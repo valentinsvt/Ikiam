@@ -40,5 +40,6 @@
     <string name="settings_title">Settings</string>
 
     <string name="gallery_choose_btn_label">Choose image</string>
+    <string name="camera_btn_label">Take photo</string>
 
 </resources>

@@ -23,10 +23,25 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  * Created by DELL on 23/07/2014.
+ */
+
+/**
+ * Based on the Example of loading an image into an image view using the image picker.
+ * Created by Rex St. John (on behalf of AirPair.com) on 3/4/14.
+ * http://www.airpair.com/android/android-image-picker-select-gallery-images
+ * <p/>
+ * image rotation
+ * http://stackoverflow.com/questions/20478765/how-to-get-the-correct-orientation-of-the-image-selected-from-the-default-image/20480741#20480741
+ * answered Dec 9 '13 at 21:04 by ramaral
+ * <p/>
+ * image resize
+ * http://stackoverflow.com/questions/477572/strange-out-of-memory-issue-while-loading-an-image-to-a-bitmap-object
+ * edited Jan 12 '12 at 12:33 by Fedor
+ * and
+ * edited Mar 20 at 6:18 by Thomas Vervest
  */
 public class GalleryFragment extends Fragment implements Button.OnClickListener {
 
@@ -129,10 +144,25 @@ public class GalleryFragment extends Fragment implements Button.OnClickListener 
 
             //Find the correct scale value. It should be the power of 2.
             int scale = 1;
-//            while (o.outWidth / scale / 2 >= REQUIRED_SIZE && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-//                scale *= 2;
+////            while (o.outWidth / scale / 2 >= REQUIRED_SIZz E && o.outHeight / scale / 2 >= REQUIRED_SIZE)
+////                scale *= 2;
             while (o.outWidth / scale / 2 >= REQUIRED_W && o.outHeight / scale / 2 >= REQUIRED_H)
                 scale *= 2;
+//            int scale = 1;
+//            if (o.outHeight > IMAGE_MAX_SIZE || o.outWidth > IMAGE_MAX_SIZE) {
+//                scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_SIZE /
+//                        (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
+//            }
+//            int scale = 1;
+//            if (o.outHeight > REQUIRED_H || o.outWidth > REQUIRED_W) {
+//                if (o.outHeight > REQUIRED_H) {
+//                    scale = (int) Math.pow(2, (int) Math.ceil(Math.log(REQUIRED_W /
+//                            (double) o.outWidth) / Math.log(0.5)));
+//                } else {
+//                    scale = (int) Math.pow(2, (int) Math.ceil(Math.log(REQUIRED_H /
+//                            (double) o.outHeight) / Math.log(0.5)));
+//                }
+//            }
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
