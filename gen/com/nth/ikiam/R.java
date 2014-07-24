@@ -28,7 +28,7 @@ public final class R {
         public static final int venus=0x7f02000b;
     }
     public static final class id {
-        public static final int action_websearch=0x7f080004;
+        public static final int search_btn_label =0x7f080004;
         public static final int content_frame=0x7f080001;
         public static final int drawer_layout=0x7f080000;
         public static final int image=0x7f080003;
@@ -43,9 +43,9 @@ public final class R {
         public static final int main=0x7f070000;
     }
     public static final class string {
-        public static final int action_websearch=0x7f040004;
+        public static final int search_btn_label =0x7f040004;
         public static final int app_name=0x7f040000;
-        public static final int app_not_available=0x7f040005;
+        public static final int web_app_not_available =0x7f040005;
         public static final int drawer_close=0x7f040003;
         public static final int drawer_open=0x7f040002;
         public static final int menu_title=0x7f040001;

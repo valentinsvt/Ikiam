@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="map_title_label" type="id">map_label</item>
-    <item name="camera_title_label" type="id">camera_label</item>
-    <item name="encyclopedia_title_label" type="id">encyclopedia_label</item>
+    <item name="camera_title_label" type="id">camera_title_label</item>
+    <item name="encyclopedia_title_label" type="id">encyclopedia_title_label</item>
     <item name="settings_title_label" type="id">settings_title_label</item>
+    <item name="gallery_title_label" type="id">gallery_title_label</item>
+    <item name="gallery_choose_btn" type="id">gallery_choose_btn</item>
+    <item name="gallery_chosen_image_view" type="id">gallery_chosen_image_view</item>
 </resources>

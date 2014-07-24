@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" >
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/gallery_title"
-            android:id="@+id/textView"
-            android:layout_x="94dp"
-            android:layout_y="122dp"
+            android:id="@id/gallery_title_label"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             />
-</AbsoluteLayout>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gallery_choose_btn_label"
+            android:id="@id/gallery_choose_btn"
+            android:layout_below="@id/gallery_title_label"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="38dp"
+            android:clickable="true"
+            android:enabled="true"
+            />
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@id/gallery_chosen_image_view"
+            android:adjustViewBounds="false"
+            android:layout_below="@id/gallery_choose_btn"
+            android:layout_marginTop="71dp"
+            android:layout_alignParentEnd="true"
+            />
+
+</RelativeLayout>
