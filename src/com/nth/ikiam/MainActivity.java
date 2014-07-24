@@ -18,7 +18,6 @@ package com.nth.ikiam;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -31,7 +30,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -191,7 +189,7 @@ public class MainActivity extends Activity {
         Fragment fragment;
         switch (position) {
             case MAP_POS:
-                fragment = new MapFragment();
+                fragment = new NthMapFragment();
                 break;
             case CAMERA_POS:
                 fragment = new CameraFragment();
@@ -206,7 +204,7 @@ public class MainActivity extends Activity {
                 fragment = new SettingsFragment();
                 break;
             default:
-                fragment = new MapFragment();
+                fragment = new NthMapFragment();
         }
 
         FragmentManager fragmentManager = getFragmentManager();
