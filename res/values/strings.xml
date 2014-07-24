@@ -31,5 +31,10 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="map_title">Mapa</string>
+    <string name="camera_title">Cámara</string>
+    <string name="encyclopedia_title">Enciclopedia</string>
+    <string name="gallery_title">Galería</string>
+    <string name="settings_title">Configuración</string>
 
 </resources>

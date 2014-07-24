@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="map_title_label" type="id">map_label</item>
+    <item name="camera_title_label" type="id">camera_label</item>
+    <item name="encyclopedia_title_label" type="id">encyclopedia_label</item>
+    <item name="settings_title_label" type="id">settings_title_label</item>
+</resources>
