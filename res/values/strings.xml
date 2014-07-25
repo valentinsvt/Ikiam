@@ -21,8 +21,7 @@
 
     <string-array name="options_array">
         <item>Mapa</item>
-        <item>Cámara</item>
-        <item>Galería</item>
+        <item>Nueva captura</item>
         <item>Enciclopedia</item>
         <item>Configuración</item>
     </string-array>

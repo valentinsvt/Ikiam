@@ -70,10 +70,9 @@ public class MainActivity extends Activity {
     private String[] mOptionsArray;
 
     private final int MAP_POS = 0;
-    private final int CAMERA_POS = 1;
-    private final int GALLERY_POS = 2;
-    private final int ENCYCLOPEDIA_POS = 3;
-    private final int SETTINGS_POS = 4;
+    private final int CAPTURA_POS = 1;
+    private final int ENCYCLOPEDIA_POS = 2;
+    private final int SETTINGS_POS = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,12 +192,15 @@ public class MainActivity extends Activity {
             case MAP_POS:
                 fragment = new NthMapFragment();
                 break;
-            case CAMERA_POS:
-                fragment = new CameraFragment();
+            case CAPTURA_POS:
+                fragment = new CapturaFragment();
                 break;
-            case GALLERY_POS:
-                fragment = new GalleryFragment();
-                break;
+            //            case CAMERA_POS:
+//                fragment = new CameraFragment();
+//                break;
+//            case GALLERY_POS:
+//                fragment = new GalleryFragment();
+//                break;
             case ENCYCLOPEDIA_POS:
                 fragment = new EncyclopediaFragment();
                 break;
