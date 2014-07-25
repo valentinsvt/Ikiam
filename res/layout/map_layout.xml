@@ -7,12 +7,19 @@
                 tools:context=".MapFragment" >
 
     <Button
-            android:id="@+id/btnLocate"
+            android:id="@+id/btnGalapagos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:text="@string/map_galapagos_btn" />
+    <Button
+            android:id="@+id/btnLocate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/map_locate_btn"
+            android:icon="@drawable/action_search"
+            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
 
     <fragment
             android:id="@+id/mapF"
