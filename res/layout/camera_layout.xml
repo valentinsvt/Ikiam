@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/camera_btn_label"
-            android:id="@id/camera_btn_label"
+            android:id="@id/camera_btn"
             android:layout_below="@id/camera_title_label"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="38dp"
@@ -31,9 +31,9 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@id/gallery_chosen_image_view"
+            android:id="@id/camera_chosen_image_view"
             android:adjustViewBounds="false"
-            android:layout_below="@id/camera_btn_label"
+            android:layout_below="@id/camera_btn"
             android:layout_marginTop="71dp"
             android:layout_alignParentEnd="true"
             />

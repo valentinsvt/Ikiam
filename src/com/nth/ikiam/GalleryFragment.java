@@ -61,10 +61,8 @@ public class GalleryFragment extends Fragment implements Button.OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.gallery_layout, container, false);
 
-        chooseBtn = (Button) view.findViewById(R.id.gallery_choose_btn);
         selectedImage = (ImageView) view.findViewById(R.id.gallery_chosen_image_view);
-
-        // Set OnItemClickListener so we can be notified on button clicks
+        chooseBtn = (Button) view.findViewById(R.id.gallery_choose_btn);
         chooseBtn.setOnClickListener(this);
         return view;
     }

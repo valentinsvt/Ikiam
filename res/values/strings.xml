@@ -32,6 +32,7 @@
     <string name="search_btn_label">Búsqueda</string>
     <string name="web_app_not_available">Lo siento, no hay un navegador configurado</string>
     <string name="gallery_app_not_available">Lo siento, no hay una galería configurada</string>
+    <string name="camera_app_not_available">Lo siento, no hay una cámara configurada</string>
 
     <string name="map_title">Mapa</string>
     <string name="camera_title">Cámara</string>

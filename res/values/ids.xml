@@ -7,5 +7,6 @@
     <item name="gallery_title_label" type="id">gallery_title_label</item>
     <item name="gallery_choose_btn" type="id">gallery_choose_btn</item>
     <item name="gallery_chosen_image_view" type="id">gallery_chosen_image_view</item>
-    <item name="camera_btn_label" type="id">camera_btn_label</item>
+    <item name="camera_btn" type="id">camera_btn</item>
+    <item name="camera_chosen_image_view" type="id">camera_chosen_image_view</item>
 </resources>
