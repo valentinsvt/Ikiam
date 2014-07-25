@@ -9,4 +9,9 @@
     <item name="gallery_chosen_image_view" type="id">gallery_chosen_image_view</item>
     <item name="camera_btn" type="id">camera_btn</item>
     <item name="camera_chosen_image_view" type="id">camera_chosen_image_view</item>
+    <item name="captura_gallery_btn" type="id">captura_gallery_btn</item>
+    <item name="captura_camera_btn" type="id">captura_camera_btn</item>
+    <item name="captura_chosen_image_view" type="id">captura_chosen_image_view</item>
+    <item name="captura_divider" type="id" />
+    <item name="captura_divider_hor" type="id">captura_divider_hor</item>
 </resources>
