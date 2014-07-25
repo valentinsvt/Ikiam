@@ -20,6 +20,13 @@
             android:text="@string/map_locate_btn"
             android:icon="@drawable/action_search"
             android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
+    <Button
+            android:id="@+id/btnService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/map_service"
+            android:icon="@drawable/action_search"
+            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnLocate"/>
 
     <fragment
             android:id="@+id/mapF"

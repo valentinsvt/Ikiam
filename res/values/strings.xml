@@ -45,5 +45,6 @@
     <string name="camera_btn_label">Tomar foto</string>
     <string name="map_continente_btn">Continente</string>
     <string name="map_locate_btn">Mi ubicación</string>
+    <string name="map_service">Servicio</string>
 
 </resources>
