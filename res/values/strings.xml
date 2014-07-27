@@ -19,6 +19,13 @@
     <string name="app_name">Ikiam</string>
     <string name="menu_title">Ikiam</string>
 
+    <string name="global_yes">Sí</string>
+    <string name="global_no">No</string>
+    <string name="global_ok">Aceptar</string>
+    <string name="global_save">Guardar</string>
+    <string name="global_cancel">Cancelar</string>
+    <string name="global_placeHolder">placeHolder</string>
+
     <string-array name="options_array">
         <item>Mapa</item>
         <item>Nueva captura</item>
@@ -29,21 +36,38 @@
     <string name="drawer_open">Abrir menú de navegación</string>
     <string name="drawer_close">Cerrar menú de navegación</string>
     <string name="search_btn_label">Búsqueda</string>
+
     <string name="web_app_not_available">Lo siento, no hay un navegador configurado</string>
     <string name="gallery_app_not_available">Lo siento, no hay una galería configurada</string>
     <string name="camera_app_not_available">Lo siento, no hay una cámara configurada</string>
 
-    <string name="map_title">Mapa</string>
-    <string name="camera_title">Cámara</string>
     <string name="encyclopedia_title">Enciclopedia</string>
-    <string name="gallery_title">Galería</string>
     <string name="settings_title">Configuración</string>
-    <string name="map_galapagos_btn">Galápagos</string>
+    <string name="camera_title">Cámara</string>
+    <string name="gallery_title">Galería</string>
+    <string name="map_title">Mapa</string>
 
     <string name="gallery_choose_btn_label">Seleccionar imagen</string>
     <string name="camera_btn_label">Tomar foto</string>
+
+    <string name="map_galapagos_btn">Galápagos</string>
     <string name="map_continente_btn">Continente</string>
     <string name="map_locate_btn">Mi ubicación</string>
     <string name="map_service">Servicio</string>
+
+    <string name="captura_tiene_fruta">Se ve la fruta</string>
+    <string name="captura_tiene_arbol">Se ve el árbol completo</string>
+    <string name="captura_tiene_corteza">Se ve la corteza</string>
+    <string name="captura_tiene_hoja">Se ven las hojas</string>
+    <string name="captura_tiene_flor">Se ven las flores</string>
+
+    <string name="captura_keyWord_fruta">Fruta</string>
+    <string name="captura_keyWord_arbol">Árbol</string>
+    <string name="captura_keyWord_corteza">Corteza</string>
+    <string name="captura_keyWord_hoja">Hojas</string>
+    <string name="captura_keyWord_flor">Flores</string>
+
+    <string name="captura_comentarios_label">Ingresa tus comentarios</string>
+    <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
 
 </resources>

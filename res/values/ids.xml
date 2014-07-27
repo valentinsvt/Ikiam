@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="map_title_label" type="id">map_label</item>
-    <item name="camera_title_label" type="id">camera_title_label</item>
-    <item name="encyclopedia_title_label" type="id">encyclopedia_title_label</item>
-    <item name="settings_title_label" type="id">settings_title_label</item>
-    <item name="gallery_title_label" type="id">gallery_title_label</item>
-    <item name="gallery_choose_btn" type="id">gallery_choose_btn</item>
-    <item name="gallery_chosen_image_view" type="id">gallery_chosen_image_view</item>
-    <item name="camera_btn" type="id">camera_btn</item>
-    <item name="camera_chosen_image_view" type="id">camera_chosen_image_view</item>
-    <item name="captura_gallery_btn" type="id">captura_gallery_btn</item>
-    <item name="captura_camera_btn" type="id">captura_camera_btn</item>
-    <item name="captura_chosen_image_view" type="id">captura_chosen_image_view</item>
-    <item name="captura_divider" type="id" />
-    <item name="captura_divider_hor" type="id">captura_divider_hor</item>
+    <item name="map_title_label" type="id" />
+    <item name="camera_title_label" type="id" />
+    <item name="encyclopedia_title_label" type="id" />
+    <item name="settings_title_label" type="id" />
+    <item name="gallery_title_label" type="id" />
+
+    <item name="gallery_choose_btn" type="id" />
+    <item name="gallery_chosen_image_view" type="id" />
+
+    <item name="camera_btn" type="id" />
+    <item name="camera_chosen_image_view" type="id" />
+
+    <item name="captura_chosen_image_view" type="id" />
+    <item name="captura_botones_container" type="id" />
+    <item name="captura_divider_hor" type="id" />
+    <item name="captura_gallery_btn" type="id" />
+    <item name="captura_divider_vert" type="id" />
+    <item name="captura_camera_btn" type="id" />
+    <item name="captura_fruta_toggle" type="id" />
+    <item name="captura_arbol_toggle" type="id" />
+    <item name="captura_corteza_toggle" type="id" />
+    <item name="captura_hoja_toggle" type="id" />
+    <item name="captura_flor_toggle" type="id" />
+    <item name="captura_info_label" type="id" />
+    <item name="captura_save_btn" type="id" />
+    <item name="captura_comentarios_txt" type="id" />
+    <item name="captura_comentarios_label" type="id" />
 </resources>

@@ -2,9 +2,11 @@ package com.nth.ikiam;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -13,13 +15,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.*;
+import com.nth.ikiam.db.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,13 +46,18 @@ import java.io.FileNotFoundException;
 public class CapturaFragment extends Fragment implements Button.OnClickListener {
 
     private ImageButton[] botones;
+    private ToggleButton[] toggles;
     private ImageView selectedImage;
+    private TextView lblInfo;
+    private EditText textoComentarios;
 
     private static final int GALLERY_REQUEST = 999;
     private static final int CAMERA_REQUEST = 1337;
 
     private static int screenWidth;
     private static int screenHeight;
+
+    boolean hayFoto = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,16 +68,28 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
 
-        System.out.println("W: " + screenWidth + "   H: " + screenHeight);
+//        System.out.println("W: " + screenWidth + "   H: " + screenHeight);
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
-        botones = new ImageButton[2];
+        lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
+        textoComentarios = (EditText) view.findViewById(R.id.captura_comentarios_txt);
+
+        botones = new ImageButton[3];
         botones[0] = (ImageButton) view.findViewById(R.id.captura_gallery_btn);
         botones[1] = (ImageButton) view.findViewById(R.id.captura_camera_btn);
-        for (int i = 0; i < botones.length; i++) {
-            botones[i].setOnClickListener(this);
+        botones[2] = (ImageButton) view.findViewById(R.id.captura_save_btn);
+        for (ImageButton button : botones) {
+            button.setOnClickListener(this);
         }
-
+        toggles = new ToggleButton[5];
+        toggles[0] = (ToggleButton) view.findViewById(R.id.captura_arbol_toggle);
+        toggles[1] = (ToggleButton) view.findViewById(R.id.captura_corteza_toggle);
+        toggles[2] = (ToggleButton) view.findViewById(R.id.captura_hoja_toggle);
+        toggles[3] = (ToggleButton) view.findViewById(R.id.captura_flor_toggle);
+        toggles[4] = (ToggleButton) view.findViewById(R.id.captura_fruta_toggle);
+        for (ToggleButton toggle : toggles) {
+            toggle.setOnClickListener(this);
+        }
         return view;
     }
 
@@ -82,7 +100,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(intent, GALLERY_REQUEST);
             } else {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.gallery_app_not_available, Toast.LENGTH_LONG).show();
+                alerta(getString(R.string.gallery_app_not_available));
             }
         }
         if (v.getId() == botones[1].getId()) { // camara
@@ -90,9 +108,77 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST);
             } else {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.camera_app_not_available, Toast.LENGTH_LONG).show();
+                alerta(getString(R.string.camera_app_not_available));
             }
         }
+        if (v.getId() == botones[2].getId()) { // save
+            if (hayFoto) {
+                String[] keys = {"arbol", "corteza", "hoja", "flor", "fruta"};
+                String comentarios = textoComentarios.getText().toString();
+                String keywords = "";
+                int i = 0;
+                for (ToggleButton toggle : toggles) {
+                    if (toggle.isChecked()) {
+                        if (!keywords.equals("")) {
+                            keywords += ", ";
+                        }
+                        keywords += keys[i];
+                    }
+                    i++;
+                }
+//                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
+
+                Context c = getActivity().getApplicationContext();
+
+
+            } else {
+                alerta(getString(R.string.captura_error_seleccion));
+            }
+        }
+        if (v.getId() == toggles[0].getId()) { //tree
+            updateStatus(toggles[0]);
+        }
+        if (v.getId() == toggles[1].getId()) { //bark
+            updateStatus(toggles[1]);
+        }
+        if (v.getId() == toggles[2].getId()) { //leaf
+            updateStatus(toggles[2]);
+        }
+        if (v.getId() == toggles[3].getId()) { //flower
+            updateStatus(toggles[3]);
+        }
+        if (v.getId() == toggles[4].getId()) { //fruit
+            updateStatus(toggles[4]);
+        }
+    }
+
+    private void updateStatus(ToggleButton toggleButton) {
+        if (hayFoto) {
+            String info = "";
+            String[] statusString = {getString(R.string.captura_tiene_arbol), getString(R.string.captura_tiene_corteza),
+                    getString(R.string.captura_tiene_hoja), getString(R.string.captura_tiene_flor), getString(R.string.captura_tiene_fruta)};
+
+            int i = 0;
+            for (ToggleButton toggle : toggles) {
+                if (toggle.isChecked()) {
+                    if (!info.equals("")) {
+                        info += ", ";
+                    }
+                    info += statusString[i];
+                }
+                i++;
+            }
+            lblInfo.setText(info);
+        } else {
+            if (toggleButton != null) {
+                toggleButton.setChecked(false);
+            }
+            alerta(getString(R.string.captura_error_seleccion));
+        }
+    }
+
+    private void alerta(String string) {
+        Toast.makeText(getActivity().getApplicationContext(), string, Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -100,20 +186,14 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
      * Read more at http://www.airpair.com/android/android-image-picker-select-gallery-images#bok7edWCrB11olZ1.99
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (resultCode == Activity.RESULT_OK) {
-            MainActivity activity = (MainActivity) getActivity();
-
-            Bitmap bitmap = getBitmapFromCameraData(data, activity);
-            selectedImage.setImageBitmap(bitmap);
-//            if (requestCode == GALLERY_REQUEST) {
-//                Bitmap bitmap = getBitmapFromCameraData(data, activity);
-//                selectedImage.setImageBitmap(bitmap);
-//            }
-//            if (requestCode == CAMERA_REQUEST) {
-//                Bitmap bitmap = getBitmapFromCameraData(data, activity);
-//                selectedImage.setImageBitmap(bitmap);
-//            }
+            if (requestCode == GALLERY_REQUEST || requestCode == CAMERA_REQUEST) {
+                hayFoto = true;
+                updateStatus(null);
+                MainActivity activity = (MainActivity) getActivity();
+                Bitmap bitmap = getBitmapFromCameraData(data, activity);
+                selectedImage.setImageBitmap(bitmap);
+            }
         }
     }
 
@@ -170,7 +250,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             final int REQUIRED_W = 100;
             final int REQUIRED_H = 100;
 
-            System.out.println("reqW: " + REQUIRED_W + "    reqH: " + REQUIRED_H);
+//            System.out.println("reqW: " + REQUIRED_W + "    reqH: " + REQUIRED_H);
 
             //Find the correct scale value. It should be the power of 2.
             int scaleW = 1, scaleH = 1;
@@ -179,8 +259,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             while (o.outHeight / scaleH / 2 >= REQUIRED_H)
                 scaleH *= 2;
 
-            System.out.println("scaleW: " + scaleW + "    scaleH: " + scaleH);
-            System.out.println("scale: " + (Math.max(scaleH, scaleW)));
+//            System.out.println("scaleW: " + scaleW + "    scaleH: " + scaleH);
+//            System.out.println("scale: " + (Math.max(scaleH, scaleW)));
 
             //Decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
