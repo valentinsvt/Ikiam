@@ -25,6 +25,7 @@ import com.nth.ikiam.db.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +45,7 @@ import java.util.List;
  * and
  * edited Mar 20 at 6:18 by Thomas Vervest
  */
-public class CapturaFragment extends Fragment implements Button.OnClickListener {
+public class CapturaFragment extends Fragment implements Button.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
@@ -66,16 +67,29 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
-        //inicializa las tablas q va a usar
-        Color rojo = new Color(context, "rojo");
-        rojo.save();
-        Coordenada coordenada = new Coordenada(context);
-        Familia familia = new Familia(context);
-        Genero genero = new Genero(context);
-        Especie especie = new Especie(context);
-        Foto foto = new Foto(context);
-        Lugar lugar = new Lugar(context);
-        Ruta ruta = new Ruta(context);
+
+        //verifico q haya al menos un color
+        int cantColores = Color.count(context);
+        if (cantColores == 0) {
+            Color blue = new Color(context, "azul");
+            blue.save();
+            Color brown = new Color(context, "cafe");
+            brown.save();
+            Color green = new Color(context, "verde");
+            green.save();
+            Color orange = new Color(context, "naranja");
+            orange.save();
+            Color pink = new Color(context, "rosa");
+            pink.save();
+            Color purple = new Color(context, "violeta");
+            purple.save();
+            Color red = new Color(context, "rojo");
+            red.save();
+            Color white = new Color(context, "blanco");
+            white.save();
+            Color yellow = new Color(context, "amarillo");
+            yellow.save();
+        }
 
         View view = inflater.inflate(R.layout.captura_layout, container, false);
 
@@ -85,7 +99,10 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         screenWidth = displaymetrics.widthPixels;
 
         spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color_spinner);
-        loadColores(spinnerColor1);
+        spinnerColor1.setAdapter(new MyAdapter(getActivity(), Color.listString(context)));
+        System.out.println("}}}}}}}}} " + getResources().getIdentifier("blanco", "string", context.getPackageName()));
+//        spinnerColor1.setOnItemSelectedListener(this);
+//        loadColores(spinnerColor1);
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
@@ -108,6 +125,20 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             toggle.setOnClickListener(this);
         }
         return view;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // On selecting a spinner item
+        String label = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+        alerta("You selected: " + label);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     @Override
@@ -166,11 +197,14 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     }
 
     private void loadColores(Spinner spinner) {
-        List<String> colores = Color.listString(context);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, colores);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(dataAdapter);
+//        List<String> colores = Color.listString(context);
+//
+////        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, colores);
+////        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, colores);
+//        dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+//        spinner.setAdapter(dataAdapter);
     }
 
     private void updateStatus(ToggleButton toggleButton) {

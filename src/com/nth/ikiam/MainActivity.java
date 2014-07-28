@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.nth.ikiam.db.DbHelper;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -78,6 +79,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DbHelper helper = new DbHelper(this);
+        helper.getWritableDatabase();
 
         mTitle = mDrawerTitle = getTitle();
         mOptionsArray = getResources().getStringArray(R.array.options_array);

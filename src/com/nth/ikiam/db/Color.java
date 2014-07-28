@@ -2,6 +2,7 @@ package com.nth.ikiam.db;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public class Color {
         return e.getAllColores();
     }
 
-    public static List<String> listString(Context context) {
+    public static ArrayList<Color> listString(Context context) {
         ColorDbHelper e = new ColorDbHelper(context);
         return e.getAllColoresString();
     }

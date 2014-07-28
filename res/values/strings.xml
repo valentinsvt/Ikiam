@@ -26,22 +26,21 @@
     <string name="global_cancel">Cancelar</string>
     <string name="global_placeHolder">placeHolder</string>
 
+    <string name="global_color_azul">Azul</string>
+    <string name="global_color_cafe">Café</string>
+    <string name="global_color_verde">Verde</string>
+    <string name="global_color_naranja">Naranja</string>
+    <string name="global_color_rosa">Rosa</string>
+    <string name="global_color_violeta">Violeta</string>
+    <string name="global_color_rojo">Rojo</string>
+    <string name="global_color_blanco">Blanco</string>
+    <string name="global_color_amarillo">Amarillo</string>
+
     <string-array name="options_array">
         <item>Mapa</item>
         <item>Nueva captura</item>
         <item>Enciclopedia</item>
         <item>Configuración</item>
-    </string-array>
-
-     <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
     </string-array>
 
     <string name="drawer_open">Abrir menú de navegación</string>

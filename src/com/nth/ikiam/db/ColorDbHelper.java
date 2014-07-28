@@ -80,9 +80,9 @@ public class ColorDbHelper extends DbHelper {
         return colores;
     }
 
-    public List<String> getAllColoresString() {
+    public ArrayList<Color> getAllColoresString() {
         SQLiteDatabase db = this.getReadableDatabase();
-        List<String> colores = new ArrayList<String>();
+        ArrayList<Color> colores = new ArrayList<Color>();
         String selectQuery = "SELECT  * FROM " + TABLE_COLOR;
 
         logQuery(LOG, selectQuery);
@@ -95,7 +95,7 @@ public class ColorDbHelper extends DbHelper {
                 Color cl = setDatos(c);
 
                 // adding to tags list
-                colores.add(cl.nombre);
+                colores.add(cl);
             } while (c.moveToNext());
         }
         return colores;
