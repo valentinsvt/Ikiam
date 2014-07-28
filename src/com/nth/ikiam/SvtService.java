@@ -23,6 +23,8 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.nth.ikiam.db.Coordenada;
+import com.nth.ikiam.db.Ruta;
 
 public class SvtService extends Service implements  GooglePlayServicesClient.ConnectionCallbacks,GooglePlayServicesClient.OnConnectionFailedListener{
 
@@ -46,7 +48,8 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     String contenido = "";
     String texto ="";
     FileOutputStream outputStream;
-
+    Ruta ruta;
+    Context context;
     @Override
     public IBinder onBind(Intent intent) {
         return mMessenger.getBinder();
@@ -62,7 +65,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
                     mClients.remove(msg.replyTo);
                     break;
                 case MSG_SET_INT_VALUE:
-                    incrementby = msg.arg1;
+                    ruta=Ruta.get(context,(long)msg.arg1);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -113,7 +116,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     public void onCreate() {
         super.onCreate();
         Log.i("MyService", "Service Started.");
-
+        this.context=this;
         try {
             outputStream = openFileOutput(filename, Context.MODE_APPEND | Context.MODE_PRIVATE);
             texto = "\n!=route "+new Date()+"\n";
@@ -124,6 +127,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         showNotification();
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
+
         timer.scheduleAtFixedRate(new TimerTask(){ public void run() {onTimerTick();}}, 2500, 30000L);
         isRunning = true;
     }
@@ -161,6 +165,10 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
             counter++;
             Log.i("TimerTick", "Timer doing work cada 10?." + mCurrentLocation.getLatitude()+"  "+mCurrentLocation.getLongitude());
             sendMessageToUI(mCurrentLocation);
+            if(ruta!=null){
+                Coordenada cord = new Coordenada(this.context,(long)mCurrentLocation.getLatitude(),(long)mCurrentLocation.getLongitude(),ruta);
+                cord.save();
+            }
             try{
                 texto=""+ mCurrentLocation.getLatitude()+"%"+mCurrentLocation.getLatitude()+"&";
                 outputStream.write(texto.getBytes());

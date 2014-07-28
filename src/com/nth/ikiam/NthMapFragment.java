@@ -22,11 +22,15 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nth.ikiam.db.Coordenada;
+import com.nth.ikiam.db.Ruta;
+import com.nth.ikiam.dialogs.NthMapDialog;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.util.List;
 
 /**
  * Created by DELL on 23/07/2014.
@@ -142,6 +146,9 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
+        System.out.println("rutas "+Ruta.count(this.getActivity()));
+        Ruta ruta = Ruta.get(this.getActivity(),1L);
+        List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
         return view;
 
     }
@@ -162,24 +169,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     @Override
     public void onClick(View v){
         if(v.getId()==botones[0].getId()){
-            try {
-                File file = new File(this.getActivity().getFilesDir(), filename);
-                if(file.exists()){
-                    StringBuilder text = new StringBuilder();
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        text.append(line);
-                        text.append('\n');
-                    }
-                    Toast.makeText(this.getActivity(), text, Toast.LENGTH_SHORT).show();
-                }
 
-
-
-            }catch (Exception e){
-
-            }
             if(!continente) {
                 location = new LatLng(-1.6477220517969353, -78.46435546875);
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
@@ -213,7 +203,9 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     location=new LatLng( mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
                     map.animateCamera(update);
-
+                    Ruta ruta= new Ruta(this.getActivity(),"");
+                    ruta.save();
+                    sendMessageToService((int)ruta.id);
                     status=true;
                 }else {
                     doUnbindService();
@@ -295,6 +287,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
             }
         }
     }
+
 
 
     void doBindService() {
@@ -399,7 +392,6 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
          */
         System.out.println("error connection failed");
     }
-
 
 
 }
