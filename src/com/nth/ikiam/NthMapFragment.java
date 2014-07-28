@@ -164,13 +164,13 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
-        System.out.println("rutas "+Ruta.count(this.getActivity()));
-        Ruta ruta = Ruta.get(this.getActivity(),10L);
-
-        List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
-        for (Coordenada cord : coords) {
-            System.out.println("coord--> "+cord.latitud+"  "+cord.longitud+"  "+cord.ruta.id);
-        }
+//        System.out.println("rutas "+Ruta.count(this.getActivity()));
+//        Ruta ruta = Ruta.get(this.getActivity(),11L);
+//
+//        List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
+//        for (Coordenada cord : coords) {
+//            System.out.println("coord--> "+cord.latitud+"  "+cord.longitud+"  "+cord.ruta.id);
+//        }
         return view;
 
     }
@@ -222,22 +222,62 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     ruta.save();
                     this.getActivity().startService(new Intent(this.getActivity(), SvtService.class));
                     doBindService();
-                  //  sendMessageToService((int)ruta.id);
+                    //  sendMessageToService((int)ruta.id);
                     Location mCurrentLocation;
                     mCurrentLocation = locationClient.getLastLocation();
                     location=new LatLng( mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
                     map.animateCamera(update);
-
+                    botones[2].setText("Parar");
 
                     status=true;
                 }else {
                     doUnbindService();
                     this.getActivity().stopService(new Intent(this.getActivity(), SvtService.class));
+                    botones[2].setText("Nueva ruta");
+                    ruta=null;
                     status=false;
                 }
             }
 
+        }
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        if(ruta!=null)
+            savedInstanceState.putInt("ruta", (int)ruta.id);
+//        savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        System.out.println("restore bundle");
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null){
+            if(savedInstanceState.containsKey("ruta")){
+                System.out.println("contiene "+savedInstanceState.getLong("ruta"));
+                ruta = Ruta.get(this.getActivity(),savedInstanceState.getLong("ruta"));
+                List<Coordenada>   coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
+
+                setUpMapIfNeeded();
+                boolean band = false;
+                for (Coordenada cord : coords) {
+                    if(!band){
+                        location = new LatLng(cord.latitud, cord.longitud);
+                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 16);
+                        map.animateCamera(update);
+                    }
+                    map.addMarker(new MarkerOptions().position(new LatLng(cord.latitud, cord.longitud)).title("Pos"));
+                    band=true;
+                }
+            }
         }
 
     }
@@ -276,14 +316,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
 
 
     /*service*/
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
 
-        super.onSaveInstanceState(outState);
-//    outState.putString("textStatus", textStatus.getText().toString());
-//    outState.putString("textIntValue", textIntValue.getText().toString());
-//    outState.putString("textStrValue", textStrValue.getText().toString());
-    }
     private void restoreMe(Bundle state) {
         if (state!=null) {
 //            textStatus.setText(state.getString("textStatus"));
@@ -354,6 +387,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         super.onDestroy();
         try {
             doUnbindService();
+            this.getActivity().stopService(new Intent(this.getActivity(), SvtService.class));
         } catch (Throwable t) {
             Log.e("MainActivity", "Failed to unbind from the service", t);
         }
@@ -361,7 +395,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
 
     /***** Sets up the map if it is possible to do so *****/
     public  void setUpMapIfNeeded() {
-        System.out.println("setUpMap if needed");
+        //System.out.println("setUpMap if needed");
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
             // Try to obtain the map from the SupportMapFragment.

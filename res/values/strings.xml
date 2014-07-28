@@ -64,7 +64,7 @@
     <string name="map_galapagos_btn">Galápagos</string>
     <string name="map_continente_btn">Continente</string>
     <string name="map_locate_btn">Mi ubicación</string>
-    <string name="map_service">Servicio</string>
+    <string name="map_service">Nueva Ruta</string>
 
     <string name="captura_tiene_fruta">Se ve la fruta</string>
     <string name="captura_tiene_arbol">Se ve el árbol completo</string>
