@@ -8,12 +8,12 @@ import java.util.List;
  * Created by Svt on 7/27/2014.
  */
 public class Coordenada {
-    long id=0;
-    long latitud;
-    long longitud;
-    Ruta ruta;
-    CoordenadaDbHelper coordenadaDbHelper;
-    String fecha;
+    public long id=0;
+    public long latitud;
+    public long longitud;
+    public Ruta ruta;
+    public CoordenadaDbHelper coordenadaDbHelper;
+    public String fecha;
 
     public Coordenada(Context context,long latitud,long longitud,Ruta ruta){
         this.latitud=latitud;

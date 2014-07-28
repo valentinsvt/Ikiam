@@ -26,7 +26,7 @@ public class EspecieDbHelper extends DbHelper {
     private static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE, KEY_GENERO_ID, KEY_COLOR_ID, KEY_COLOR2_ID};
 
     // ESPECIE table create statement
-    private static final String CREATE_TABLE_ESPECIE = createTableSql(TABLE_ESPECIE, KEYS_ESPECIE);
+    public static final String CREATE_TABLE_ESPECIE = createTableSql(TABLE_ESPECIE, KEYS_ESPECIE);
 
     public EspecieDbHelper(Context context) {
         super(context);

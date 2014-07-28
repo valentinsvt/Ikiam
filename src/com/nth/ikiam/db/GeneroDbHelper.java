@@ -19,7 +19,7 @@ public class GeneroDbHelper extends DbHelper {
     private static final String KEY_FAMILIA_ID = "familia_id";
     private static final String[] KEYS_GENERO = {KEY_NOMBRE, KEY_FAMILIA_ID};
 
-    private static final String CREATE_TABLE_GENERO = createTableSql(TABLE_GENERO, KEYS_GENERO);
+    public static final String CREATE_TABLE_GENERO = createTableSql(TABLE_GENERO, KEYS_GENERO);
 
     public GeneroDbHelper(Context context) {
         super(context);

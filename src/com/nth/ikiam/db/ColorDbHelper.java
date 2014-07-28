@@ -18,7 +18,7 @@ public class ColorDbHelper extends DbHelper {
     private static final String KEY_NOMBRE = "nombre";
     private static final String[] KEYS_COLOR = {KEY_NOMBRE};
 
-    private static final String CREATE_TABLE_COLOR = createTableSql(TABLE_COLOR, KEYS_COLOR);
+    public static final String CREATE_TABLE_COLOR = createTableSql(TABLE_COLOR, KEYS_COLOR);
 
     public ColorDbHelper(Context context) {
         super(context);

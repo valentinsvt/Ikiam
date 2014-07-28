@@ -17,7 +17,7 @@ public class RutaDbHelper extends DbHelper {
     private static final String KEY_DESCRIPCION = "descripcion";
     private static final String[] KEYS_RUTA = {KEY_DESCRIPCION};
 
-    private static final String CREATE_TABLE_RUTA = createTableSql(TABLE_RUTA, KEYS_RUTA);
+    public static final String CREATE_TABLE_RUTA = createTableSql(TABLE_RUTA, KEYS_RUTA);
 
     public RutaDbHelper(Context context) {
         super(context);

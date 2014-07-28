@@ -8,12 +8,12 @@ import java.util.List;
  * Created by DELL on 28/07/2014.
  */
 public class Genero {
-    long id = 0;
-    String fecha;
-    Familia familia;
-    String nombre;
+    public long id = 0;
+    public String fecha;
+    public Familia familia;
+    public String nombre;
 
-    GeneroDbHelper generoDbHelper;
+    public GeneroDbHelper generoDbHelper;
 
     public Genero(Context context) {
         generoDbHelper = new GeneroDbHelper(context);

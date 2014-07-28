@@ -25,7 +25,7 @@ public class FotoDbHelper extends DbHelper {
     private static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS};
 
     // FOTO table create statement
-    private static final String CREATE_TABLE_FOTO = createTableSql(TABLE_FOTO, KEYS_FOTO);
+    public static final String CREATE_TABLE_FOTO = createTableSql(TABLE_FOTO, KEYS_FOTO);
 
     public FotoDbHelper(Context context) {
         super(context);

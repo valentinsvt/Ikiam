@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Svt on 7/27/2014.
- */
+
 public class CoordenadaDbHelper  extends DbHelper{
 
     private static final String LOG = "CoordenadaDbHelper";
@@ -20,15 +18,17 @@ public class CoordenadaDbHelper  extends DbHelper{
     private static final String KEY_RUTA = "ruta_id";
     private static final String[] KEYS_COORDENADA = {KEY_LATITUD,KEY_LONGITUD,KEY_RUTA};
 
-    private static final String CREATE_TABLE_COORDENADA = createTableSql(TABLE_COORDENADA, KEYS_COORDENADA);
+    public static final String CREATE_TABLE_COORDENADA = createTableSql(TABLE_COORDENADA, KEYS_COORDENADA);
 
     public CoordenadaDbHelper(Context context) {
         super(context);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         // creating required tables
+
         db.execSQL(CREATE_TABLE_COORDENADA);
     }
 

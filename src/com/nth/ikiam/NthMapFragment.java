@@ -23,6 +23,7 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nth.ikiam.db.Coordenada;
+import com.nth.ikiam.db.DbHelper;
 import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.dialogs.NthMapDialog;
 
@@ -47,6 +48,8 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     boolean mIsBound;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
     Boolean status = false;
+    Boolean attached = false;
+    Ruta ruta;
 
     class IncomingHandler extends Handler {
         @Override
@@ -65,6 +68,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     Double longitud = msg.getData().getDouble("logitud");
                     System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
                     map.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title("Pos"));
+                    System.out.println("Crear ping "+map);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -80,9 +84,23 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                 Message msg = Message.obtain(null, SvtService.MSG_REGISTER_CLIENT);
                 msg.replyTo = mMessenger;
                 mService.send(msg);
+                attached=true;
             } catch (RemoteException e) {
                 // In this case the service has crashed before we could even do anything with it
             }
+            if(ruta!=null){
+                try {
+                    Message msg = Message.obtain(null, SvtService.MSG_SET_INT_VALUE);
+                    msg.replyTo = mMessenger;
+                    msg.arg1=(int)ruta.id;
+                    mService.send(msg);
+                    System.out.println("Mando mensaje de ruta");
+                    attached=true;
+                } catch (RemoteException e) {
+                    // In this case the service has crashed before we could even do anything with it
+                }
+            }
+
         }
 
         public void onServiceDisconnected(ComponentName className) {
@@ -116,10 +134,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     /*Fin google services*/
 
 
-    /*file*/
-    String filename = "nthData";
-    String contenido = "";
-    FileOutputStream outputStream;
+    DbHelper helper;
 
     public NthMapFragment() {
         // Empty constructor required for fragment subclasses
@@ -130,6 +145,9 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.map_layout, container, false);
+        helper = new DbHelper(this.getActivity());
+        // open to read and write
+        helper.getWritableDatabase();
         botones = new Button[3];
         botones[0]=(Button) view.findViewById(R.id.btnGalapagos);
         botones[1]= (Button) view.findViewById(R.id.btnLocate);
@@ -146,9 +164,13 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
-        //System.out.println("rutas "+Ruta.count(this.getActivity()));
-        //Ruta ruta = Ruta.get(this.getActivity(),1L);
-        //List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
+        System.out.println("rutas "+Ruta.count(this.getActivity()));
+        Ruta ruta = Ruta.get(this.getActivity(),8L);
+
+        List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
+        for (Coordenada cord : coords) {
+            System.out.println("coord--> "+cord.latitud+"  "+cord.longitud+"  "+cord.ruta.id);
+        }
         return view;
 
     }
@@ -196,16 +218,18 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         if(v.getId()==botones[2].getId()){
             if(servicesConnected()){
                 if(!status) {
+                    ruta= new Ruta(this.getActivity(),"Ruta");
+                    ruta.save();
                     this.getActivity().startService(new Intent(this.getActivity(), SvtService.class));
                     doBindService();
+                  //  sendMessageToService((int)ruta.id);
                     Location mCurrentLocation;
                     mCurrentLocation = locationClient.getLastLocation();
                     location=new LatLng( mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
                     map.animateCamera(update);
-                    Ruta ruta= new Ruta(this.getActivity(),"");
-                    ruta.save();
-                    sendMessageToService((int)ruta.id);
+
+
                     status=true;
                 }else {
                     doUnbindService();
@@ -254,7 +278,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     /*service*/
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        System.out.println("on saved entro");
+
         super.onSaveInstanceState(outState);
 //    outState.putString("textStatus", textStatus.getText().toString());
 //    outState.putString("textIntValue", textIntValue.getText().toString());
@@ -279,9 +303,13 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         if (mIsBound) {
             if (mService != null) {
                 try {
+                    while (!attached){
+
+                    }
                     Message msg = Message.obtain(null, SvtService.MSG_SET_INT_VALUE, intvaluetosend, 0);
                     msg.replyTo = mMessenger;
                     mService.send(msg);
+                    System.out.println("mando mensaje "+intvaluetosend);
                 } catch (RemoteException e) {
                 }
             }
@@ -294,6 +322,13 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         this.getActivity().bindService(new Intent(this.getActivity(), SvtService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
         System.out.println("Binding.");
+    }
+    void doBindServiceAndSend(int id) {
+        this.getActivity().bindService(new Intent(this.getActivity(), SvtService.class), mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+        System.out.println("Binding.");
+        System.out.println("mando id de ruta "+id);
+        sendMessageToService(id);
     }
     void doUnbindService() {
         if (mIsBound) {

@@ -18,7 +18,7 @@ public class LugarDbHelper extends DbHelper {
     private static final String KEY_NOMBRE = "nombre";
     private static final String[] KEYS_LUGAR = {KEY_NOMBRE};
 
-    private static final String CREATE_TABLE_LUGAR = createTableSql(TABLE_LUGAR, KEYS_LUGAR);
+    public static final String CREATE_TABLE_LUGAR = createTableSql(TABLE_LUGAR, KEYS_LUGAR);
 
     public LugarDbHelper(Context context) {
         super(context);

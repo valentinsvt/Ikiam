@@ -8,11 +8,11 @@ import java.util.List;
  * Created by DELL on 28/07/2014.
  */
 public class Familia {
-    long id = 0;
-    String fecha;
-    String nombre;
+    public long id = 0;
+    public String fecha;
+    public String nombre;
 
-    FamiliaDbHelper familiaDbHelper;
+    public FamiliaDbHelper familiaDbHelper;
 
     public Familia(Context context) {
         familiaDbHelper = new FamiliaDbHelper(context);

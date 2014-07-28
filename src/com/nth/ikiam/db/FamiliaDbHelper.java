@@ -18,7 +18,7 @@ public class FamiliaDbHelper extends DbHelper {
     private static final String KEY_NOMBRE = "nombre";
     private static final String[] KEYS_FAMILIA = {KEY_NOMBRE};
 
-    private static final String CREATE_TABLE_FAMILIA = createTableSql(TABLE_FAMILIA, KEYS_FAMILIA);
+    public static final String CREATE_TABLE_FAMILIA = createTableSql(TABLE_FAMILIA, KEYS_FAMILIA);
 
     public FamiliaDbHelper(Context context) {
         super(context);

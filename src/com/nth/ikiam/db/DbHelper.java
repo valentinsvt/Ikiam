@@ -16,10 +16,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
-    private static final String DATABASE_NAME = "ikiamDb";
+    private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
+    private static final String DATABASE_NAME = "ikiamDb2";
 
     // Table Names
     protected static final String TABLE_COLOR = "colores";
@@ -44,6 +45,26 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        System.out.print("DBHELPER ON CREATE");
+
+        Coordenada c = new Coordenada(context);
+        sqLiteDatabase.execSQL(c.coordenadaDbHelper.CREATE_TABLE_COORDENADA);
+        Ruta r = new Ruta(context);
+        sqLiteDatabase.execSQL(r.rutaDbHelper.CREATE_TABLE_RUTA);
+        Foto foto = new Foto(context);
+        sqLiteDatabase.execSQL(foto.fotoDbHelper.CREATE_TABLE_FOTO);
+        Color co = new Color(context);
+        sqLiteDatabase.execSQL(co.colorDbHelper.CREATE_TABLE_COLOR);
+        Lugar l = new Lugar(context);
+        sqLiteDatabase.execSQL(l.lugarDbHelper.CREATE_TABLE_LUGAR);
+        Familia fa = new Familia(context);
+        sqLiteDatabase.execSQL(fa.familiaDbHelper.CREATE_TABLE_FAMILIA);
+        Genero g = new Genero(context);
+        sqLiteDatabase.execSQL(g.generoDbHelper.CREATE_TABLE_GENERO);
+        Especie e = new Especie(context);
+        sqLiteDatabase.execSQL(e.especieDbHelper.CREATE_TABLE_ESPECIE);
+
+
     }
 
     @Override
@@ -67,6 +88,7 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
         sql += ")";
+        //System.out.println("crear sql create " + sql);
         return sql;
     }
 

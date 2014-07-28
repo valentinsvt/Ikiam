@@ -43,11 +43,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
 
 
-    /*File*/
-    String filename = "nthData";
-    String contenido = "";
-    String texto ="";
-    FileOutputStream outputStream;
+
     Ruta ruta;
     Context context;
     @Override
@@ -57,6 +53,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     class IncomingHandler extends Handler { // Handler of incoming messages from clients.
         @Override
         public void handleMessage(Message msg) {
+            System.out.println("service Recibio mensaje "+msg.what+"  "+msg.arg1);
             switch (msg.what) {
                 case MSG_REGISTER_CLIENT:
                     mClients.add(msg.replyTo);
@@ -65,6 +62,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
                     mClients.remove(msg.replyTo);
                     break;
                 case MSG_SET_INT_VALUE:
+                    System.out.println("set ruta id "+msg.arg1);
                     ruta=Ruta.get(context,(long)msg.arg1);
                     break;
                 default:
@@ -117,13 +115,6 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         super.onCreate();
         Log.i("MyService", "Service Started.");
         this.context=this;
-        try {
-            outputStream = openFileOutput(filename, Context.MODE_APPEND | Context.MODE_PRIVATE);
-            texto = "\n!=route "+new Date()+"\n";
-            outputStream.write(texto.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         showNotification();
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
@@ -158,38 +149,30 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
 
 
     private void onTimerTick() {
+        Location mCurrentLocation;
+        mCurrentLocation = locationClient.getLastLocation();
+        try{
 
-        try {
-            Location mCurrentLocation;
-            mCurrentLocation = locationClient.getLastLocation();
-            counter++;
-            Log.i("TimerTick", "Timer doing work cada 10?." + mCurrentLocation.getLatitude()+"  "+mCurrentLocation.getLongitude());
-            sendMessageToUI(mCurrentLocation);
+            System.out.println("insert en coord "+ruta.id);
             if(ruta!=null){
                 Coordenada cord = new Coordenada(this.context,(long)mCurrentLocation.getLatitude(),(long)mCurrentLocation.getLongitude(),ruta);
                 cord.save();
             }
-            try{
-                texto=""+ mCurrentLocation.getLatitude()+"%"+mCurrentLocation.getLatitude()+"&";
-                outputStream.write(texto.getBytes());
-            }catch (Exception e){
-
-            }
-
-        } catch (Throwable t) { //you should always ultimately catch all exceptions in timer tasks.
-            Log.e("TimerTick", "Timer Tick Failed.", t);
+        }catch (Exception e){
+            System.out.println("error insertando coordenada "+e.getMessage());
         }
+        finally {
+            sendMessageToUI(mCurrentLocation);
+        }
+
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         locationClient.disconnect();
-        try {
-            outputStream.close();
-        }catch (Exception e){
 
-        }
         if (timer != null) {timer.cancel();}
         counter=0;
         nm.cancel(23); // Cancel the persistent notification.
