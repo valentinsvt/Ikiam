@@ -146,9 +146,9 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
-        System.out.println("rutas "+Ruta.count(this.getActivity()));
-        Ruta ruta = Ruta.get(this.getActivity(),1L);
-        List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
+        //System.out.println("rutas "+Ruta.count(this.getActivity()));
+        //Ruta ruta = Ruta.get(this.getActivity(),1L);
+        //List<Coordenada> coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
         return view;
 
     }
