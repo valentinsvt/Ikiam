@@ -3,15 +3,16 @@ package com.nth.ikiam.db;
 import android.content.Context;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Svt on 7/27/2014.
  */
 public class Ruta {
-    long id=0;
-    String descripcion;
-    String fecha;
-    RutaDbHelper rutaDbHelper;
+    public long id=0;
+    public String descripcion;
+    public String fecha;
+    public RutaDbHelper rutaDbHelper;
 
 
     public Ruta(Context context, String descripcion){
@@ -23,10 +24,7 @@ public class Ruta {
         this.rutaDbHelper=new RutaDbHelper(context);
     }
 
-    public static Ruta get(Context context,long id){
-        RutaDbHelper rutaDbHelper = new RutaDbHelper(context);
-        return rutaDbHelper.getRuta(id) ;
-    }
+ 
 
     public String getDescripcion() {
         return descripcion;
@@ -51,4 +49,31 @@ public class Ruta {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
+    public void save() {
+        if (this.id == 0) {
+            this.id = this.rutaDbHelper.createRuta(this);
+        } else {
+            this.id = this.rutaDbHelper.updateRuta(this);
+        }
+    }
+
+    public static Ruta get(Context context, long id) {
+        RutaDbHelper e = new RutaDbHelper(context);
+        return e.getRuta(id);
+    }
+
+    public static int count(Context context) {
+        RutaDbHelper e = new RutaDbHelper(context);
+        return e.countAllRutas();
+    }
+
+
+    public static List<Ruta> list(Context context) {
+        RutaDbHelper e = new RutaDbHelper(context);
+        return e.getAllRutas();
+    }
+
+
+
+
 }

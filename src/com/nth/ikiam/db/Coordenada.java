@@ -2,6 +2,8 @@ package com.nth.ikiam.db;
 
 import android.content.Context;
 
+import java.util.List;
+
 /**
  * Created by Svt on 7/27/2014.
  */
@@ -68,4 +70,35 @@ public class Coordenada {
     public void setRuta(Ruta ruta) {
         this.ruta = ruta;
     }
+
+    public void save() {
+        if (this.id == 0) {
+            this.id = this.coordenadaDbHelper.createCoordenada(this);
+        } else {
+            this.id = this.coordenadaDbHelper.updateCoordenada(this);
+        }
+    }
+
+    public static Coordenada get(Context context, long id) {
+        CoordenadaDbHelper e = new CoordenadaDbHelper(context);
+        return e.getCoordenada(id);
+    }
+
+    public static int count(Context context) {
+        CoordenadaDbHelper e = new CoordenadaDbHelper(context);
+        return e.countAllCoordenadas();
+    }
+
+
+    public static List<Coordenada> list(Context context) {
+        CoordenadaDbHelper e = new CoordenadaDbHelper(context);
+        return e.getAllCoordenadas();
+    }
+
+    public static List<Coordenada> findAllByRuta(Context context,Ruta ruta) {
+        CoordenadaDbHelper e = new CoordenadaDbHelper(context);
+        return e.getAllCoordenadasByRuta(ruta);
+    }
+    
+    
 }
