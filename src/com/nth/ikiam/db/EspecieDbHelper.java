@@ -23,10 +23,8 @@ public class EspecieDbHelper extends DbHelper {
     private static final String KEY_COLOR_ID = "color_id";
     private static final String KEY_GENERO_ID = "genero_id";
     private static final String KEY_COLOR2_ID = "color2_id";
-    private static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE, KEY_GENERO_ID, KEY_COLOR_ID, KEY_COLOR2_ID};
 
-    // ESPECIE table create statement
-    public static final String CREATE_TABLE_ESPECIE = createTableSql(TABLE_ESPECIE, KEYS_ESPECIE);
+    public static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE, KEY_GENERO_ID, KEY_COLOR_ID, KEY_COLOR2_ID};
 
     public EspecieDbHelper(Context context) {
         super(context);
@@ -34,8 +32,6 @@ public class EspecieDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_ESPECIE);
     }
 
     @Override

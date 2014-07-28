@@ -78,6 +78,11 @@ public class Color {
         return e.getAllColores();
     }
 
+    public static List<String> listString(Context context) {
+        ColorDbHelper e = new ColorDbHelper(context);
+        return e.getAllColoresString();
+    }
+
     public static List<Color> findAllByNombre(Context context, String color) {
         ColorDbHelper e = new ColorDbHelper(context);
         return e.getAllColoresByNombre(color);

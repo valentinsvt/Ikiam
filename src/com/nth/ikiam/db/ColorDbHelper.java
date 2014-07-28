@@ -16,9 +16,8 @@ public class ColorDbHelper extends DbHelper {
     private static final String LOG = "ColorDbHelper";
 
     private static final String KEY_NOMBRE = "nombre";
-    private static final String[] KEYS_COLOR = {KEY_NOMBRE};
 
-    public static final String CREATE_TABLE_COLOR = createTableSql(TABLE_COLOR, KEYS_COLOR);
+    public static final String[] KEYS_COLOR = {KEY_NOMBRE};
 
     public ColorDbHelper(Context context) {
         super(context);
@@ -26,8 +25,6 @@ public class ColorDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_COLOR);
     }
 
     @Override
@@ -78,6 +75,27 @@ public class ColorDbHelper extends DbHelper {
 
                 // adding to tags list
                 colores.add(cl);
+            } while (c.moveToNext());
+        }
+        return colores;
+    }
+
+    public List<String> getAllColoresString() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<String> colores = new ArrayList<String>();
+        String selectQuery = "SELECT  * FROM " + TABLE_COLOR;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Color cl = setDatos(c);
+
+                // adding to tags list
+                colores.add(cl.nombre);
             } while (c.moveToNext());
         }
         return colores;

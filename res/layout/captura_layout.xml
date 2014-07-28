@@ -249,7 +249,9 @@
         android:id="@id/captura_color_spinner"
         android:layout_above="@id/captura_nombre_label"
         android:layout_alignParentStart="true"
-        android:spinnerMode="dialog" />
+        android:spinnerMode="dialog"
+        android:background="#ffa1a1a1"
+        style="@android:style/TextAppearance.Holo.Inverse" />
 
     <TextView
         android:layout_width="wrap_content"

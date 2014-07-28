@@ -16,9 +16,8 @@ public class CoordenadaDbHelper  extends DbHelper{
     private static final String KEY_LONGITUD = "longitud";
     private static final String KEY_LATITUD = "latitud";
     private static final String KEY_RUTA = "ruta_id";
-    private static final String[] KEYS_COORDENADA = {KEY_LATITUD,KEY_LONGITUD,KEY_RUTA};
 
-    public static final String CREATE_TABLE_COORDENADA = createTableSql(TABLE_COORDENADA, KEYS_COORDENADA);
+    public static final String[] KEYS_COORDENADA = {KEY_LATITUD,KEY_LONGITUD,KEY_RUTA};
 
     public CoordenadaDbHelper(Context context) {
         super(context);
@@ -27,9 +26,6 @@ public class CoordenadaDbHelper  extends DbHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-
-        db.execSQL(CREATE_TABLE_COORDENADA);
     }
 
     @Override

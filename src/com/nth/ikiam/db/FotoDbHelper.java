@@ -22,10 +22,8 @@ public class FotoDbHelper extends DbHelper {
     private static final String KEY_LUGAR_ID = "lugar_id";
     private static final String KEY_COORDENADA = "coordenada";
     private static final String KEY_KEYWORDS = "keywords";
-    private static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS};
 
-    // FOTO table create statement
-    public static final String CREATE_TABLE_FOTO = createTableSql(TABLE_FOTO, KEYS_FOTO);
+    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS};
 
     public FotoDbHelper(Context context) {
         super(context);
@@ -33,8 +31,6 @@ public class FotoDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_FOTO);
     }
 
     @Override

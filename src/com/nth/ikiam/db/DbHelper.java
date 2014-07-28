@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -29,12 +30,13 @@ public class DbHelper extends SQLiteOpenHelper {
     protected static final String TABLE_FAMILIA = "familias";
     protected static final String TABLE_GENERO = "generos";
     protected static final String TABLE_ESPECIE = "especies";
-    protected static final String TABLE_COORDENADA= "coordenada";
-    protected static final String TABLE_RUTA= "ruta";
+    protected static final String TABLE_COORDENADA = "coordenada";
+    protected static final String TABLE_RUTA = "ruta";
 
     // Common column names
     protected static final String KEY_ID = "id";
     protected static final String KEY_FECHA = "fecha";
+    private static final String[] KEYS_COMMON = {KEY_ID, KEY_FECHA};
 
     protected Context context;
 
@@ -47,23 +49,14 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         System.out.print("DBHELPER ON CREATE");
 
-        Coordenada c = new Coordenada(context);
-        sqLiteDatabase.execSQL(c.coordenadaDbHelper.CREATE_TABLE_COORDENADA);
-        Ruta r = new Ruta(context);
-        sqLiteDatabase.execSQL(r.rutaDbHelper.CREATE_TABLE_RUTA);
-        Foto foto = new Foto(context);
-        sqLiteDatabase.execSQL(foto.fotoDbHelper.CREATE_TABLE_FOTO);
-        Color co = new Color(context);
-        sqLiteDatabase.execSQL(co.colorDbHelper.CREATE_TABLE_COLOR);
-        Lugar l = new Lugar(context);
-        sqLiteDatabase.execSQL(l.lugarDbHelper.CREATE_TABLE_LUGAR);
-        Familia fa = new Familia(context);
-        sqLiteDatabase.execSQL(fa.familiaDbHelper.CREATE_TABLE_FAMILIA);
-        Genero g = new Genero(context);
-        sqLiteDatabase.execSQL(g.generoDbHelper.CREATE_TABLE_GENERO);
-        Especie e = new Especie(context);
-        sqLiteDatabase.execSQL(e.especieDbHelper.CREATE_TABLE_ESPECIE);
-
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_COLOR, KEYS_COMMON, ColorDbHelper.KEYS_COLOR));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_COORDENADA, KEYS_COMMON, CoordenadaDbHelper.KEYS_COORDENADA));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ESPECIE, KEYS_COMMON, EspecieDbHelper.KEYS_ESPECIE));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_FAMILIA, KEYS_COMMON, FamiliaDbHelper.KEYS_FAMILIA));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_FOTO, KEYS_COMMON, FotoDbHelper.KEYS_FOTO));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_GENERO, KEYS_COMMON, GeneroDbHelper.KEYS_GENERO));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_LUGAR, KEYS_COMMON, LugarDbHelper.KEYS_LUGAR));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_RUTA, KEYS_COMMON, RutaDbHelper.KEYS_RUTA));
 
     }
 

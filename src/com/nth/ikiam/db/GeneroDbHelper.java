@@ -17,9 +17,8 @@ public class GeneroDbHelper extends DbHelper {
 
     private static final String KEY_NOMBRE = "nombre";
     private static final String KEY_FAMILIA_ID = "familia_id";
-    private static final String[] KEYS_GENERO = {KEY_NOMBRE, KEY_FAMILIA_ID};
 
-    public static final String CREATE_TABLE_GENERO = createTableSql(TABLE_GENERO, KEYS_GENERO);
+    public static final String[] KEYS_GENERO = {KEY_NOMBRE, KEY_FAMILIA_ID};
 
     public GeneroDbHelper(Context context) {
         super(context);
@@ -27,8 +26,6 @@ public class GeneroDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_GENERO);
     }
 
     @Override

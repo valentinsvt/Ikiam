@@ -16,9 +16,8 @@ public class FamiliaDbHelper extends DbHelper {
     private static final String LOG = "FamiliaDbHelper";
 
     private static final String KEY_NOMBRE = "nombre";
-    private static final String[] KEYS_FAMILIA = {KEY_NOMBRE};
 
-    public static final String CREATE_TABLE_FAMILIA = createTableSql(TABLE_FAMILIA, KEYS_FAMILIA);
+    public static final String[] KEYS_FAMILIA = {KEY_NOMBRE};
 
     public FamiliaDbHelper(Context context) {
         super(context);
@@ -26,8 +25,6 @@ public class FamiliaDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_FAMILIA);
     }
 
     @Override

@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Ikiam.iml" filepath="$PROJECT_DIR$/Ikiam.iml" />
-      <module fileurl="file://C:/android/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="C:/android/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
       <module fileurl="file://$USER_HOME$/android/adt-bundle-linux-x86-20140702/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="$USER_HOME$/android/adt-bundle-linux-x86-20140702/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
+      <module fileurl="file://C:/android/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="C:/android/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
       <module fileurl="file://$USER_HOME$/adt-bundle-linux-x86-20140702/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="$USER_HOME$/adt-bundle-linux-x86-20140702/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../adt/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="$PROJECT_DIR$/../../adt/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
     </modules>

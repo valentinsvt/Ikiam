@@ -25,6 +25,7 @@ import com.nth.ikiam.db.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 /**
  * Created by luz on 25/07/14.
@@ -50,6 +51,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     private ImageView selectedImage;
     private TextView lblInfo;
     private EditText textoComentarios;
+    private Spinner spinnerColor1;
 
     private static final int GALLERY_REQUEST = 999;
     private static final int CAMERA_REQUEST = 1337;
@@ -59,8 +61,22 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
     boolean hayFoto = false;
 
+    Context context;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        context = getActivity().getApplicationContext();
+        //inicializa las tablas q va a usar
+        Color rojo = new Color(context, "rojo");
+        rojo.save();
+        Coordenada coordenada = new Coordenada(context);
+        Familia familia = new Familia(context);
+        Genero genero = new Genero(context);
+        Especie especie = new Especie(context);
+        Foto foto = new Foto(context);
+        Lugar lugar = new Lugar(context);
+        Ruta ruta = new Ruta(context);
+
         View view = inflater.inflate(R.layout.captura_layout, container, false);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -68,7 +84,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
 
-//        System.out.println("W: " + screenWidth + "   H: " + screenHeight);
+        spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color_spinner);
+        loadColores(spinnerColor1);
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
@@ -127,10 +144,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     i++;
                 }
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
-
-                Context c = getActivity().getApplicationContext();
-
-
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
@@ -150,6 +163,14 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         if (v.getId() == toggles[4].getId()) { //fruit
             updateStatus(toggles[4]);
         }
+    }
+
+    private void loadColores(Spinner spinner) {
+        List<String> colores = Color.listString(context);
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, colores);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
     }
 
     private void updateStatus(ToggleButton toggleButton) {
@@ -178,7 +199,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     }
 
     private void alerta(String string) {
-        Toast.makeText(getActivity().getApplicationContext(), string, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }
 
     /**

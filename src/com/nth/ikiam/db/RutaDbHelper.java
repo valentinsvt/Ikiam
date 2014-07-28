@@ -15,9 +15,8 @@ public class RutaDbHelper extends DbHelper {
     private static final String LOG = "RutaDbHelper";
 
     private static final String KEY_DESCRIPCION = "descripcion";
-    private static final String[] KEYS_RUTA = {KEY_DESCRIPCION};
 
-    public static final String CREATE_TABLE_RUTA = createTableSql(TABLE_RUTA, KEYS_RUTA);
+    public static final String[] KEYS_RUTA = {KEY_DESCRIPCION};
 
     public RutaDbHelper(Context context) {
         super(context);
@@ -25,8 +24,6 @@ public class RutaDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_RUTA);
     }
 
     @Override
@@ -83,7 +80,6 @@ public class RutaDbHelper extends DbHelper {
     }
 
 
-
     public int countAllRutas() {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_RUTA;
@@ -93,7 +89,6 @@ public class RutaDbHelper extends DbHelper {
         }
         return 0;
     }
-
 
 
     public int updateRuta(Ruta ruta) {

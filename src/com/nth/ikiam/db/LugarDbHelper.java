@@ -16,9 +16,8 @@ public class LugarDbHelper extends DbHelper {
     private static final String LOG = "LugarDbHelper";
 
     private static final String KEY_NOMBRE = "nombre";
-    private static final String[] KEYS_LUGAR = {KEY_NOMBRE};
 
-    public static final String CREATE_TABLE_LUGAR = createTableSql(TABLE_LUGAR, KEYS_LUGAR);
+    public static final String[] KEYS_LUGAR = {KEY_NOMBRE};
 
     public LugarDbHelper(Context context) {
         super(context);
@@ -26,8 +25,6 @@ public class LugarDbHelper extends DbHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // creating required tables
-        db.execSQL(CREATE_TABLE_LUGAR);
     }
 
     @Override
