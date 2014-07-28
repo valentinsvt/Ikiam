@@ -10,7 +10,7 @@ import java.util.List;
 public class Color {
     long id = 0;
     String fecha;
-    String color;
+    String nombre;
 
     ColorDbHelper colorDbHelper;
 
@@ -18,8 +18,8 @@ public class Color {
         colorDbHelper = new ColorDbHelper(context);
     }
 
-    public Color(Context context, String color) {
-        this.color = color;
+    public Color(Context context, String nombre) {
+        this.nombre = nombre;
 
         colorDbHelper = new ColorDbHelper(context);
     }
@@ -29,8 +29,8 @@ public class Color {
         return id;
     }
 
-    public String getColor() {
-        return color;
+    public String getNombre() {
+        return nombre;
     }
 
     public String getFecha() {
@@ -42,8 +42,8 @@ public class Color {
         this.id = id;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setFecha(String fecha) {
@@ -68,9 +68,9 @@ public class Color {
         return e.countAllColores();
     }
 
-    public static int countByColor(Context context, String color) {
+    public static int countByNombre(Context context, String color) {
         ColorDbHelper e = new ColorDbHelper(context);
-        return e.countColoresByColor(color);
+        return e.countColoresByNombre(color);
     }
 
     public static List<Color> list(Context context) {
@@ -78,9 +78,9 @@ public class Color {
         return e.getAllColores();
     }
 
-    public static List<Color> findAllByColor(Context context, String color) {
+    public static List<Color> findAllByNombre(Context context, String color) {
         ColorDbHelper e = new ColorDbHelper(context);
-        return e.getAllColoresByColor(color);
+        return e.getAllColoresByNombre(color);
     }
 
     public static void empty(Context context) {

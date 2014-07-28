@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,8 @@ public class LugarDbHelper extends DbHelper {
 
     private static final String LOG = "LugarDbHelper";
 
-    private static final String KEY_LUGAR = "lugar";
-    private static final String[] KEYS_LUGAR = {KEY_LUGAR};
+    private static final String KEY_NOMBRE = "nombre";
+    private static final String[] KEYS_LUGAR = {KEY_NOMBRE};
 
     private static final String CREATE_TABLE_LUGAR = createTableSql(TABLE_LUGAR, KEYS_LUGAR);
 
@@ -84,11 +83,11 @@ public class LugarDbHelper extends DbHelper {
         return lugares;
     }
 
-    public List<Lugar> getAllLugaresByLugar(String lugar) {
+    public List<Lugar> getAllLugaresByNombre(String lugar) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Lugar> lugares = new ArrayList<Lugar>();
         String selectQuery = "SELECT  * FROM " + TABLE_LUGAR +
-                " WHERE " + KEY_LUGAR + " = '" + lugar + "'";
+                " WHERE " + KEY_NOMBRE + " = '" + lugar + "'";
 
         logQuery(LOG, selectQuery);
 
@@ -125,10 +124,10 @@ public class LugarDbHelper extends DbHelper {
         return 0;
     }
 
-    public int countLugaresByLugar(String lugar) {
+    public int countLugaresByNombre(String lugar) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_LUGAR +
-                " WHERE " + KEY_LUGAR + " = '" + lugar + "'";
+                " WHERE " + KEY_NOMBRE + " = '" + lugar + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
@@ -152,7 +151,7 @@ public class LugarDbHelper extends DbHelper {
         Lugar lg = new Lugar(this.context);
         lg.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         lg.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        lg.setLugar(c.getString(c.getColumnIndex(KEY_LUGAR)));
+        lg.setNombre(c.getString(c.getColumnIndex(KEY_NOMBRE)));
         return lg;
     }
 
@@ -161,7 +160,7 @@ public class LugarDbHelper extends DbHelper {
         if (fecha) {
             values.put(KEY_FECHA, getDateTime());
         }
-        values.put(KEY_LUGAR, lugar.lugar);
+        values.put(KEY_NOMBRE, lugar.nombre);
         return values;
     }
 

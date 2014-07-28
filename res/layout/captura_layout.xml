@@ -175,7 +175,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/captura_comentarios_label"
-        android:layout_below="@id/captura_info_label"
+        android:textStyle="bold|italic"
+        android:layout_above="@id/captura_comentarios_txt"
         android:layout_alignParentStart="true" />
 
     <EditText
@@ -184,11 +185,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
-        android:minLines="8"
+        android:minLines="5"
         android:background="#ffa1a1a1"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/captura_comentarios_label"
-        android:layout_above="@+id/captura_guardar_container" />
+        android:layout_above="@+id/captura_guardar_container"
+        android:password="false" />
 
     <RelativeLayout
         android:id="@+id/captura_guardar_container"
@@ -221,5 +222,43 @@
             android:src="@drawable/ic_action_accept" />
 
     </RelativeLayout>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_above="@id/captura_comentarios_label"
+        android:layout_toRightOf="@id/captura_info_label"
+        android:layout_alignEnd="@id/captura_comentarios_txt"
+        android:autoText="true"
+        android:background="#ffa1a1a1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/captura_nombre_label"
+        android:id="@id/captura_nombre_label"
+        android:layout_above="@+id/editText"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold|italic" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@id/captura_color_spinner"
+        android:layout_above="@id/captura_nombre_label"
+        android:layout_alignParentStart="true"
+        android:spinnerMode="dialog" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/captura_color1_label"
+        android:id="@id/captura_color1_label"
+        android:layout_above="@id/captura_color_spinner"
+        android:layout_alignParentStart="true"
+        android:textStyle="bold|italic" />
 
 </RelativeLayout>

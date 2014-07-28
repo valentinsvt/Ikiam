@@ -10,12 +10,13 @@ import java.util.List;
 public class Especie {
     long id = 0;
     String fecha;
+    Genero genero;
+    String nombre;
     String nombreComun;
-    String nombreCientifico;
     String comentarios;
 
-    Color colorFlor;
-    Lugar lugar;
+    Color color1;
+    Color color2;
 
     EspecieDbHelper especieDbHelper;
 
@@ -37,10 +38,26 @@ public class Especie {
         especieDbHelper = new EspecieDbHelper(context);
     }
 
-    public Especie(Context context, String nombreComun, String nombreCientifico, String comentarios) {
+    public Especie(Context context, String nombreComun, Genero genero, String nombre, String comentarios) {
+        this.nombre = nombre;
         this.nombreComun = nombreComun;
-        this.nombreCientifico = nombreCientifico;
+        this.genero = genero;
         this.comentarios = comentarios;
+
+        especieDbHelper = new EspecieDbHelper(context);
+    }
+
+    public Especie(Context context, Genero genero, String nombre, String comentarios) {
+        this.nombre = nombre;
+        this.genero = genero;
+        this.comentarios = comentarios;
+
+        especieDbHelper = new EspecieDbHelper(context);
+    }
+
+    public Especie(Context context, Genero genero, String nombre) {
+        this.nombre = nombre;
+        this.genero = genero;
 
         especieDbHelper = new EspecieDbHelper(context);
     }
@@ -54,8 +71,16 @@ public class Especie {
         return nombreComun;
     }
 
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
     public String getNombreCientifico() {
-        return nombreCientifico;
+        return genero.nombre + " " + nombre;
     }
 
     public String getComentarios() {
@@ -66,12 +91,12 @@ public class Especie {
         return fecha;
     }
 
-    public Color getColorFlor() {
-        return colorFlor;
+    public Color getColor1() {
+        return color1;
     }
 
-    public Lugar getLugar() {
-        return lugar;
+    public Color getColor2() {
+        return color2;
     }
 
     //setters
@@ -83,8 +108,12 @@ public class Especie {
         this.nombreComun = nombreComun;
     }
 
-    public void setNombreCientifico(String nombreCientifico) {
-        this.nombreCientifico = nombreCientifico;
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setComentarios(String comentarios) {
@@ -95,12 +124,12 @@ public class Especie {
         this.fecha = fecha;
     }
 
-    public void setColorFlor(Color colorFlor) {
-        this.colorFlor = colorFlor;
+    public void setColor1(Color color1) {
+        this.color1 = color1;
     }
 
-    public void setLugar(Lugar lugar) {
-        this.lugar = lugar;
+    public void setColor2(Color color2) {
+        this.color2 = color2;
     }
 
     public void save() {
@@ -126,6 +155,11 @@ public class Especie {
         return e.getAllEspeciesByColor(color);
     }
 
+    public static List<Especie> findAllByGenero(Context context, Genero genero) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.getAllEspeciesByGenero(genero);
+    }
+
     public static int count(Context context) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.countAllEspecies();
@@ -136,9 +170,9 @@ public class Especie {
         return e.countEspeciesByColor(color);
     }
 
-    public static int countByLugar(Context context, Lugar lugar) {
+    public static int countByGenero(Context context, Genero genero) {
         EspecieDbHelper e = new EspecieDbHelper(context);
-        return e.countEspeciesByLugar(lugar);
+        return e.countEspeciesByGenero(genero);
     }
 
     public static void empty(Context context) {

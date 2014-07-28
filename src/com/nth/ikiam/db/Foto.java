@@ -11,8 +11,8 @@ public class Foto {
     long id = 0;
     String fecha;
     Especie especie;
-    double latitud;
-    double longitud;
+    Lugar lugar;
+    Coordenada coordenada;
     String comentarios;
     String keywords;
 
@@ -22,9 +22,8 @@ public class Foto {
         fotoDbHelper = new FotoDbHelper(context);
     }
 
-    public Foto(Context context, Especie especie, String comentarios, String keywords, double latitud, double longitud) {
-        this.latitud = latitud;
-        this.longitud = longitud;
+    public Foto(Context context, Especie especie, String comentarios, String keywords, Coordenada coordenada) {
+        this.coordenada = coordenada;
         this.comentarios = comentarios;
         this.keywords = keywords;
         this.especie = especie;
@@ -62,12 +61,8 @@ public class Foto {
         return id;
     }
 
-    public double getLatitud() {
-        return latitud;
-    }
-
-    public double getLongitud() {
-        return longitud;
+    public Coordenada getCoordenada() {
+        return coordenada;
     }
 
     public String getComentarios() {
@@ -82,6 +77,10 @@ public class Foto {
         return fecha;
     }
 
+    public Lugar getLugar() {
+        return lugar;
+    }
+
     //setter
     public void setEspecie(Especie especie) {
         this.especie = especie;
@@ -91,12 +90,8 @@ public class Foto {
         this.id = id;
     }
 
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
-
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
+    public void setCoordenada(Coordenada coordenada) {
+        this.coordenada = coordenada;
     }
 
     public void setComentarios(String comentarios) {
@@ -109,6 +104,10 @@ public class Foto {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public void setLugar(Lugar lugar) {
+        this.lugar = lugar;
     }
 
     public void save() {
@@ -144,9 +143,19 @@ public class Foto {
         return e.countFotosByEspecie(especie);
     }
 
+    public static int countByLugar(Context context, Lugar lugar) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.countFotosByLugar(lugar);
+    }
+
     public static List<Foto> findAllByEspecie(Context context, Especie especie) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.getAllFotosByEspecie(especie);
+    }
+
+    public static List<Foto> findAllByLugar(Context context, Lugar lugar) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getAllFotosByLugar(lugar);
     }
 
     public static List<Foto> findAllByKeyword(Context context, String keyword) {

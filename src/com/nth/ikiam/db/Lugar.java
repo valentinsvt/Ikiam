@@ -10,7 +10,7 @@ import java.util.List;
 public class Lugar {
     long id = 0;
     String fecha;
-    String lugar;
+    String nombre;
 
     LugarDbHelper lugarDbHelper;
 
@@ -19,7 +19,7 @@ public class Lugar {
     }
 
     public Lugar(Context context, String color) {
-        this.lugar = lugar;
+        this.nombre = nombre;
 
         lugarDbHelper = new LugarDbHelper(context);
     }
@@ -29,8 +29,8 @@ public class Lugar {
         return id;
     }
 
-    public String getLugar() {
-        return lugar;
+    public String getNombre() {
+        return nombre;
     }
 
     public String getFecha() {
@@ -42,8 +42,8 @@ public class Lugar {
         this.id = id;
     }
 
-    public void setLugar(String lugar) {
-        this.lugar = lugar;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public void setFecha(String fecha) {
@@ -68,9 +68,9 @@ public class Lugar {
         return e.countAllLugares();
     }
 
-    public static int countByLugar(Context context, String lugar) {
+    public static int countByNombre(Context context, String lugar) {
         LugarDbHelper e = new LugarDbHelper(context);
-        return e.countLugaresByLugar(lugar);
+        return e.countLugaresByNombre(lugar);
     }
 
     public static List<Lugar> list(Context context) {
@@ -78,9 +78,9 @@ public class Lugar {
         return e.getAllLugares();
     }
 
-    public static List<Lugar> findAllByLugar(Context context, String lugar) {
+    public static List<Lugar> findAllByNOmbre(Context context, String lugar) {
         LugarDbHelper e = new LugarDbHelper(context);
-        return e.getAllLugaresByLugar(lugar);
+        return e.getAllLugaresByNombre(lugar);
     }
 
     public static void empty(Context context) {

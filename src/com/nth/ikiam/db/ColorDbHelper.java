@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,8 @@ public class ColorDbHelper extends DbHelper {
 
     private static final String LOG = "ColorDbHelper";
 
-    private static final String KEY_COLOR = "color";
-    private static final String[] KEYS_COLOR = {KEY_COLOR};
+    private static final String KEY_NOMBRE = "nombre";
+    private static final String[] KEYS_COLOR = {KEY_NOMBRE};
 
     private static final String CREATE_TABLE_COLOR = createTableSql(TABLE_COLOR, KEYS_COLOR);
 
@@ -84,11 +83,11 @@ public class ColorDbHelper extends DbHelper {
         return colores;
     }
 
-    public List<Color> getAllColoresByColor(String color) {
+    public List<Color> getAllColoresByNombre(String color) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Color> colores = new ArrayList<Color>();
         String selectQuery = "SELECT  * FROM " + TABLE_COLOR +
-                " WHERE " + KEY_COLOR + " = '" + color + "'";
+                " WHERE " + KEY_NOMBRE + " = '" + color + "'";
 
         logQuery(LOG, selectQuery);
 
@@ -116,10 +115,10 @@ public class ColorDbHelper extends DbHelper {
         return 0;
     }
 
-    public int countColoresByColor(String color) {
+    public int countColoresByNombre(String color) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COLOR +
-                " WHERE " + KEY_COLOR + " = '" + color + "'";
+                " WHERE " + KEY_NOMBRE + " = '" + color + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
@@ -152,7 +151,7 @@ public class ColorDbHelper extends DbHelper {
         Color cl = new Color(this.context);
         cl.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         cl.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        cl.setColor(c.getString(c.getColumnIndex(KEY_COLOR)));
+        cl.setNombre(c.getString(c.getColumnIndex(KEY_NOMBRE)));
         return cl;
     }
 
@@ -161,7 +160,7 @@ public class ColorDbHelper extends DbHelper {
         if (fecha) {
             values.put(KEY_FECHA, getDateTime());
         }
-        values.put(KEY_COLOR, color.color);
+        values.put(KEY_NOMBRE, color.nombre);
         return values;
     }
 

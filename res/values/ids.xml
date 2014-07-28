@@ -27,4 +27,7 @@
     <item name="captura_save_btn" type="id" />
     <item name="captura_comentarios_txt" type="id" />
     <item name="captura_comentarios_label" type="id" />
+    <item name="captura_nombre_label" type="id" />
+    <item name="captura_color_spinner" type="id" />
+    <item name="captura_color1_label" type="id" />
 </resources>

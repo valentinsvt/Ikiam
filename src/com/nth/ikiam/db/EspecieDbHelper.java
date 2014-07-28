@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +19,11 @@ public class EspecieDbHelper extends DbHelper {
     // ESPECIE Table - column names
     private static final String KEY_COMENTARIOS = "comentarios";
     private static final String KEY_NOMBRE_COMUN = "nombre_comun";
-    private static final String KEY_NOMBRE_CIENTIFICO = "nombre_cientifico";
+    private static final String KEY_NOMBRE = "nombre";
     private static final String KEY_COLOR_ID = "color_id";
-    private static final String KEY_LUGAR_ID = "lugar_id";
-    private static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE_CIENTIFICO, KEY_COLOR_ID, KEY_LUGAR_ID};
+    private static final String KEY_GENERO_ID = "genero_id";
+    private static final String KEY_COLOR2_ID = "color2_id";
+    private static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE, KEY_GENERO_ID, KEY_COLOR_ID, KEY_COLOR2_ID};
 
     // ESPECIE table create statement
     private static final String CREATE_TABLE_ESPECIE = createTableSql(TABLE_ESPECIE, KEYS_ESPECIE);
@@ -95,7 +95,8 @@ public class EspecieDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Especie> todos = new ArrayList<Especie>();
         String selectQuery = "SELECT  * FROM " + TABLE_ESPECIE +
-                " WHERE " + KEY_COLOR_ID + " = " + color.id;
+                " WHERE " + KEY_COLOR_ID + " = " + color.id +
+                " OR " + KEY_COLOR2_ID + " = " + color.id;
 
         logQuery(LOG, selectQuery);
 
@@ -113,11 +114,11 @@ public class EspecieDbHelper extends DbHelper {
         return todos;
     }
 
-    public List<Especie> getAllEspeciesByLugar(Lugar lugar) {
+    public List<Especie> getAllEspeciesByGenero(Genero genero) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Especie> todos = new ArrayList<Especie>();
         String selectQuery = "SELECT  * FROM " + TABLE_ESPECIE +
-                " WHERE " + KEY_LUGAR_ID + " = " + lugar.id;
+                " WHERE " + KEY_GENERO_ID + " = " + genero.id;
 
         logQuery(LOG, selectQuery);
 
@@ -135,6 +136,28 @@ public class EspecieDbHelper extends DbHelper {
         return todos;
     }
 
+    public List<Especie> getAllEspeciesByNombreCientifico(String nombreCientifico) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Especie> todos = new ArrayList<Especie>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ESPECIE + " te, " + TABLE_GENERO + " tg" +
+                " WHERE te." + KEY_GENERO_ID + " = tg." + KEY_ID +
+                " AND tg." + KEY_NOMBRE + "||' '||te." + KEY_NOMBRE + " = '" + nombreCientifico + "'";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Especie es = setDatos(c);
+                // adding to especie list
+                todos.add(es);
+            } while (c.moveToNext());
+        }
+
+        return todos;
+    }
 
     public int countAllEspecies() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -149,7 +172,8 @@ public class EspecieDbHelper extends DbHelper {
     public int countEspeciesByColor(Color color) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_ESPECIE +
-                " WHERE " + KEY_COLOR_ID + " = '" + color.id + "'";
+                " WHERE " + KEY_COLOR_ID + " = '" + color.id + "'" +
+                " OR " + KEY_COLOR2_ID + " = '" + color.id + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
@@ -157,10 +181,22 @@ public class EspecieDbHelper extends DbHelper {
         return 0;
     }
 
-    public int countEspeciesByLugar(Lugar lugar) {
+    public int countEspeciesByGenero(Genero genero) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_ESPECIE +
-                " WHERE " + KEY_LUGAR_ID + " = '" + lugar.id + "'";
+                " WHERE " + KEY_GENERO_ID + " = '" + genero.id + "'";
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            return c.getInt(c.getColumnIndex("count"));
+        }
+        return 0;
+    }
+
+    public int countEspeciesByNombreCientifico(String nombreCientifico) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  count(*) FROM " + TABLE_ESPECIE + " te, " + TABLE_GENERO + " tg" +
+                " WHERE te." + KEY_GENERO_ID + " = tg." + KEY_ID +
+                " AND tg." + KEY_NOMBRE + "||' '||te." + KEY_NOMBRE + " = '" + nombreCientifico + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
@@ -207,10 +243,11 @@ public class EspecieDbHelper extends DbHelper {
         Especie es = new Especie(this.context);
         es.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         es.setNombreComun((c.getString(c.getColumnIndex(KEY_NOMBRE_COMUN))));
-        es.setNombreCientifico(c.getString(c.getColumnIndex(KEY_NOMBRE_CIENTIFICO)));
+        es.setNombre(c.getString(c.getColumnIndex(KEY_NOMBRE)));
         es.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        es.setColorFlor(Color.get(this.context, c.getLong(c.getColumnIndex(KEY_COLOR_ID))));
-        es.setLugar(Lugar.get(this.context, c.getLong(c.getColumnIndex(KEY_LUGAR_ID))));
+        es.setColor1(Color.get(this.context, c.getLong(c.getColumnIndex(KEY_COLOR_ID))));
+        es.setColor2(Color.get(this.context, c.getLong(c.getColumnIndex(KEY_COLOR2_ID))));
+        es.setGenero(Genero.get(this.context, c.getLong(c.getColumnIndex(KEY_GENERO_ID))));
         return es;
     }
 
@@ -220,10 +257,11 @@ public class EspecieDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_NOMBRE_COMUN, especie.nombreComun);
-        values.put(KEY_NOMBRE_CIENTIFICO, especie.nombreCientifico);
+        values.put(KEY_NOMBRE, especie.nombre);
         values.put(KEY_COMENTARIOS, especie.comentarios);
-        values.put(KEY_COLOR_ID, especie.colorFlor.id);
-        values.put(KEY_LUGAR_ID, especie.lugar.id);
+        values.put(KEY_COLOR_ID, especie.color1.id);
+        values.put(KEY_COLOR2_ID, especie.color2.id);
+        values.put(KEY_GENERO_ID, especie.genero.id);
         return values;
     }
 

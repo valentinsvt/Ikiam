@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +19,10 @@ public class FotoDbHelper extends DbHelper {
     //  FOTO - column names
     private static final String KEY_COMENTARIOS = "comentarios";
     private static final String KEY_ESPECIE_ID = "especie_id";
-    private static final String KEY_LATITUD = "latitud";
-    private static final String KEY_LONGITUD = "longitud";
+    private static final String KEY_LUGAR_ID = "lugar_id";
+    private static final String KEY_COORDENADA = "coordenada";
     private static final String KEY_KEYWORDS = "keywords";
-    private static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LATITUD, KEY_LONGITUD, KEY_KEYWORDS};
+    private static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS};
 
     // FOTO table create statement
     private static final String CREATE_TABLE_FOTO = createTableSql(TABLE_FOTO, KEYS_FOTO);
@@ -91,6 +90,17 @@ public class FotoDbHelper extends DbHelper {
         return 0;
     }
 
+    public int countFotosByLugar(Lugar lugar) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  count(*) count FROM " + TABLE_FOTO +
+                " WHERE " + KEY_LUGAR_ID + " = '" + lugar.id + "'";
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            return c.getInt(c.getColumnIndex("count"));
+        }
+        return 0;
+    }
+
     public List<Foto> getAllFotos() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Foto> fotos = new ArrayList<Foto>();
@@ -122,6 +132,29 @@ public class FotoDbHelper extends DbHelper {
 
         String selectQuery = "SELECT * FROM " + TABLE_FOTO +
                 " WHERE " + KEY_ESPECIE_ID + " = " + especie.id;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto f = setDatos(c);
+
+                // adding to foto list
+                fotos.add(f);
+            } while (c.moveToNext());
+        }
+        return fotos;
+    }
+
+    public List<Foto> getAllFotosByLugar(Lugar lugar) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Foto> fotos = new ArrayList<Foto>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_FOTO +
+                " WHERE " + KEY_LUGAR_ID + " = " + lugar.id;
 
         logQuery(LOG, selectQuery);
 
@@ -188,8 +221,7 @@ public class FotoDbHelper extends DbHelper {
         f.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         f.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         f.setEspecie(Especie.get(this.context, c.getLong(c.getColumnIndex(KEY_ESPECIE_ID))));
-        f.setLatitud((c.getDouble(c.getColumnIndex(KEY_LATITUD))));
-        f.setLongitud((c.getDouble(c.getColumnIndex(KEY_LONGITUD))));
+        f.setCoordenada(Coordenada.get(this.context, c.getLong(c.getColumnIndex(KEY_COORDENADA))));
         f.setComentarios((c.getString(c.getColumnIndex(KEY_COMENTARIOS))));
         f.setKeywords((c.getString(c.getColumnIndex(KEY_KEYWORDS))));
         return f;
@@ -201,8 +233,7 @@ public class FotoDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_ESPECIE_ID, foto.especie.id);
-        values.put(KEY_LATITUD, foto.getLatitud());
-        values.put(KEY_LONGITUD, foto.getLongitud());
+        values.put(KEY_COORDENADA, foto.coordenada.id);
         values.put(KEY_COMENTARIOS, foto.getComentarios());
         values.put(KEY_KEYWORDS, foto.getKeywords());
         return values;
