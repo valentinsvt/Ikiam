@@ -1,5 +1,7 @@
 package com.nth.ikiam;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -7,6 +9,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
@@ -37,6 +40,12 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     static final int MSG_SET_COORDS= 23;
     final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
 
+
+    /*File*/
+    String filename = "nthData";
+    String contenido = "";
+    String texto ="";
+    FileOutputStream outputStream;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -83,12 +92,12 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         for (int i=mClients.size()-1; i>=0; i--) {
             try {
                 // Send data as an Integer
-               // mClients.get(i).send(Message.obtain(null, MSG_SET_INT_VALUE, intvaluetosend, 0));
+                // mClients.get(i).send(Message.obtain(null, MSG_SET_INT_VALUE, intvaluetosend, 0));
 
                 //Send data as a String
                 Bundle b = new Bundle();
-                b.putDouble("latitud", location.getLatitude());
-                b.putDouble("logitud", location.getLongitude());
+                b.putDouble("latitud", location.getLatitude()+counter+0.00230);
+                b.putDouble("logitud", location.getLongitude()+counter+0.00130);
                 Message msg = Message.obtain(null, MSG_SET_COORDS);
                 msg.setData(b);
                 mClients.get(i).send(msg);
@@ -104,6 +113,14 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     public void onCreate() {
         super.onCreate();
         Log.i("MyService", "Service Started.");
+
+        try {
+            outputStream = openFileOutput(filename, Context.MODE_APPEND | Context.MODE_PRIVATE);
+            texto = "\n!=route "+new Date()+"\n";
+            outputStream.write(texto.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         showNotification();
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
@@ -141,9 +158,15 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         try {
             Location mCurrentLocation;
             mCurrentLocation = locationClient.getLastLocation();
-            counter += incrementby;
+            counter++;
             Log.i("TimerTick", "Timer doing work cada 10?." + mCurrentLocation.getLatitude()+"  "+mCurrentLocation.getLongitude());
             sendMessageToUI(mCurrentLocation);
+            try{
+                texto=""+ mCurrentLocation.getLatitude()+"%"+mCurrentLocation.getLatitude()+"&";
+                outputStream.write(texto.getBytes());
+            }catch (Exception e){
+
+            }
 
         } catch (Throwable t) { //you should always ultimately catch all exceptions in timer tasks.
             Log.e("TimerTick", "Timer Tick Failed.", t);
@@ -154,6 +177,11 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     public void onDestroy() {
         super.onDestroy();
         locationClient.disconnect();
+        try {
+            outputStream.close();
+        }catch (Exception e){
+
+        }
         if (timer != null) {timer.cancel();}
         counter=0;
         nm.cancel(23); // Cancel the persistent notification.
@@ -175,8 +203,8 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     @Override
     public void onDisconnected() {
         // Display the connection status
-       // Toast.makeText(this, "Disconnected. Please re-connect.",
-                //Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "Disconnected. Please re-connect.",
+        //Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -191,6 +219,6 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
          * start a Google Play services activity that can resolve
          * error.
          */
-     System.out.println("error connection failed");
+        System.out.println("error connection failed");
     }
 }

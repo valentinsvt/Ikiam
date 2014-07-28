@@ -26,6 +26,8 @@ public class DbHelper extends SQLiteOpenHelper {
     protected static final String TABLE_LUGAR = "lugares";
     protected static final String TABLE_FOTO = "fotos";
     protected static final String TABLE_ESPECIE = "especies";
+    protected static final String TABLE_COORDENADA= "coordenada";
+    protected static final String TABLE_RUTA= "ruta";
 
     // Common column names
     protected static final String KEY_ID = "id";

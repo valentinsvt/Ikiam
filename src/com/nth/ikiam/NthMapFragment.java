@@ -16,20 +16,28 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+
 /**
  * Created by DELL on 23/07/2014.
  */
-public class NthMapFragment extends Fragment implements Button.OnClickListener {
+public class NthMapFragment extends Fragment implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks,GooglePlayServicesClient.OnConnectionFailedListener {
     private Button chooseBtn;
     private Button[] botones;
     private static GoogleMap map;
+    boolean continente=true;
     private static LatLng location ;
-
+    LocationClient locationClient;
     /*Service */
     Messenger mService = null;
     boolean mIsBound;
@@ -104,6 +112,11 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener {
     /*Fin google services*/
 
 
+    /*file*/
+    String filename = "nthData";
+    String contenido = "";
+    FileOutputStream outputStream;
+
     public NthMapFragment() {
         // Empty constructor required for fragment subclasses
         super();
@@ -124,6 +137,8 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener {
         }
         // map=((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
         //  map=new MapFragment().getMap();
+        locationClient = new LocationClient(this.getActivity(),this, this);
+        locationClient.connect();
         setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
@@ -147,14 +162,44 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener {
     @Override
     public void onClick(View v){
         if(v.getId()==botones[0].getId()){
-            location=new LatLng( -0.4614207935306084, -90.615234375);
-            CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,7);
-            map.animateCamera(update);
+            try {
+                File file = new File(this.getActivity().getFilesDir(), filename);
+                if(file.exists()){
+                    StringBuilder text = new StringBuilder();
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    Toast.makeText(this.getActivity(), text, Toast.LENGTH_SHORT).show();
+                }
 
+
+
+            }catch (Exception e){
+
+            }
+            if(!continente) {
+                location = new LatLng(-1.6477220517969353, -78.46435546875);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
+                map.animateCamera(update);
+                botones[0].setText(R.string.map_galapagos_btn);
+                continente = true;
+            }else{
+                location = new LatLng(-0.4614207935306084, -90.615234375);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
+                map.animateCamera(update);
+                botones[0].setText(R.string.map_continente_btn);
+                continente = false;
+            }
         }
         if(v.getId()==botones[1].getId()){
-            Location myLocation  = map.getMyLocation();
-            location=new LatLng( myLocation.getLatitude(), myLocation.getLongitude());
+            Location mCurrentLocation;
+            mCurrentLocation = locationClient.getLastLocation();
+            //Location myLocation  = map.getMyLocation();
+            //System.out.println(" location "+myLocation+" map "+map);
+            location=new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
             map.animateCamera(update);
         }
@@ -163,8 +208,9 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener {
                 if(!status) {
                     this.getActivity().startService(new Intent(this.getActivity(), SvtService.class));
                     doBindService();
-                    Location myLocation  = map.getMyLocation();
-                    location=new LatLng( myLocation.getLatitude(), myLocation.getLongitude());
+                    Location mCurrentLocation;
+                    mCurrentLocation = locationClient.getLastLocation();
+                    location=new LatLng( mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
                     map.animateCamera(update);
 
@@ -216,6 +262,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener {
     /*service*/
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        System.out.println("on saved entro");
         super.onSaveInstanceState(outState);
 //    outState.putString("textStatus", textStatus.getText().toString());
 //    outState.putString("textIntValue", textIntValue.getText().toString());
@@ -317,6 +364,41 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener {
         //map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 12.0f));
     }
 
+
+
+    /*location */
+    @Override
+    public void onConnected(Bundle dataBundle) {
+        // Display the connection status
+        //Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+
+    }
+
+    /*
+     * Called by Location Services if the connection to the
+     * location client drops because of an error.
+     */
+    @Override
+    public void onDisconnected() {
+        // Display the connection status
+        // Toast.makeText(this, "Disconnected. Please re-connect.",
+        //Toast.LENGTH_SHORT).show();
+    }
+
+    /*
+     * Called by Location Services if the attempt to
+     * Location Services fails.
+     */
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        /*
+         * Google Play services can resolve some errors it detects.
+         * If the error has a resolution, try sending an Intent to
+         * start a Google Play services activity that can resolve
+         * error.
+         */
+        System.out.println("error connection failed");
+    }
 
 
 
