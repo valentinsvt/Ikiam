@@ -153,8 +153,8 @@ public class CoordenadaDbHelper  extends DbHelper{
         Coordenada cord = new Coordenada(this.context);
         cord.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         cord.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        cord.setLatitud(c.getLong(c.getColumnIndex(KEY_LONGITUD)));
-        cord.setLongitud(c.getLong(c.getColumnIndex(KEY_LONGITUD)));
+        cord.setLatitud(c.getDouble(c.getColumnIndex(KEY_LONGITUD)));
+        cord.setLongitud(c.getDouble(c.getColumnIndex(KEY_LONGITUD)));
         cord.setRuta(Ruta.get(context,c.getLong(c.getColumnIndex(KEY_RUTA))));
         return cord;
     }

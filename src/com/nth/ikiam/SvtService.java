@@ -155,7 +155,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
 
             System.out.println("insert en coord "+ruta.id);
             if(ruta!=null){
-                Coordenada cord = new Coordenada(this.context,(long)mCurrentLocation.getLatitude(),(long)mCurrentLocation.getLongitude(),ruta);
+                Coordenada cord = new Coordenada(this.context,mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude(),ruta);
                 cord.save();
             }
         }catch (Exception e){

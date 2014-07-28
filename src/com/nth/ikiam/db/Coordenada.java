@@ -9,20 +9,20 @@ import java.util.List;
  */
 public class Coordenada {
     public long id=0;
-    public long latitud;
-    public long longitud;
+    public double latitud;
+    public double longitud;
     public Ruta ruta;
     public CoordenadaDbHelper coordenadaDbHelper;
     public String fecha;
 
-    public Coordenada(Context context,long latitud,long longitud,Ruta ruta){
+    public Coordenada(Context context,double latitud,double longitud,Ruta ruta){
         this.latitud=latitud;
         this.longitud=longitud;
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
         this.ruta=ruta;
 
     }
-    public Coordenada(Context context,long latitud,long longitud,long ruta){
+    public Coordenada(Context context,double latitud,double longitud,long ruta){
         this.latitud=latitud;
         this.longitud=longitud;
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
@@ -41,19 +41,19 @@ public class Coordenada {
         this.id = id;
     }
 
-    public long getLatitud() {
+    public double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(long latitud) {
+    public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public long getLongitud() {
+    public double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(long longitud) {
+    public void setLongitud(double longitud) {
         this.longitud = longitud;
     }
     public void setFecha(String fecha) {
