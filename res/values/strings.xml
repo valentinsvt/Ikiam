@@ -77,9 +77,14 @@
     <string name="captura_keyWord_hoja">Hojas</string>
     <string name="captura_keyWord_flor">Flores</string>
 
-    <string name="captura_comentarios_label">Ingresa tus comentarios</string>
-    <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
-    <string name="captura_nombre_label">Nombre común (si lo conoces)</string>
+    <string name="captura_comentarios_label">Comentarios</string>
+    <string name="captura_nombre_familia_label">Familia</string>
+    <string name="captura_nombre_genero_label">Género</string>
+    <string name="captura_nombre_especie_label">Especie</string>
+    <string name="captura_nombre_comun_label">Nombre común</string>
     <string name="captura_color1_label">Color principal</string>
+    <string name="captura_color2_label">Color secundario</string>
 
+    <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
+    <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
 </resources>

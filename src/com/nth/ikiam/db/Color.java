@@ -51,6 +51,10 @@ public class Color {
         this.fecha = fecha;
     }
 
+    public String toString() {
+        return "**" + nombre;
+    }
+
     public void save() {
         if (this.id == 0) {
             this.id = this.colorDbHelper.createColor(this);

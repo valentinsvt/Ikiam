@@ -27,7 +27,17 @@
     <item name="captura_save_btn" type="id" />
     <item name="captura_comentarios_txt" type="id" />
     <item name="captura_comentarios_label" type="id" />
-    <item name="captura_nombre_label" type="id" />
-    <item name="captura_color_spinner" type="id" />
+    <item name="captura_color1_spinner" type="id" />
+    <item name="captura_color2_spinner" type="id" />
     <item name="captura_color1_label" type="id" />
+    <item name="captura_color2_label" type="id" />
+    <item name="captura_row_color_label" type="id" />
+    <item name="captura_nombre_familia_label" type="id" />
+    <item name="captura_nombre_familia_txt" type="id" />
+    <item name="captura_nombre_genero_label" type="id" />
+    <item name="captura_nombre_genero_txt" type="id" />
+    <item name="captura_nombre_especie_label" type="id" />
+    <item name="captura_nombre_especie_txt" type="id" />
+    <item name="captura_nombre_comun_label" type="id" />
+    <item name="captura_nombre_comun_txt" type="id" />
 </resources>

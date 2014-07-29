@@ -2,11 +2,9 @@ package com.nth.ikiam;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -15,18 +13,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.db.*;
+import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by luz on 25/07/14.
@@ -45,7 +42,7 @@ import java.util.List;
  * and
  * edited Mar 20 at 6:18 by Thomas Vervest
  */
-public class CapturaFragment extends Fragment implements Button.OnClickListener, AdapterView.OnItemSelectedListener {
+public class CapturaFragment extends Fragment implements Button.OnClickListener {
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
@@ -53,12 +50,17 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
     private TextView lblInfo;
     private EditText textoComentarios;
     private Spinner spinnerColor1;
+    private Spinner spinnerColor2;
 
     private static final int GALLERY_REQUEST = 999;
     private static final int CAMERA_REQUEST = 1337;
 
     private static int screenWidth;
     private static int screenHeight;
+
+    private String fotoPath;
+    private double fotoLat;
+    private double fotoLong;
 
     boolean hayFoto = false;
 
@@ -68,29 +70,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
 
-        //verifico q haya al menos un color
-        int cantColores = Color.count(context);
-        if (cantColores == 0) {
-            Color blue = new Color(context, "azul");
-            blue.save();
-            Color brown = new Color(context, "cafe");
-            brown.save();
-            Color green = new Color(context, "verde");
-            green.save();
-            Color orange = new Color(context, "naranja");
-            orange.save();
-            Color pink = new Color(context, "rosa");
-            pink.save();
-            Color purple = new Color(context, "violeta");
-            purple.save();
-            Color red = new Color(context, "rojo");
-            red.save();
-            Color white = new Color(context, "blanco");
-            white.save();
-            Color yellow = new Color(context, "amarillo");
-            yellow.save();
-        }
-
         View view = inflater.inflate(R.layout.captura_layout, container, false);
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -98,11 +77,13 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
 
-        spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color_spinner);
-        spinnerColor1.setAdapter(new MyAdapter(getActivity(), Color.listString(context)));
-        System.out.println("}}}}}}}}} " + getResources().getIdentifier("blanco", "string", context.getPackageName()));
-//        spinnerColor1.setOnItemSelectedListener(this);
-//        loadColores(spinnerColor1);
+        ArrayList<Color> colores = Color.listString(context);
+
+        spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);
+        spinnerColor1.setAdapter(new MyAdapter(getActivity(), colores));
+
+        spinnerColor2 = (Spinner) view.findViewById(R.id.captura_color2_spinner);
+        spinnerColor2.setAdapter(new MyAdapter(getActivity(), colores));
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
@@ -128,20 +109,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
-        String label = parent.getItemAtPosition(position).toString();
-
-        // Showing selected spinner item
-        alerta("You selected: " + label);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
     public void onClick(View v) {
         if (v.getId() == botones[0].getId()) { // galeria
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -163,6 +130,11 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
             if (hayFoto) {
                 String[] keys = {"arbol", "corteza", "hoja", "flor", "fruta"};
                 String comentarios = textoComentarios.getText().toString();
+                Color col = (Color) spinnerColor1.getSelectedItem();
+                System.out.println("************************************************");
+                System.out.println(spinnerColor1.getSelectedItem());
+                System.out.println(col.getId());
+                System.out.println("************************************************");
                 String keywords = "";
                 int i = 0;
                 for (ToggleButton toggle : toggles) {
@@ -174,7 +146,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                     }
                     i++;
                 }
-//                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
+
+                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
@@ -196,17 +169,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
         }
     }
 
-    private void loadColores(Spinner spinner) {
-
-//        List<String> colores = Color.listString(context);
-//
-////        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, colores);
-////        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item, colores);
-//        dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
-//        spinner.setAdapter(dataAdapter);
-    }
-
     private void updateStatus(ToggleButton toggleButton) {
         if (hayFoto) {
             String info = "";
@@ -223,7 +185,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                 }
                 i++;
             }
-            lblInfo.setText(info);
+//            lblInfo.setText(info);
         } else {
             if (toggleButton != null) {
                 toggleButton.setChecked(false);
@@ -248,6 +210,29 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                 MainActivity activity = (MainActivity) getActivity();
                 Bitmap bitmap = getBitmapFromCameraData(data, activity);
                 selectedImage.setImageBitmap(bitmap);
+
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = context.getContentResolver().query(data.getData(), filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                fotoPath = cursor.getString(columnIndex);
+
+                try {
+                    ExifInterface exif = new ExifInterface(fotoPath);
+                    GeoDegree gd = new GeoDegree(exif);
+
+                    System.out.println("************************************************************");
+                    System.out.println(exif.getAttribute(ExifInterface.TAG_DATETIME));
+                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
+                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
+                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
+                    System.out.println(gd.getLatitudeE6());
+                    System.out.println(gd.getLongitudeE6());
+                    System.out.println("************************************************************");
+                } catch (Exception e) {
+                    alerta(getString(R.string.captura_error_tag_gps));
+                    e.printStackTrace();
+                }
             }
         }
     }

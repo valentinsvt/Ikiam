@@ -42,32 +42,20 @@ public class MyAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-
         Color cur_obj = colores.get(position);
         LayoutInflater inflater = ((Activity) c).getLayoutInflater();
         View row = inflater.inflate(R.layout.row, parent, false);
-        TextView label = (TextView) row.findViewById(R.id.company);
-        label.setText(cur_obj.getNombre());
-        TextView sub = (TextView) row.findViewById(R.id.sub);
-//        sub.setText(cur_obj.getNombre());
-        sub.setText(getStringResourceByName(cur_obj.getNombre()));
-
-//        ImageView icon = (ImageView) row.findViewById(R.id.image);
-//        icon.setImageResource(cur_obj.getImage_id());
-
+        TextView sub = (TextView) row.findViewById(R.id.captura_row_color_label);
+        sub.setText(getStringResourceByName("global_color_" + cur_obj.getNombre()));
         return row;
     }
 
     private String getStringResourceByName(String aString) {
         String packageName = c.getPackageName();
         int resId = c.getResources().getIdentifier(aString, "string", packageName);
-        System.out.println(">>>>>> " + packageName);
-        System.out.println("<<<<<<< " + c.getResources().getIdentifier("blanco", "string", packageName));
-        System.out.println(">>>>>> " + aString + "     " + resId);
         if (resId == 0) {
             return aString;
         } else {
-            System.out.println("??????? " + c.getString(resId));
             return c.getString(resId);
         }
     }
