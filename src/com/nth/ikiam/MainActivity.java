@@ -80,6 +80,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        System.out.println(getString(R.string.global_color_cafe));
+
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
 
