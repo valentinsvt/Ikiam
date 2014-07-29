@@ -30,7 +30,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
 
     private NotificationManager nm;
     private Timer timer = new Timer();
-    private int counter = 0, incrementby = 1;
+    private int counter = 0;
     private static boolean isRunning = false;
     LocationClient locationClient;
     ArrayList<Messenger> mClients = new ArrayList<Messenger>(); // Keeps track of all current registered clients.
@@ -149,12 +149,10 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
 
 
     private void onTimerTick() {
-        counter++;
+
         Location mCurrentLocation;
         mCurrentLocation = locationClient.getLastLocation();
         try{
-
-            System.out.println("insert en coord "+ruta.id);
             if(ruta!=null){
                 Coordenada cord = new Coordenada(this.context,mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude(),ruta);
                 cord.save();
@@ -164,6 +162,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         }
         finally {
             sendMessageToUI(mCurrentLocation);
+            counter++;
         }
 
 

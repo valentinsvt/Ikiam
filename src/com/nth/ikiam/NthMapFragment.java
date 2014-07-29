@@ -7,8 +7,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.*;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +22,12 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
 import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.DbHelper;
 import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.dialogs.NthMapDialog;
+import com.nth.ikiam.image.ImageTableObserver;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,10 +41,16 @@ import java.util.List;
 public class NthMapFragment extends Fragment implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks,GooglePlayServicesClient.OnConnectionFailedListener {
     private Button chooseBtn;
     private Button[] botones;
+    /*Mapa*/
     private static GoogleMap map;
-    boolean continente=true;
+    private Polyline polyLine;
+    private PolylineOptions rectOptions = new PolylineOptions().color(Color.RED);
     private static LatLng location ;
     LocationClient locationClient;
+    Marker lastPosition;
+    /*Fin mapa*/
+    boolean continente=true;
+
     /*Service */
     Messenger mService = null;
     boolean mIsBound;
@@ -50,6 +58,8 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     Boolean status = false;
     Boolean attached = false;
     Ruta ruta;
+    private ImageTableObserver camera;
+    int lastestImageIndex = 0;
 
     class IncomingHandler extends Handler {
         @Override
@@ -66,9 +76,16 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                 case SvtService.MSG_SET_COORDS:
                     Double latitud = msg.getData().getDouble("latitud");
                     Double longitud = msg.getData().getDouble("logitud");
-                    System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
-                    map.addMarker(new MarkerOptions().position(new LatLng(latitud, longitud)).title("Pos"));
-                    System.out.println("Crear ping "+map);
+                    //System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
+                    LatLng latlong = new LatLng(latitud, longitud);
+                    if(lastPosition==null)
+                        lastPosition = map.addMarker(new MarkerOptions().position(latlong).title("Última posición registrada"));
+                    else
+                        lastPosition.setPosition(latlong);
+                    updatePolyLine(latlong);
+                    if(lastestImageIndex!=0){
+                        System.out.println("Tomo foto "+lastestImageIndex);
+                    }
                     break;
                 default:
                     super.handleMessage(msg);
@@ -94,7 +111,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     msg.replyTo = mMessenger;
                     msg.arg1=(int)ruta.id;
                     mService.send(msg);
-                    System.out.println("Mando mensaje de ruta");
+                    //System.out.println("Mando mensaje de ruta");
                     attached=true;
                 } catch (RemoteException e) {
                     // In this case the service has crashed before we could even do anything with it
@@ -144,6 +161,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         View view = inflater.inflate(R.layout.map_layout, container, false);
         helper = new DbHelper(this.getActivity());
         // open to read and write
@@ -161,6 +179,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         //  map=new MapFragment().getMap();
         locationClient = new LocationClient(this.getActivity(),this, this);
         locationClient.connect();
+
         setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
@@ -214,10 +233,12 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
             location=new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
             map.animateCamera(update);
+
         }
         if(v.getId()==botones[2].getId()){
             if(servicesConnected()){
                 if(!status) {
+                    map.clear();
                     ruta= new Ruta(this.getActivity(),"Ruta");
                     ruta.save();
                     this.getActivity().startService(new Intent(this.getActivity(), SvtService.class));
@@ -228,8 +249,10 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     location=new LatLng( mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
                     CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
                     map.animateCamera(update);
+                    polyLine = map.addPolyline(rectOptions);
                     botones[2].setText("Parar");
-
+                    camera = new ImageTableObserver(new Handler(),this);
+                    this.getActivity().getContentResolver().registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, camera);
                     status=true;
                 }else {
                     doUnbindService();
@@ -431,9 +454,8 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     /*location */
     @Override
     public void onConnected(Bundle dataBundle) {
-        // Display the connection status
-        //Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-
+        Location mCurrentLocation;
+        mCurrentLocation = locationClient.getLastLocation();
     }
 
     /*
@@ -462,5 +484,27 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         System.out.println("error connection failed");
     }
 
+
+    /*MAPS*/
+    /**
+     * Add the marker to the polyline.
+     */
+    private void updatePolyLine(LatLng latLng) {
+        List<LatLng> points = polyLine.getPoints();
+        points.add(latLng);
+        polyLine.setPoints(points);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for (LatLng l : points) {
+            builder.include(l);
+        }
+        LatLngBounds bounds = builder.build();
+        int padding = (100);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+        map.animateCamera(cu);
+    }
+
+    public void setImageIndex(int index){
+        this.lastestImageIndex=index;
+    }
 
 }

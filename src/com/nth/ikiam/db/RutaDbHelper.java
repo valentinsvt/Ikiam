@@ -38,9 +38,9 @@ public class RutaDbHelper extends DbHelper {
     public long createRuta(Ruta ruta) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = setValues(ruta, true);
-
-        // insert row
-        return db.insert(TABLE_RUTA, null, values);
+        long res = db.insert(TABLE_RUTA, null, values);
+        db.close();
+        return res;
     }
 
     public Ruta getRuta(long ruta_id) {
@@ -54,7 +54,7 @@ public class RutaDbHelper extends DbHelper {
 
         if (c != null)
             c.moveToFirst();
-
+        db.close();
         return setDatos(c);
     }
 
@@ -76,6 +76,7 @@ public class RutaDbHelper extends DbHelper {
                 rutas.add(r);
             } while (c.moveToNext());
         }
+        db.close();
         return rutas;
     }
 
@@ -84,6 +85,7 @@ public class RutaDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_RUTA;
         Cursor c = db.rawQuery(selectQuery, null);
+        db.close();
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
         }
@@ -94,22 +96,24 @@ public class RutaDbHelper extends DbHelper {
     public int updateRuta(Ruta ruta) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = setValues(ruta);
-
-        // updating row
-        return db.update(TABLE_RUTA, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_RUTA, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(ruta.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteRuta(Ruta ruta) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_RUTA, KEY_ID + " = ?",
                 new String[]{String.valueOf(ruta.id)});
+        db.close();
     }
 
     public void deleteAllRutas() {
         String sql = "DELETE FROM " + TABLE_RUTA;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Ruta setDatos(Cursor c) {

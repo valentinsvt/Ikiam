@@ -41,8 +41,10 @@ public class CoordenadaDbHelper  extends DbHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = setValues(coordenada, true);
 
-        // insert row
-        return db.insert(TABLE_COORDENADA, null, values);
+        long res = db.insert(TABLE_COORDENADA, null, values);
+        db.close();
+        return res;
+
     }
 
     public Coordenada getCoordenada(long coordenada_id) {
@@ -56,7 +58,7 @@ public class CoordenadaDbHelper  extends DbHelper{
 
         if (c != null)
             c.moveToFirst();
-
+        db.close();
         return setDatos(c);
     }
 
@@ -78,6 +80,7 @@ public class CoordenadaDbHelper  extends DbHelper{
                 coordenadas.add(cl);
             } while (c.moveToNext());
         }
+        db.close();
         return coordenadas;
     }
 
@@ -100,6 +103,7 @@ public class CoordenadaDbHelper  extends DbHelper{
                 coordenadas.add(cl);
             } while (c.moveToNext());
         }
+        db.close();
         return coordenadas;
     }
 
@@ -107,6 +111,7 @@ public class CoordenadaDbHelper  extends DbHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COORDENADA;
         Cursor c = db.rawQuery(selectQuery, null);
+        db.close();
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
         }
@@ -118,6 +123,7 @@ public class CoordenadaDbHelper  extends DbHelper{
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COORDENADA +
                 " WHERE " + KEY_RUTA + " = " + ruta.id;
         Cursor c = db.rawQuery(selectQuery, null);
+        db.close();
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
         }
@@ -129,20 +135,22 @@ public class CoordenadaDbHelper  extends DbHelper{
         ContentValues values = setValues(coordenada);
 
         // updating row
-        return db.update(TABLE_COORDENADA, values, KEY_ID + " = ?",
-                new String[]{String.valueOf(coordenada.getId())});
+        int res = db.update(TABLE_COORDENADA, values, KEY_ID + " = ?",new String[]{String.valueOf(coordenada.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteCoordenada(Coordenada coordenada) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_COORDENADA, KEY_ID + " = ?",
-                new String[]{String.valueOf(coordenada.id)});
+        db.delete(TABLE_COORDENADA, KEY_ID + " = ?",new String[]{String.valueOf(coordenada.id)});
+        db.close();
     }
 
     public void deleteAllCoordenadaes() {
         String sql = "DELETE FROM " + TABLE_COORDENADA;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Coordenada setDatos(Cursor c) {
