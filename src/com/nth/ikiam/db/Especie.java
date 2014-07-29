@@ -31,13 +31,6 @@ public class Especie {
 
     }
 
-    public Especie(Context context, String nombreComun, String comentarios) {
-        this.nombreComun = nombreComun;
-        this.comentarios = comentarios;
-
-        especieDbHelper = new EspecieDbHelper(context);
-    }
-
     public Especie(Context context, String nombreComun, Genero genero, String nombre, String comentarios) {
         this.nombre = nombre;
         this.nombreComun = nombreComun;
@@ -160,6 +153,11 @@ public class Especie {
         return e.getAllEspeciesByGenero(genero);
     }
 
+    public static List<Especie> findAllByNombre(Context context, String especie) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.getAllEspeciesByNombre(especie);
+    }
+
     public static int count(Context context) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.countAllEspecies();
@@ -173,6 +171,11 @@ public class Especie {
     public static int countByGenero(Context context, Genero genero) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.countEspeciesByGenero(genero);
+    }
+
+    public static int countByNombre(Context context, String especie) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.countEspeciesByNombre(especie);
     }
 
     public static void empty(Context context) {

@@ -12,8 +12,6 @@ import java.io.FileNotFoundException;
  */
 public class ImageUtils {
 
-
-
     public static Bitmap decodeFile(String path,int screenWidth, int screenHeight) {
         File f = new File(path);
         try {

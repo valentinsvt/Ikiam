@@ -13,17 +13,20 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.db.*;
+import com.nth.ikiam.utils.GeoDegree;
 //import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by luz on 25/07/14.
@@ -46,9 +49,17 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
+
     private ImageView selectedImage;
+
     private TextView lblInfo;
+
     private EditText textoComentarios;
+    private EditText textoFamilia;
+    private EditText textoGenero;
+    private EditText textoEspecie;
+    private EditText textoNombreComun;
+
     private Spinner spinnerColor1;
     private Spinner spinnerColor2;
 
@@ -59,8 +70,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     private static int screenHeight;
 
     private String fotoPath;
-    private double fotoLat;
-    private double fotoLong;
+    private Double fotoLat;
+    private Double fotoLong;
 
     boolean hayFoto = false;
 
@@ -86,8 +97,14 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         spinnerColor2.setAdapter(new MyAdapter(getActivity(), colores));
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
+
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
+
         textoComentarios = (EditText) view.findViewById(R.id.captura_comentarios_txt);
+        textoFamilia = (EditText) view.findViewById(R.id.captura_nombre_familia_txt);
+        textoGenero = (EditText) view.findViewById(R.id.captura_nombre_genero_txt);
+        textoEspecie = (EditText) view.findViewById(R.id.captura_nombre_especie_txt);
+        textoNombreComun = (EditText) view.findViewById(R.id.captura_nombre_comun_txt);
 
         botones = new ImageButton[3];
         botones[0] = (ImageButton) view.findViewById(R.id.captura_gallery_btn);
@@ -129,12 +146,13 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         if (v.getId() == botones[2].getId()) { // save
             if (hayFoto) {
                 String[] keys = {"arbol", "corteza", "hoja", "flor", "fruta"};
-                String comentarios = textoComentarios.getText().toString();
-                Color col = (Color) spinnerColor1.getSelectedItem();
-                System.out.println("************************************************");
-                System.out.println(spinnerColor1.getSelectedItem());
-                System.out.println(col.getId());
-                System.out.println("************************************************");
+                Color color1 = (Color) spinnerColor1.getSelectedItem();
+                Color color2 = (Color) spinnerColor2.getSelectedItem();
+                String nombreFamilia = textoFamilia.getText().toString().trim();
+                String nombreGenero = textoGenero.getText().toString().trim();
+                String nombreEspecie = textoEspecie.getText().toString().trim();
+                String nombreComun = textoNombreComun.getText().toString().trim();
+                String comentarios = textoComentarios.getText().toString().trim();
                 String keywords = "";
                 int i = 0;
                 for (ToggleButton toggle : toggles) {
@@ -146,8 +164,50 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     }
                     i++;
                 }
+                List<Familia> listFamilia = Familia.findAllByNombre(context, nombreFamilia);
+                List<Genero> listGenero = Genero.findAllByNombre(context, nombreGenero);
+                List<Especie> listEspecie = Especie.findAllByNombre(context, nombreEspecie);
+                Familia familia;
+                Genero genero;
+                Especie especie;
+                if (listFamilia.size() == 0) {
+                    familia = new Familia(context, nombreFamilia);
+                    familia.save();
+                } else if (listFamilia.size() == 1) {
+                    familia = listFamilia.get(0);
+                } else {
+                    Log.e("Guardando familia", "Existen " + listFamilia.size() + " familias " + nombreFamilia);
+                    familia = listFamilia.get(0);
+                }
+                if (listGenero.size() == 0) {
+                    genero = new Genero(context, familia, nombreGenero);
+                    genero.save();
+                } else if (listGenero.size() == 1) {
+                    genero = listGenero.get(0);
+                } else {
+                    Log.e("Guardando género", "Existen " + listGenero.size() + " géneros " + nombreGenero);
+                    genero = listGenero.get(0);
+                }
+                if (listEspecie.size() == 0) {
+                    especie = new Especie(context, genero, nombreFamilia);
+                    especie.save();
+                } else if (listEspecie.size() == 1) {
+                    especie = listEspecie.get(0);
+                } else {
+                    Log.e("Guardando especie", "Existen " + listEspecie.size() + " especies " + nombreEspecie);
+                    especie = listEspecie.get(0);
+                }
+                Foto foto = new Foto(context);
+                foto.setEspecie(especie);
+                foto.setComentarios(comentarios);
+                foto.setKeywords(keywords);
+                if (fotoLat != null && fotoLong != null) {
+                    Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
+                    foto.setCoordenada(coordenada);
+                }
+                foto.save();
 
-                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
+//                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
@@ -219,18 +279,13 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
                 try {
                     ExifInterface exif = new ExifInterface(fotoPath);
-//                    GeoDegree gd = new GeoDegree(exif);
-//
-//                    System.out.println("************************************************************");
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_DATETIME));
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
-//                    System.out.println(gd.getLatitudeE6());
-//                    System.out.println(gd.getLongitudeE6());
-//                    System.out.println("************************************************************");
+                    GeoDegree gd = new GeoDegree(exif);
+                    fotoLat = gd.getLatitude();
+                    fotoLong = gd.getLongitude();
                 } catch (Exception e) {
                     alerta(getString(R.string.captura_error_tag_gps));
+                    fotoLat = null;
+                    fotoLong = null;
                     e.printStackTrace();
                 }
             }

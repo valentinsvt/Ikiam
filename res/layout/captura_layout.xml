@@ -134,7 +134,6 @@
                 android:textOn="@string/global_yes"
                 android:textStyle="bold"
 
-                android:layout_below="@id/captura_botones_container"
                 android:layout_toRightOf="@id/captura_corteza_toggle" />
 
             <ToggleButton
