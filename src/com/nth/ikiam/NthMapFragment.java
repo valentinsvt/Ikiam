@@ -3,20 +3,20 @@ package com.nth.ikiam;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -26,13 +26,10 @@ import com.google.android.gms.maps.model.*;
 import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.DbHelper;
 import com.nth.ikiam.db.Ruta;
-import com.nth.ikiam.dialogs.NthMapDialog;
+import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
+import com.nth.ikiam.image.ImageUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.util.List;
 
 /**
@@ -59,8 +56,11 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     Boolean attached = false;
     Ruta ruta;
     private ImageTableObserver camera;
+    /*Images*/
     int lastestImageIndex = 0;
-
+    ImageItem imageItem;
+    List<Bitmap> imagenes;
+    /*Fin imagenes*/
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -76,7 +76,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                 case SvtService.MSG_SET_COORDS:
                     Double latitud = msg.getData().getDouble("latitud");
                     Double longitud = msg.getData().getDouble("logitud");
-                    //System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
+                    System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
                     LatLng latlong = new LatLng(latitud, longitud);
                     if(lastPosition==null)
                         lastPosition = map.addMarker(new MarkerOptions().position(latlong).title("Última posición registrada"));
@@ -85,6 +85,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     updatePolyLine(latlong);
                     if(lastestImageIndex!=0){
                         System.out.println("Tomo foto "+lastestImageIndex);
+                        getFoto();
                     }
                     break;
                 default:
@@ -504,7 +505,64 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     }
 
     public void setImageIndex(int index){
-        this.lastestImageIndex=index;
+        if(index>lastestImageIndex)
+            this.lastestImageIndex=index;
+        else {
+            /*Borro una foto*/
+            this.lastestImageIndex=0;
+        }
     }
+
+    /*Fotos*/
+
+    public void getFoto(){
+        imagenes.add(ImageUtils.decodeFile(imageItem.imagePath,100,100));
+
+    }
+
+    public ImageItem getLatestItem()
+    {
+        // set vars
+        if(lastestImageIndex>0){
+            ImageItem item  = null;
+            String columns[] = new String[]{ MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE, MediaStore.Images.Media.MINI_THUMB_MAGIC };
+
+            // loop until break
+            while (true) {
+                // get latest image from table
+                Uri image     = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, lastestImageIndex);
+                Cursor cursor = this.getActivity().managedQuery(image, columns, null, null, null);
+
+                // check if cursus has rows, if not break and exit loop
+                if (cursor.moveToFirst()) {
+                    // get thumbnail field
+                    String imageThumb = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MINI_THUMB_MAGIC));
+
+                    // if thumbnail field is not null it means image is written to sdcard
+                    // create new image item and break loop otherwise restart loop to check again
+                    if (imageThumb != null) {
+                        item           = new ImageItem();
+                        item.prefs     = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
+                        item.imageId   = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                        item.imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                        item.imageName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                        item.imageType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
+                        item.imageSize = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.SIZE));
+
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            return item;
+        }
+
+        return null;
+
+    }
+
+
+
 
 }

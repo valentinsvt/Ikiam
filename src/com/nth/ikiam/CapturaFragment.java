@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.db.*;
-import com.nth.ikiam.utils.GeoDegree;
+//import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -219,16 +219,16 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
                 try {
                     ExifInterface exif = new ExifInterface(fotoPath);
-                    GeoDegree gd = new GeoDegree(exif);
-
-                    System.out.println("************************************************************");
-                    System.out.println(exif.getAttribute(ExifInterface.TAG_DATETIME));
-                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
-                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
-                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
-                    System.out.println(gd.getLatitudeE6());
-                    System.out.println(gd.getLongitudeE6());
-                    System.out.println("************************************************************");
+//                    GeoDegree gd = new GeoDegree(exif);
+//
+//                    System.out.println("************************************************************");
+//                    System.out.println(exif.getAttribute(ExifInterface.TAG_DATETIME));
+//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
+//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
+//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
+//                    System.out.println(gd.getLatitudeE6());
+//                    System.out.println(gd.getLongitudeE6());
+//                    System.out.println("************************************************************");
                 } catch (Exception e) {
                     alerta(getString(R.string.captura_error_tag_gps));
                     e.printStackTrace();
