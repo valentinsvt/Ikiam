@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.nth.ikiam.db.Color;
 
@@ -44,7 +43,7 @@ public class MyAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Color cur_obj = colores.get(position);
         LayoutInflater inflater = ((Activity) c).getLayoutInflater();
-        View row = inflater.inflate(R.layout.row, parent, false);
+        View row = inflater.inflate(R.layout.captura_select_row, parent, false);
         TextView sub = (TextView) row.findViewById(R.id.captura_row_color_label);
         sub.setText(getStringResourceByName("global_color_" + cur_obj.getNombre()));
         return row;

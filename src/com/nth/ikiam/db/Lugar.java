@@ -1,6 +1,7 @@
 package com.nth.ikiam.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -63,6 +64,21 @@ public class Lugar {
         return e.getLugar(id);
     }
 
+    public static Lugar getByNombreOrCreate(Context context, String nombreLugar) {
+        Lugar lugar;
+        List<Lugar> listLugar = findAllByNombre(context, nombreLugar);
+        if (listLugar.size() == 0) {
+            lugar = new Lugar(context, nombreLugar);
+            lugar.save();
+        } else if (listLugar.size() == 1) {
+            lugar = listLugar.get(0);
+        } else {
+            Log.e("getByNombreOrCreate lugar", "Se encontraron " + listLugar.size() + " lugares con nombre " + nombreLugar);
+            lugar = listLugar.get(0);
+        }
+        return lugar;
+    }
+
     public static int count(Context context) {
         LugarDbHelper e = new LugarDbHelper(context);
         return e.countAllLugares();
@@ -78,7 +94,7 @@ public class Lugar {
         return e.getAllLugares();
     }
 
-    public static List<Lugar> findAllByNOmbre(Context context, String lugar) {
+    public static List<Lugar> findAllByNombre(Context context, String lugar) {
         LugarDbHelper e = new LugarDbHelper(context);
         return e.getAllLugaresByNombre(lugar);
     }

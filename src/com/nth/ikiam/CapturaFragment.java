@@ -25,6 +25,7 @@ import com.nth.ikiam.utils.GeoDegree;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,10 +77,34 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     boolean hayFoto = false;
 
     Context context;
+    private String pathFolder;
+    private Bitmap bitmap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
+        pathFolder = getArguments().getString("pathFolder");
+
+        if (Color.count(context) == 0) {
+            Color c1 = new Color(context, "azul");
+            c1.save();
+            Color c2 = new Color(context, "cafe");
+            c2.save();
+            Color c3 = new Color(context, "verde");
+            c3.save();
+            Color c4 = new Color(context, "naranja");
+            c4.save();
+            Color c5 = new Color(context, "rosa");
+            c5.save();
+            Color c6 = new Color(context, "violeta");
+            c6.save();
+            Color c7 = new Color(context, "rojo");
+            c7.save();
+            Color c8 = new Color(context, "blanco");
+            c8.save();
+            Color c9 = new Color(context, "amarillo");
+            c9.save();
+        }
 
         View view = inflater.inflate(R.layout.captura_layout, container, false);
 
@@ -164,47 +189,65 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     }
                     i++;
                 }
-                List<Familia> listFamilia = Familia.findAllByNombre(context, nombreFamilia);
-                List<Genero> listGenero = Genero.findAllByNombre(context, nombreGenero);
-                List<Especie> listEspecie = Especie.findAllByNombre(context, nombreEspecie);
-                Familia familia;
-                Genero genero;
-                Especie especie;
-                if (listFamilia.size() == 0) {
-                    familia = new Familia(context, nombreFamilia);
-                    familia.save();
-                } else if (listFamilia.size() == 1) {
-                    familia = listFamilia.get(0);
-                } else {
-                    Log.e("Guardando familia", "Existen " + listFamilia.size() + " familias " + nombreFamilia);
-                    familia = listFamilia.get(0);
+                Familia familia = null;
+                Genero genero = null;
+                Especie especie = null;
+                if (!nombreFamilia.equals("")) {
+                    familia = Familia.getByNombreOrCreate(context, nombreFamilia);
                 }
-                if (listGenero.size() == 0) {
-                    genero = new Genero(context, familia, nombreGenero);
-                    genero.save();
-                } else if (listGenero.size() == 1) {
-                    genero = listGenero.get(0);
-                } else {
-                    Log.e("Guardando género", "Existen " + listGenero.size() + " géneros " + nombreGenero);
-                    genero = listGenero.get(0);
+                if (!nombreGenero.equals("")) {
+                    genero = Genero.getByNombreOrCreate(context, nombreGenero);
+                    if (familia != null) {
+                        genero.setFamilia(familia);
+                        genero.save();
+                    }
                 }
-                if (listEspecie.size() == 0) {
-                    especie = new Especie(context, genero, nombreFamilia);
+                if (!nombreEspecie.equals("")) {
+                    especie = Especie.getByNombreOrCreate(context, nombreEspecie);
+                    if (genero != null) {
+                        especie.setGenero(genero);
+                    }
+                    if (color1 != null) {
+                        especie.setColor1(color1);
+                    }
+                    if (color2 != null) {
+                        especie.setColor2(color2);
+                    }
+                    if (!nombreComun.equals("")) {
+                        especie.setNombreComun(nombreComun);
+                    }
                     especie.save();
-                } else if (listEspecie.size() == 1) {
-                    especie = listEspecie.get(0);
-                } else {
-                    Log.e("Guardando especie", "Existen " + listEspecie.size() + " especies " + nombreEspecie);
-                    especie = listEspecie.get(0);
                 }
+
                 Foto foto = new Foto(context);
-                foto.setEspecie(especie);
+                if (especie != null) {
+                    foto.setEspecie(especie);
+                }
                 foto.setComentarios(comentarios);
                 foto.setKeywords(keywords);
                 if (fotoLat != null && fotoLong != null) {
                     Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
                     foto.setCoordenada(coordenada);
                 }
+
+                File file = new File(pathFolder, fotoPath);
+                fotoPath = file.getName();
+                file = new File(pathFolder, fotoPath);
+////                if (file.exists()) {
+////                    file.delete();
+////                }
+                try {
+                    if (!file.exists()) {
+                        FileOutputStream out = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        out.flush();
+                        out.close();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                foto.setPath(fotoPath);
                 foto.save();
 
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
@@ -268,7 +311,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 hayFoto = true;
                 updateStatus(null);
                 MainActivity activity = (MainActivity) getActivity();
-                Bitmap bitmap = getBitmapFromCameraData(data, activity);
+                bitmap = getBitmapFromCameraData(data, activity);
                 selectedImage.setImageBitmap(bitmap);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};

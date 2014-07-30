@@ -14,6 +14,7 @@ import com.nth.ikiam.db.Foto;
 public class EncyclopediaFragment extends Fragment {
 
     Context context;
+    private String pathFolder;
 
     public EncyclopediaFragment() {
 
@@ -22,6 +23,7 @@ public class EncyclopediaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
+        pathFolder = getArguments().getString("pathFolder");
 
         View view = inflater.inflate(R.layout.encyclopedia_fragment, container, false);
 

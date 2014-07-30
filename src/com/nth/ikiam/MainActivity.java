@@ -20,6 +20,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -34,6 +35,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.nth.ikiam.db.DbHelper;
 import com.nth.ikiam.image.ImageTableObserver;
+
+import java.io.File;
 
 
 public class MainActivity extends Activity {
@@ -50,13 +53,25 @@ public class MainActivity extends Activity {
     private final int ENCYCLOPEDIA_POS = 2;
     private final int SETTINGS_POS = 3;
 
+    private String pathFolder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
 //        System.out.println(getString(R.string.global_color_cafe));
+
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            pathFolder = Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name);
+            System.out.println("1" + Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name));
+        } else {
+            /* save the folder in internal memory of phone */
+            pathFolder = "/data/data/" + getPackageName() + File.separator + getString(R.string.app_name);
+            System.out.println("2" + "/data/data/" + getPackageName() + File.separator + getString(R.string.app_name));
+        }
+        File folder = new File(pathFolder);
+        folder.mkdirs();
 
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
@@ -192,6 +207,10 @@ public class MainActivity extends Activity {
             default:
                 fragment = new NthMapFragment();
         }
+
+        Bundle args = new Bundle();
+        args.putString("pathFolder", pathFolder);
+        fragment.setArguments(args);
 
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();

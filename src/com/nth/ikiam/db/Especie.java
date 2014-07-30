@@ -1,6 +1,7 @@
 package com.nth.ikiam.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -28,7 +29,12 @@ public class Especie {
         this.nombreComun = nombreComun;
 
         especieDbHelper = new EspecieDbHelper(context);
+    }
 
+    public Especie(Context context, String nombreEspecie, int algo) {
+        this.nombre = nombreEspecie;
+
+        especieDbHelper = new EspecieDbHelper(context);
     }
 
     public Especie(Context context, String nombreComun, Genero genero, String nombre, String comentarios) {
@@ -136,6 +142,21 @@ public class Especie {
     public static Especie get(Context context, long id) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.getEspecie(id);
+    }
+
+    public static Especie getByNombreOrCreate(Context context, String nombreEspecie) {
+        Especie especie;
+        List<Especie> listEspecies = findAllByNombre(context, nombreEspecie);
+        if (listEspecies.size() == 0) {
+            especie = new Especie(context, nombreEspecie, 1);
+            especie.save();
+        } else if (listEspecies.size() == 1) {
+            especie = listEspecies.get(0);
+        } else {
+            Log.e("getByNombreOrCreate especie", "Se encontraron " + listEspecies.size() + " especies con nombre " + nombreEspecie);
+            especie = listEspecies.get(0);
+        }
+        return especie;
     }
 
     public static List<Especie> list(Context context) {

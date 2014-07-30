@@ -22,8 +22,9 @@ public class FotoDbHelper extends DbHelper {
     private static final String KEY_LUGAR_ID = "lugar_id";
     private static final String KEY_COORDENADA = "coordenada";
     private static final String KEY_KEYWORDS = "keywords";
+    private static final String KEY_PATH = "path";
 
-    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS};
+    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_COMENTARIOS, KEY_PATH};
 
     public FotoDbHelper(Context context) {
         super(context);
@@ -216,10 +217,12 @@ public class FotoDbHelper extends DbHelper {
         Foto f = new Foto(this.context);
         f.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         f.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
+        f.setLugar(Lugar.get(this.context, c.getLong(c.getColumnIndex(KEY_LUGAR_ID))));
         f.setEspecie(Especie.get(this.context, c.getLong(c.getColumnIndex(KEY_ESPECIE_ID))));
         f.setCoordenada(Coordenada.get(this.context, c.getLong(c.getColumnIndex(KEY_COORDENADA))));
         f.setComentarios((c.getString(c.getColumnIndex(KEY_COMENTARIOS))));
         f.setKeywords((c.getString(c.getColumnIndex(KEY_KEYWORDS))));
+        f.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
         return f;
     }
 
@@ -228,10 +231,16 @@ public class FotoDbHelper extends DbHelper {
         if (fecha) {
             values.put(KEY_FECHA, getDateTime());
         }
-        values.put(KEY_ESPECIE_ID, foto.especie.id);
+        if (foto.especie != null) {
+            values.put(KEY_ESPECIE_ID, foto.especie.id);
+        }
+        if (foto.lugar != null) {
+            values.put(KEY_LUGAR_ID, foto.lugar.id);
+        }
         values.put(KEY_COORDENADA, foto.coordenada.id);
         values.put(KEY_COMENTARIOS, foto.getComentarios());
         values.put(KEY_KEYWORDS, foto.getKeywords());
+        values.put(KEY_PATH, foto.getPath());
         return values;
     }
 

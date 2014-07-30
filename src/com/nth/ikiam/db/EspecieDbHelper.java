@@ -17,14 +17,14 @@ public class EspecieDbHelper extends DbHelper {
     private static final String LOG = "EspecieDbHelper";
 
     // ESPECIE Table - column names
-    private static final String KEY_COMENTARIOS = "comentarios";
     private static final String KEY_NOMBRE_COMUN = "nombre_comun";
     private static final String KEY_NOMBRE = "nombre";
     private static final String KEY_COLOR1_ID = "color_id";
     private static final String KEY_COLOR2_ID = "color2_id";
     private static final String KEY_GENERO_ID = "genero_id";
 
-    public static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE, KEY_GENERO_ID, KEY_COLOR1_ID, KEY_COLOR2_ID};
+    public static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE, KEY_GENERO_ID,
+            KEY_COLOR1_ID, KEY_COLOR2_ID};
 
     public EspecieDbHelper(Context context) {
         super(context);
@@ -287,10 +287,15 @@ public class EspecieDbHelper extends DbHelper {
         }
         values.put(KEY_NOMBRE_COMUN, especie.nombreComun);
         values.put(KEY_NOMBRE, especie.nombre);
-        values.put(KEY_COMENTARIOS, especie.comentarios);
-        values.put(KEY_COLOR1_ID, especie.color1.id);
-        values.put(KEY_COLOR2_ID, especie.color2.id);
-        values.put(KEY_GENERO_ID, especie.genero.id);
+        if (especie.color1 != null) {
+            values.put(KEY_COLOR1_ID, especie.color1.id);
+        }
+        if (especie.color2 != null) {
+            values.put(KEY_COLOR2_ID, especie.color2.id);
+        }
+        if (especie.genero != null) {
+            values.put(KEY_GENERO_ID, especie.genero.id);
+        }
         return values;
     }
 

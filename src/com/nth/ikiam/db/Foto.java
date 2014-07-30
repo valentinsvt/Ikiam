@@ -16,6 +16,8 @@ public class Foto {
     String comentarios;
     String keywords;
 
+    String path;
+
     FotoDbHelper fotoDbHelper;
 
     public Foto(Context context) {
@@ -81,6 +83,10 @@ public class Foto {
         return lugar;
     }
 
+    public String getPath() {
+        return path;
+    }
+
     //setter
     public void setEspecie(Especie especie) {
         this.especie = especie;
@@ -108,6 +114,10 @@ public class Foto {
 
     public void setLugar(Lugar lugar) {
         this.lugar = lugar;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public void save() {
