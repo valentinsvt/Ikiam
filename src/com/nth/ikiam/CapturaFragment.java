@@ -13,11 +13,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.utils.GeoDegree;
 //import com.nth.ikiam.utils.GeoDegree;
@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by luz on 25/07/14.
@@ -116,10 +115,10 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         ArrayList<Color> colores = Color.listString(context);
 
         spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);
-        spinnerColor1.setAdapter(new MyAdapter(getActivity(), colores));
+        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores));
 
         spinnerColor2 = (Spinner) view.findViewById(R.id.captura_color2_spinner);
-        spinnerColor2.setAdapter(new MyAdapter(getActivity(), colores));
+        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores));
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
 

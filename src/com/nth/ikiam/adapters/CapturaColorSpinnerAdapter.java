@@ -1,4 +1,4 @@
-package com.nth.ikiam;
+package com.nth.ikiam.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
 
 import java.util.ArrayList;
@@ -14,12 +15,12 @@ import java.util.ArrayList;
 /**
  * Created by luz on 28/07/14.
  */
-public class MyAdapter extends BaseAdapter {
+public class CapturaColorSpinnerAdapter extends BaseAdapter {
 
     Context c;
     ArrayList<Color> colores;
 
-    public MyAdapter(Context context, ArrayList<Color> colores) {
+    public CapturaColorSpinnerAdapter(Context context, ArrayList<Color> colores) {
         super();
         this.c = context;
         this.colores = colores;
