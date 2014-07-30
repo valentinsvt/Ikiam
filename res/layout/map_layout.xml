@@ -13,25 +13,19 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:text="@string/map_galapagos_btn" />
-    <Button
-            android:id="@+id/btnLocate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/map_locate_btn"
-            android:icon="@drawable/action_search"
-            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
+
     <Button
             android:id="@+id/btnService"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/map_service"
             android:icon="@drawable/action_search"
-            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnLocate"/>
+            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
 
     <fragment
             android:id="@+id/mapF"
             android:name="com.google.android.gms.maps.MapFragment"
-            android:layout_below="@+id/btnLocate"
+            android:layout_below="@+id/btnGalapagos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />

@@ -5,8 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.*;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.*;
 import android.location.Location;
 import android.net.Uri;
 import android.os.*;
@@ -29,8 +28,12 @@ import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
+import com.nth.ikiam.utils.ImageUploader;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by DELL on 23/07/2014.
@@ -60,6 +63,9 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     int lastestImageIndex = 0;
     ImageItem imageItem;
     List<Bitmap> imagenes;
+    int lastIndex = -1;
+    int lastSize = 0;
+    private ExecutorService queue = Executors.newSingleThreadExecutor();
     /*Fin imagenes*/
     class IncomingHandler extends Handler {
         @Override
@@ -76,7 +82,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                 case SvtService.MSG_SET_COORDS:
                     Double latitud = msg.getData().getDouble("latitud");
                     Double longitud = msg.getData().getDouble("logitud");
-                    System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
+//                    System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
                     LatLng latlong = new LatLng(latitud, longitud);
                     if(lastPosition==null)
                         lastPosition = map.addMarker(new MarkerOptions().position(latlong).title("Última posición registrada"));
@@ -85,7 +91,26 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     updatePolyLine(latlong);
                     if(lastestImageIndex!=0){
                         System.out.println("Tomo foto "+lastestImageIndex);
+                        imageItem = getLatestItem();
                         getFoto();
+                        if(imagenes.size()>lastSize) {
+//                            map.addMarker(new MarkerOptions().position(latlong).title("Sydney").snippet("Population: 4,627,300").icon(BitmapDescriptorFactory.fromBitmap(imagenes.get(lastIndex))));
+                            Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                            Bitmap bmp = Bitmap.createBitmap(86,59, conf);
+                            Canvas canvas1 = new Canvas(bmp);
+                            Paint color = new Paint();
+                            color.setTextSize(35);
+                            color.setColor(Color.BLACK);//modify canvas
+                            canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                                    R.drawable.pin3), 0,0, color);
+                            canvas1.drawBitmap(imagenes.get(lastIndex), 3,2, color);
+
+                            map.addMarker(new MarkerOptions().position(latlong)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                                    .anchor(0.5f, 1));
+                            lastSize=imagenes.size();
+                            queue.execute(new ImageUploader(getActivity(), queue, imageItem, 0));
+                        }
                     }
                     break;
                 default:
@@ -124,7 +149,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         public void onServiceDisconnected(ComponentName className) {
             // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
             mService = null;
-            System.out.println("Disconnected.");
+           // System.out.println("Disconnected.");
         }
     };
 
@@ -164,24 +189,15 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.map_layout, container, false);
-        helper = new DbHelper(this.getActivity());
-        // open to read and write
-        helper.getWritableDatabase();
-        botones = new Button[3];
+        setUpMapIfNeeded();
+        locationClient = new LocationClient(this.getActivity(),this, this);
+        locationClient.connect();
+        botones = new Button[2];
         botones[0]=(Button) view.findViewById(R.id.btnGalapagos);
-        botones[1]= (Button) view.findViewById(R.id.btnLocate);
-        botones[2]= (Button) view.findViewById(R.id.btnService);
-        // chooseBtn = (Button) view.findViewById(R.id.btnGalapagos);
-        //chooseBtn.setOnClickListener(this);
+        botones[1]= (Button) view.findViewById(R.id.btnService);
         for(int i=0;i<botones.length;i++){
             botones[i].setOnClickListener(this);
         }
-        // map=((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
-        //  map=new MapFragment().getMap();
-        locationClient = new LocationClient(this.getActivity(),this, this);
-        locationClient.connect();
-
-        setUpMapIfNeeded();
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
 //        System.out.println("rutas "+Ruta.count(this.getActivity()));
@@ -226,17 +242,17 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                 continente = false;
             }
         }
+//        if(v.getId()==botones[1].getId()){
+//            Location mCurrentLocation;
+//            mCurrentLocation = locationClient.getLastLocation();
+//            //Location myLocation  = map.getMyLocation();
+//            //System.out.println(" location "+myLocation+" map "+map);
+//            location=new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+//            CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
+//            map.animateCamera(update);
+//
+//        }
         if(v.getId()==botones[1].getId()){
-            Location mCurrentLocation;
-            mCurrentLocation = locationClient.getLastLocation();
-            //Location myLocation  = map.getMyLocation();
-            //System.out.println(" location "+myLocation+" map "+map);
-            location=new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
-            map.animateCamera(update);
-
-        }
-        if(v.getId()==botones[2].getId()){
             if(servicesConnected()){
                 if(!status) {
                     map.clear();
@@ -251,14 +267,14 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
                     map.animateCamera(update);
                     polyLine = map.addPolyline(rectOptions);
-                    botones[2].setText("Parar");
+                    botones[1].setText("Parar");
                     camera = new ImageTableObserver(new Handler(),this);
                     this.getActivity().getContentResolver().registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, camera);
                     status=true;
                 }else {
                     doUnbindService();
                     this.getActivity().stopService(new Intent(this.getActivity(), SvtService.class));
-                    botones[2].setText("Nueva ruta");
+                    botones[1].setText("Nueva ruta");
                     ruta=null;
                     status=false;
                 }
@@ -282,11 +298,11 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         // Always call the superclass so it can restore the view hierarchy
-        System.out.println("restore bundle");
+        //System.out.println("restore bundle");
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState!=null){
             if(savedInstanceState.containsKey("ruta")){
-                System.out.println("contiene "+savedInstanceState.getLong("ruta"));
+                //System.out.println("contiene "+savedInstanceState.getLong("ruta"));
                 ruta = Ruta.get(this.getActivity(),savedInstanceState.getLong("ruta"));
                 List<Coordenada>   coords = Coordenada.findAllByRuta(this.getActivity(),ruta);
 
@@ -452,11 +468,12 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
 
 
 
-    /*location */
+    /*location services*/
     @Override
     public void onConnected(Bundle dataBundle) {
         Location mCurrentLocation;
         mCurrentLocation = locationClient.getLastLocation();
+        map.getMyLocation();
     }
 
     /*
@@ -505,18 +522,31 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     }
 
     public void setImageIndex(int index){
-        if(index>lastestImageIndex)
-            this.lastestImageIndex=index;
-        else {
+        //System.out.println("set image index " + index);
+        if(imagenes==null){
+            imagenes=  new ArrayList<Bitmap>();;
+        }
+        if(index>=lastestImageIndex) {
+            this.lastestImageIndex = index;
+        }else {
             /*Borro una foto*/
             this.lastestImageIndex=0;
         }
+        System.out.println("set image index fin "+this.lastestImageIndex);
     }
 
     /*Fotos*/
 
     public void getFoto(){
-        imagenes.add(ImageUtils.decodeFile(imageItem.imagePath,100,100));
+        if(imageItem!=null) {
+           // System.out.println("path "+imageItem.imagePath);
+            //System.out.println("images " + imagenes);
+            Bitmap b = ImageUtils.decodeFile(imageItem.imagePath);
+            System.out.println("width "+b.getWidth()+"  "+b.getHeight());
+            imagenes.add(b);
+            lastIndex++;
+            lastestImageIndex = 0;
+        }
 
     }
 
@@ -528,33 +558,26 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
             String columns[] = new String[]{ MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE, MediaStore.Images.Media.MINI_THUMB_MAGIC };
 
             // loop until break
-            while (true) {
-                // get latest image from table
-                Uri image     = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, lastestImageIndex);
-                Cursor cursor = this.getActivity().managedQuery(image, columns, null, null, null);
+            System.out.println("getLatestItem");
 
-                // check if cursus has rows, if not break and exit loop
-                if (cursor.moveToFirst()) {
-                    // get thumbnail field
-                    String imageThumb = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MINI_THUMB_MAGIC));
+            // get latest image from table
+            Uri image     = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, lastestImageIndex);
+            Cursor cursor = this.getActivity().managedQuery(image, columns, null, null, null);
 
-                    // if thumbnail field is not null it means image is written to sdcard
-                    // create new image item and break loop otherwise restart loop to check again
-                    if (imageThumb != null) {
-                        item           = new ImageItem();
-                        item.prefs     = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
-                        item.imageId   = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
-                        item.imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                        item.imageName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
-                        item.imageType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
-                        item.imageSize = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.SIZE));
-
-                        break;
-                    }
-                } else {
-                    break;
-                }
+            // check if cursus has rows, if not break and exit loop
+            if (cursor.moveToFirst()) {
+                System.out.println("tiene rows "+cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MINI_THUMB_MAGIC)));
+                item           = new ImageItem();
+                item.prefs     = PreferenceManager.getDefaultSharedPreferences(this.getActivity().getBaseContext());
+                item.imageId   = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                item.imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                item.imageName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
+                item.imageType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
+                item.imageSize = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media.SIZE));
             }
+            //cursor.close();
+
+            System.out.println("salio");
             return item;
         }
 

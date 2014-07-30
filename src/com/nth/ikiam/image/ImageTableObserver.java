@@ -25,11 +25,12 @@ public class ImageTableObserver extends ContentObserver
      * Main application
      */
     private NthMapFragment application;
+    private boolean first = true;
 
     /**
      *  Queue that handles image uploads
      */
-    private ExecutorService queue;
+
 
     /**
      * Constructor
@@ -41,7 +42,6 @@ public class ImageTableObserver extends ContentObserver
     public ImageTableObserver(Handler handler, NthMapFragment application)
     {
         super(handler);
-
         this.application = application;
 
     }
@@ -52,22 +52,21 @@ public class ImageTableObserver extends ContentObserver
      * @param selfChange
      */
     @Override
-    public void onChange(boolean selfChange)
-    {
-
-        System.out.println("on change");
+    public void onChange(boolean selfChange){
         // get latest image id
+        if(!first) {
+            String[] columns = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.ORIENTATION};
+            Cursor cursor = application.getActivity().managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.Images.Media._ID + " DESC");
 
-        String[] columns = new String[]{ MediaStore.Images.Media._ID, MediaStore.Images.Media.ORIENTATION };
-        Cursor cursor    = application.getActivity().managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.Images.Media._ID+" DESC");
-
-        // check if table has any rows at all
-        if (!cursor.moveToFirst()) {
-            return;
+            // check if table has any rows at all
+            if (!cursor.moveToFirst()) {
+                return;
+            }
+            int latestId = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+            application.setImageIndex(latestId);
         }
-        int latestId  = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
-        application.setImageIndex(latestId);
-        System.out.println("lastest id "+latestId);
+        this.first=false;
+//        System.out.println("lastest id "+latestId);
 
     }
 
