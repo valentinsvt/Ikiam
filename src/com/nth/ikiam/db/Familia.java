@@ -1,6 +1,7 @@
 package com.nth.ikiam.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -61,6 +62,21 @@ public class Familia {
     public static Familia get(Context context, long id) {
         FamiliaDbHelper e = new FamiliaDbHelper(context);
         return e.getFamilia(id);
+    }
+
+    public static Familia getByNombreOrCreate(Context context, String nombreFamilia) {
+        Familia familia;
+        List<Familia> listFamilias = findAllByNombre(context, nombreFamilia);
+        if (listFamilias.size() == 0) {
+            familia = new Familia(context, nombreFamilia);
+            familia.save();
+        } else if (listFamilias.size() == 1) {
+            familia = listFamilias.get(0);
+        } else {
+            Log.e("getByNombreOrCreate familia", "Se encontraron " + listFamilias.size() + " familias con nombre " + nombreFamilia);
+            familia = listFamilias.get(0);
+        }
+        return familia;
     }
 
     public static int count(Context context) {

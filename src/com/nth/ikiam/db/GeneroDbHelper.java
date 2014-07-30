@@ -193,7 +193,9 @@ public class GeneroDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_NOMBRE, genero.nombre);
-        values.put(KEY_FAMILIA_ID, genero.familia.id);
+        if (genero.familia != null) {
+            values.put(KEY_FAMILIA_ID, genero.familia.id);
+        }
         return values;
     }
 

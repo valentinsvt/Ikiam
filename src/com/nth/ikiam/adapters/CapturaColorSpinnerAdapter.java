@@ -1,4 +1,4 @@
-package com.nth.ikiam;
+package com.nth.ikiam.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
 
 import java.util.ArrayList;
@@ -15,12 +15,12 @@ import java.util.ArrayList;
 /**
  * Created by luz on 28/07/14.
  */
-public class MyAdapter extends BaseAdapter {
+public class CapturaColorSpinnerAdapter extends BaseAdapter {
 
     Context c;
     ArrayList<Color> colores;
 
-    public MyAdapter(Context context, ArrayList<Color> colores) {
+    public CapturaColorSpinnerAdapter(Context context, ArrayList<Color> colores) {
         super();
         this.c = context;
         this.colores = colores;
@@ -44,7 +44,7 @@ public class MyAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Color cur_obj = colores.get(position);
         LayoutInflater inflater = ((Activity) c).getLayoutInflater();
-        View row = inflater.inflate(R.layout.row, parent, false);
+        View row = inflater.inflate(R.layout.captura_select_row, parent, false);
         TextView sub = (TextView) row.findViewById(R.id.captura_row_color_label);
         sub.setText(getStringResourceByName("global_color_" + cur_obj.getNombre()));
         return row;

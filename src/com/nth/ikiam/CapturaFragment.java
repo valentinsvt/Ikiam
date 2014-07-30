@@ -17,12 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
 import com.nth.ikiam.db.*;
+import com.nth.ikiam.utils.GeoDegree;
 //import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -46,9 +49,17 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
+
     private ImageView selectedImage;
+
     private TextView lblInfo;
+
     private EditText textoComentarios;
+    private EditText textoFamilia;
+    private EditText textoGenero;
+    private EditText textoEspecie;
+    private EditText textoNombreComun;
+
     private Spinner spinnerColor1;
     private Spinner spinnerColor2;
 
@@ -59,16 +70,40 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     private static int screenHeight;
 
     private String fotoPath;
-    private double fotoLat;
-    private double fotoLong;
+    private Double fotoLat;
+    private Double fotoLong;
 
     boolean hayFoto = false;
 
     Context context;
+    private String pathFolder;
+    private Bitmap bitmap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
+        pathFolder = getArguments().getString("pathFolder");
+
+        if (Color.count(context) == 0) {
+            Color c1 = new Color(context, "azul");
+            c1.save();
+            Color c2 = new Color(context, "cafe");
+            c2.save();
+            Color c3 = new Color(context, "verde");
+            c3.save();
+            Color c4 = new Color(context, "naranja");
+            c4.save();
+            Color c5 = new Color(context, "rosa");
+            c5.save();
+            Color c6 = new Color(context, "violeta");
+            c6.save();
+            Color c7 = new Color(context, "rojo");
+            c7.save();
+            Color c8 = new Color(context, "blanco");
+            c8.save();
+            Color c9 = new Color(context, "amarillo");
+            c9.save();
+        }
 
         View view = inflater.inflate(R.layout.captura_layout, container, false);
 
@@ -80,14 +115,20 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         ArrayList<Color> colores = Color.listString(context);
 
         spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);
-        spinnerColor1.setAdapter(new MyAdapter(getActivity(), colores));
+        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores));
 
         spinnerColor2 = (Spinner) view.findViewById(R.id.captura_color2_spinner);
-        spinnerColor2.setAdapter(new MyAdapter(getActivity(), colores));
+        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores));
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
+
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
+
         textoComentarios = (EditText) view.findViewById(R.id.captura_comentarios_txt);
+        textoFamilia = (EditText) view.findViewById(R.id.captura_nombre_familia_txt);
+        textoGenero = (EditText) view.findViewById(R.id.captura_nombre_genero_txt);
+        textoEspecie = (EditText) view.findViewById(R.id.captura_nombre_especie_txt);
+        textoNombreComun = (EditText) view.findViewById(R.id.captura_nombre_comun_txt);
 
         botones = new ImageButton[3];
         botones[0] = (ImageButton) view.findViewById(R.id.captura_gallery_btn);
@@ -129,12 +170,13 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         if (v.getId() == botones[2].getId()) { // save
             if (hayFoto) {
                 String[] keys = {"arbol", "corteza", "hoja", "flor", "fruta"};
-                String comentarios = textoComentarios.getText().toString();
-                Color col = (Color) spinnerColor1.getSelectedItem();
-                System.out.println("************************************************");
-                System.out.println(spinnerColor1.getSelectedItem());
-                System.out.println(col.getId());
-                System.out.println("************************************************");
+                Color color1 = (Color) spinnerColor1.getSelectedItem();
+                Color color2 = (Color) spinnerColor2.getSelectedItem();
+                String nombreFamilia = textoFamilia.getText().toString().trim();
+                String nombreGenero = textoGenero.getText().toString().trim();
+                String nombreEspecie = textoEspecie.getText().toString().trim();
+                String nombreComun = textoNombreComun.getText().toString().trim();
+                String comentarios = textoComentarios.getText().toString().trim();
                 String keywords = "";
                 int i = 0;
                 for (ToggleButton toggle : toggles) {
@@ -146,8 +188,68 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     }
                     i++;
                 }
+                Familia familia = null;
+                Genero genero = null;
+                Especie especie = null;
+                if (!nombreFamilia.equals("")) {
+                    familia = Familia.getByNombreOrCreate(context, nombreFamilia);
+                }
+                if (!nombreGenero.equals("")) {
+                    genero = Genero.getByNombreOrCreate(context, nombreGenero);
+                    if (familia != null) {
+                        genero.setFamilia(familia);
+                        genero.save();
+                    }
+                }
+                if (!nombreEspecie.equals("")) {
+                    especie = Especie.getByNombreOrCreate(context, nombreEspecie);
+                    if (genero != null) {
+                        especie.setGenero(genero);
+                    }
+                    if (color1 != null) {
+                        especie.setColor1(color1);
+                    }
+                    if (color2 != null) {
+                        especie.setColor2(color2);
+                    }
+                    if (!nombreComun.equals("")) {
+                        especie.setNombreComun(nombreComun);
+                    }
+                    especie.save();
+                }
 
-                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
+                Foto foto = new Foto(context);
+                if (especie != null) {
+                    foto.setEspecie(especie);
+                }
+                foto.setComentarios(comentarios);
+                foto.setKeywords(keywords);
+                if (fotoLat != null && fotoLong != null) {
+                    Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
+                    foto.setCoordenada(coordenada);
+                }
+
+                File file = new File(pathFolder, fotoPath);
+                fotoPath = file.getName();
+                file = new File(pathFolder, fotoPath);
+////                if (file.exists()) {
+////                    file.delete();
+////                }
+                try {
+                    if (!file.exists()) {
+                        FileOutputStream out = new FileOutputStream(file);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                        out.flush();
+                        out.close();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                foto.setPath(fotoPath);
+                foto.save();
+
+//                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
@@ -208,7 +310,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 hayFoto = true;
                 updateStatus(null);
                 MainActivity activity = (MainActivity) getActivity();
-                Bitmap bitmap = getBitmapFromCameraData(data, activity);
+                bitmap = getBitmapFromCameraData(data, activity);
                 selectedImage.setImageBitmap(bitmap);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -219,18 +321,13 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
                 try {
                     ExifInterface exif = new ExifInterface(fotoPath);
-//                    GeoDegree gd = new GeoDegree(exif);
-//
-//                    System.out.println("************************************************************");
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_DATETIME));
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE));
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE));
-//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
-//                    System.out.println(gd.getLatitudeE6());
-//                    System.out.println(gd.getLongitudeE6());
-//                    System.out.println("************************************************************");
+                    GeoDegree gd = new GeoDegree(exif);
+                    fotoLat = gd.getLatitude();
+                    fotoLong = gd.getLongitude();
                 } catch (Exception e) {
                     alerta(getString(R.string.captura_error_tag_gps));
+                    fotoLat = null;
+                    fotoLong = null;
                     e.printStackTrace();
                 }
             }

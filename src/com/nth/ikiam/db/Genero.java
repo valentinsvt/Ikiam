@@ -1,6 +1,7 @@
 package com.nth.ikiam.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -16,6 +17,12 @@ public class Genero {
     public GeneroDbHelper generoDbHelper;
 
     public Genero(Context context) {
+        generoDbHelper = new GeneroDbHelper(context);
+    }
+
+    public Genero(Context context, String nombre) {
+        this.nombre = nombre;
+
         generoDbHelper = new GeneroDbHelper(context);
     }
 
@@ -71,6 +78,21 @@ public class Genero {
     public static Genero get(Context context, long id) {
         GeneroDbHelper e = new GeneroDbHelper(context);
         return e.getGenero(id);
+    }
+
+    public static Genero getByNombreOrCreate(Context context, String nombreGenero) {
+        Genero genero;
+        List<Genero> listGeneros = findAllByNombre(context, nombreGenero);
+        if (listGeneros.size() == 0) {
+            genero = new Genero(context, nombreGenero);
+            genero.save();
+        } else if (listGeneros.size() == 1) {
+            genero = listGeneros.get(0);
+        } else {
+            Log.e("getByNombreOrCreate genero", "Se encontraron " + listGeneros.size() + " generos con nombre " + nombreGenero);
+            genero = listGeneros.get(0);
+        }
+        return genero;
     }
 
     public static int count(Context context) {

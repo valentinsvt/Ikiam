@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CoordenadaDbHelper  extends DbHelper{
+public class CoordenadaDbHelper extends DbHelper {
 
     private static final String LOG = "CoordenadaDbHelper";
 
@@ -17,7 +17,7 @@ public class CoordenadaDbHelper  extends DbHelper{
     private static final String KEY_LATITUD = "latitud";
     private static final String KEY_RUTA = "ruta_id";
 
-    public static final String[] KEYS_COORDENADA = {KEY_LATITUD,KEY_LONGITUD,KEY_RUTA};
+    public static final String[] KEYS_COORDENADA = {KEY_LATITUD, KEY_LONGITUD, KEY_RUTA};
 
     public CoordenadaDbHelper(Context context) {
         super(context);
@@ -135,14 +135,14 @@ public class CoordenadaDbHelper  extends DbHelper{
         ContentValues values = setValues(coordenada);
 
         // updating row
-        int res = db.update(TABLE_COORDENADA, values, KEY_ID + " = ?",new String[]{String.valueOf(coordenada.getId())});
+        int res = db.update(TABLE_COORDENADA, values, KEY_ID + " = ?", new String[]{String.valueOf(coordenada.getId())});
         db.close();
         return res;
     }
 
     public void deleteCoordenada(Coordenada coordenada) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_COORDENADA, KEY_ID + " = ?",new String[]{String.valueOf(coordenada.id)});
+        db.delete(TABLE_COORDENADA, KEY_ID + " = ?", new String[]{String.valueOf(coordenada.id)});
         db.close();
     }
 
@@ -159,7 +159,7 @@ public class CoordenadaDbHelper  extends DbHelper{
         cord.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         cord.setLatitud(c.getDouble(c.getColumnIndex(KEY_LATITUD)));
         cord.setLongitud(c.getDouble(c.getColumnIndex(KEY_LONGITUD)));
-        cord.setRuta(Ruta.get(context,c.getLong(c.getColumnIndex(KEY_RUTA))));
+        cord.setRuta(Ruta.get(context, c.getLong(c.getColumnIndex(KEY_RUTA))));
         return cord;
     }
 
@@ -170,7 +170,9 @@ public class CoordenadaDbHelper  extends DbHelper{
         }
         values.put(KEY_LATITUD, coordenada.latitud);
         values.put(KEY_LONGITUD, coordenada.longitud);
-        values.put(KEY_RUTA,coordenada.ruta.id);
+        if (coordenada.ruta != null) {
+            values.put(KEY_RUTA, coordenada.ruta.id);
+        }
         return values;
     }
 
