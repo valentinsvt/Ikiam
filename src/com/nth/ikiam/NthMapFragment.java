@@ -268,7 +268,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                     map.animateCamera(update);
                     polyLine = map.addPolyline(rectOptions);
                     botones[1].setText("Parar");
-                    camera = new ImageTableObserver(new Handler(),this);
+                   // camera = new ImageTableObserver(new Handler(),this);
                     this.getActivity().getContentResolver().registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, camera);
                     status=true;
                 }else {
@@ -504,9 +504,6 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
 
 
     /*MAPS*/
-    /**
-     * Add the marker to the polyline.
-     */
     private void updatePolyLine(LatLng latLng) {
         List<LatLng> points = polyLine.getPoints();
         points.add(latLng);

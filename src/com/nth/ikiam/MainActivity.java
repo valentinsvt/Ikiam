@@ -18,11 +18,10 @@ package com.nth.ikiam;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,7 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.nth.ikiam.db.DbHelper;
-import com.nth.ikiam.image.ImageTableObserver;
 
 import java.io.File;
 
@@ -58,9 +56,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int option = getIntent().getIntExtra("selected",1);
+
         setContentView(R.layout.activity_main);
 
-//        System.out.println(getString(R.string.global_color_cafe));
+
 
         if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
             pathFolder = Environment.getExternalStorageDirectory() + File.separator + getString(R.string.app_name);
@@ -117,7 +117,7 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(option);
         }
     }
 
@@ -187,7 +187,9 @@ public class MainActivity extends Activity {
         Fragment fragment;
         switch (position) {
             case MAP_POS:
-                fragment = new NthMapFragment();
+                fragment=null;
+                Intent intent = new Intent(this,MapActivity.class);
+                startActivity(intent);
                 break;
             case CAPTURA_POS:
                 fragment = new CapturaFragment();
@@ -208,17 +210,19 @@ public class MainActivity extends Activity {
                 fragment = new NthMapFragment();
         }
 
-        Bundle args = new Bundle();
-        args.putString("pathFolder", pathFolder);
-        fragment.setArguments(args);
+        if(fragment!=null){
+            Bundle args = new Bundle();
+            args.putString("pathFolder", pathFolder);
+            fragment.setArguments(args);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-        // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mOptionsArray[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
+            // update selected item and title, then close the drawer
+            mDrawerList.setItemChecked(position, true);
+            setTitle(mOptionsArray[position]);
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     @Override
