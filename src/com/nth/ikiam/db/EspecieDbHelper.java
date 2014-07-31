@@ -59,7 +59,7 @@ public class EspecieDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
+        Especie es = null;
         if (c != null)
             c.moveToFirst();
 

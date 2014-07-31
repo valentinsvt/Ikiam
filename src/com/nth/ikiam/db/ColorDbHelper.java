@@ -55,7 +55,7 @@ public class ColorDbHelper extends DbHelper {
         Color cl = null;
         if (c.getCount() > 0) {
             c.moveToFirst();
-            setDatos(c);
+            cl = setDatos(c);
         }
 
         return cl;
