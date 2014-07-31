@@ -160,25 +160,50 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // TODO Auto-generated method stub
+
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        /*Aqui ahcer restore*/
+        System.out.println("es restore");
         if (map != null)
             setUpMap();
-
-        if (map == null) {
+        else{
             // Try to obtain the map from the SupportMapFragment.
             map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
             // Check if we were successful in obtaining the map.
             if (map != null)
                 setUpMap();
         }
+        // Restore state members from saved instance
+//        mCurrentScore = savedInstanceState.getInt(STATE_SCORE);
+//        mCurrentLevel = savedInstanceState.getInt(STATE_LEVEL);
     }
+
+//    @Override
+//    public void onResume() {
+//
+//        super.onStart();
+//        System.out.println("on res "+map);
+//        // TODO Auto-generated method stub
+//        if (map != null)
+//            setUpMap();
+//
+//        if (map == null) {
+//            // Try to obtain the map from the SupportMapFragment.
+//            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
+//            // Check if we were successful in obtaining the map.
+//            if (map != null)
+//                setUpMap();
+//        }
+//        System.out.println("on res fin "+map);
+//    }
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
+        savedInstanceState.putInt("restore", 1);
         if(ruta!=null)
             savedInstanceState.putInt("ruta", (int)ruta.id);
 //        savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
@@ -379,6 +404,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,6);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
+        System.out.println("fin setUpmap");
     }
 
 
@@ -569,18 +595,18 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            System.out.println("entro?");
+           // System.out.println("entro?");
             selectItem(position);
         }
     }
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-        System.out.println("pos? "+position);
+        //System.out.println("pos? "+position);
         switch (position) {
             case MAP_POS:
                 // fragment = new NthMapFragment();
-                System.out.println("map?");
+               // System.out.println("map?");
                 break;
             default:
                 System.out.println("no es map? "+position);
