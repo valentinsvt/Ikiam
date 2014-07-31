@@ -67,6 +67,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.myfirstapp.MainActivity" />
         </activity>
+        <activity android:name=".MapActivity"/>
 
         <!--<activity android:name=".EncyclopediaActivity" />-->
     </application>
