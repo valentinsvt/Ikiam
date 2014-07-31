@@ -52,11 +52,13 @@ public class ColorDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Color cl = null;
+        if (c.getCount() > 0) {
             c.moveToFirst();
+            cl = setDatos(c);
+        }
 
-        return setDatos(c);
+        return cl;
     }
 
     public List<Color> getAllColores() {

@@ -109,7 +109,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
                                     .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                                     .anchor(0.5f, 1));
                             lastSize=imagenes.size();
-                            queue.execute(new ImageUploader(getActivity(), queue, imageItem, 0));
+                            //queue.execute(new ImageUploader(getActivity(), queue, imageItem, 0));
                         }
                     }
                     break;

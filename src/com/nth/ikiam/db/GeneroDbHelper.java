@@ -53,11 +53,13 @@ public class GeneroDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Genero gn = null;
+        if (c != null) {
             c.moveToFirst();
+            gn = setDatos(c);
+        }
 
-        return setDatos(c);
+        return gn;
     }
 
     public List<Genero> getAllGeneros() {

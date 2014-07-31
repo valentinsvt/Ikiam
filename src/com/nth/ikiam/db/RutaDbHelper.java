@@ -51,11 +51,13 @@ public class RutaDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Ruta rt = null;
+        if (c != null) {
             c.moveToFirst();
+            rt = setDatos(c);
+        }
         db.close();
-        return setDatos(c);
+        return rt;
     }
 
     public List<Ruta> getAllRutas() {

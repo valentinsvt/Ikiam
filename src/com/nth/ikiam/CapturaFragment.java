@@ -1,7 +1,6 @@
 package com.nth.ikiam;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +11,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import android.widget.*;
 import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.utils.GeoDegree;
+import com.nth.ikiam.utils.Utils;
 //import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
