@@ -60,10 +60,12 @@ public class EspecieDbHelper extends DbHelper {
 
         Cursor c = db.rawQuery(selectQuery, null);
         Especie es = null;
-        if (c != null)
+        if (c.getCount() > 0) {
             c.moveToFirst();
+            es = setDatos(c);
+        }
 
-        return setDatos(c);
+        return es;
     }
 
     public List<Especie> getAllEspecies() {

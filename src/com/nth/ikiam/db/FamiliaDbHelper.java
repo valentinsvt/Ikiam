@@ -52,11 +52,13 @@ public class FamiliaDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Familia fm = null;
+        if (c.getCount() > 0) {
             c.moveToFirst();
+            fm = setDatos(c);
+        }
 
-        return setDatos(c);
+        return fm;
     }
 
     public List<Familia> getAllFamilias() {

@@ -59,11 +59,13 @@ public class FotoDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Foto ft = null;
+        if (c != null) {
             c.moveToFirst();
+            ft = setDatos(c);
+        }
 
-        return setDatos(c);
+        return ft;
     }
 
     public int countAllFotos() {
