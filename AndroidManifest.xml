@@ -58,6 +58,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.nth.ikiam.YourAppMainActivity"
+            android:label="Main activity"
+            android:parentActivityName="com.nth.ikiam.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myfirstapp.MainActivity" />
+        </activity>
+
+        <!--<activity android:name=".EncyclopediaActivity" />-->
     </application>
 
 </manifest>

@@ -55,11 +55,13 @@ public class CoordenadaDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Coordenada cd = null;
+        if (c.getCount() > 0) {
             c.moveToFirst();
+            cd = setDatos(c);
+        }
         db.close();
-        return setDatos(c);
+        return cd;
     }
 
     public List<Coordenada> getAllCoordenadas() {

@@ -52,11 +52,12 @@ public class LugarDbHelper extends DbHelper {
         logQuery(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
-
-        if (c != null)
+        Lugar lg = null;
+        if (c.getCount() > 0) {
             c.moveToFirst();
-
-        return setDatos(c);
+            lg = setDatos(c);
+        }
+        return lg;
     }
 
     public List<Lugar> getAllLugares() {
