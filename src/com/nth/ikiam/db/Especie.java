@@ -9,15 +9,15 @@ import java.util.List;
  * Created by DELL on 26/07/2014.
  */
 public class Especie {
-    long id = 0;
-    String fecha;
-    Genero genero;
-    String nombre;
-    String nombreComun;
-    String comentarios;
+    public long id = 0;
+    public String fecha;
+    public Genero genero;
+    public String nombre;
+    public String nombreComun;
+    public String comentarios;
 
-    Color color1;
-    Color color2;
+    public Color color1;
+    public Color color2;
 
     EspecieDbHelper especieDbHelper;
 

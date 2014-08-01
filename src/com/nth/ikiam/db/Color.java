@@ -9,9 +9,9 @@ import java.util.List;
  * Created by DELL on 27/07/2014.
  */
 public class Color {
-    long id = 0;
-    String fecha;
-    String nombre;
+    public long id = 0;
+    public String fecha;
+    public String nombre;
 
     ColorDbHelper colorDbHelper;
 

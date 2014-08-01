@@ -8,15 +8,16 @@ import java.util.List;
  * Created by DELL on 26/07/2014.
  */
 public class Foto {
-    long id = 0;
-    String fecha;
-    Especie especie;
-    Lugar lugar;
-    Coordenada coordenada;
-    String comentarios;
-    String keywords;
+    public long id = 0;
+    public String fecha;
+    public Especie especie;
+    public Coordenada coordenada;
+    public String keywords;
+    public Entry entry;
 
-    String path;
+    public String path;
+
+    public int uploaded;
 
     FotoDbHelper fotoDbHelper;
 
@@ -26,7 +27,6 @@ public class Foto {
 
     public Foto(Context context, Especie especie, String comentarios, String keywords, Coordenada coordenada) {
         this.coordenada = coordenada;
-        this.comentarios = comentarios;
         this.keywords = keywords;
         this.especie = especie;
 
@@ -34,7 +34,6 @@ public class Foto {
     }
 
     public Foto(Context context, Especie especie, String comentarios, String keywords) {
-        this.comentarios = comentarios;
         this.keywords = keywords;
         this.especie = especie;
 
@@ -42,7 +41,6 @@ public class Foto {
     }
 
     public Foto(Context context, Especie especie, String comentarios) {
-        this.comentarios = comentarios;
         this.especie = especie;
 
         fotoDbHelper = new FotoDbHelper(context);
@@ -67,10 +65,6 @@ public class Foto {
         return coordenada;
     }
 
-    public String getComentarios() {
-        return comentarios;
-    }
-
     public String getKeywords() {
         return keywords;
     }
@@ -79,12 +73,16 @@ public class Foto {
         return fecha;
     }
 
-    public Lugar getLugar() {
-        return lugar;
-    }
-
     public String getPath() {
         return path;
+    }
+
+    public Entry getEntry() {
+        return entry;
+    }
+
+    public int getUploaded() {
+        return uploaded;
     }
 
     //setter
@@ -100,10 +98,6 @@ public class Foto {
         this.coordenada = coordenada;
     }
 
-    public void setComentarios(String comentarios) {
-        this.comentarios = comentarios;
-    }
-
     public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
@@ -112,12 +106,16 @@ public class Foto {
         this.fecha = fecha;
     }
 
-    public void setLugar(Lugar lugar) {
-        this.lugar = lugar;
-    }
-
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public void setEntry(Entry entry) {
+        this.entry = entry;
+    }
+
+    public void setUploaded(int uploaded) {
+        this.uploaded = uploaded;
     }
 
     public void save() {
@@ -137,7 +135,6 @@ public class Foto {
         return e.getFoto(id);
     }
 
-
     public static List<Foto> list(Context context) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.getAllFotos();
@@ -153,9 +150,9 @@ public class Foto {
         return e.countFotosByEspecie(especie);
     }
 
-    public static int countByLugar(Context context, Lugar lugar) {
+    public static int countNotUploaded(Context context) {
         FotoDbHelper e = new FotoDbHelper(context);
-        return e.countFotosByLugar(lugar);
+        return e.countFotosByUploaded(0);
     }
 
     public static List<Foto> findAllByEspecie(Context context, Especie especie) {
@@ -163,14 +160,14 @@ public class Foto {
         return e.getAllFotosByEspecie(especie);
     }
 
-    public static List<Foto> findAllByLugar(Context context, Lugar lugar) {
-        FotoDbHelper e = new FotoDbHelper(context);
-        return e.getAllFotosByLugar(lugar);
-    }
-
     public static List<Foto> findAllByKeyword(Context context, String keyword) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.getAllFotosByKeyword(keyword);
+    }
+
+    public static List<Foto> findAllNotUploaded(Context context) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getAllFotosByUploaded(0);
     }
 
     public static void empty(Context context) {

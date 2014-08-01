@@ -20,7 +20,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
 import com.nth.ikiam.db.*;
+import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
+import com.nth.ikiam.utils.ImageUploader;
 import com.nth.ikiam.utils.Utils;
 //import com.nth.ikiam.utils.GeoDegree;
 
@@ -29,6 +31,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by luz on 25/07/14.
@@ -132,10 +136,11 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         textoEspecie = (EditText) view.findViewById(R.id.captura_nombre_especie_txt);
         textoNombreComun = (EditText) view.findViewById(R.id.captura_nombre_comun_txt);
 
-        botones = new ImageButton[3];
+        botones = new ImageButton[4];
         botones[0] = (ImageButton) view.findViewById(R.id.captura_gallery_btn);
         botones[1] = (ImageButton) view.findViewById(R.id.captura_camera_btn);
         botones[2] = (ImageButton) view.findViewById(R.id.captura_save_btn);
+        botones[3] = (ImageButton) view.findViewById(R.id.captura_save_upload_btn);
         for (ImageButton button : botones) {
             button.setOnClickListener(this);
         }
@@ -169,7 +174,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 alerta(getString(R.string.camera_app_not_available));
             }
         }
-        if (v.getId() == botones[2].getId()) { // save
+        if (v.getId() == botones[2].getId() || v.getId() == botones[3].getId()) { // save || upload
             if (hayFoto) {
                 String[] keys = {"arbol", "corteza", "hoja", "flor", "fruta"};
                 Color color1 = (Color) spinnerColor1.getSelectedItem();
@@ -193,6 +198,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 Familia familia = null;
                 Genero genero = null;
                 Especie especie = null;
+                Entry entry = null;
                 if (!nombreFamilia.equals("")) {
                     familia = Familia.getByNombreOrCreate(context, nombreFamilia);
                 }
@@ -218,13 +224,21 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                         especie.setNombreComun(nombreComun);
                     }
                     especie.save();
+
+                    entry = new Entry(context);
+                    entry.setEspecie(especie);
+                    entry.setComentarios(comentarios);
+                    entry.setUploaded(0);
+                    entry.save();
                 }
 
                 Foto foto = new Foto(context);
                 if (especie != null) {
                     foto.setEspecie(especie);
                 }
-                foto.setComentarios(comentarios);
+                if (entry != null) {
+                    foto.setEntry(entry);
+                }
                 foto.setKeywords(keywords);
                 if (fotoLat != null && fotoLong != null) {
                     Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
@@ -248,9 +262,17 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                foto.setPath(fotoPath);
+                System.out.println("Path folder: " + pathFolder);
+                System.out.println("Photo path: " + fotoPath);
+                foto.setPath(pathFolder + "/" + fotoPath);
+                foto.setUploaded(0);
                 foto.save();
 
+                if (v.getId() == botones[3].getId()) {
+                    // aqui hace upload al servidor.....
+                    ExecutorService queue = Executors.newSingleThreadExecutor();
+                    queue.execute(new CapturaUploader(getActivity(), queue, foto, 0));
+                }
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
                 alerta(getString(R.string.captura_error_seleccion));

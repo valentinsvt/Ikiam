@@ -26,7 +26,7 @@ import org.apache.http.params.HttpParams;
 /**
  * Created by svt on 7/30/2014.
  */
-public class ImageUploader  implements Runnable {
+public class ImageUploader implements Runnable {
 
     /**
      * Application context
@@ -34,7 +34,7 @@ public class ImageUploader  implements Runnable {
     private Context context;
 
     /**
-     *  Queue that handles image uploads
+     * Queue that handles image uploads
      */
     private ExecutorService queue;
 
@@ -52,33 +52,37 @@ public class ImageUploader  implements Runnable {
      * Constructor
      *
      * @param context Application context
-     * @param queue Queue that handles image uploads
-     * @param item Image queue item
+     * @param queue   Queue that handles image uploads
+     * @param item    Image queue item
      * @param retries Number of retries for failed uploads
      */
-    public ImageUploader(Context context, ExecutorService queue, ImageItem item, int retries)
-    {
-        this.context  = context;
-        this.queue    = queue;
-        this.item     = item;
-        this.retries  = retries;
+    public ImageUploader(Context context, ExecutorService queue, ImageItem item, int retries) {
+        this.context = context;
+        this.queue = queue;
+        this.item = item;
+        this.retries = retries;
+    }
+
+    public ImageUploader(Context context, ExecutorService queue, int retries) {
+        this.context = context;
+        this.queue = queue;
+        this.retries = retries;
     }
 
     /**
      * Upload image to Picasa
      */
-    public void run()
-    {
+    public void run() {
         // create items for http client
         System.out.println("run del upload");
         //UploadNotification notification = new UploadNotification(context, item.imageId, item.imageSize, item.imageName);
-        String urlstr                      = "http://10.0.0.3:8080/ikiamServer/nthServer/reciveFile";
+        String urlstr = "http://10.0.0.3:8080/ikiamServer/nthServer/reciveFile";
         //HttpClient client               = new DefaultHttpClient();
         //HttpPost post                   = new HttpPost(url);
 
         try {
             // new file and and entity
-            File file            = new File(item.imagePath);
+            File file = new File(item.imagePath);
 //            Multipart multipart  = new Multipart("Media multipart posting", "END_OF_PART");
 //
 //            // create entity parts
@@ -146,7 +150,7 @@ public class ImageUploader  implements Runnable {
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name='upload-file' ; filename='prueba.jpg' " + lineEnd);
 
-                    dos.writeBytes(lineEnd);
+            dos.writeBytes(lineEnd);
 
             // create a buffer of  maximum size
             bytesAvailable = fileInputStream.available();
@@ -177,23 +181,18 @@ public class ImageUploader  implements Runnable {
             Log.i("uploadFile", "HTTP Response is : "
                     + serverResponseMessage + ": " + serverResponseCode);
 
-            if(serverResponseCode == 200){
+            if (serverResponseCode == 200) {
 
-            System.out.print("competed");
+                System.out.print("competed");
             }
 
             //close the streams //
             fileInputStream.close();
             dos.flush();
             dos.close();
-
-
         } catch (Exception e) {
             System.out.println("fail upload " + e.getMessage());
             // file upload failed so abort post and close connection
-
-
-
         }
     }
 }

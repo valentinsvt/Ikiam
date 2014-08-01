@@ -23,6 +23,7 @@
     <string name="global_no">No</string>
     <string name="global_ok">Aceptar</string>
     <string name="global_save">Guardar</string>
+    <string name="global_upload">Guardar y enviar al servidor</string>
     <string name="global_cancel">Cancelar</string>
     <string name="global_placeHolder">placeHolder</string>
 

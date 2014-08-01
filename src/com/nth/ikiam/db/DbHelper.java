@@ -17,7 +17,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     // Database Name
     private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
@@ -32,6 +32,7 @@ public class DbHelper extends SQLiteOpenHelper {
     protected static final String TABLE_ESPECIE = "especies";
     protected static final String TABLE_COORDENADA = "coordenada";
     protected static final String TABLE_RUTA = "ruta";
+    protected static final String TABLE_ENTRY = "entry";
 
     // Common column names
     protected static final String KEY_ID = "id";
@@ -57,6 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_GENERO, KEYS_COMMON, GeneroDbHelper.KEYS_GENERO));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_LUGAR, KEYS_COMMON, LugarDbHelper.KEYS_LUGAR));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_RUTA, KEYS_COMMON, RutaDbHelper.KEYS_RUTA));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ENTRY, KEYS_COMMON, EntryDbHelper.KEYS_ENTRY));
 
     }
 

@@ -17,14 +17,14 @@ public class FotoDbHelper extends DbHelper {
     private static final String LOG = "FotoDbHelper";
 
     //  FOTO - column names
-    private static final String KEY_COMENTARIOS = "comentarios";
     private static final String KEY_ESPECIE_ID = "especie_id";
-    private static final String KEY_LUGAR_ID = "lugar_id";
+    private static final String KEY_ENTRY_ID = "entry_id";
     private static final String KEY_COORDENADA = "coordenada";
     private static final String KEY_KEYWORDS = "keywords";
     private static final String KEY_PATH = "path";
+    private static final String KEY_UPLOADED = "uploaded";
 
-    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_LUGAR_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_COMENTARIOS, KEY_PATH};
+    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_ENTRY_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_PATH, KEY_UPLOADED};
 
     public FotoDbHelper(Context context) {
         super(context);
@@ -89,10 +89,10 @@ public class FotoDbHelper extends DbHelper {
         return 0;
     }
 
-    public int countFotosByLugar(Lugar lugar) {
+    public int countFotosByUploaded(int uploaded) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_FOTO +
-                " WHERE " + KEY_LUGAR_ID + " = '" + lugar.id + "'";
+                " WHERE " + KEY_UPLOADED + " = '" + uploaded + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
             return c.getInt(c.getColumnIndex("count"));
@@ -148,29 +148,6 @@ public class FotoDbHelper extends DbHelper {
         return fotos;
     }
 
-    public List<Foto> getAllFotosByLugar(Lugar lugar) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        List<Foto> fotos = new ArrayList<Foto>();
-
-        String selectQuery = "SELECT * FROM " + TABLE_FOTO +
-                " WHERE " + KEY_LUGAR_ID + " = " + lugar.id;
-
-        logQuery(LOG, selectQuery);
-
-        Cursor c = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                Foto f = setDatos(c);
-
-                // adding to foto list
-                fotos.add(f);
-            } while (c.moveToNext());
-        }
-        return fotos;
-    }
-
     public List<Foto> getAllFotosByKeyword(String keyword) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Foto> fotos = new ArrayList<Foto>();
@@ -188,6 +165,29 @@ public class FotoDbHelper extends DbHelper {
                 Foto f = setDatos(c);
 
                 // adding to foto list
+                fotos.add(f);
+            } while (c.moveToNext());
+        }
+        return fotos;
+    }
+
+    public List<Foto> getAllFotosByUploaded(int uploaded) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Foto> fotos = new ArrayList<Foto>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_FOTO +
+                " WHERE " + KEY_UPLOADED + " = " + uploaded;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto f = setDatos(c);
+
+                // adding to entry list
                 fotos.add(f);
             } while (c.moveToNext());
         }
@@ -219,12 +219,12 @@ public class FotoDbHelper extends DbHelper {
         Foto f = new Foto(this.context);
         f.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         f.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        f.setLugar(Lugar.get(this.context, c.getLong(c.getColumnIndex(KEY_LUGAR_ID))));
+        f.setEntry(Entry.get(this.context, c.getLong(c.getColumnIndex(KEY_ENTRY_ID))));
         f.setEspecie(Especie.get(this.context, c.getLong(c.getColumnIndex(KEY_ESPECIE_ID))));
         f.setCoordenada(Coordenada.get(this.context, c.getLong(c.getColumnIndex(KEY_COORDENADA))));
-        f.setComentarios((c.getString(c.getColumnIndex(KEY_COMENTARIOS))));
         f.setKeywords((c.getString(c.getColumnIndex(KEY_KEYWORDS))));
         f.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
+        f.setUploaded((c.getInt(c.getColumnIndex(KEY_UPLOADED))));
         return f;
     }
 
@@ -236,13 +236,15 @@ public class FotoDbHelper extends DbHelper {
         if (foto.especie != null) {
             values.put(KEY_ESPECIE_ID, foto.especie.id);
         }
-        if (foto.lugar != null) {
-            values.put(KEY_LUGAR_ID, foto.lugar.id);
+        if (foto.entry != null) {
+            values.put(KEY_ENTRY_ID, foto.entry.id);
         }
-        values.put(KEY_COORDENADA, foto.coordenada.id);
-        values.put(KEY_COMENTARIOS, foto.getComentarios());
+        if (foto.coordenada != null) {
+            values.put(KEY_COORDENADA, foto.coordenada.id);
+        }
         values.put(KEY_KEYWORDS, foto.getKeywords());
         values.put(KEY_PATH, foto.getPath());
+        values.put(KEY_UPLOADED, foto.getUploaded());
         return values;
     }
 

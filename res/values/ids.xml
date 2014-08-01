@@ -40,4 +40,7 @@
     <item name="captura_nombre_especie_txt" type="id" />
     <item name="captura_nombre_comun_label" type="id" />
     <item name="captura_nombre_comun_txt" type="id" />
+    <item name="captura_divider_hor2" type="id">captura_divider_hor2</item>
+    <item name="captura_save_upload_btn" type="id">captura_save_upload_btn</item>
+    <item name="captura_divider_vert2" type="id">captura_divider_vert2</item>
 </resources>
