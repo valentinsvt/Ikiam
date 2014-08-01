@@ -97,10 +97,6 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
         super.onCreate(savedInstanceState);
         first=true;
-        if(savedInstanceState!=null){
-            System.out.println("!!!!! es restore!!!!!!!!");
-        }
-
 
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
@@ -161,9 +157,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        if (savedInstanceState == null) {
-            selectItem(0);
-        }
+//        if (savedInstanceState == null) {
+//            selectItem(0);
+//        }
         /*FinDrawer*/
     }
 

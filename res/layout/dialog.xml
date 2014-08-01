@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:id="@+id/header"
+            android:layout_height="40"
+            android:layout_alignParentStart="true">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/map_activity_nuevaFoto"
+                android:id="@+id/textView"
+                android:layout_centerVertical="true" android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+            android:id="@+id/body"
+            android:layout_width="fill_parent"
+            android:layout_height="300"
+            android:layout_below="@+id/header">
+    </RelativeLayout>
+    <RelativeLayout
+            android:id="@+id/foter"
+            android:layout_width="fill_parent"
+            android:layout_height="40"
+            android:layout_below="@+id/body">
+        <Button
+                android:layout_width="100"
+                android:layout_height="fill_parent"
+                android:id="@+id/subir"
+                android:layout_alignParentTop="true" android:layout_alignParentStart="true"
+                android:text="@string/dialog_btn_descargar"/>
+        <Button
+                android:layout_width="100"
+                android:layout_height="fill_parent"
+                android:id="@+id/cerrar"
+                android:layout_alignParentTop="true" android:layout_toRightOf="@+id/subir"
+                android:text="@string/dialog_btn_cerrar"/>
+        <Button
+                android:layout_width="100"
+                android:layout_height="fill_parent"
+                android:id="@+id/borrar"
+                android:layout_alignParentTop="true" android:layout_toRightOf="@+id/cerrar"
+                android:text="@string/dialog_btn_borrar" android:textAlignment="center"
+                android:background="@drawable/ic_action_upload"
+                android:drawableTop="32sp"
+                android:drawablePadding="-15sp"
+               />
+    </RelativeLayout>
+</RelativeLayout>
