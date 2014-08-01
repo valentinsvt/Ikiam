@@ -7,7 +7,7 @@
                 tools:context=".MapFragment" >
 
     <Button
-            android:id="@+id/btnGalapagos"
+            android:id="@+id/btnGalapagos22222"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -15,17 +15,17 @@
             android:text="@string/map_galapagos_btn" />
 
     <Button
-            android:id="@+id/btnService"
+            android:id="@+id/btnService2222"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/map_service"
             android:icon="@drawable/action_search"
-            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
+            android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos22222"/>
 
     <fragment
-            android:id="@+id/mapF"
+            android:id="@+id/mapF222222"
             android:name="com.google.android.gms.maps.MapFragment"
-            android:layout_below="@+id/btnGalapagos"
+            android:layout_below="@+id/btnGalapagos22222"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />

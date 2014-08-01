@@ -1,6 +1,9 @@
 package com.nth.ikiam;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.*;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -18,10 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -39,6 +39,7 @@ import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.ImageUploader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,6 +53,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private CharSequence mTitle;
     private String[] mOptionsArray;
     private final int MAP_POS = 0;
+    private final int CAPTURA_POS = 1;
+    private final int ENCYCLOPEDIA_POS = 2;
+    private final int SETTINGS_POS = 3;
 
     /*Interfaz*/
     private Button[] botones;
@@ -64,6 +68,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private static LatLng location ;
     LocationClient locationClient;
     Marker lastPosition;
+    HashMap<Marker,ImageItem> data;
     /*Google services*/
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     /*Fin mapa*/
@@ -86,10 +91,17 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private ExecutorService queue = Executors.newSingleThreadExecutor();
     /*Fin imagenes*/
 
-
+    boolean first = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        first=true;
+        if(savedInstanceState!=null){
+            System.out.println("!!!!! es restore!!!!!!!!");
+        }
+
+
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
@@ -97,6 +109,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
         /*CORE*/
         setUpMapIfNeeded();
+        data = new HashMap<Marker, ImageItem>();
         locationClient = new LocationClient(this,this, this);
         locationClient.connect();
         botones = new Button[2];
@@ -117,8 +130,8 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         /*DRAWER*/
         mTitle = mDrawerTitle = getTitle();
         mOptionsArray = getResources().getStringArray(R.array.options_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer2);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, mOptionsArray));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -161,56 +174,36 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     }
 
 
-
+    @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        /*Aqui ahcer restore*/
-        System.out.println("es restore");
-        if (map != null)
-            setUpMap();
-        else{
-            // Try to obtain the map from the SupportMapFragment.
-            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
-            // Check if we were successful in obtaining the map.
-            if (map != null)
-                setUpMap();
-        }
-        // Restore state members from saved instance
-//        mCurrentScore = savedInstanceState.getInt(STATE_SCORE);
-//        mCurrentLevel = savedInstanceState.getInt(STATE_LEVEL);
+
+
     }
 
-//    @Override
-//    public void onResume() {
-//
-//        super.onStart();
-//        System.out.println("on res "+map);
+    @Override
+    public void onResume() {
+
+        super.onStart();
+
 //        // TODO Auto-generated method stub
-//        if (map != null)
-//            setUpMap();
-//
-//        if (map == null) {
-//            // Try to obtain the map from the SupportMapFragment.
-//            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
-//            // Check if we were successful in obtaining the map.
-//            if (map != null)
-//                setUpMap();
-//        }
-//        System.out.println("on res fin "+map);
-//    }
+
+    }
 
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        savedInstanceState.putInt("restore", 1);
         if(ruta!=null)
             savedInstanceState.putInt("ruta", (int)ruta.id);
+        savedInstanceState.putInt("restore", 1);
+        getFragmentManager().saveFragmentInstanceState(getFragmentManager().findFragmentById(R.id.mapF));
 //        savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+
 
     @Override
     public void onDestroy() {
@@ -358,7 +351,6 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                     Message msg = Message.obtain(null, SvtService.MSG_SET_INT_VALUE, intvaluetosend, 0);
                     msg.replyTo = mMessenger;
                     mService.send(msg);
-                    System.out.println("mando mensaje "+intvaluetosend);
                 } catch (RemoteException e) {
                 }
             }
@@ -367,7 +359,6 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     void doBindService() {
         this.bindService(new Intent(this, SvtService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
-        System.out.println("Binding.");
     }
     void doUnbindService() {
         if (mIsBound) {
@@ -384,12 +375,13 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             // Detach our existing connection.
             this.unbindService(mConnection);
             mIsBound = false;
-            System.out.println("UnBinding.");
         }
     }
 
     public  void setUpMapIfNeeded() {
-        //System.out.println("setUpMap if needed");
+        //System.out.println("setUpMap if needed" +map);
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
+        //System.out.println("setUpMap if needed despues" +map);
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -397,14 +389,44 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             // Check if we were successful in obtaining the map.
             if (map != null)
                 setUpMap();
+        }else{
+            setUpMap();
         }
     }
-    private static void setUpMap() {
+    private  void setUpMap() {
         location=new LatLng(-1.6477220517969353, -78.46435546875);
         CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,6);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
-        System.out.println("fin setUpmap");
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(final Marker marker){
+                if(data.get(marker)!=null){
+                    marker.showInfoWindow();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setMessage("Subir al servidor").setTitle("subir");
+                    builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                            Intent intent = new Intent(activity,MainActivity.class);
+                            intent.putExtra("selected",1);
+                            intent.putExtra("image",data.get(marker).imagePath);
+                            startActivity(intent);
+                        }
+                    });
+                    builder.setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
 
@@ -446,11 +468,14 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                                     R.drawable.pin3), 0,0, color);
                             canvas1.drawBitmap(imagenes.get(lastIndex), 3,2, color);
 
-                            map.addMarker(new MarkerOptions().position(latlong)
+                            Marker marker = map.addMarker(new MarkerOptions().position(latlong)
                                     .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                                    .anchor(0.5f, 1));
+                                    .anchor(0.5f, 1).title("Nueva fotografía"));
+                            ImageItem it = imageItem;
+                            data.put(marker,it);
+
                             lastSize=imagenes.size();
-                            queue.execute(new ImageUploader(activity, queue, imageItem, 0));
+                            //queue.execute(new ImageUploader(activity, queue, imageItem, 0));
                         }
                     }
                     break;
@@ -463,7 +488,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             mService = new Messenger(service);
-            System.out.println("Attached.");
+
             try {
                 Message msg = Message.obtain(null, SvtService.MSG_REGISTER_CLIENT);
                 msg.replyTo = mMessenger;
@@ -507,7 +532,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             /*Borro una foto*/
             this.lastestImageIndex=0;
         }
-        System.out.println("set image index fin "+this.lastestImageIndex);
+        //System.out.println("set image index fin "+this.lastestImageIndex);
     }
 
     /*Fotos*/
@@ -595,7 +620,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-           // System.out.println("entro?");
+            // System.out.println("entro?");
             selectItem(position);
         }
     }
@@ -603,19 +628,68 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private void selectItem(int position) {
         // update the main content by replacing fragments
         //System.out.println("pos? "+position);
+        Fragment fragment;
         switch (position) {
             case MAP_POS:
                 // fragment = new NthMapFragment();
-               // System.out.println("map?");
+
+                if(!first) {
+                    //System.out.println("map?");
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                            .hide(fragmentManager.findFragmentById(R.id.content_frame))
+                            .commit();
+                    RelativeLayout mainLayout=(RelativeLayout)this.findViewById(R.id.rl2);
+                    mainLayout.setVisibility(View.VISIBLE);
+                }
+                first=false;
+                fragment=null;
+
+                break;
+            case CAPTURA_POS:
+                fragment = new CapturaFragment();
+                break;
+            //            case CAMERA_POS:
+//                fragment = new CameraFragment();
+//                break;
+//            case GALLERY_POS:
+//                fragment = new GalleryFragment();
+//                break;
+            case ENCYCLOPEDIA_POS:
+                fragment = new EncyclopediaFragment();
+                break;
+            case SETTINGS_POS:
+                fragment = new SettingsFragment();
                 break;
             default:
-                System.out.println("no es map? "+position);
-                Intent intent = new Intent(this,MainActivity.class);
-                intent.putExtra("selected", position);
-                startActivity(intent);
+                fragment=null;
                 break;
 
+
         }
+        if(fragment!=null){
+           // System.out.println("fragment "+fragment);
+            Bundle args = new Bundle();
+            //args.putString("pathFolder", pathFolder);
+            fragment.setArguments(args);
+
+            FragmentManager fragmentManager = getFragmentManager();
+            RelativeLayout mainLayout=(RelativeLayout)this.findViewById(R.id.rl2);
+            mainLayout.setVisibility(LinearLayout.GONE);
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+           // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+            // update selected item and title, then close the drawer
+
+        }
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mOptionsArray[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+
 
 
     }
@@ -630,6 +704,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
      * When using the ActionBarDrawerToggle, you must call it during
      * onPostCreate() and onConfigurationChanged()...
      */
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

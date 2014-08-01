@@ -57,6 +57,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int option = getIntent().getIntExtra("selected",1);
+        System.out.println("image "+ getIntent().getStringExtra("image"));
 
         setContentView(R.layout.activity_main);
 

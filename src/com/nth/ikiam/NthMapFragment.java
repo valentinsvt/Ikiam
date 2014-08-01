@@ -28,16 +28,13 @@ import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
-import com.nth.ikiam.utils.ImageUploader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * Created by DELL on 23/07/2014.
- */
+
 public class NthMapFragment extends Fragment implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks,GooglePlayServicesClient.OnConnectionFailedListener {
     private Button chooseBtn;
     private Button[] botones;
@@ -149,7 +146,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         public void onServiceDisconnected(ComponentName className) {
             // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
             mService = null;
-           // System.out.println("Disconnected.");
+            // System.out.println("Disconnected.");
         }
     };
 
@@ -187,8 +184,12 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
+        //View view = inflater.inflate(R.layout.map_layout, container, false);
+        View view = container.findViewById(R.id.mapF);
+        view = inflater.inflate(R.layout.map_layout,container,false);
 
-        View view = inflater.inflate(R.layout.map_layout, container, false);
         setUpMapIfNeeded();
         locationClient = new LocationClient(this.getActivity(),this, this);
         locationClient.connect();
@@ -216,13 +217,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         if (map != null)
             setUpMap();
 
-        if (map == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
-            // Check if we were successful in obtaining the map.
-            if (map != null)
-                setUpMap();
-        }
+        setUpMapIfNeeded();
     }
     @Override
     public void onClick(View v){
@@ -338,18 +333,18 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
             // Get the error code
             int errorCode = 10;
             // Get the error dialog from Google Play services
-            Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode,this.getActivity(),CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            //Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode,this.getActivity(),CONNECTION_FAILURE_RESOLUTION_REQUEST);
 
             // If Google Play services can provide an error dialog
-            if (errorDialog != null) {
-                // Create a new DialogFragment for the error dialog
-                ErrorDialogFragment errorFragment =
-                        new ErrorDialogFragment();
-                // Set the dialog in the DialogFragment
-                errorFragment.setDialog(errorDialog);
-                // Show the error dialog in the DialogFragment
-                errorFragment.show(this.getFragmentManager(),"Location Updates");
-            }
+            //if (errorDialog != null) {
+            // Create a new DialogFragment for the error dialog
+            //  ErrorDialogFragment errorFragment =
+            //      new ErrorDialogFragment();
+            // Set the dialog in the DialogFragment
+            //errorFragment.setDialog(errorDialog);
+            // Show the error dialog in the DialogFragment
+            //errorFragment.show(this.getFragmentManager(),"Location Updates");
+            //}
             return false;
         }
     }
@@ -438,12 +433,24 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
         //System.out.println("setUpMap if needed");
         // Do a null check to confirm that we have not already instantiated the map.
         if (map == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
-            // Check if we were successful in obtaining the map.
-            if (map != null)
-                setUpMap();
+        // Try to obtain the map from the SupportMapFragment.
+          map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
+        // Check if we were successful in obtaining the map.
+        if (map != null)
+          setUpMap();
+           }
+        /*MapFragment sp = (MapFragment) getChildFragmentManager().findFragmentById(R.id.mapF);
+        System.out.println("sp " + sp);
+        if(sp==null){
+            sp =new MapFragment();
+            sp.setRetainInstance(true);
+            getChildFragmentManager().beginTransaction().replace(R.id.mapF,sp,null).commit();
+            map = sp.getMap();
+        }else{
+            map=sp.getMap();
         }
+        */
+        System.out.println("map "+map);
     }
 
     /**
@@ -536,7 +543,7 @@ public class NthMapFragment extends Fragment implements Button.OnClickListener, 
 
     public void getFoto(){
         if(imageItem!=null) {
-           // System.out.println("path "+imageItem.imagePath);
+            // System.out.println("path "+imageItem.imagePath);
             //System.out.println("images " + imagenes);
             Bitmap b = ImageUtils.decodeFile(imageItem.imagePath);
             System.out.println("width "+b.getWidth()+"  "+b.getHeight());
