@@ -96,7 +96,7 @@ public class Coordenada {
         if (this.id == 0) {
             this.id = this.coordenadaDbHelper.createCoordenada(this);
         } else {
-            this.id = this.coordenadaDbHelper.updateCoordenada(this);
+            this.coordenadaDbHelper.updateCoordenada(this);
         }
     }
 

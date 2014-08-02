@@ -204,7 +204,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 Entry entry = null;
                 if (!nombreFamilia.equals("")) {
                     familia = Familia.getByNombreOrCreate(context, nombreFamilia);
-                    System.out.println("familia: " + familia.id + "   " + familia.nombre);
                 }
                 if (!nombreGenero.equals("")) {
                     genero = Genero.getByNombreOrCreate(context, nombreGenero);
@@ -212,7 +211,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                         genero.setFamilia(familia);
                         genero.save();
                     }
-                    System.out.println("genero: " + genero.id + "   " + genero.nombre + "  (" + familia.nombre + " " + familia.id + ")");
                 }
                 if (!nombreEspecie.equals("")) {
                     especie = Especie.getByNombreOrCreate(context, nombreEspecie);
@@ -229,15 +227,12 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                         especie.setNombreComun(nombreComun);
                     }
                     especie.save();
-                    System.out.println("especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
-                    System.out.println("especie: " + especie.id + "   " + especie.nombre + "  (" + especie.getGenero().nombre + " " + especie.getGenero().id + ")" + "  (" + especie.getGenero().getFamilia().nombre + " " + especie.getGenero().getFamilia().id + ")");
 
                     entry = new Entry(context);
                     entry.setEspecie(especie);
                     entry.setComentarios(comentarios);
                     entry.setUploaded(0);
                     entry.save();
-                    System.out.println("entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                 }
 
                 Foto foto = new Foto(context);
@@ -270,12 +265,12 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                System.out.println("Path folder: " + pathFolder);
-                System.out.println("Photo path: " + fotoPath);
+                //System.out.println("Path folder: " + pathFolder);
+                //System.out.println("Photo path: " + fotoPath);
                 foto.setPath(pathFolder + "/" + fotoPath);
                 foto.setUploaded(0);
                 foto.save();
-                System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
+                //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                 if (v.getId() == botones[3].getId()) {
                     // aqui hace upload al servidor.....
                     ExecutorService queue = Executors.newSingleThreadExecutor();

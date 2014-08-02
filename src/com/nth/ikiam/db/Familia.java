@@ -55,7 +55,7 @@ public class Familia {
         if (this.id == 0) {
             this.id = this.familiaDbHelper.createFamilia(this);
         } else {
-            this.id = this.familiaDbHelper.updateFamilia(this);
+            this.familiaDbHelper.updateFamilia(this);
         }
     }
 

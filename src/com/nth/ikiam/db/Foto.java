@@ -152,7 +152,7 @@ public class Foto {
         if (this.id == 0) {
             this.id = this.fotoDbHelper.createFoto(this);
         } else {
-            this.id = this.fotoDbHelper.updateFoto(this);
+           this.fotoDbHelper.updateFoto(this);
         }
     }
 

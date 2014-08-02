@@ -82,7 +82,7 @@ public class Genero {
         if (this.id == 0) {
             this.id = this.generoDbHelper.createGenero(this);
         } else {
-            this.id = this.generoDbHelper.updateGenero(this);
+            this.generoDbHelper.updateGenero(this);
         }
     }
 

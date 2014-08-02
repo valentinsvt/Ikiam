@@ -59,7 +59,7 @@ public class Color {
         if (this.id == 0) {
             this.id = this.colorDbHelper.createColor(this);
         } else {
-            this.id = this.colorDbHelper.updateColor(this);
+             this.colorDbHelper.updateColor(this);
         }
     }
 

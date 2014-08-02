@@ -85,7 +85,7 @@ public class Entry {
         if (this.id == 0) {
             this.id = this.entryDbHelper.createEntry(this);
         } else {
-            this.id = this.entryDbHelper.updateEntry(this);
+             this.entryDbHelper.updateEntry(this);
         }
     }
 

@@ -126,7 +126,6 @@ public class Especie {
     }
 
     public void setGenero(Genero genero) {
-        System.out.println("*************************" + genero.id);
         this.genero_id = genero.id;
     }
 
@@ -162,7 +161,7 @@ public class Especie {
         if (this.id == 0) {
             this.id = this.especieDbHelper.createEspecie(this);
         } else {
-            this.id = this.especieDbHelper.updateEspecie(this);
+          this.especieDbHelper.updateEspecie(this);
         }
     }
 

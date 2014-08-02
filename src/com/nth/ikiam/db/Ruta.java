@@ -53,7 +53,7 @@ public class Ruta {
         if (this.id == 0) {
             this.id = this.rutaDbHelper.createRuta(this);
         } else {
-            this.id = this.rutaDbHelper.updateRuta(this);
+            this.rutaDbHelper.updateRuta(this);
         }
     }
 
