@@ -11,53 +11,59 @@ import java.util.List;
 public class Especie {
     public long id = 0;
     public String fecha;
-    public Genero genero;
+    //    public Genero genero;
+    public Long genero_id;
     public String nombre;
     public String nombreComun;
     public String comentarios;
 
-    public Color color1;
-    public Color color2;
+    //    public Color color1;
+//    public Color color2;
+    public Long color1_id;
+    public Long color2_id;
 
     EspecieDbHelper especieDbHelper;
 
+    Context context;
+
     public Especie(Context context) {
         especieDbHelper = new EspecieDbHelper(context);
+        this.context = context;
     }
 
     public Especie(Context context, String nombreComun) {
         this.nombreComun = nombreComun;
-
+        this.context = context;
         especieDbHelper = new EspecieDbHelper(context);
     }
 
     public Especie(Context context, String nombreEspecie, int algo) {
         this.nombre = nombreEspecie;
-
+        this.context = context;
         especieDbHelper = new EspecieDbHelper(context);
     }
 
     public Especie(Context context, String nombreComun, Genero genero, String nombre, String comentarios) {
         this.nombre = nombre;
         this.nombreComun = nombreComun;
-        this.genero = genero;
+        this.genero_id = genero.id;
         this.comentarios = comentarios;
-
+        this.context = context;
         especieDbHelper = new EspecieDbHelper(context);
     }
 
     public Especie(Context context, Genero genero, String nombre, String comentarios) {
         this.nombre = nombre;
-        this.genero = genero;
+        this.genero_id = genero.id;
         this.comentarios = comentarios;
-
+        this.context = context;
         especieDbHelper = new EspecieDbHelper(context);
     }
 
     public Especie(Context context, Genero genero, String nombre) {
         this.nombre = nombre;
-        this.genero = genero;
-
+        this.genero_id = genero.id;
+        this.context = context;
         especieDbHelper = new EspecieDbHelper(context);
     }
 
@@ -71,15 +77,15 @@ public class Especie {
     }
 
     public Genero getGenero() {
-        return genero;
+        return Genero.get(context, genero_id);
+    }
+
+    public long getGenero_id() {
+        return genero_id;
     }
 
     public String getNombre() {
         return nombre;
-    }
-
-    public String getNombreCientifico() {
-        return genero.nombre + " " + nombre;
     }
 
     public String getComentarios() {
@@ -91,11 +97,19 @@ public class Especie {
     }
 
     public Color getColor1() {
-        return color1;
+        return Color.get(context, color1_id);
     }
 
     public Color getColor2() {
-        return color2;
+        return Color.get(context, color2_id);
+    }
+
+    public long getColor1_id() {
+        return color1_id;
+    }
+
+    public long getColor2_id() {
+        return color2_id;
     }
 
     //setters
@@ -107,8 +121,13 @@ public class Especie {
         this.nombreComun = nombreComun;
     }
 
+    public void setGenero_id(long genero) {
+        this.genero_id = genero;
+    }
+
     public void setGenero(Genero genero) {
-        this.genero = genero;
+        System.out.println("*************************" + genero.id);
+        this.genero_id = genero.id;
     }
 
     public void setNombre(String nombre) {
@@ -123,12 +142,20 @@ public class Especie {
         this.fecha = fecha;
     }
 
+    public void setColor1_id(long color1) {
+        this.color1_id = color1;
+    }
+
+    public void setColor2_id(long color2) {
+        this.color2_id = color2;
+    }
+
     public void setColor1(Color color1) {
-        this.color1 = color1;
+        this.color1_id = color1.id;
     }
 
     public void setColor2(Color color2) {
-        this.color2 = color2;
+        this.color2_id = color2.id;
     }
 
     public void save() {

@@ -10,14 +10,20 @@ import java.util.List;
 public class Foto {
     public long id = 0;
     public String fecha;
-    public Especie especie;
-    public Coordenada coordenada;
+    //    public Especie especie;
+//    public Coordenada coordenada;
     public String keywords;
-    public Entry entry;
+//    public Entry entry;
+
+    public Long especie_id;
+    public Long coordenada_id;
+    public Long entry_id;
 
     public String path;
 
     public int uploaded;
+
+    Context context;
 
     FotoDbHelper fotoDbHelper;
 
@@ -26,35 +32,39 @@ public class Foto {
     }
 
     public Foto(Context context, Especie especie, String comentarios, String keywords, Coordenada coordenada) {
-        this.coordenada = coordenada;
+        this.coordenada_id = coordenada.id;
         this.keywords = keywords;
-        this.especie = especie;
-
+        this.especie_id = especie.id;
+        this.context = context;
         fotoDbHelper = new FotoDbHelper(context);
     }
 
     public Foto(Context context, Especie especie, String comentarios, String keywords) {
         this.keywords = keywords;
-        this.especie = especie;
-
+        this.especie_id = especie.id;
+        this.context = context;
         fotoDbHelper = new FotoDbHelper(context);
     }
 
     public Foto(Context context, Especie especie, String comentarios) {
-        this.especie = especie;
-
+        this.especie_id = especie.id;
+        this.context = context;
         fotoDbHelper = new FotoDbHelper(context);
     }
 
     public Foto(Context context, Especie especie) {
-        this.especie = especie;
-
+        this.especie_id = especie.id;
+        this.context = context;
         fotoDbHelper = new FotoDbHelper(context);
     }
 
     //getters
     public Especie getEspecie() {
-        return especie;
+        return Especie.get(context, especie_id);
+    }
+
+    public Long getEspecie_id() {
+        return especie_id;
     }
 
     public long getId() {
@@ -62,7 +72,11 @@ public class Foto {
     }
 
     public Coordenada getCoordenada() {
-        return coordenada;
+        return Coordenada.get(context, coordenada_id);
+    }
+
+    public Long getCoordenada_id() {
+        return coordenada_id;
     }
 
     public String getKeywords() {
@@ -78,7 +92,11 @@ public class Foto {
     }
 
     public Entry getEntry() {
-        return entry;
+        return Entry.get(context, entry_id);
+    }
+
+    public Long getEntry_id() {
+        return entry_id;
     }
 
     public int getUploaded() {
@@ -87,7 +105,11 @@ public class Foto {
 
     //setter
     public void setEspecie(Especie especie) {
-        this.especie = especie;
+        this.especie_id = especie.id;
+    }
+
+    public void setEspecie_id(Long especie_id) {
+        this.especie_id = especie_id;
     }
 
     public void setId(long id) {
@@ -95,7 +117,11 @@ public class Foto {
     }
 
     public void setCoordenada(Coordenada coordenada) {
-        this.coordenada = coordenada;
+        this.coordenada_id = coordenada.id;
+    }
+
+    public void setCoordenada_id(Long coordenada_id) {
+        this.coordenada_id = coordenada_id;
     }
 
     public void setKeywords(String keywords) {
@@ -111,7 +137,11 @@ public class Foto {
     }
 
     public void setEntry(Entry entry) {
-        this.entry = entry;
+        this.entry_id = entry.id;
+    }
+
+    public void setEntry_id(Long entry_id) {
+        this.entry_id = entry_id;
     }
 
     public void setUploaded(int uploaded) {

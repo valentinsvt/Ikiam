@@ -113,10 +113,12 @@ public class CoordenadaDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COORDENADA;
         Cursor c = db.rawQuery(selectQuery, null);
-        db.close();
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -125,10 +127,12 @@ public class CoordenadaDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COORDENADA +
                 " WHERE " + KEY_RUTA + " = " + ruta.id;
         Cursor c = db.rawQuery(selectQuery, null);
-        db.close();
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -161,7 +165,7 @@ public class CoordenadaDbHelper extends DbHelper {
         cord.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         cord.setLatitud(c.getDouble(c.getColumnIndex(KEY_LATITUD)));
         cord.setLongitud(c.getDouble(c.getColumnIndex(KEY_LONGITUD)));
-        cord.setRuta(Ruta.get(context, c.getLong(c.getColumnIndex(KEY_RUTA))));
+        cord.setRuta_id(c.getLong(c.getColumnIndex(KEY_RUTA)));
         return cord;
     }
 
@@ -172,8 +176,8 @@ public class CoordenadaDbHelper extends DbHelper {
         }
         values.put(KEY_LATITUD, coordenada.latitud);
         values.put(KEY_LONGITUD, coordenada.longitud);
-        if (coordenada.ruta != null) {
-            values.put(KEY_RUTA, coordenada.ruta.id);
+        if (coordenada.ruta_id != null) {
+            values.put(KEY_RUTA, coordenada.ruta_id);
         }
         return values;
     }

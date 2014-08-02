@@ -3,8 +3,14 @@ package com.nth.ikiam.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -17,11 +23,12 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     // Database Version
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
-    private static final String DATABASE_NAME = "ikiamDb2";
+//    private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
+    private static String DB_PATH = Environment.getExternalStorageDirectory().getPath() + "/db/";
+    private static final String DATABASE_NAME = "ikiamDb.db";
 
     // Table Names
     protected static final String TABLE_COLOR = "colores";
@@ -42,7 +49,8 @@ public class DbHelper extends SQLiteOpenHelper {
     protected Context context;
 
     public DbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DB_PATH + DATABASE_NAME, null, DATABASE_VERSION);
+//        System.out.println(DB_PATH + DATABASE_NAME);
         this.context = context;
     }
 
@@ -97,7 +105,39 @@ public class DbHelper extends SQLiteOpenHelper {
         return dateFormat.format(date);
     }
 
+
+//    public void export() {
+//        File f = new File(context.getFilesDir().getParent() + "/databases/" + DATABASE_NAME);
+//        FileInputStream fis = null;
+//        FileOutputStream fos = null;
+//
+//        try {
+//            fis = new FileInputStream(f);
+//            fos = new FileOutputStream("/mnt/sdcard/db_dump_" + DATABASE_NAME + ".db");
+////            Environment.getExternalStorageDirectory().getPath();
+//            while (true) {
+//                int i = fis.read();
+//                if (i != -1) {
+//                    fos.write(i);
+//                } else {
+//                    break;
+//                }
+//            }
+//            fos.flush();
+//            Toast.makeText(context, "DB dump OK", Toast.LENGTH_LONG).show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            Toast.makeText(context, "DB dump ERROR", Toast.LENGTH_LONG).show();
+//        } finally {
+//            try {
+//                fos.close();
+//                fis.close();
+//            } catch (IOException ioe) {
+//            }
+//        }
+//    }
+
     protected void logQuery(String log, String query) {
-        Log.e(log, query);
+//        Log.e(log, query);
     }
 }

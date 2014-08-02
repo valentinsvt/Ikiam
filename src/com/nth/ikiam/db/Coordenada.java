@@ -11,32 +11,37 @@ public class Coordenada {
     public long id = 0;
     public double latitud;
     public double longitud;
-    public Ruta ruta;
+    public Long ruta_id;
     public CoordenadaDbHelper coordenadaDbHelper;
     public String fecha;
+    Context context;
 
     public Coordenada(Context context, double latitud, double longitud, Ruta ruta) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
-        this.ruta = ruta;
+        this.ruta_id = ruta.id;
+        this.context = context;
     }
 
     public Coordenada(Context context, double latitud, double longitud, long ruta) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
-        this.ruta = Ruta.get(context, ruta);
+        this.ruta_id = ruta;
+        this.context = context;
     }
 
     public Coordenada(Context context, double latitud, double longitud) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
+        this.context = context;
     }
 
     public Coordenada(Context context) {
         coordenadaDbHelper = new CoordenadaDbHelper(context);
+        this.context = context;
     }
 
     public long getId() {
@@ -72,11 +77,19 @@ public class Coordenada {
     }
 
     public Ruta getRuta() {
-        return ruta;
+        return Ruta.get(context, ruta_id);
+    }
+
+    public Long getRuta_id() {
+        return ruta_id;
     }
 
     public void setRuta(Ruta ruta) {
-        this.ruta = ruta;
+        this.ruta_id = ruta.id;
+    }
+
+    public void setRuta_id(Long ruta_id) {
+        this.ruta_id = ruta_id;
     }
 
     public void save() {

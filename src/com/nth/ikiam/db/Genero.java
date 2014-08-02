@@ -11,25 +11,28 @@ import java.util.List;
 public class Genero {
     public long id = 0;
     public String fecha;
-    public Familia familia;
+    public Long familia_id;
     public String nombre;
 
     public GeneroDbHelper generoDbHelper;
 
+    Context context;
+
     public Genero(Context context) {
         generoDbHelper = new GeneroDbHelper(context);
+        this.context = context;
     }
 
     public Genero(Context context, String nombre) {
         this.nombre = nombre;
-
+        this.context = context;
         generoDbHelper = new GeneroDbHelper(context);
     }
 
     public Genero(Context context, Familia familia, String nombre) {
-        this.familia = familia;
+        this.familia_id = familia.id;
         this.nombre = nombre;
-
+        this.context = context;
         generoDbHelper = new GeneroDbHelper(context);
     }
 
@@ -39,7 +42,11 @@ public class Genero {
     }
 
     public Familia getFamilia() {
-        return familia;
+        return Familia.get(context, familia_id);
+    }
+
+    public Long getFamilia_id() {
+        return familia_id;
     }
 
     public String getNombre() {
@@ -60,7 +67,11 @@ public class Genero {
     }
 
     public void setFamilia(Familia familia) {
-        this.familia = familia;
+        this.familia_id = familia.id;
+    }
+
+    public void setFamilia_id(Long familia_id) {
+        this.familia_id = familia_id;
     }
 
     public void setFecha(String fecha) {
@@ -105,6 +116,11 @@ public class Genero {
         return e.countGenerosByNombre(familia);
     }
 
+    public static int countByFamilia(Context context, Familia familia) {
+        GeneroDbHelper e = new GeneroDbHelper(context);
+        return e.countGenerosByFamilia(familia);
+    }
+
     public static List<Genero> list(Context context) {
         GeneroDbHelper e = new GeneroDbHelper(context);
         return e.getAllGeneros();
@@ -113,6 +129,11 @@ public class Genero {
     public static List<Genero> findAllByNombre(Context context, String familia) {
         GeneroDbHelper e = new GeneroDbHelper(context);
         return e.getAllGenerosByNombre(familia);
+    }
+
+    public static List<Genero> findAllByFamilia(Context context, Familia familia) {
+        GeneroDbHelper e = new GeneroDbHelper(context);
+        return e.getAllGenerosByFamilia(familia);
     }
 
     public static void empty(Context context) {

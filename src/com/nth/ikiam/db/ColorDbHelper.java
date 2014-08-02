@@ -41,7 +41,9 @@ public class ColorDbHelper extends DbHelper {
         ContentValues values = setValues(color, true);
 
         // insert row
-        return db.insert(TABLE_COLOR, null, values);
+        long res = db.insert(TABLE_COLOR, null, values);
+        db.close();
+        return res;
     }
 
     public Color getColor(long color_id) {
@@ -57,7 +59,7 @@ public class ColorDbHelper extends DbHelper {
             c.moveToFirst();
             cl = setDatos(c);
         }
-
+        db.close();
         return cl;
     }
 
@@ -79,6 +81,7 @@ public class ColorDbHelper extends DbHelper {
                 colores.add(cl);
             } while (c.moveToNext());
         }
+        db.close();
         return colores;
     }
 
@@ -100,6 +103,7 @@ public class ColorDbHelper extends DbHelper {
                 colores.add(cl);
             } while (c.moveToNext());
         }
+        db.close();
         return colores;
     }
 
@@ -122,6 +126,7 @@ public class ColorDbHelper extends DbHelper {
                 colores.add(cl);
             } while (c.moveToNext());
         }
+        db.close();
         return colores;
     }
 
@@ -130,8 +135,11 @@ public class ColorDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COLOR;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -140,9 +148,13 @@ public class ColorDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COLOR +
                 " WHERE " + KEY_NOMBRE + " = '" + color + "'";
         Cursor c = db.rawQuery(selectQuery, null);
+        db.close();
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -151,20 +163,24 @@ public class ColorDbHelper extends DbHelper {
         ContentValues values = setValues(color);
 
         // updating row
-        return db.update(TABLE_COLOR, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_COLOR, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(color.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteColor(Color color) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_COLOR, KEY_ID + " = ?",
                 new String[]{String.valueOf(color.id)});
+        db.close();
     }
 
     public void deleteAllColores() {
         String sql = "DELETE FROM " + TABLE_COLOR;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Color setDatos(Cursor c) {

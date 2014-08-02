@@ -12,21 +12,23 @@ public class Entry {
     public long id;
     public String fecha;
 
-    public Especie especie;
+    public Long especie_id;
     public String comentarios;
 
     public int uploaded = 0;
-
+    Context context;
     EntryDbHelper entryDbHelper;
 
     public Entry(Context context, Especie especie, String comentarios) {
-        this.especie = especie;
+        this.especie_id = especie.id;
         this.comentarios = comentarios;
         entryDbHelper = new EntryDbHelper(context);
+        this.context = context;
     }
 
     public Entry(Context context) {
         entryDbHelper = new EntryDbHelper(context);
+        this.context = context;
     }
 
     //getters
@@ -39,7 +41,11 @@ public class Entry {
     }
 
     public Especie getEspecie() {
-        return especie;
+        return Especie.get(context, especie_id);
+    }
+
+    public Long getEspecie_id() {
+        return especie_id;
     }
 
     public String getComentarios() {
@@ -60,7 +66,11 @@ public class Entry {
     }
 
     public void setEspecie(Especie especie) {
-        this.especie = especie;
+        this.especie_id = especie.id;
+    }
+
+    public void setEspecie_id(Long especie_id) {
+        this.especie_id = especie_id;
     }
 
     public void setComentarios(String comentarios) {

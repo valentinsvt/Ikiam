@@ -45,7 +45,9 @@ public class EntryDbHelper extends DbHelper {
         ContentValues values = setValues(entry, true);
 
         // insert row
-        return db.insert(TABLE_ENTRY, null, values);
+        long res = db.insert(TABLE_ENTRY, null, values);
+        db.close();
+        return res;
     }
 
     public Entry getEntry(long entry_id) {
@@ -61,7 +63,7 @@ public class EntryDbHelper extends DbHelper {
             c.moveToFirst();
             en = setDatos(c);
         }
-
+        db.close();
         return en;
     }
 
@@ -70,8 +72,11 @@ public class EntryDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_ENTRY;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -81,8 +86,11 @@ public class EntryDbHelper extends DbHelper {
                 " WHERE " + KEY_ESPECIE_ID + " = '" + especie.id + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -92,8 +100,11 @@ public class EntryDbHelper extends DbHelper {
                 " WHERE " + KEY_UPLOADED + " = '" + uploaded + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -115,6 +126,7 @@ public class EntryDbHelper extends DbHelper {
                 entries.add(e);
             } while (c.moveToNext());
         }
+        db.close();
         return entries;
     }
 
@@ -138,6 +150,7 @@ public class EntryDbHelper extends DbHelper {
                 entries.add(e);
             } while (c.moveToNext());
         }
+        db.close();
         return entries;
     }
 
@@ -161,6 +174,7 @@ public class EntryDbHelper extends DbHelper {
                 entries.add(e);
             } while (c.moveToNext());
         }
+        db.close();
         return entries;
     }
 
@@ -169,27 +183,31 @@ public class EntryDbHelper extends DbHelper {
         ContentValues values = setValues(entry);
 
         // updating row
-        return db.update(TABLE_ENTRY, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_ENTRY, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(entry.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteEntry(Entry entry) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_ENTRY, KEY_ID + " = ?",
                 new String[]{String.valueOf(entry.id)});
+        db.close();
     }
 
     public void deleteAllEntries() {
         String sql = "DELETE FROM " + TABLE_ENTRY;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Entry setDatos(Cursor c) {
         Entry f = new Entry(this.context);
         f.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         f.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        f.setEspecie(Especie.get(this.context, c.getLong(c.getColumnIndex(KEY_ESPECIE_ID))));
+        f.setEspecie_id(c.getLong(c.getColumnIndex(KEY_ESPECIE_ID)));
         f.setComentarios((c.getString(c.getColumnIndex(KEY_COMENTARIOS))));
         f.setUploaded((c.getInt(c.getColumnIndex(KEY_UPLOADED))));
         return f;
@@ -200,8 +218,8 @@ public class EntryDbHelper extends DbHelper {
         if (fecha) {
             values.put(KEY_FECHA, getDateTime());
         }
-        if (entry.especie != null) {
-            values.put(KEY_ESPECIE_ID, entry.especie.id);
+        if (entry.especie_id != null) {
+            values.put(KEY_ESPECIE_ID, entry.especie_id);
         }
         values.put(KEY_COMENTARIOS, entry.getComentarios());
         values.put(KEY_UPLOADED, entry.getUploaded());

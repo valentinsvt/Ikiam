@@ -42,7 +42,9 @@ public class GeneroDbHelper extends DbHelper {
         ContentValues values = setValues(genero, true);
 
         // insert row
-        return db.insert(TABLE_GENERO, null, values);
+        long res = db.insert(TABLE_GENERO, null, values);
+        db.close();
+        return res;
     }
 
     public Genero getGenero(long genero_id) {
@@ -58,7 +60,7 @@ public class GeneroDbHelper extends DbHelper {
             c.moveToFirst();
             gn = setDatos(c);
         }
-
+        db.close();
         return gn;
     }
 
@@ -80,6 +82,7 @@ public class GeneroDbHelper extends DbHelper {
                 generos.add(gn);
             } while (c.moveToNext());
         }
+        db.close();
         return generos;
     }
 
@@ -102,6 +105,7 @@ public class GeneroDbHelper extends DbHelper {
                 generos.add(gn);
             } while (c.moveToNext());
         }
+        db.close();
         return generos;
     }
 
@@ -124,6 +128,7 @@ public class GeneroDbHelper extends DbHelper {
                 generos.add(gn);
             } while (c.moveToNext());
         }
+        db.close();
         return generos;
     }
 
@@ -132,8 +137,11 @@ public class GeneroDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_GENERO;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -143,8 +151,11 @@ public class GeneroDbHelper extends DbHelper {
                 " WHERE " + KEY_NOMBRE + " = '" + genero + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -154,8 +165,11 @@ public class GeneroDbHelper extends DbHelper {
                 " WHERE " + KEY_FAMILIA_ID + " = '" + familia.id + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -164,20 +178,24 @@ public class GeneroDbHelper extends DbHelper {
         ContentValues values = setValues(genero);
 
         // updating row
-        return db.update(TABLE_GENERO, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_GENERO, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(genero.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteGenero(Genero genero) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_GENERO, KEY_ID + " = ?",
                 new String[]{String.valueOf(genero.id)});
+        db.close();
     }
 
     public void deleteAllGeneros() {
         String sql = "DELETE FROM " + TABLE_GENERO;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Genero setDatos(Cursor c) {
@@ -185,7 +203,7 @@ public class GeneroDbHelper extends DbHelper {
         gn.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         gn.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         gn.setNombre(c.getString(c.getColumnIndex(KEY_NOMBRE)));
-        gn.setFamilia(Familia.get(this.context, c.getLong(c.getColumnIndex(KEY_FAMILIA_ID))));
+        gn.setFamilia_id(c.getLong(c.getColumnIndex(KEY_FAMILIA_ID)));
         return gn;
     }
 
@@ -195,8 +213,8 @@ public class GeneroDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_NOMBRE, genero.nombre);
-        if (genero.familia != null) {
-            values.put(KEY_FAMILIA_ID, genero.familia.id);
+        if (genero.familia_id != null) {
+            values.put(KEY_FAMILIA_ID, genero.familia_id);
         }
         return values;
     }

@@ -87,10 +87,12 @@ public class RutaDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_RUTA;
         Cursor c = db.rawQuery(selectQuery, null);
-        db.close();
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 

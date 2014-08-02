@@ -110,9 +110,9 @@ public class CapturaUploader implements Runnable {
 //            dos.writeBytes("Content-Disposition: form-data; name=familia" + lineEnd);
 //            dos.writeBytes(lineEnd + foto.especie.genero.familia.nombre + lineEnd);
 //            dos.writeBytes(twoHyphens + boundary + lineEnd);
-            addFormPart(dos, "familia", foto.especie.genero.familia.nombre);
-            addFormPart(dos, "genero", foto.especie.genero.nombre);
-            addFormPart(dos, "especie", foto.especie.nombre);
+            addFormPart(dos, "familia", foto.getEspecie().getGenero().getFamilia().nombre);
+            addFormPart(dos, "genero", foto.getEspecie().getGenero().nombre);
+            addFormPart(dos, "especie", foto.getEspecie().nombre);
             addFormPart(dos, "archivo", foto.path);
             addFormPart(dos, "keywords", foto.keywords);
 

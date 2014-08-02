@@ -41,7 +41,9 @@ public class FamiliaDbHelper extends DbHelper {
         ContentValues values = setValues(familia, true);
 
         // insert row
-        return db.insert(TABLE_FAMILIA, null, values);
+        long res = db.insert(TABLE_FAMILIA, null, values);
+        db.close();
+        return res;
     }
 
     public Familia getFamilia(long familia_id) {
@@ -57,14 +59,15 @@ public class FamiliaDbHelper extends DbHelper {
             c.moveToFirst();
             fm = setDatos(c);
         }
-
+        db.close();
         return fm;
     }
 
     public List<Familia> getAllFamilias() {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Familia> familias = new ArrayList<Familia>();
-        String selectQuery = "SELECT  * FROM " + TABLE_FAMILIA;
+        String selectQuery = "SELECT  * FROM " + TABLE_FAMILIA +
+                " ORDER BY " + KEY_NOMBRE;
 
         logQuery(LOG, selectQuery);
 
@@ -79,6 +82,7 @@ public class FamiliaDbHelper extends DbHelper {
                 familias.add(fm);
             } while (c.moveToNext());
         }
+        db.close();
         return familias;
     }
 
@@ -101,6 +105,7 @@ public class FamiliaDbHelper extends DbHelper {
                 familias.add(fm);
             } while (c.moveToNext());
         }
+        db.close();
         return familias;
     }
 
@@ -109,8 +114,11 @@ public class FamiliaDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_FAMILIA;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -120,8 +128,11 @@ public class FamiliaDbHelper extends DbHelper {
                 " WHERE " + KEY_NOMBRE + " = '" + familia + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -130,20 +141,24 @@ public class FamiliaDbHelper extends DbHelper {
         ContentValues values = setValues(familia);
 
         // updating row
-        return db.update(TABLE_FAMILIA, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_FAMILIA, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(familia.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteFamilia(Familia familia) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FAMILIA, KEY_ID + " = ?",
                 new String[]{String.valueOf(familia.id)});
+        db.close();
     }
 
     public void deleteAllFamilias() {
         String sql = "DELETE FROM " + TABLE_FAMILIA;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Familia setDatos(Cursor c) {

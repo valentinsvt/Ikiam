@@ -48,7 +48,9 @@ public class EspecieDbHelper extends DbHelper {
         ContentValues values = setValues(especie, true);
 
         // insert row
-        return db.insert(TABLE_ESPECIE, null, values);
+        long res = db.insert(TABLE_ESPECIE, null, values);
+        db.close();
+        return res;
     }
 
     public Especie getEspecie(long especie_id) {
@@ -64,7 +66,7 @@ public class EspecieDbHelper extends DbHelper {
             c.moveToFirst();
             es = setDatos(c);
         }
-
+        db.close();
         return es;
     }
 
@@ -85,7 +87,7 @@ public class EspecieDbHelper extends DbHelper {
                 todos.add(es);
             } while (c.moveToNext());
         }
-
+        db.close();
         return todos;
     }
 
@@ -108,7 +110,7 @@ public class EspecieDbHelper extends DbHelper {
                 todos.add(es);
             } while (c.moveToNext());
         }
-
+        db.close();
         return todos;
     }
 
@@ -130,7 +132,7 @@ public class EspecieDbHelper extends DbHelper {
                 todos.add(es);
             } while (c.moveToNext());
         }
-
+        db.close();
         return todos;
     }
 
@@ -152,7 +154,7 @@ public class EspecieDbHelper extends DbHelper {
                 todos.add(es);
             } while (c.moveToNext());
         }
-
+        db.close();
         return todos;
     }
 
@@ -175,7 +177,7 @@ public class EspecieDbHelper extends DbHelper {
                 todos.add(es);
             } while (c.moveToNext());
         }
-
+        db.close();
         return todos;
     }
 
@@ -184,8 +186,11 @@ public class EspecieDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_ESPECIE;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -196,8 +201,11 @@ public class EspecieDbHelper extends DbHelper {
                 " OR " + KEY_COLOR2_ID + " = '" + color.id + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -205,10 +213,14 @@ public class EspecieDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_ESPECIE +
                 " WHERE " + KEY_GENERO_ID + " = '" + genero.id + "'";
+        logQuery(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -218,8 +230,11 @@ public class EspecieDbHelper extends DbHelper {
                 " WHERE " + KEY_NOMBRE + " = '" + especie + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -230,8 +245,11 @@ public class EspecieDbHelper extends DbHelper {
                 " AND tg." + KEY_NOMBRE + "||' '||te." + KEY_NOMBRE + " = '" + nombreCientifico + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -240,8 +258,10 @@ public class EspecieDbHelper extends DbHelper {
         ContentValues values = setValues(especie);
 
         // updating row
-        return db.update(TABLE_ESPECIE, values, KEY_ID + " = ?",
+        long res = db.update(TABLE_ESPECIE, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(especie.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteEspecie(Especie especie, boolean should_delete_all_fotos) {
@@ -262,12 +282,14 @@ public class EspecieDbHelper extends DbHelper {
         // now delete the tag
         db.delete(TABLE_ESPECIE, KEY_ID + " = ?",
                 new String[]{String.valueOf(especie.getId())});
+        db.close();
     }
 
     public void deleteAllEspecies() {
         String sql = "DELETE FROM " + TABLE_ESPECIE;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Especie setDatos(Cursor c) {
@@ -276,9 +298,9 @@ public class EspecieDbHelper extends DbHelper {
         es.setNombreComun((c.getString(c.getColumnIndex(KEY_NOMBRE_COMUN))));
         es.setNombre(c.getString(c.getColumnIndex(KEY_NOMBRE)));
         es.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        es.setColor1(Color.get(this.context, c.getLong(c.getColumnIndex(KEY_COLOR1_ID))));
-        es.setColor2(Color.get(this.context, c.getLong(c.getColumnIndex(KEY_COLOR2_ID))));
-        es.setGenero(Genero.get(this.context, c.getLong(c.getColumnIndex(KEY_GENERO_ID))));
+        es.setColor1_id(c.getLong(c.getColumnIndex(KEY_COLOR1_ID)));
+        es.setColor2_id(c.getLong(c.getColumnIndex(KEY_COLOR2_ID)));
+        es.setGenero_id(c.getLong(c.getColumnIndex(KEY_GENERO_ID)));
         return es;
     }
 
@@ -289,14 +311,14 @@ public class EspecieDbHelper extends DbHelper {
         }
         values.put(KEY_NOMBRE_COMUN, especie.nombreComun);
         values.put(KEY_NOMBRE, especie.nombre);
-        if (especie.color1 != null) {
-            values.put(KEY_COLOR1_ID, especie.color1.id);
+        if (especie.color1_id != null) {
+            values.put(KEY_COLOR1_ID, especie.color1_id);
         }
-        if (especie.color2 != null) {
-            values.put(KEY_COLOR2_ID, especie.color2.id);
+        if (especie.color2_id != null) {
+            values.put(KEY_COLOR2_ID, especie.color2_id);
         }
-        if (especie.genero != null) {
-            values.put(KEY_GENERO_ID, especie.genero.id);
+        if (especie.genero_id != null) {
+            values.put(KEY_GENERO_ID, especie.genero_id);
         }
         return values;
     }

@@ -48,7 +48,9 @@ public class FotoDbHelper extends DbHelper {
         ContentValues values = setValues(foto, true);
 
         // insert row
-        return db.insert(TABLE_FOTO, null, values);
+        long res = db.insert(TABLE_FOTO, null, values);
+        db.close();
+        return res;
     }
 
     public Foto getFoto(long foto_id) {
@@ -64,7 +66,7 @@ public class FotoDbHelper extends DbHelper {
             c.moveToFirst();
             ft = setDatos(c);
         }
-
+        db.close();
         return ft;
     }
 
@@ -73,8 +75,11 @@ public class FotoDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_FOTO;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -84,8 +89,11 @@ public class FotoDbHelper extends DbHelper {
                 " WHERE " + KEY_ESPECIE_ID + " = '" + especie.id + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -95,8 +103,11 @@ public class FotoDbHelper extends DbHelper {
                 " WHERE " + KEY_UPLOADED + " = '" + uploaded + "'";
         Cursor c = db.rawQuery(selectQuery, null);
         if (c.moveToFirst()) {
-            return c.getInt(c.getColumnIndex("count"));
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
         }
+        db.close();
         return 0;
     }
 
@@ -118,6 +129,7 @@ public class FotoDbHelper extends DbHelper {
                 fotos.add(f);
             } while (c.moveToNext());
         }
+        db.close();
         return fotos;
     }
 
@@ -145,6 +157,7 @@ public class FotoDbHelper extends DbHelper {
                 fotos.add(f);
             } while (c.moveToNext());
         }
+        db.close();
         return fotos;
     }
 
@@ -168,6 +181,7 @@ public class FotoDbHelper extends DbHelper {
                 fotos.add(f);
             } while (c.moveToNext());
         }
+        db.close();
         return fotos;
     }
 
@@ -191,6 +205,7 @@ public class FotoDbHelper extends DbHelper {
                 fotos.add(f);
             } while (c.moveToNext());
         }
+        db.close();
         return fotos;
     }
 
@@ -199,29 +214,33 @@ public class FotoDbHelper extends DbHelper {
         ContentValues values = setValues(foto);
 
         // updating row
-        return db.update(TABLE_FOTO, values, KEY_ID + " = ?",
+        int res = db.update(TABLE_FOTO, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(foto.getId())});
+        db.close();
+        return res;
     }
 
     public void deleteFoto(Foto foto) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FOTO, KEY_ID + " = ?",
                 new String[]{String.valueOf(foto.id)});
+        db.close();
     }
 
     public void deleteAllFotos() {
         String sql = "DELETE FROM " + TABLE_FOTO;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);
+        db.close();
     }
 
     private Foto setDatos(Cursor c) {
         Foto f = new Foto(this.context);
         f.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         f.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
-        f.setEntry(Entry.get(this.context, c.getLong(c.getColumnIndex(KEY_ENTRY_ID))));
-        f.setEspecie(Especie.get(this.context, c.getLong(c.getColumnIndex(KEY_ESPECIE_ID))));
-        f.setCoordenada(Coordenada.get(this.context, c.getLong(c.getColumnIndex(KEY_COORDENADA))));
+        f.setEntry_id(c.getLong(c.getColumnIndex(KEY_ENTRY_ID)));
+        f.setEspecie_id(c.getLong(c.getColumnIndex(KEY_ESPECIE_ID)));
+        f.setCoordenada_id(c.getLong(c.getColumnIndex(KEY_COORDENADA)));
         f.setKeywords((c.getString(c.getColumnIndex(KEY_KEYWORDS))));
         f.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
         f.setUploaded((c.getInt(c.getColumnIndex(KEY_UPLOADED))));
@@ -233,14 +252,14 @@ public class FotoDbHelper extends DbHelper {
         if (fecha) {
             values.put(KEY_FECHA, getDateTime());
         }
-        if (foto.especie != null) {
-            values.put(KEY_ESPECIE_ID, foto.especie.id);
+        if (foto.especie_id != null) {
+            values.put(KEY_ESPECIE_ID, foto.especie_id);
         }
-        if (foto.entry != null) {
-            values.put(KEY_ENTRY_ID, foto.entry.id);
+        if (foto.entry_id != null) {
+            values.put(KEY_ENTRY_ID, foto.entry_id);
         }
-        if (foto.coordenada != null) {
-            values.put(KEY_COORDENADA, foto.coordenada.id);
+        if (foto.coordenada_id != null) {
+            values.put(KEY_COORDENADA, foto.coordenada_id);
         }
         values.put(KEY_KEYWORDS, foto.getKeywords());
         values.put(KEY_PATH, foto.getPath());
