@@ -85,6 +85,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     Context context;
     private String pathFolder;
     private Bitmap bitmap;
+    MapActivity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,11 +117,11 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
         View view = inflater.inflate(R.layout.captura_layout, container, false);
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        screenHeight = displaymetrics.heightPixels;
-        screenWidth = displaymetrics.widthPixels;
-
+        //DisplayMetrics displaymetrics = new DisplayMetrics();
+        //getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        activity=(MapActivity)getActivity();
+        screenHeight = activity.screenHeight;
+        screenWidth = activity.screenWidth;
         ArrayList<Color> colores = Color.listString(context);
 
         spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);

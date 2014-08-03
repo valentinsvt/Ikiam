@@ -16,11 +16,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -31,7 +29,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.*;
+import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.DbHelper;
+import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
@@ -92,26 +92,37 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     /*Fin imagenes*/
 
     boolean first = true;
+    String imagePathUpload="";
+    AlertDialog dialog;
+    View myView;
+    public int screenHeight;
+    public int screenWidth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        first=true;
+        first = true;
 
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
-        this.activity=this;
+        this.activity = this;
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        screenHeight = displaymetrics.heightPixels;
+        screenWidth = displaymetrics.widthPixels;
+
 
         /*CORE*/
         setUpMapIfNeeded();
         data = new HashMap<Marker, ImageItem>();
-        locationClient = new LocationClient(this,this, this);
+        locationClient = new LocationClient(this, this, this);
         locationClient.connect();
         botones = new Button[2];
-        botones[0]=(Button) this.findViewById(R.id.btnGalapagos);
-        botones[1]= (Button) this.findViewById(R.id.btnService);
-        for(int i=0;i<botones.length;i++){
+        botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
+        botones[1] = (Button) this.findViewById(R.id.btnService);
+        for (int i = 0; i < botones.length; i++) {
             botones[i].setOnClickListener(this);
         }
         restoreMe(savedInstanceState);
@@ -129,7 +140,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
         mDrawerList = (ListView) findViewById(R.id.left_drawer2);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item, mOptionsArray));
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mOptionsArray));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -143,13 +154,17 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
-            /** Called when a drawer has settled in a completely closed state. */
+            /**
+             * Called when a drawer has settled in a completely closed state.
+             */
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 
-            /** Called when a drawer has settled in a completely open state. */
+            /**
+             * Called when a drawer has settled in a completely open state.
+             */
             public void onDrawerOpened(View drawerView) {
 //                getActionBar().setTitle(mDrawerTitle);
                 getActionBar().setTitle(R.string.menu_title);
@@ -161,12 +176,14 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 //            selectItem(0);
 //        }
         /*FinDrawer*/
+
     }
 
     private void restoreMe(Bundle state) {
         if (state!=null) {
                 /*Implementar el restor*/
         }
+
     }
 
 
@@ -399,24 +416,40 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             public boolean onMarkerClick(final Marker marker){
                 if(data.get(marker)!=null){
                     marker.showInfoWindow();
+                    LayoutInflater inflater = activity.getLayoutInflater();
+                    myView= inflater.inflate(R.layout.dialog, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setMessage("Subir al servidor").setTitle("subir");
-                    builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    builder.setTitle(R.string.map_activity_nuevaFoto);
+                    builder.setView(myView);
+                    builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
+                        @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            // User clicked OK button
-                            Intent intent = new Intent(activity,MainActivity.class);
-                            intent.putExtra("selected",1);
-                            intent.putExtra("image",data.get(marker).imagePath);
-                            startActivity(intent);
+                            imagePathUpload = data.get(marker).imagePath;
+                            selectItem(1);
+                            dialog.dismiss();
                         }
                     });
-                    builder.setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
+
                         }
+
+
                     });
-                    AlertDialog dialog = builder.create();
+
+                    builder.setNeutralButton(R.string.dialog_btn_borrar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+
+
+                    });
+                    dialog = builder.create();
+                    ImageView img= (ImageView) myView.findViewById(R.id.image);
+                    img.setImageBitmap(imagenes.get(data.get(marker).imageIndex));
+                    img.setImageBitmap(getFotoDialog(data.get(marker), screenWidth, 300));
                     dialog.show();
+
                     return true;
                 }
                 return false;
@@ -455,6 +488,12 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                         if(imagenes.size()>lastSize) {
 //                            map.addMarker(new MarkerOptions().position(latlong).title("Sydney").snippet("Population: 4,627,300").icon(BitmapDescriptorFactory.fromBitmap(imagenes.get(lastIndex))));
                             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                            Foto foto = new Foto(activity);
+                            foto.setCoordenada(new Coordenada(activity,latitud,longitud));
+                            foto.setRuta(ruta);
+                            foto.path=imageItem.imagePath;
+                            foto.uploaded=0;
+                            foto.save();
                             Bitmap bmp = Bitmap.createBitmap(86,59, conf);
                             Canvas canvas1 = new Canvas(bmp);
                             Paint color = new Paint();
@@ -468,6 +507,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                                     .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                                     .anchor(0.5f, 1).title("Nueva fotografía"));
                             ImageItem it = imageItem;
+                            it.imageIndex=lastIndex;
                             data.put(marker,it);
 
                             lastSize=imagenes.size();
@@ -543,6 +583,17 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             lastIndex++;
             lastestImageIndex = 0;
         }
+
+    }
+    public Bitmap getFotoDialog(ImageItem image,int width,int heigth){
+        if(imageItem!=null) {
+            // System.out.println("path "+imageItem.imagePath);
+            System.out.println("images " + image.imagePath+"  "+width+"  "+heigth);
+            Bitmap b = ImageUtils.decodeFile(image.imagePath,width,heigth);
+            return b;
+
+        }
+        return null;
 
     }
 

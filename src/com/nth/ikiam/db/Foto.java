@@ -18,6 +18,7 @@ public class Foto {
     public Long especie_id;
     public Long coordenada_id;
     public Long entry_id;
+    public Long ruta_id;
 
     public String path;
 
@@ -103,6 +104,13 @@ public class Foto {
         return uploaded;
     }
 
+    public Ruta getRuta(){
+        return Ruta.get(context,this.ruta_id);
+    }
+     public long getRutaId(){
+         return this.ruta_id;
+     }
+
     //setter
     public void setEspecie(Especie especie) {
         this.especie_id = especie.id;
@@ -147,6 +155,10 @@ public class Foto {
     public void setUploaded(int uploaded) {
         this.uploaded = uploaded;
     }
+
+    public void setRuta(Ruta ruta){this.ruta_id=ruta.id;}
+
+    public void setRuta_id(long id){this.ruta_id=id;}
 
     public void save() {
         if (this.id == 0) {

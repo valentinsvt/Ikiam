@@ -23,8 +23,9 @@ public class FotoDbHelper extends DbHelper {
     private static final String KEY_KEYWORDS = "keywords";
     private static final String KEY_PATH = "path";
     private static final String KEY_UPLOADED = "uploaded";
+    private static final String KEY_RUTA_ID = "ruta_id";
 
-    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_ENTRY_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_PATH, KEY_UPLOADED};
+    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_ENTRY_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_PATH, KEY_UPLOADED, KEY_RUTA_ID};
 
     public FotoDbHelper(Context context) {
         super(context);
@@ -244,6 +245,7 @@ public class FotoDbHelper extends DbHelper {
         f.setKeywords((c.getString(c.getColumnIndex(KEY_KEYWORDS))));
         f.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
         f.setUploaded((c.getInt(c.getColumnIndex(KEY_UPLOADED))));
+        f.setRuta_id(c.getLong(c.getColumnIndex(KEY_RUTA_ID)));
         return f;
     }
 
@@ -264,6 +266,7 @@ public class FotoDbHelper extends DbHelper {
         values.put(KEY_KEYWORDS, foto.getKeywords());
         values.put(KEY_PATH, foto.getPath());
         values.put(KEY_UPLOADED, foto.getUploaded());
+        values.put(KEY_RUTA_ID,foto.getRutaId());
         return values;
     }
 

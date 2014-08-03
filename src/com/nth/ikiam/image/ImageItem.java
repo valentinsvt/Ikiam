@@ -43,4 +43,6 @@ public class ImageItem
      * Image size
      */
     public int imageSize;
+
+    public int imageIndex;
 }
