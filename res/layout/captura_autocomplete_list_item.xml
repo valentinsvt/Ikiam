@@ -1,7 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="16sp"
-    android:textColor="#000"></TextView>
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/captura_autocomplete_item_texto"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Item name here..."
+        android:textSize="15dp"
+        android:textColor="@android:color/black" />
+
+</RelativeLayout>

@@ -3,6 +3,7 @@ package com.nth.ikiam.db;
 import android.content.Context;
 import android.util.Log;
 
+import java.text.Normalizer;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ public class Especie {
     public Long genero_id;
     public String nombre;
     public String nombreComun;
+    public String nombreComunNorm;
     public String comentarios;
 
     //    public Color color1;
@@ -123,6 +125,7 @@ public class Especie {
 
     public void setNombreComun(String nombreComun) {
         this.nombreComun = nombreComun;
+        this.nombreComunNorm = Normalizer.normalize(nombreComun, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public void setGenero_id(long genero) {
@@ -207,6 +210,11 @@ public class Especie {
     public static List<Especie> findAllByNombre(Context context, String especie) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.getAllEspeciesByNombre(especie);
+    }
+
+    public static List<Especie> findAllByNombreComunLike(Context context, String especie) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.getAllEspeciesByNombreComunLike(especie);
     }
 
     public static int count(Context context) {

@@ -19,7 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
+import com.nth.ikiam.adapters.CapturaNombreComunArrayAdapter;
+import com.nth.ikiam.capturaAutocomplete.CustomAutoCompleteView;
 import com.nth.ikiam.db.*;
+import com.nth.ikiam.listeners.CustomAutoCompleteTextChangedListener;
 import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
 import com.nth.ikiam.utils.ImageUploader;
@@ -31,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,10 +71,12 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     private EditText textoEspecie;
     private EditText textoNombreComun;
 
-    private AutoCompleteTextView autocompleteNombreComun;
+    public CustomAutoCompleteView autocompleteNombreComun;
 
     private Spinner spinnerColor1;
     private Spinner spinnerColor2;
+
+    public CapturaNombreComunArrayAdapter adapter;
 
     private static final int GALLERY_REQUEST = 999;
     private static final int CAMERA_REQUEST = 1337;
@@ -154,9 +160,24 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         textoEspecie = (EditText) view.findViewById(R.id.captura_nombre_especie_txt);
         textoNombreComun = (EditText) view.findViewById(R.id.captura_nombre_comun_txt);
 
-        String[] countries = {"uno", "dos", "tres"};
-        autocompleteNombreComun = (AutoCompleteTextView) view.findViewById(R.id.captura_autocomplete_nombre_comun);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.captura_autocomplete_list_item, countries);
+        autocompleteNombreComun = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_comun);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.captura_autocomplete_list_item, countries);
+        autocompleteNombreComun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
+                RelativeLayout rl = (RelativeLayout) arg1;
+                TextView tv = (TextView) rl.getChildAt(0);
+                autocompleteNombreComun.setText(tv.getText().toString());
+            }
+        });
+        // add the listener so it will tries to suggest while the user types
+        autocompleteNombreComun.addTextChangedListener(new CustomAutoCompleteTextChangedListener(context, this));
+
+        // ObjectItemData has no value at first
+        List<Especie> objectItemData = Especie.list(context);
+
+        // set the custom ArrayAdapter
+        adapter = new CapturaNombreComunArrayAdapter(context, R.layout.captura_autocomplete_list_item, objectItemData);
         autocompleteNombreComun.setAdapter(adapter);
 
         botones = new ImageButton[4];
@@ -208,7 +229,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 String nombreFamilia = textoFamilia.getText().toString().trim();
                 String nombreGenero = textoGenero.getText().toString().trim();
                 String nombreEspecie = textoEspecie.getText().toString().trim();
-                String nombreComun = textoNombreComun.getText().toString().trim();
+//                String nombreComun = textoNombreComun.getText().toString().trim();
+                String nombreComun = autocompleteNombreComun.getText().toString().trim();
                 String comentarios = textoComentarios.getText().toString().trim();
                 String keywords = "";
                 int i = 0;

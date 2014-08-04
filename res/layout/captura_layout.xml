@@ -221,7 +221,7 @@
                 android:spinnerMode="dialog"
                 android:layout_marginLeft="15dp" />
 
-            <AutoCompleteTextView
+            <com.nth.ikiam.capturaAutocomplete.CustomAutoCompleteView
                 android:id="@+id/captura_autocomplete_nombre_comun"
 
                 android:layout_width="match_parent"
