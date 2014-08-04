@@ -23,7 +23,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 11;
 
     // Database Name
 //    private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
@@ -57,7 +57,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Log.e("DBHELPER", "DBHELPER ON CREATE");
-
+        //System.out.println("ON CREATE Db");
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_COLOR, KEYS_COMMON, ColorDbHelper.KEYS_COLOR));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_COORDENADA, KEYS_COMMON, CoordenadaDbHelper.KEYS_COORDENADA));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ESPECIE, KEYS_COMMON, EspecieDbHelper.KEYS_ESPECIE));

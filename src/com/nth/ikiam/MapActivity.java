@@ -68,7 +68,8 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private static LatLng location ;
     LocationClient locationClient;
     Marker lastPosition;
-    HashMap<Marker,ImageItem> data;
+    HashMap<Marker,Foto> data;
+
     /*Google services*/
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     /*Fin mapa*/
@@ -89,6 +90,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     int lastIndex = -1;
     int lastSize = 0;
     private ExecutorService queue = Executors.newSingleThreadExecutor();
+    List<Foto> fotos;
     /*Fin imagenes*/
 
     boolean first = true;
@@ -112,11 +114,11 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         screenHeight = displaymetrics.heightPixels;
         screenWidth = displaymetrics.widthPixels;
-
+        fotos = new ArrayList<Foto>();
 
         /*CORE*/
         setUpMapIfNeeded();
-        data = new HashMap<Marker, ImageItem>();
+        data = new HashMap<Marker, Foto>();
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
         botones = new Button[2];
@@ -424,14 +426,14 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                     builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            imagePathUpload = data.get(marker).imagePath;
+                            imagePathUpload = data.get(marker).path;
                             selectItem(1);
                             dialog.dismiss();
                         }
                     });
                     builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
+                            dialog.dismiss();
                         }
 
 
@@ -439,14 +441,17 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
                     builder.setNeutralButton(R.string.dialog_btn_borrar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
+                            data.get(marker).delete();
+                            data.remove(marker);
+                            marker.remove();
+                            dialog.dismiss();
                         }
 
 
                     });
                     dialog = builder.create();
                     ImageView img= (ImageView) myView.findViewById(R.id.image);
-                    img.setImageBitmap(imagenes.get(data.get(marker).imageIndex));
+
                     img.setImageBitmap(getFotoDialog(data.get(marker), screenWidth, 300));
                     dialog.show();
 
@@ -489,11 +494,14 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 //                            map.addMarker(new MarkerOptions().position(latlong).title("Sydney").snippet("Population: 4,627,300").icon(BitmapDescriptorFactory.fromBitmap(imagenes.get(lastIndex))));
                             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
                             Foto foto = new Foto(activity);
-                            foto.setCoordenada(new Coordenada(activity,latitud,longitud));
+                            Coordenada cord=new Coordenada(activity,latitud,longitud);
+                            cord.save();
+                            foto.setCoordenada(cord);
                             foto.setRuta(ruta);
                             foto.path=imageItem.imagePath;
                             foto.uploaded=0;
                             foto.save();
+                            fotos.add(foto);
                             Bitmap bmp = Bitmap.createBitmap(86,59, conf);
                             Canvas canvas1 = new Canvas(bmp);
                             Paint color = new Paint();
@@ -506,9 +514,8 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                             Marker marker = map.addMarker(new MarkerOptions().position(latlong)
                                     .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                                     .anchor(0.5f, 1).title("Nueva fotografía"));
-                            ImageItem it = imageItem;
-                            it.imageIndex=lastIndex;
-                            data.put(marker,it);
+
+                            data.put(marker,foto);
 
                             lastSize=imagenes.size();
                             //queue.execute(new ImageUploader(activity, queue, imageItem, 0));
@@ -560,7 +567,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     public void setImageIndex(int index){
         //System.out.println("set image index " + index);
         if(imagenes==null){
-            imagenes=  new ArrayList<Bitmap>();;
+            imagenes=  new ArrayList<Bitmap>();
         }
         if(index>=lastestImageIndex) {
             this.lastestImageIndex = index;
@@ -585,11 +592,11 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         }
 
     }
-    public Bitmap getFotoDialog(ImageItem image,int width,int heigth){
-        if(imageItem!=null) {
+    public Bitmap getFotoDialog(Foto image,int width,int heigth){
+        if(image!=null) {
             // System.out.println("path "+imageItem.imagePath);
-            System.out.println("images " + image.imagePath+"  "+width+"  "+heigth);
-            Bitmap b = ImageUtils.decodeFile(image.imagePath,width,heigth);
+            //System.out.println("images " + image.imagePath+"  "+width+"  "+heigth);
+            Bitmap b = ImageUtils.decodeFile(image.path,width,heigth);
             return b;
 
         }
@@ -680,17 +687,17 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             case MAP_POS:
                 // fragment = new NthMapFragment();
 
-                if(!first) {
-                    //System.out.println("map?");
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                            .hide(fragmentManager.findFragmentById(R.id.content_frame))
-                            .commit();
-                    RelativeLayout mainLayout=(RelativeLayout)this.findViewById(R.id.rl2);
-                    mainLayout.setVisibility(View.VISIBLE);
-                }
-                first=false;
+
+                //System.out.println("map?");
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                        .hide(fragmentManager.findFragmentById(R.id.content_frame))
+                        .commit();
+                RelativeLayout mainLayout=(RelativeLayout)this.findViewById(R.id.rl2);
+                mainLayout.setVisibility(View.VISIBLE);
+
+
                 fragment=null;
 
                 break;
@@ -716,7 +723,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
         }
         if(fragment!=null){
-           // System.out.println("fragment "+fragment);
+            // System.out.println("fragment "+fragment);
             Bundle args = new Bundle();
             //args.putString("pathFolder", pathFolder);
             fragment.setArguments(args);
@@ -728,7 +735,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .replace(R.id.content_frame, fragment)
                     .commit();
-           // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
             // update selected item and title, then close the drawer
 
