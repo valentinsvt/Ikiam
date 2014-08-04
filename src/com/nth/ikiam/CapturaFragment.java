@@ -67,6 +67,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     private EditText textoEspecie;
     private EditText textoNombreComun;
 
+    private AutoCompleteTextView autocompleteNombreComun;
+
     private Spinner spinnerColor1;
     private Spinner spinnerColor2;
 
@@ -94,7 +96,17 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
         pathFolder = Utils.getFolder(context);
 
+//        Color.empty(context);
+//        Familia.empty(context);
+//        Genero.empty(context);
+//        Especie.empty(context);
+//        Entry.empty(context);
+//        Foto.empty(context);
+//        Coordenada.empty(context);
+
         if (Color.count(context) == 0) {
+            Color c0 = new Color(context, "none");
+            c0.save();
             Color c1 = new Color(context, "azul");
             c1.save();
             Color c2 = new Color(context, "cafe");
@@ -119,16 +131,18 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
         //DisplayMetrics displaymetrics = new DisplayMetrics();
         //getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        activity=(MapActivity)getActivity();
+        activity = (MapActivity) getActivity();
         screenHeight = activity.screenHeight;
         screenWidth = activity.screenWidth;
-        ArrayList<Color> colores = Color.listString(context);
+
+        ArrayList<Color> colores1 = Color.listColores(context);
+        ArrayList<Color> colores2 = Color.list(context);
 
         spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);
-        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores));
+        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores1));
 
         spinnerColor2 = (Spinner) view.findViewById(R.id.captura_color2_spinner);
-        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores));
+        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores2));
 
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
 
@@ -139,6 +153,11 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         textoGenero = (EditText) view.findViewById(R.id.captura_nombre_genero_txt);
         textoEspecie = (EditText) view.findViewById(R.id.captura_nombre_especie_txt);
         textoNombreComun = (EditText) view.findViewById(R.id.captura_nombre_comun_txt);
+
+        String[] countries = {"uno", "dos", "tres"};
+        autocompleteNombreComun = (AutoCompleteTextView) view.findViewById(R.id.captura_autocomplete_nombre_comun);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.captura_autocomplete_list_item, countries);
+        autocompleteNombreComun.setAdapter(adapter);
 
         botones = new ImageButton[4];
         botones[0] = (ImageButton) view.findViewById(R.id.captura_gallery_btn);
@@ -162,6 +181,9 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
     @Override
     public void onClick(View v) {
+
+        Utils.hideSoftKeyboard(this.getActivity());
+
         if (v.getId() == botones[0].getId()) { // galeria
             Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -221,7 +243,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     if (color1 != null) {
                         especie.setColor1(color1);
                     }
-                    if (color2 != null) {
+                    if (color2 != null && !color2.nombre.equals("none")) {
                         especie.setColor2(color2);
                     }
                     if (!nombreComun.equals("")) {
@@ -271,12 +293,15 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 foto.setPath(pathFolder + "/" + fotoPath);
                 foto.setUploaded(0);
                 foto.save();
+                String msg = "Foto guardada";
                 //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                 if (v.getId() == botones[3].getId()) {
                     // aqui hace upload al servidor.....
                     ExecutorService queue = Executors.newSingleThreadExecutor();
                     queue.execute(new CapturaUploader(getActivity(), queue, foto, 0));
+                    msg += " y subida ";
                 }
+                alerta(msg + " exitosamente");
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
                 alerta(getString(R.string.captura_error_seleccion));

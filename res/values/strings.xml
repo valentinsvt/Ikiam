@@ -27,6 +27,7 @@
     <string name="global_cancel">Cancelar</string>
     <string name="global_placeHolder">placeHolder</string>
 
+    <string name="global_color_none">-Ninguno-</string>
     <string name="global_color_azul">Azul</string>
     <string name="global_color_cafe">Café</string>
     <string name="global_color_verde">Verde</string>
@@ -91,8 +92,14 @@
     <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
+
     <string name="dialog_btn_cerrar">Cerrar</string>
     <string name="dialog_btn_borrar">Borrar</string>
     <string name="dialog_btn_descargar">Subir</string>
+    <string name="dialog_btn_anterior">Anterior</string>
+    <string name="dialog_btn_siguiente">Siguiente</string>
+
     <string name="map_activity_dialog">Nueva captura</string>
+
+    <string name="encyclopedia_entries_dialog_title">Foto(s)</string>
 </resources>

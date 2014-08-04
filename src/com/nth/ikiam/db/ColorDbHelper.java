@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,9 +64,9 @@ public class ColorDbHelper extends DbHelper {
         return cl;
     }
 
-    public List<Color> getAllColores() {
+    public ArrayList<Color> getAllColores() {
         SQLiteDatabase db = this.getReadableDatabase();
-        List<Color> colores = new ArrayList<Color>();
+        ArrayList<Color> colores = new ArrayList<Color>();
         String selectQuery = "SELECT  * FROM " + TABLE_COLOR;
 
         logQuery(LOG, selectQuery);
@@ -85,10 +86,11 @@ public class ColorDbHelper extends DbHelper {
         return colores;
     }
 
-    public ArrayList<Color> getAllColoresString() {
+    public ArrayList<Color> getOnlyColores() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Color> colores = new ArrayList<Color>();
-        String selectQuery = "SELECT  * FROM " + TABLE_COLOR;
+        String selectQuery = "SELECT  * FROM " + TABLE_COLOR +
+                " WHERE " + KEY_NOMBRE + " <> 'none'";
 
         logQuery(LOG, selectQuery);
 

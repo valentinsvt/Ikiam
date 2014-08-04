@@ -13,6 +13,7 @@ import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.db.Genero;
+import com.nth.ikiam.utils.Utils;
 
 import java.util.List;
 
@@ -33,7 +34,11 @@ public class EncyclopediaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity().getApplicationContext();
-        pathFolder = getArguments().getString("pathFolder");
+//        pathFolder = getArguments().getString("pathFolder");
+
+        pathFolder = Utils.getFolder(context);
+        Utils.hideSoftKeyboard(this.getActivity());
+
 
 //        System.out.println("Folder: " + pathFolder);
 
@@ -44,37 +49,21 @@ public class EncyclopediaFragment extends Fragment {
 //            System.out.println(foto.getPath());
 //        }
 
-        String[] nivel2 = {"uno nivel 2", "dos nivel 2", "tres nivel 2", "cuatro nivel 2", "cinco nivel 2", "seis nivel 2"};
-        String[] nivel3 = {"uno nivel 3", "dos nivel 3", "tres nivel 3", "cuatro nivel 3", "cinco nivel 3", "seis nivel 3"};
-
         List<Familia> familias = Familia.list(context);
 
-        for (Familia familia : familias) {
-            System.out.println("Familia: " + familia.nombre + " <" + familia.id + ">");
-            List<Genero> generos = Genero.findAllByFamilia(context, familia);
-            for (Genero genero : generos) {
-                System.out.println("\tGenero: " + genero.nombre + " <" + familia.id + ">" + " <" + genero.id + ">");
-                List<Especie> especies = Especie.findAllByGenero(context, genero);
-                for (Especie especie : especies) {
-                    System.out.println("\t\tEspecie: " + especie.nombre + " (" + especie.nombreComun + ")" + " <" + familia.id + ">" + " <" + genero.id + ">" + " <" + especie.id + ">");
-                }
-            }
-        }
-
-
         expandableListView = (ExpandableListView) view.findViewById(R.id.encyclopedia_level_1);
-        expandableListView.setAdapter(new EncyclopediaFirstLevelAdapter(context, familias, nivel2, nivel3));
+        expandableListView.setAdapter(new EncyclopediaFirstLevelAdapter(context, (MapActivity) getActivity(), this, familias));
 
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Toast.makeText(context, "click", Toast.LENGTH_LONG).show();
+//        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+//
+//            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+//                Toast.makeText(context, "click", Toast.LENGTH_LONG).show();
 //                final String selected = (String) ParentLevelAdapter.getChild(groupPosition, childPosition);
 //
 //                Toast.makeText(getBaseContext(), selected, Toast.LENGTH_LONG).show();
-                return true;
-            }
-        });
+//                return true;
+//            }
+//        });
 
         return view;
     }

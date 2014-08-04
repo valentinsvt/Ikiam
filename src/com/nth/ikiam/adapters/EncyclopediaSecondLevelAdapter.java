@@ -19,19 +19,16 @@ import java.util.List;
  */
 public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 
-    String[] nivel2;
-    String[] nivel3;
     int position;
 
     List<Genero> generos;
 
     Context context;
 
-    public EncyclopediaSecondLevelAdapter(Context context, int position, List<Genero> generos, String[] nivel3) {
+    public EncyclopediaSecondLevelAdapter(Context context, int position, List<Genero> generos) {
         this.context = context;
         this.position = position;
         this.generos = generos;
-        this.nivel3 = nivel3;
     }
 
     @Override
@@ -41,6 +38,11 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 
     public Genero getGenero(int pos) {
         return generos.get(pos);
+    }
+
+    public Especie getEspecie(int pos) {
+        List<Especie> especies = Especie.findAllByGenero(context, getGenero(position));
+        return especies.get(pos);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 //        tv.setBackgroundColor(Color.YELLOW);
 //        tv.setLayoutParams(new ListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 //        return tv;
-        System.out.println(getGenero(position).nombre);
+//        System.out.println(getGenero(position).nombre);
         List<Especie> especies = Especie.findAllByGenero(context, getGenero(position));
         Especie especie = especies.get(childPosition);
         String label = especie.nombre + " (" + especie.nombreComun + ")";
@@ -75,7 +77,7 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         Genero genero = getGenero(position);
-        System.out.println("pos=" + position + " gp=" + groupPosition + "  gen=" + genero.nombre + " count=" + Especie.countByGenero(context, genero));
+//        System.out.println("pos=" + position + " gp=" + groupPosition + "  gen=" + genero.nombre + " count=" + Especie.countByGenero(context, genero));
         return Especie.countByGenero(context, genero);
     }
 

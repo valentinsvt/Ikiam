@@ -152,7 +152,7 @@ public class CoordenadaDbHelper extends DbHelper {
         db.close();
     }
 
-    public void deleteAllCoordenadaes() {
+    public void deleteAllCoordenadas() {
         String sql = "DELETE FROM " + TABLE_COORDENADA;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);

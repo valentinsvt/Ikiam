@@ -8,5 +8,5 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text MAIN"
-        android:id="@+id/textView" />
+        android:id="@+id/encyclopedia_entries_foto_number" />
 </LinearLayout>

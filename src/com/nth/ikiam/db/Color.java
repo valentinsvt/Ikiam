@@ -25,6 +25,13 @@ public class Color {
         colorDbHelper = new ColorDbHelper(context);
     }
 
+    public Color(Context context, long id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+
+        colorDbHelper = new ColorDbHelper(context);
+    }
+
     //getters
     public long getId() {
         return id;
@@ -59,7 +66,7 @@ public class Color {
         if (this.id == 0) {
             this.id = this.colorDbHelper.createColor(this);
         } else {
-             this.colorDbHelper.updateColor(this);
+            this.colorDbHelper.updateColor(this);
         }
     }
 
@@ -78,14 +85,14 @@ public class Color {
         return e.countColoresByNombre(color);
     }
 
-    public static List<Color> list(Context context) {
+    public static ArrayList<Color> list(Context context) {
         ColorDbHelper e = new ColorDbHelper(context);
         return e.getAllColores();
     }
 
-    public static ArrayList<Color> listString(Context context) {
+    public static ArrayList<Color> listColores(Context context) {
         ColorDbHelper e = new ColorDbHelper(context);
-        return e.getAllColoresString();
+        return e.getOnlyColores();
     }
 
     public static List<Color> findAllByNombre(Context context, String color) {

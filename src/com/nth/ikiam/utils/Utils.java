@@ -1,7 +1,9 @@
 package com.nth.ikiam.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
+import android.view.inputmethod.InputMethodManager;
 import com.nth.ikiam.R;
 
 import java.io.File;
@@ -25,4 +27,10 @@ public class Utils {
         folder.mkdirs();
         return pathFolder;
     }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
 }

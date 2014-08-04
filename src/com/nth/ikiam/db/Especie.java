@@ -112,6 +112,10 @@ public class Especie {
         return color2_id;
     }
 
+    public String getNombreCientifico() {
+        return getGenero().nombre + " " + nombre;
+    }
+
     //setters
     public void setId(long id) {
         this.id = id;
@@ -161,7 +165,7 @@ public class Especie {
         if (this.id == 0) {
             this.id = this.especieDbHelper.createEspecie(this);
         } else {
-          this.especieDbHelper.updateEspecie(this);
+            this.especieDbHelper.updateEspecie(this);
         }
     }
 

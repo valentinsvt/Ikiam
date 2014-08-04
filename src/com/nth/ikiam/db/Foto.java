@@ -202,6 +202,11 @@ public class Foto {
         return e.getAllFotosByEspecie(especie);
     }
 
+    public static List<Foto> findAllByEntry(Context context, Entry entry) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getAllFotosByEntry(entry);
+    }
+
     public static List<Foto> findAllByKeyword(Context context, String keyword) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.getAllFotosByKeyword(keyword);

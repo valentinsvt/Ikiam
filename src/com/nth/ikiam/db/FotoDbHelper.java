@@ -162,6 +162,34 @@ public class FotoDbHelper extends DbHelper {
         return fotos;
     }
 
+    public List<Foto> getAllFotosByEntry(Entry entry) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Foto> fotos = new ArrayList<Foto>();
+
+//        String selectQuery = "SELECT * FROM " + TABLE_FOTO + " tf, " + TABLE_ESPECIE + " te " +
+//                "WHERE tf." + KEY_ESPECIE_ID + "=te." + KEY_ID +
+//                " AND te." + KEY_ID + "='" + especie.id + "' ";
+
+        String selectQuery = "SELECT * FROM " + TABLE_FOTO +
+                " WHERE " + KEY_ENTRY_ID + " = " + entry.id;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto f = setDatos(c);
+
+                // adding to foto list
+                fotos.add(f);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return fotos;
+    }
+
     public List<Foto> getAllFotosByKeyword(String keyword) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Foto> fotos = new ArrayList<Foto>();
@@ -266,7 +294,9 @@ public class FotoDbHelper extends DbHelper {
         values.put(KEY_KEYWORDS, foto.getKeywords());
         values.put(KEY_PATH, foto.getPath());
         values.put(KEY_UPLOADED, foto.getUploaded());
-        values.put(KEY_RUTA_ID,foto.getRutaId());
+        if (foto.ruta_id != null) {
+            values.put(KEY_RUTA_ID, foto.getRutaId());
+        }
         return values;
     }
 

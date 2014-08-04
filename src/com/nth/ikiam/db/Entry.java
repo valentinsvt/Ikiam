@@ -123,6 +123,11 @@ public class Entry {
         return e.getAllEntriesByEspecie(especie);
     }
 
+    public static List<Entry> findAllByEspecie(Context context, long especie) {
+        EntryDbHelper e = new EntryDbHelper(context);
+        return e.getAllEntriesByEspecie(especie);
+    }
+
     public static List<Entry> findAllNotUploaded(Context context) {
         EntryDbHelper e = new EntryDbHelper(context);
         return e.getAllEntriesByUploaded(0);

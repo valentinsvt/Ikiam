@@ -121,5 +121,9 @@ public class Coordenada {
         return e.getAllCoordenadasByRuta(ruta);
     }
 
+    public static void empty(Context context) {
+        CoordenadaDbHelper e = new CoordenadaDbHelper(context);
+        e.deleteAllCoordenadas();
+    }
 
 }
