@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="#ff8c7124">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/encyclopedia_group_item_nivel_3_lbl"

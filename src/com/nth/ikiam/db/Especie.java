@@ -15,6 +15,7 @@ public class Especie {
     //    public Genero genero;
     public Long genero_id;
     public String nombre;
+    public String nombreNorm;
     public String nombreComun;
     public String nombreComunNorm;
     public String comentarios;
@@ -138,6 +139,7 @@ public class Especie {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        this.nombreNorm = Normalizer.normalize(nombre, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public void setComentarios(String comentarios) {
@@ -181,7 +183,8 @@ public class Especie {
         Especie especie;
         List<Especie> listEspecies = findAllByNombre(context, nombreEspecie);
         if (listEspecies.size() == 0) {
-            especie = new Especie(context, nombreEspecie, 1);
+            especie = new Especie(context);
+            especie.setNombre(nombreEspecie);
             especie.save();
         } else if (listEspecies.size() == 1) {
             especie = listEspecies.get(0);
@@ -210,6 +213,11 @@ public class Especie {
     public static List<Especie> findAllByNombre(Context context, String especie) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.getAllEspeciesByNombre(especie);
+    }
+
+    public static List<Especie> findAllByNombreLike(Context context, String especie) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.getAllEspeciesByNombreLike(especie);
     }
 
     public static List<Especie> findAllByNombreComunLike(Context context, String especie) {
