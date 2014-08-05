@@ -20,12 +20,13 @@ public class EspecieDbHelper extends DbHelper {
     private static final String KEY_NOMBRE_COMUN = "nombre_comun";
     private static final String KEY_NOMBRE_COMUN_NORM = "nombre_comun_norm";
     private static final String KEY_NOMBRE = "nombre";
+    private static final String KEY_NOMBRE_NORM = "nombre_norm";
     private static final String KEY_COLOR1_ID = "color_id";
     private static final String KEY_COLOR2_ID = "color2_id";
     private static final String KEY_GENERO_ID = "genero_id";
 
-    public static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE_COMUN_NORM, KEY_NOMBRE, KEY_GENERO_ID,
-            KEY_COLOR1_ID, KEY_COLOR2_ID};
+    public static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE_COMUN_NORM, KEY_NOMBRE, KEY_NOMBRE_NORM,
+            KEY_GENERO_ID, KEY_COLOR1_ID, KEY_COLOR2_ID};
 
     public EspecieDbHelper(Context context) {
         super(context);
@@ -164,6 +165,28 @@ public class EspecieDbHelper extends DbHelper {
         List<Especie> todos = new ArrayList<Especie>();
         String selectQuery = "SELECT  * FROM " + TABLE_ESPECIE +
                 " WHERE LOWER(" + KEY_NOMBRE_COMUN_NORM + ") LIKE '%" + especie.toLowerCase() + "%'";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Especie es = setDatos(c);
+                // adding to especie list
+                todos.add(es);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return todos;
+    }
+
+    public List<Especie> getAllEspeciesByNombreLike(String especie) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Especie> todos = new ArrayList<Especie>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ESPECIE +
+                " WHERE LOWER(" + KEY_NOMBRE_NORM + ") LIKE '%" + especie.toLowerCase() + "%'";
 
         logQuery(LOG, selectQuery);
 
@@ -335,6 +358,7 @@ public class EspecieDbHelper extends DbHelper {
         values.put(KEY_NOMBRE_COMUN, especie.nombreComun);
         values.put(KEY_NOMBRE_COMUN_NORM, especie.nombreComunNorm);
         values.put(KEY_NOMBRE, especie.nombre);
+        values.put(KEY_NOMBRE_NORM, especie.nombreNorm);
         if (especie.color1_id != null) {
             values.put(KEY_COLOR1_ID, especie.color1_id);
         }

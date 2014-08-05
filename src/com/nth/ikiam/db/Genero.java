@@ -3,6 +3,7 @@ package com.nth.ikiam.db;
 import android.content.Context;
 import android.util.Log;
 
+import java.text.Normalizer;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class Genero {
     public String fecha;
     public Long familia_id;
     public String nombre;
+    public String nombreNorm;
 
     public GeneroDbHelper generoDbHelper;
 
@@ -64,6 +66,7 @@ public class Genero {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        this.nombreNorm = Normalizer.normalize(nombre, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public void setFamilia(Familia familia) {
@@ -95,7 +98,8 @@ public class Genero {
         Genero genero;
         List<Genero> listGeneros = findAllByNombre(context, nombreGenero);
         if (listGeneros.size() == 0) {
-            genero = new Genero(context, nombreGenero);
+            genero = new Genero(context);
+            genero.setNombre(nombreGenero);
             genero.save();
         } else if (listGeneros.size() == 1) {
             genero = listGeneros.get(0);
@@ -126,9 +130,14 @@ public class Genero {
         return e.getAllGeneros();
     }
 
-    public static List<Genero> findAllByNombre(Context context, String familia) {
+    public static List<Genero> findAllByNombre(Context context, String genero) {
         GeneroDbHelper e = new GeneroDbHelper(context);
-        return e.getAllGenerosByNombre(familia);
+        return e.getAllGenerosByNombre(genero);
+    }
+
+    public static List<Genero> findAllByNombreLike(Context context, String genero) {
+        GeneroDbHelper e = new GeneroDbHelper(context);
+        return e.getAllGenerosByNombreLike(genero);
     }
 
     public static List<Genero> findAllByFamilia(Context context, Familia familia) {

@@ -16,8 +16,9 @@ public class FamiliaDbHelper extends DbHelper {
     private static final String LOG = "FamiliaDbHelper";
 
     private static final String KEY_NOMBRE = "nombre";
+    private static final String KEY_NOMBRE_NORM = "nombre_norm";
 
-    public static final String[] KEYS_FAMILIA = {KEY_NOMBRE};
+    public static final String[] KEYS_FAMILIA = {KEY_NOMBRE, KEY_NOMBRE_NORM};
 
     public FamiliaDbHelper(Context context) {
         super(context);
@@ -109,6 +110,29 @@ public class FamiliaDbHelper extends DbHelper {
         return familias;
     }
 
+    public List<Familia> getAllFamiliasByNombreLike(String familia) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Familia> familias = new ArrayList<Familia>();
+        String selectQuery = "SELECT  * FROM " + TABLE_FAMILIA +
+                " WHERE LOWER(" + KEY_NOMBRE_NORM + ") LIKE '%" + familia.toLowerCase() + "%'";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Familia fm = setDatos(c);
+
+                // adding to tags list
+                familias.add(fm);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return familias;
+    }
+
     public int countAllFamilias() {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_FAMILIA;
@@ -175,6 +199,7 @@ public class FamiliaDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_NOMBRE, familia.nombre);
+        values.put(KEY_NOMBRE_NORM, familia.nombreNorm);
         return values;
     }
 

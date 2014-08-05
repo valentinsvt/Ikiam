@@ -16,9 +16,10 @@ public class GeneroDbHelper extends DbHelper {
     private static final String LOG = "GeneroDbHelper";
 
     private static final String KEY_NOMBRE = "nombre";
+    private static final String KEY_NOMBRE_NORM = "nombre_norm";
     private static final String KEY_FAMILIA_ID = "familia_id";
 
-    public static final String[] KEYS_GENERO = {KEY_NOMBRE, KEY_FAMILIA_ID};
+    public static final String[] KEYS_GENERO = {KEY_NOMBRE, KEY_NOMBRE_NORM, KEY_FAMILIA_ID};
 
     public GeneroDbHelper(Context context) {
         super(context);
@@ -91,6 +92,29 @@ public class GeneroDbHelper extends DbHelper {
         List<Genero> generos = new ArrayList<Genero>();
         String selectQuery = "SELECT  * FROM " + TABLE_GENERO +
                 " WHERE " + KEY_NOMBRE + " = '" + genero + "'";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Genero gn = setDatos(c);
+
+                // adding to tags list
+                generos.add(gn);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return generos;
+    }
+
+    public List<Genero> getAllGenerosByNombreLike(String genero) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Genero> generos = new ArrayList<Genero>();
+        String selectQuery = "SELECT  * FROM " + TABLE_GENERO +
+                " WHERE LOWER(" + KEY_NOMBRE_NORM + ") LIKE '%" + genero.toLowerCase() + "%'";
 
         logQuery(LOG, selectQuery);
 
@@ -213,6 +237,7 @@ public class GeneroDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_NOMBRE, genero.nombre);
+        values.put(KEY_NOMBRE_NORM, genero.nombreNorm);
         if (genero.familia_id != null) {
             values.put(KEY_FAMILIA_ID, genero.familia_id);
         }
