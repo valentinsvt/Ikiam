@@ -43,6 +43,7 @@
         <item>Nueva captura</item>
         <item>Enciclopedia</item>
         <item>Configuración</item>
+        <item>Login</item>
     </string-array>
 
     <string name="drawer_open">Abrir menú de navegación</string>
@@ -102,4 +103,12 @@
     <string name="map_activity_dialog">Nueva captura</string>
 
     <string name="encyclopedia_entries_dialog_title">Foto(s)</string>
+    <string name="app_id">298464543671961</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Contraseña</string>
+    <string name="login_repetir_pass">Repetir contraseña</string>
+    <string name="login_nombre">Nombre</string>
+    <string name="login_apellido">Apellido</string>
+    <string name="login_crear_cuenta">Crear una cuenta</string>
+    <string name="login_separados">Ó</string>
 </resources>

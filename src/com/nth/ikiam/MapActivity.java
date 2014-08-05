@@ -13,6 +13,9 @@ import android.net.Uri;
 import android.os.*;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+//import android.support.v4.app.ActionBarDrawerToggle;
+//import android.support.v4.view.GravityCompat;
+//import android.support.v4.widget.DrawerLayout;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,7 +39,8 @@ import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
-import com.nth.ikiam.utils.ImageUploader;
+import com.facebook.*;
+import com.facebook.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +60,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     private final int CAPTURA_POS = 1;
     private final int ENCYCLOPEDIA_POS = 2;
     private final int SETTINGS_POS = 3;
+    private final int LOGIN_POS = 4;
 
     /*Interfaz*/
     private Button[] botones;
@@ -99,6 +104,11 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     View myView;
     public int screenHeight;
     public int screenWidth;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -178,6 +188,28 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 //            selectItem(0);
 //        }
         /*FinDrawer*/
+        // start Facebook Login
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+            // callback when session changes state
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                if (session.isOpened()) {
+                    Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                        // callback after Graph API response with user object
+                        @Override
+                        public void onCompleted(GraphUser user, Response response) {
+                            if (user != null) {
+                                //TextView welcome = (TextView) findViewById(R.id.welcome);
+                                System.out.println("Hello " + user.getName() + "!");
+                                //welcome.setText();
+                            }
+                        }
+                    }).executeAsync();
+                }
+            }
+        });
 
     }
 
@@ -715,6 +747,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                 break;
             case SETTINGS_POS:
                 fragment = new SettingsFragment();
+                break;
+            case LOGIN_POS:
+                fragment = new Loginfragment();
                 break;
             default:
                 fragment=null;
