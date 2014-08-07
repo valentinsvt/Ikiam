@@ -23,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -39,8 +40,7 @@ import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
-import com.facebook.*;
-import com.facebook.model.*;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,6 +104,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     View myView;
     public int screenHeight;
     public int screenWidth;
+    public static final String PREFS_NAME = "IkiamSettings";
+    public String userId;
+    public String name;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -115,9 +118,29 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         super.onCreate(savedInstanceState);
         first = true;
 
+        /*preferencias*/
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        userId=settings.getString("user","-1");
+        name = settings.getString("name","-1");
+        //System.out.println("variables name "+userId+"  name "+name);
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
+
+        Session session = Session.getActiveSession();
+        if (session != null && session.isOpened()) {
+
+        }else{
+            SharedPreferences.Editor editor = settings.edit();
+            if(!settings.getString("user","-1").equals("-1") && !settings.getString("type","-1").equals("ikiam")) {
+                editor.putString("user", "-1");
+                editor.putString("login", "-1");
+                editor.putString("name", "-1");
+                editor.putString("type", "-1");
+                editor.commit();
+            }
+        }
+
         this.activity = this;
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -188,28 +211,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 //            selectItem(0);
 //        }
         /*FinDrawer*/
-        // start Facebook Login
-        Session.openActiveSession(this, true, new Session.StatusCallback() {
 
-            // callback when session changes state
-            @Override
-            public void call(Session session, SessionState state, Exception exception) {
-                if (session.isOpened()) {
-                    Request.newMeRequest(session, new Request.GraphUserCallback() {
-
-                        // callback after Graph API response with user object
-                        @Override
-                        public void onCompleted(GraphUser user, Response response) {
-                            if (user != null) {
-                                //TextView welcome = (TextView) findViewById(R.id.welcome);
-                                System.out.println("Hello " + user.getName() + "!");
-                                //welcome.setText();
-                            }
-                        }
-                    }).executeAsync();
-                }
-            }
-        });
 
     }
 
