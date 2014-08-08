@@ -2,10 +2,7 @@ package com.nth.ikiam.utils;
 
 import android.content.Context;
 import android.util.Log;
-import com.nth.ikiam.db.Especie;
-import com.nth.ikiam.db.Familia;
-import com.nth.ikiam.db.Foto;
-import com.nth.ikiam.db.Genero;
+import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.ImageItem;
 
 import java.io.DataOutputStream;
@@ -13,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -81,41 +79,73 @@ public class CapturaUploader implements Runnable {
             URL url = new URL(urlstr);
             int serverResponseCode = 0;
 
-            // Open a HTTP  connection to  the URL
+            // Open a HTTP  connection to  the URLF
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // Allow Inputs
             conn.setDoOutput(true); // Allow Outputs
             conn.setUseCaches(false); // Don't use a Cached Copy
             conn.setChunkedStreamingMode(0); // when the body length is NOT known in advance,
+            conn.setRequestProperty("Accept-Charset", "UTF-8");
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             conn.setRequestProperty("uploaded_file", foto.path);
 
-//            conn.setRequestProperty("fecha", foto.fecha);
-//            conn.setRequestProperty("keywords", foto.keywords);
-//
-//            conn.setRequestProperty("familia", "" + foto.especie.genero.familia.nombre);
-//            conn.setRequestProperty("genero", "" + foto.especie.genero.nombre);
-//            conn.setRequestProperty("especie", "" + foto.especie.nombre);
-//            conn.setRequestProperty("comentarios", "" + foto.entry.comentarios);
-//            conn.setRequestProperty("latitud", "" + foto.coordenada.latitud);
-//            conn.setRequestProperty("longitud", "" + foto.coordenada.longitud);
-
             dos = new DataOutputStream(conn.getOutputStream());
 
-//            dos.writeBytes(twoHyphens + boundary + lineEnd);
-//            dos.writeBytes("Content-Type: text/plain" + lineEnd);
-//            dos.writeBytes("Content-Disposition: form-data; name=familia" + lineEnd);
-//            dos.writeBytes(lineEnd + foto.especie.genero.familia.nombre + lineEnd);
-//            dos.writeBytes(twoHyphens + boundary + lineEnd);
-            addFormPart(dos, "familia", foto.getEspecie().getGenero().getFamilia().nombre);
-            addFormPart(dos, "genero", foto.getEspecie().getGenero().nombre);
-            addFormPart(dos, "especie", foto.getEspecie().nombre);
+            Especie especie = null;
+            Genero genero = null;
+            Familia familia = null;
+            Entry entry = null;
+            Color color1 = null;
+            Color color2 = null;
+            Coordenada coordenada = null;
+
+            especie = foto.getEspecie(context);
+            entry = foto.getEntry(context);
+            coordenada = foto.getCoordenada(context);
+            if (especie != null) {
+                color1 = especie.getColor1(context);
+                color2 = especie.getColor2(context);
+
+                genero = especie.getGenero(context);
+                if (genero != null) {
+                    familia = genero.getFamilia(context);
+                }
+            }
+
+            if (familia != null) {
+                addFormPart(dos, "familia", familia.nombre);
+            }
+            if (genero != null) {
+                addFormPart(dos, "genero", genero.nombre);
+            }
+
+            if (especie != null) {
+                addFormPart(dos, "especie", especie.nombre);
+                addFormPart(dos, "comun", especie.nombreComun);
+            }
+            if (color1 != null) {
+                addFormPart(dos, "color1", color1.nombre);
+            }
+            if (color2 != null) {
+                addFormPart(dos, "color2", color2.nombre);
+            }
+
+            if (entry != null) {
+                addFormPart(dos, "comentarios", entry.comentarios);
+                addFormPart(dos, "fecha", entry.fecha);
+            }
+
+            addFormPart(dos, "keywords", foto.keywords);
             addFormPart(dos, "archivo", foto.path);
             addFormPart(dos, "keywords", foto.keywords);
 
+            if (coordenada != null) {
+                addFormPart(dos, "lat", "" + coordenada.latitud);
+                addFormPart(dos, "long", "" + coordenada.longitud);
+            }
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=foto-file ; filename=" + foto.path + lineEnd);
@@ -167,6 +197,7 @@ public class CapturaUploader implements Runnable {
             dos.flush();
             dos.close();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("fail upload " + e.getMessage());
             // file upload failed so abort post and close connection
         }
@@ -176,6 +207,9 @@ public class CapturaUploader implements Runnable {
         dos.writeBytes(twoHyphens + boundary + lineEnd);
         dos.writeBytes("Content-Type: text/plain" + lineEnd);
         dos.writeBytes("Content-Disposition: form-data; name=" + paramName + lineEnd);
+        if (paramName != "fecha") {
+            value = URLEncoder.encode(value, "utf-8");
+        }
         dos.writeBytes(lineEnd + value + lineEnd);
         dos.writeBytes(twoHyphens + boundary + lineEnd);
     }

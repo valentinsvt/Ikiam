@@ -92,6 +92,7 @@
 
     <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
+    <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
@@ -101,6 +102,8 @@
     <string name="dialog_btn_siguiente">Siguiente</string>
 
     <string name="map_activity_dialog">Nueva captura</string>
+
+    <string name="settings_btn_upload">Subir %1$d fotos</string>
 
     <string name="encyclopedia_entries_dialog_title">Foto(s)</string>
     <string name="app_id">298464543671961</string>
