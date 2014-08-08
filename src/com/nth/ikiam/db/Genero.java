@@ -43,8 +43,12 @@ public class Genero {
         return id;
     }
 
-    public Familia getFamilia() {
-        return Familia.get(context, familia_id);
+    public Familia getFamilia(Context context) {
+        if (familia_id != null) {
+            return Familia.get(context, familia_id);
+        } else {
+            return null;
+        }
     }
 
     public Long getFamilia_id() {

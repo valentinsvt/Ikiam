@@ -60,8 +60,12 @@ public class Foto {
     }
 
     //getters
-    public Especie getEspecie() {
-        return Especie.get(context, especie_id);
+    public Especie getEspecie(Context context) {
+        if (especie_id != null) {
+            return Especie.get(context, especie_id);
+        } else {
+            return null;
+        }
     }
 
     public Long getEspecie_id() {
@@ -72,8 +76,12 @@ public class Foto {
         return id;
     }
 
-    public Coordenada getCoordenada() {
-        return Coordenada.get(context, coordenada_id);
+    public Coordenada getCoordenada(Context context) {
+        if (coordenada_id != null) {
+            return Coordenada.get(context, coordenada_id);
+        } else {
+            return null;
+        }
     }
 
     public Long getCoordenada_id() {
@@ -92,8 +100,12 @@ public class Foto {
         return path;
     }
 
-    public Entry getEntry() {
-        return Entry.get(context, entry_id);
+    public Entry getEntry(Context context) {
+        if (entry_id != null) {
+            return Entry.get(context, entry_id);
+        } else {
+            return null;
+        }
     }
 
     public Long getEntry_id() {
@@ -104,12 +116,17 @@ public class Foto {
         return uploaded;
     }
 
-    public Ruta getRuta(){
-        return Ruta.get(context,this.ruta_id);
+    public Ruta getRuta(Context context) {
+        if (ruta_id != null) {
+            return Ruta.get(context, this.ruta_id);
+        } else {
+            return null;
+        }
     }
-     public long getRutaId(){
-         return this.ruta_id;
-     }
+
+    public long getRutaId() {
+        return this.ruta_id;
+    }
 
     //setter
     public void setEspecie(Especie especie) {
@@ -156,15 +173,19 @@ public class Foto {
         this.uploaded = uploaded;
     }
 
-    public void setRuta(Ruta ruta){this.ruta_id=ruta.id;}
+    public void setRuta(Ruta ruta) {
+        this.ruta_id = ruta.id;
+    }
 
-    public void setRuta_id(long id){this.ruta_id=id;}
+    public void setRuta_id(long id) {
+        this.ruta_id = id;
+    }
 
     public void save() {
         if (this.id == 0) {
             this.id = this.fotoDbHelper.createFoto(this);
         } else {
-           this.fotoDbHelper.updateFoto(this);
+            this.fotoDbHelper.updateFoto(this);
         }
     }
 

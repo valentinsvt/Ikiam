@@ -367,8 +367,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     }
                 }
                 if (selected != null) {
-                    autocompleteFamilia.setText(selected.getGenero().getFamilia().nombre);
-                    autocompleteGenero.setText(selected.getGenero().nombre);
+                    autocompleteFamilia.setText(selected.getGenero(context).getFamilia(context).nombre);
+                    autocompleteGenero.setText(selected.getGenero(context).nombre);
                     autocompleteEspecie.setText(selected.nombre);
                 }
             }
@@ -502,6 +502,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                     GeoDegree gd = new GeoDegree(exif);
                     fotoLat = gd.getLatitude();
                     fotoLong = gd.getLongitude();
+                    alerta(getString(R.string.captura_success_tag_gps));
                 } catch (Exception e) {
                     alerta(getString(R.string.captura_error_tag_gps));
                     fotoLat = null;

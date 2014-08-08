@@ -79,7 +79,7 @@ public class Especie {
         return nombreComun;
     }
 
-    public Genero getGenero() {
+    public Genero getGenero(Context context) {
         return Genero.get(context, genero_id);
     }
 
@@ -99,12 +99,20 @@ public class Especie {
         return fecha;
     }
 
-    public Color getColor1() {
-        return Color.get(context, color1_id);
+    public Color getColor1(Context context) {
+        if (color1_id != null) {
+            return Color.get(context, color1_id);
+        } else {
+            return null;
+        }
     }
 
-    public Color getColor2() {
-        return Color.get(context, color2_id);
+    public Color getColor2(Context context) {
+        if (color2_id != null) {
+            return Color.get(context, color2_id);
+        } else {
+            return null;
+        }
     }
 
     public long getColor1_id() {
@@ -116,7 +124,7 @@ public class Especie {
     }
 
     public String getNombreCientifico() {
-        return getGenero().nombre + " " + nombre;
+        return getGenero(context).nombre + " " + nombre;
     }
 
     //setters

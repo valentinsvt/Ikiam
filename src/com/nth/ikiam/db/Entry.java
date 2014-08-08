@@ -40,8 +40,12 @@ public class Entry {
         return fecha;
     }
 
-    public Especie getEspecie() {
-        return Especie.get(context, especie_id);
+    public Especie getEspecie(Context context) {
+        if (especie_id != null) {
+            return Especie.get(context, especie_id);
+        } else {
+            return null;
+        }
     }
 
     public Long getEspecie_id() {
@@ -85,7 +89,7 @@ public class Entry {
         if (this.id == 0) {
             this.id = this.entryDbHelper.createEntry(this);
         } else {
-             this.entryDbHelper.updateEntry(this);
+            this.entryDbHelper.updateEntry(this);
         }
     }
 

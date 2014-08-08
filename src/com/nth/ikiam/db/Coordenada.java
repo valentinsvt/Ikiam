@@ -76,8 +76,12 @@ public class Coordenada {
         return fecha;
     }
 
-    public Ruta getRuta() {
-        return Ruta.get(context, ruta_id);
+    public Ruta getRuta(Context context) {
+        if (ruta_id != null) {
+            return Ruta.get(context, ruta_id);
+        } else {
+            return null;
+        }
     }
 
     public Long getRuta_id() {
