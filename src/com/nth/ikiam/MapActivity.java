@@ -40,6 +40,7 @@ import com.nth.ikiam.db.Ruta;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
+import com.nth.ikiam.listeners.FieldListener;
 
 
 import java.util.ArrayList;
@@ -98,7 +99,6 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     List<Foto> fotos;
     /*Fin imagenes*/
 
-    boolean first = true;
     String imagePathUpload="";
     AlertDialog dialog;
     View myView;
@@ -107,6 +107,43 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     public static final String PREFS_NAME = "IkiamSettings";
     public String userId;
     public String name;
+    public String type;
+    public String email;
+    public String errorMessage;
+    List<FieldListener> listeners = new ArrayList<FieldListener>();
+    public void setUserId(String id) {
+        fireEvent("userId", id);
+        this.userId = id;
+    }
+    public void setType(String type) {
+        fireEvent("type", type);
+        this.type = type;
+    }
+    public void setErrorMessage(String msg) {
+        fireEvent("errorMessage", msg);
+        this.errorMessage = msg;
+    }
+    public void addListener(FieldListener l) {
+        if(l != null) listeners.add(l);
+    }
+
+    public void fireEvent(String fieldName, String newValue) {
+        for(FieldListener l : listeners) {
+            l.fieldValueChanged(fieldName, newValue);
+        }
+    }
+    public void showToast(final String msg){
+        final Activity a = this;
+        if (a != null ) {
+            a.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(a, msg, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,12 +153,12 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        first = true;
 
         /*preferencias*/
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         userId=settings.getString("user","-1");
         name = settings.getString("name","-1");
+        type = settings.getString("type","-1");
         //System.out.println("variables name "+userId+"  name "+name);
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
@@ -751,7 +788,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                 fragment = new SettingsFragment();
                 break;
             case LOGIN_POS:
+
                 fragment = new Loginfragment();
+                this.addListener((FieldListener)fragment);
                 break;
             default:
                 fragment=null;

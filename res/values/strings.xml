@@ -111,4 +111,8 @@
     <string name="login_apellido">Apellido</string>
     <string name="login_crear_cuenta">Crear una cuenta</string>
     <string name="login_separados">Ó</string>
+    <string name="login_guardar">Guardar</string>
+    <string name="login_ingresar">Ingresar</string>
+    <string name="login_lbl_ingresar">Cuenta Ikiam</string>
+    <string name="login_logout">Salir</string>
 </resources>
