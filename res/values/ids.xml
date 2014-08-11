@@ -23,6 +23,7 @@
     <item name="captura_corteza_toggle" type="id" />
     <item name="captura_hoja_toggle" type="id" />
     <item name="captura_flor_toggle" type="id" />
+    <item name="captura_animal_toggle" type="id">captura_animal_toggle</item>
     <item name="captura_info_label" type="id" />
     <item name="captura_save_btn" type="id" />
     <item name="captura_comentarios_txt" type="id" />
@@ -43,4 +44,5 @@
     <item name="captura_divider_hor2" type="id">captura_divider_hor2</item>
     <item name="captura_save_upload_btn" type="id">captura_save_upload_btn</item>
     <item name="captura_divider_vert2" type="id">captura_divider_vert2</item>
+    <item name="settings_btn_reset_achievements" type="id" />
 </resources>

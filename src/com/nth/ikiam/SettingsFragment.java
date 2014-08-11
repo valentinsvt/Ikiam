@@ -21,6 +21,7 @@ import java.util.concurrent.Executors;
 public class SettingsFragment extends Fragment implements Button.OnClickListener {
 
     Button btnUpload;
+    Button btnDownload;
     Context context;
 
     public final static String EXTRA_MESSAGE = "com.nth.ikiam.MESSAGE";
@@ -34,10 +35,12 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         context = getActivity().getApplicationContext();
         View view = inflater.inflate(R.layout.settings_layout, container, false);
         btnUpload = (Button) view.findViewById(R.id.settings_btn_upload);
+        btnDownload = (Button) view.findViewById(R.id.settings_btn_download);
         int cantFotos = Foto.countNotUploaded(context);
         String toUpload = getString(R.string.settings_btn_upload, cantFotos);
         btnUpload.setText(toUpload);
         btnUpload.setOnClickListener(this);
+        btnDownload.setOnClickListener(this);
 
         return view;
     }
@@ -51,6 +54,8 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
                 ExecutorService queue = Executors.newSingleThreadExecutor();
                 queue.execute(new CapturaUploader(context, queue, foto, 0));
             }
+        } else if (view.getId() == btnDownload.getId()) { // download
+
         }
     }
 }

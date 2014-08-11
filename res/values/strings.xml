@@ -70,12 +70,15 @@
     <string name="map_locate_btn">Mi ubicación</string>
     <string name="map_service">Nueva Ruta</string>
 
+    <string name="captura_es_animal">Es un animal</string>
+    <string name="captura_es_planta">Es una planta</string>
     <string name="captura_tiene_fruta">Se ve la fruta</string>
     <string name="captura_tiene_arbol">Se ve el árbol completo</string>
     <string name="captura_tiene_corteza">Se ve la corteza</string>
     <string name="captura_tiene_hoja">Se ven las hojas</string>
     <string name="captura_tiene_flor">Se ven las flores</string>
 
+    <string name="captura_keyWord_animal">Animal</string>
     <string name="captura_keyWord_fruta">Fruta</string>
     <string name="captura_keyWord_arbol">Árbol</string>
     <string name="captura_keyWord_corteza">Corteza</string>
@@ -104,6 +107,9 @@
     <string name="map_activity_dialog">Nueva captura</string>
 
     <string name="settings_btn_upload">Subir %1$d fotos</string>
+    <string name="settings_btn_download">Descargar info</string>
+    <string name="settings_chk_achevements">Contabilizar logros</string>
+    <string name="settings_reset_achievements">Reiniciar contadores de logros</string>
 
     <string name="encyclopedia_entries_dialog_title">Foto(s)</string>
     <string name="app_id">298464543671961</string>

@@ -186,10 +186,10 @@ public class CapturaUploader implements Runnable {
 
             if (serverResponseCode == 200) {
                 System.out.print("completed");
-//                foto.uploaded = 1;
-//                foto.entry.uploaded = 1;
-//                foto.save();
-//                foto.entry.save();
+                foto.uploaded = 1;
+                foto.getEntry(context).uploaded = 1;
+                foto.save();
+                foto.getEntry(context).save();
             }
 
             //close the streams //

@@ -95,10 +95,25 @@
                 android:minWidth="100dp" />
 
             <ToggleButton
+                android:id="@id/captura_animal_toggle"
+
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="@string/captura_es_animal"
+                android:checked="false"
+                android:background="@drawable/ic_menu_animal"
+                android:textOff="@string/global_no"
+                android:textOn="@string/global_yes"
+                android:textStyle="bold"
+                android:textColor="#ffffffff"
+
+                android:layout_toLeftOf="@+id/captura_arbol_toggle" />
+
+            <ToggleButton
                 android:id="@id/captura_arbol_toggle"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:text="@string/captura_tiene_arbol"
                 android:checked="false"
                 android:background="@drawable/ic_menu_tree"
@@ -112,8 +127,8 @@
             <ToggleButton
                 android:id="@id/captura_corteza_toggle"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:text="@string/captura_tiene_corteza"
                 android:checked="false"
                 android:background="@drawable/ic_menu_bark"
@@ -122,29 +137,29 @@
                 android:textStyle="bold"
                 android:textColor="#ffffffff"
 
-                android:layout_toLeftOf="@id/captura_hoja_toggle"
-                android:layout_alignTop="@id/captura_hoja_toggle" />
+                android:layout_alignParentRight="true" />
 
             <ToggleButton
                 android:id="@id/captura_hoja_toggle"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:text="@string/captura_tiene_hoja"
                 android:checked="false"
                 android:background="@drawable/ic_menu_leaf"
                 android:textOff="@string/global_no"
                 android:textOn="@string/global_yes"
                 android:textStyle="bold"
-                android:layout_marginRight="12dp"
 
-                android:layout_alignParentRight="true" />
+                android:layout_below="@id/captura_animal_toggle"
+                android:layout_alignStart="@id/captura_animal_toggle"
+                android:enabled="true" />
 
             <ToggleButton
                 android:id="@id/captura_flor_toggle"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:text="@string/captura_tiene_flor"
                 android:checked="false"
                 android:background="@drawable/ic_menu_flower"
@@ -153,22 +168,23 @@
                 android:textStyle="bold"
 
                 android:layout_below="@id/captura_arbol_toggle"
-                android:layout_alignStart="@id/captura_arbol_toggle" />
+                android:layout_alignTop="@id/captura_hoja_toggle"
+                android:layout_toRightOf="@id/captura_hoja_toggle" />
 
             <ToggleButton
                 android:id="@id/captura_fruta_toggle"
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:text="@string/captura_tiene_fruta"
                 android:background="@drawable/ic_menu_apple"
                 android:textOff="@string/global_no"
                 android:textOn="@string/global_yes"
                 android:checked="false"
-                android:layout_centerHorizontal="true"
                 android:textStyle="bold"
 
                 android:layout_below="@id/captura_corteza_toggle"
+                android:layout_alignTop="@id/captura_hoja_toggle"
                 android:layout_toRightOf="@id/captura_flor_toggle" />
 
             <TextView

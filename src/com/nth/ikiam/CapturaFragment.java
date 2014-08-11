@@ -59,6 +59,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
+    String[] keys;
+    String[] statusString;
 
     private ImageView selectedImage;
 
@@ -136,18 +138,15 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             } else {
                 alerta(getString(R.string.gallery_app_not_available));
             }
-        }
-        if (v.getId() == botones[1].getId()) { // camara
+        } else if (v.getId() == botones[1].getId()) { // camara
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST);
             } else {
                 alerta(getString(R.string.camera_app_not_available));
             }
-        }
-        if (v.getId() == botones[2].getId() || v.getId() == botones[3].getId()) { // save || upload
+        } else if (v.getId() == botones[2].getId() || v.getId() == botones[3].getId()) { // save || upload
             if (hayFoto) {
-                String[] keys = {"arbol", "corteza", "hoja", "flor", "fruta"};
                 Color color1 = (Color) spinnerColor1.getSelectedItem();
                 Color color2 = (Color) spinnerColor2.getSelectedItem();
 //                String nombreFamilia = textoFamilia.getText().toString().trim();
@@ -257,21 +256,10 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
-        }
-        if (v.getId() == toggles[0].getId()) { //tree
-            updateStatus(toggles[0]);
-        }
-        if (v.getId() == toggles[1].getId()) { //bark
-            updateStatus(toggles[1]);
-        }
-        if (v.getId() == toggles[2].getId()) { //leaf
-            updateStatus(toggles[2]);
-        }
-        if (v.getId() == toggles[3].getId()) { //flower
-            updateStatus(toggles[3]);
-        }
-        if (v.getId() == toggles[4].getId()) { //fruit
-            updateStatus(toggles[4]);
+        } else {
+            for (ToggleButton toggle : toggles) {
+                updateStatus(v, toggle);
+            }
         }
     }
 
@@ -320,12 +308,30 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
     }
 
     private void initToggles(View view) {
-        toggles = new ToggleButton[5];
+        toggles = new ToggleButton[6];
         toggles[0] = (ToggleButton) view.findViewById(R.id.captura_arbol_toggle);
         toggles[1] = (ToggleButton) view.findViewById(R.id.captura_corteza_toggle);
         toggles[2] = (ToggleButton) view.findViewById(R.id.captura_hoja_toggle);
         toggles[3] = (ToggleButton) view.findViewById(R.id.captura_flor_toggle);
         toggles[4] = (ToggleButton) view.findViewById(R.id.captura_fruta_toggle);
+        toggles[5] = (ToggleButton) view.findViewById(R.id.captura_animal_toggle);
+
+        keys = new String[6];
+        keys[0] = "arbol";
+        keys[1] = "corteza";
+        keys[2] = "hoja";
+        keys[3] = "flor";
+        keys[4] = "fruta";
+        keys[5] = "animal";
+
+        statusString = new String[6];
+        statusString[0] = getString(R.string.captura_tiene_arbol);
+        statusString[1] = getString(R.string.captura_tiene_corteza);
+        statusString[2] = getString(R.string.captura_tiene_hoja);
+        statusString[3] = getString(R.string.captura_tiene_flor);
+        statusString[4] = getString(R.string.captura_tiene_fruta);
+        statusString[5] = getString(R.string.captura_es_animal);
+
         for (ToggleButton toggle : toggles) {
             toggle.setOnClickListener(this);
         }
@@ -449,11 +455,21 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         hayFoto = false;
     }
 
-    private void updateStatus(ToggleButton toggleButton) {
+    private void updateStatus(View view, ToggleButton toggleButton) {
         if (hayFoto) {
+
+            if (view != null) {
+                if (view.getId() == toggles[5].getId()) { // si es animal se desactivan todos los otros
+                    for (int i = 0; i < 4; i++) {
+                        toggles[i].setChecked(false);
+                    }
+                } else {
+                    //desactiva el de animal
+                    toggles[5].setChecked(false);
+                }
+            }
+
             String info = "";
-            String[] statusString = {getString(R.string.captura_tiene_arbol), getString(R.string.captura_tiene_corteza),
-                    getString(R.string.captura_tiene_hoja), getString(R.string.captura_tiene_flor), getString(R.string.captura_tiene_fruta)};
 
             int i = 0;
             for (ToggleButton toggle : toggles) {
@@ -486,7 +502,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST || requestCode == CAMERA_REQUEST) {
                 hayFoto = true;
-                updateStatus(null);
+                updateStatus(null, null);
                 MapActivity activity = (MapActivity) getActivity();
                 bitmap = getBitmapFromCameraData(data, activity);
                 selectedImage.setImageBitmap(bitmap);
