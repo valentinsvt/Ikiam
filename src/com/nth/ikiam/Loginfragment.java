@@ -14,8 +14,16 @@ import com.facebook.*;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
 import com.nth.ikiam.listeners.FieldListener;
+import com.nth.ikiam.utils.LoginUploader;
 import com.nth.ikiam.utils.UsuarioUploader;
+import com.nth.ikiam.utils.Utils;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -55,6 +63,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener , 
             }
         }
         if(fieldName.equals("errorMessage")){
+            System.out.println("entro aca "+newValue);
             if(!newValue.equals("")) {
                 String msg = newValue.toString();
                 activity.showToast(msg);
@@ -181,6 +190,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener , 
         // botones[1] = (Button) view.findViewById(R.id.button_logout_ikiam); /*Logout ikiam*/
         // botones[2] = (Button) view.findViewById(R.id.button_login); /*login ikiam*/
         // botones[3] = (Button) view.findViewById(R.id.button_guardar); /*Guardar cuenta ikiam*/
+        Utils.hideSoftKeyboard(this.getActivity());
         if(v.getId()==botones[0].getId()){
             RelativeLayout userPanel=(RelativeLayout)view.findViewById(R.id.user_info);
             userPanel.setVisibility(View.GONE);
@@ -217,27 +227,31 @@ public class Loginfragment extends Fragment implements Button.OnClickListener , 
             activity.name="-1";
             editor.commit();
         }
-        if(v.getId()==botones[2].getId()){
+        if(v.getId()==botones[2].getId()) {
            /*login ikiam*/
             /*aqui verificar los datos con la cuenta*/
-            RelativeLayout userPanel=(RelativeLayout)view.findViewById(R.id.user_info);
-            userPanel.setVisibility(View.GONE);
-            RelativeLayout userPanelIkiam=(RelativeLayout)view.findViewById(R.id.user_info_ikiam);
-            userPanelIkiam.setVisibility(View.VISIBLE);
-            RelativeLayout elegirCuenta=(RelativeLayout)view.findViewById(R.id.botones_cuenta);
-            elegirCuenta.setVisibility(View.GONE);
-            RelativeLayout cuentaForm=(RelativeLayout)view.findViewById(R.id.body);
-            cuentaForm.setVisibility(View.GONE);
-            RelativeLayout cuentaFormLogin=(RelativeLayout)view.findViewById(R.id.login_ikiam);
-            cuentaFormLogin.setVisibility(View.GONE);
-            /*Aqui llenar con los resultados de la comprobacion si es positiva*/
-            //SharedPreferences settings = activity.getSharedPreferences(activity.PREFS_NAME, 0);
-            //SharedPreferences.Editor editor = settings.edit();
-            //editor.putString("user", "-1");
-            //editor.putString("login", "-1");
-            //editor.putString("name", "-1");
-            //editor.putString("type", "-1");
-            //editor.commit();
+
+            String email = ((EditText) view.findViewById(R.id.email_login)).getText().toString().trim();
+            String pass = ((EditText) view.findViewById(R.id.pass_login)).getText().toString();
+            StringBuffer hexString = new StringBuffer();
+            if (email.length() > 0 && pass.length() > 0) {
+                try {
+                    MessageDigest m = java.security.MessageDigest.getInstance("MD5");
+                    m.update(pass.getBytes());
+                    byte messageDigest[] = m.digest();
+                    for (int i=0; i<messageDigest.length; i++)
+                        hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+
+                    ExecutorService queue = Executors.newSingleThreadExecutor();
+                    queue.execute(new LoginUploader(activity, queue,0,email,hexString.toString()));
+
+
+                }catch (Exception e){
+                    System.out.println("error hexing "+e.getMessage());
+                }
+            }
+
+
         }
         if(v.getId()==botones[3].getId()){
 
@@ -252,20 +266,15 @@ public class Loginfragment extends Fragment implements Button.OnClickListener , 
                 StringBuffer hexString = new StringBuffer();
                 try {
                     MessageDigest m = java.security.MessageDigest.getInstance("MD5");
+                    m.update(pass.getBytes());
                     byte messageDigest[] = m.digest();
-
-                    for (int i = 0; i < messageDigest.length; i++) {
-                        String hex = Integer.toHexString(0xFF & messageDigest[i]);
-                        if (hex.length() == 1)
-                            hexString.append('0');
-
-                        hexString.append(hex);
-                    }
+                    for (int i=0; i<messageDigest.length; i++)
+                        hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
 
                 }catch (Exception e){
                     System.out.println("error del digest "+e.getMessage());
                 }
-                System.out.println("email "+email+" "+hexString.toString()+" size"+hexString.toString().length()+" "+confirm+" "+nombre+" "+apellido);
+                //System.out.println("email "+email+" "+hexString.toString()+" size"+hexString.toString().length()+" "+confirm+" "+nombre+" "+apellido);
                 ExecutorService queue = Executors.newSingleThreadExecutor();
                 queue.execute(new UsuarioUploader(activity, queue,  0, email, nombre, apellido,hexString.toString(), "ikiam"));
 

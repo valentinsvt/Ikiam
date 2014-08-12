@@ -19,10 +19,8 @@ public class UsuarioUploader  implements Runnable  {
      */
     private ExecutorService queue;
     private int retries;
-    String lineEnd = "\r\n";
-    String twoHyphens = "--";
-    String boundary = "*****";
-    final String IP = "http://10.0.0.3:8080/ikiamServer/";
+    final String IP = "http://192.168.1.117:8080/ikiamServer/";
+    //final String IP = "http://10.0.0.3:8080/ikiamServer/";
     String email;
     String id;
     String nombre;
@@ -43,7 +41,8 @@ public class UsuarioUploader  implements Runnable  {
     public void run() {
 
         String urlstr = IP+"userServer/createUser";
-        System.out.println("run del upload "+urlstr);
+
+        //System.out.println("run del upload "+urlstr);
         try {
 
             DataOutputStream dos = null;
@@ -83,10 +82,10 @@ public class UsuarioUploader  implements Runnable  {
                 System.out.println("response!!  "+response.toString());
                 if(isInteger(response.toString().trim())){
                     this.id=response.toString();
-                    context.setUserId(response.toString());
-                    context.setType("ikiam");
                     context.name=this.nombre+" "+this.apellido;
                     context.email=this.email;
+                    context.setUserId(response.toString());
+                    context.setType("ikiam");
                     System.out.println("nombre "+context.name+"  email "+context.email+"  id "+context.userId);
 
 

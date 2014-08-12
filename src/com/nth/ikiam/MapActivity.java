@@ -109,6 +109,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     public String name;
     public String type;
     public String email;
+    public String esCientifico;
     public String errorMessage;
     List<FieldListener> listeners = new ArrayList<FieldListener>();
     public void setUserId(String id) {
@@ -139,7 +140,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
                 @Override
                 public void run() {
-                    Toast.makeText(a, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(a, msg, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -159,6 +160,8 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         userId=settings.getString("user","-1");
         name = settings.getString("name","-1");
         type = settings.getString("type","-1");
+        email = settings.getString("email","-1");
+        esCientifico = settings.getString("esCientifico","-1");
         //System.out.println("variables name "+userId+"  name "+name);
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
@@ -173,6 +176,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                 editor.putString("user", "-1");
                 editor.putString("login", "-1");
                 editor.putString("name", "-1");
+                editor.putString("email", "-1");
                 editor.putString("type", "-1");
                 editor.commit();
             }
