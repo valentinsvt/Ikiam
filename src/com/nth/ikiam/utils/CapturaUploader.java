@@ -2,6 +2,9 @@ package com.nth.ikiam.utils;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Button;
+import com.nth.ikiam.MapActivity;
+import com.nth.ikiam.R;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.ImageItem;
 
@@ -21,7 +24,7 @@ public class CapturaUploader implements Runnable {
     /**
      * Application context
      */
-    private Context context;
+    private MapActivity context;
 
     /**
      * Queue that handles image uploads
@@ -50,7 +53,7 @@ public class CapturaUploader implements Runnable {
      * @param foto    Foto queue item
      * @param retries Number of retries for failed uploads
      */
-    public CapturaUploader(Context context, ExecutorService queue, Foto foto, int retries) {
+    public CapturaUploader(MapActivity context, ExecutorService queue, Foto foto, int retries) {
         this.context = context;
         this.queue = queue;
         this.foto = foto;
@@ -62,7 +65,8 @@ public class CapturaUploader implements Runnable {
      */
     public void run() {
         System.out.println("run del upload");
-        String urlstr = "http://192.168.1.129:8080/ikiamServer/nthServer/uploadData";
+//        String urlstr = "http://192.168.1.129:8080/ikiamServer/nthServer/uploadData";
+        String urlstr = "http://www.tedein.com.ec:8080/ikiamServer/nthServer/uploadData";
 
         try {
             // new file and and entity
@@ -190,6 +194,9 @@ public class CapturaUploader implements Runnable {
                 foto.getEntry(context).uploaded = 1;
                 foto.save();
                 foto.getEntry(context).save();
+                context.setErrorMessage(context.getString(R.string.uploader_upload_success));
+            } else {
+                System.out.println("NOT COMPLETED: " + serverResponseCode + "   " + serverResponseMessage);
             }
 
             //close the streams //
@@ -199,6 +206,7 @@ public class CapturaUploader implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("fail upload " + e.getMessage());
+            context.setErrorMessage(context.getString(R.string.uploader_upload_error));
             // file upload failed so abort post and close connection
         }
     }
@@ -207,7 +215,7 @@ public class CapturaUploader implements Runnable {
         dos.writeBytes(twoHyphens + boundary + lineEnd);
         dos.writeBytes("Content-Type: text/plain" + lineEnd);
         dos.writeBytes("Content-Disposition: form-data; name=" + paramName + lineEnd);
-        if (paramName != "fecha") {
+        if (!paramName.equals("fecha")) {
             value = URLEncoder.encode(value, "utf-8");
         }
         dos.writeBytes(lineEnd + value + lineEnd);

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
 
@@ -17,10 +18,10 @@ import java.util.ArrayList;
  */
 public class CapturaColorSpinnerAdapter extends BaseAdapter {
 
-    Context c;
+    MapActivity c;
     ArrayList<Color> colores;
 
-    public CapturaColorSpinnerAdapter(Context context, ArrayList<Color> colores) {
+    public CapturaColorSpinnerAdapter(MapActivity context, ArrayList<Color> colores) {
         super();
         this.c = context;
         this.colores = colores;

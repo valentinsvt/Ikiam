@@ -111,6 +111,9 @@
     <string name="settings_chk_achevements">Contabilizar logros</string>
     <string name="settings_reset_achievements">Reiniciar contadores de logros</string>
 
+    <string name="uploader_upload_error">Ha ocurrido un error, por favor intente más tarde</string>
+    <string name="uploader_upload_success">Proceso exitoso</string>
+
     <string name="encyclopedia_entries_dialog_title">Foto(s)</string>
     <string name="app_id">298464543671961</string>
     <string name="login_email">Email</string>

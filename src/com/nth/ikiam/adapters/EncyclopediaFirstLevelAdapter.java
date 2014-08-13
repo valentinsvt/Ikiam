@@ -29,14 +29,12 @@ import java.util.List;
  */
 public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
 
-    Context context;
     MapActivity activity;
     EncyclopediaFragment fragment;
 
     List<Familia> familias;
 
-    public EncyclopediaFirstLevelAdapter(Context context, MapActivity activity, EncyclopediaFragment fragment, List<Familia> familias) {
-        this.context = context;
+    public EncyclopediaFirstLevelAdapter(MapActivity activity, EncyclopediaFragment fragment, List<Familia> familias) {
         this.familias = familias;
         this.activity = activity;
         this.fragment = fragment;
@@ -59,9 +57,9 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 //        System.out.println("pos: " + groupPosition + " familia: " + getFamilia(groupPosition).nombre);
-        EncyclopediaSecondLevelListView secondLevelexplv = new EncyclopediaSecondLevelListView(context);
-        final List<Genero> generos = Genero.findAllByFamilia(context, getFamilia(groupPosition));
-        secondLevelexplv.setAdapter(new EncyclopediaSecondLevelAdapter(context, childPosition, generos));
+        EncyclopediaSecondLevelListView secondLevelexplv = new EncyclopediaSecondLevelListView(activity);
+        final List<Genero> generos = Genero.findAllByFamilia(activity, getFamilia(groupPosition));
+        secondLevelexplv.setAdapter(new EncyclopediaSecondLevelAdapter(activity, childPosition, generos));
         secondLevelexplv.setGroupIndicator(null);
         final int gp = childPosition;
 
@@ -69,7 +67,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 //                Toast.makeText(context, "click 2", Toast.LENGTH_LONG).show();
-                List<Especie> especies = Especie.findAllByGenero(context, generos.get(gp));
+                List<Especie> especies = Especie.findAllByGenero(activity, generos.get(gp));
                 Especie selected = especies.get(childPosition);
 
                 ListFragment fragment = new EncyclopediaEntriesFragment();
@@ -84,7 +82,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
                 FragmentManager fragmentManager = activity.getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-                Toast.makeText(context, selected.nombreComun, Toast.LENGTH_LONG).show();
+//                Toast.makeText(activity, selected.nombreComun, Toast.LENGTH_LONG).show();
 //                try {
 //                    fragmentManager.beginTransaction().add(fragment, "encyclopedia").
 //                            replace(R.id.content_frame, fragment).commit();
@@ -112,7 +110,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         Familia familia = familias.get(groupPosition);
-        return Genero.countByFamilia(context, familia);
+        return Genero.countByFamilia(activity, familia);
     }
 
     @Override
@@ -142,7 +140,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
 //        return tv;
         String label = getFamilia(groupPosition).nombre;
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater infalInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.encyclopedia_nivel_1, null);
         }
         TextView item = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_1_lbl);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import com.nth.ikiam.CapturaFragment;
+import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.adapters.CapturaNombreComunArrayAdapter;
 import com.nth.ikiam.adapters.CapturaNombreFamiliaArrayAdapter;
@@ -20,10 +21,10 @@ import java.util.List;
 public class CapturaNombreFamiliaAutocompleteTextChangedListener implements TextWatcher {
 
     public static final String TAG = "CapturaNombreFamiliaAutocompleteTextChangedListener.java";
-    Context context;
+    MapActivity context;
     CapturaFragment fragment;
 
-    public CapturaNombreFamiliaAutocompleteTextChangedListener(Context context, CapturaFragment fragment) {
+    public CapturaNombreFamiliaAutocompleteTextChangedListener(MapActivity context, CapturaFragment fragment) {
         this.context = context;
         this.fragment = fragment;
     }

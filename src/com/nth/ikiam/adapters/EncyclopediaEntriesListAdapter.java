@@ -34,6 +34,7 @@ public class EncyclopediaEntriesListAdapter extends ArrayAdapter<Entry> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.encylopedia_entries_row, parent, false);
+//        System.out.println(rowView);
 
 //        TextView textViewNombre = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
         TextView textViewComentarios = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_comentarios);

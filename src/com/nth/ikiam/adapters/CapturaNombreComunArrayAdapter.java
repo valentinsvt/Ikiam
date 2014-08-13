@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class CapturaNombreComunArrayAdapter extends ArrayAdapter<Especie> {
 
-    Context context;
+    MapActivity context;
     List<Especie> especies;
     int layoutResourceId;
 
-    public CapturaNombreComunArrayAdapter(Context context, int layoutResourceId, List<Especie> especies) {
+    public CapturaNombreComunArrayAdapter(MapActivity context, int layoutResourceId, List<Especie> especies) {
         super(context, layoutResourceId, especies);
 
         this.layoutResourceId = layoutResourceId;

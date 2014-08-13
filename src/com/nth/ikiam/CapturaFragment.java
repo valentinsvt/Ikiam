@@ -20,10 +20,7 @@ import android.widget.*;
 import com.nth.ikiam.adapters.*;
 import com.nth.ikiam.capturaAutocomplete.CustomAutoCompleteView;
 import com.nth.ikiam.db.*;
-import com.nth.ikiam.listeners.CapturaNombreComunAutocompleteTextChangedListener;
-import com.nth.ikiam.listeners.CapturaNombreEspecieAutocompleteTextChangedListener;
-import com.nth.ikiam.listeners.CapturaNombreFamiliaAutocompleteTextChangedListener;
-import com.nth.ikiam.listeners.CapturaNombreGeneroAutocompleteTextChangedListener;
+import com.nth.ikiam.listeners.*;
 import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
 import com.nth.ikiam.utils.Utils;
@@ -55,7 +52,7 @@ import java.util.concurrent.Executors;
  * and
  * edited Mar 20 at 6:18 by Thomas Vervest
  */
-public class CapturaFragment extends Fragment implements Button.OnClickListener {
+public class CapturaFragment extends Fragment implements Button.OnClickListener, FieldListener {
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
@@ -97,14 +94,14 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
 
     boolean hayFoto = false;
 
-    Context context;
+    MapActivity context;
     private String pathFolder;
     private Bitmap bitmap;
     MapActivity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = getActivity().getApplicationContext();
+        context = (MapActivity) getActivity();
 //        pathFolder = getArguments().getString("pathFolder");
 
         pathFolder = Utils.getFolder(context);
@@ -149,10 +146,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             if (hayFoto) {
                 Color color1 = (Color) spinnerColor1.getSelectedItem();
                 Color color2 = (Color) spinnerColor2.getSelectedItem();
-//                String nombreFamilia = textoFamilia.getText().toString().trim();
-//                String nombreGenero = textoGenero.getText().toString().trim();
-//                String nombreEspecie = textoEspecie.getText().toString().trim();
-//                String nombreComun = textoNombreComun.getText().toString().trim();
                 String nombreComun = autocompleteNombreComun.getText().toString().trim();
                 String nombreFamilia = autocompleteFamilia.getText().toString().trim();
                 String nombreGenero = autocompleteGenero.getText().toString().trim();
@@ -242,15 +235,18 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 foto.setPath(pathFolder + "/" + fotoPath);
                 foto.setUploaded(0);
                 foto.save();
-                String msg = "Foto guardada";
+//                String msg = "Foto guardada";
                 //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                 if (v.getId() == botones[3].getId()) {
                     // aqui hace upload al servidor.....
                     ExecutorService queue = Executors.newSingleThreadExecutor();
-                    queue.execute(new CapturaUploader(getActivity(), queue, foto, 0));
-                    msg += " y subida ";
+                    queue.execute(new CapturaUploader(context, queue, foto, 0));
+
+//                    msg += " y subida ";
+                } else {
+                    alerta(getString(R.string.uploader_upload_success));
                 }
-                alerta(msg + " exitosamente");
+//                alerta(msg + " exitosamente");
                 resetForm();
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
@@ -342,10 +338,10 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         ArrayList<Color> colores2 = Color.list(context);
 
         spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);
-        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores1));
+        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(context, colores1));
 
         spinnerColor2 = (Spinner) view.findViewById(R.id.captura_color2_spinner);
-        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(getActivity(), colores2));
+        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(context, colores2));
     }
 
     private void initAutocompletes(View view) {
@@ -504,8 +500,9 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
                 hayFoto = true;
                 updateStatus(null, null);
                 MapActivity activity = (MapActivity) getActivity();
-                bitmap = getBitmapFromCameraData(data, activity);
-                selectedImage.setImageBitmap(bitmap);
+                Bitmap thumb = getBitmapFromCameraData(data, activity, true);
+                selectedImage.setImageBitmap(thumb);
+                bitmap = getBitmapFromCameraData(data, activity, false);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = context.getContentResolver().query(data.getData(), filePathColumn, null, null, null);
@@ -536,8 +533,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
      * @param context : Context
      * @return : Bitmap
      */
-    public static Bitmap getBitmapFromCameraData(Intent data, Context context) {
-
+    public static Bitmap getBitmapFromCameraData(Intent data, Context context, boolean resize) {
         Uri selectedImage = data.getData();
 
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -545,16 +541,23 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
-        Bitmap bitmap = decodeFile(picturePath);
+        Bitmap bitmap;
         try {
             ExifInterface exif = new ExifInterface(picturePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            bitmap = rotateBitmap(bitmap, orientation);
+            if (resize) {
+                bitmap = decodeFile(picturePath);
+                bitmap = rotateBitmap(bitmap, orientation);
+
+                cursor.close();
+            } else {
+                bitmap = BitmapFactory.decodeFile(picturePath);
+                bitmap = rotateBitmap(bitmap, orientation);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             bitmap = BitmapFactory.decodeFile(picturePath);
         }
-        cursor.close();
         return bitmap;
     }
 
@@ -654,5 +657,16 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener 
             return null;
         }
 
+    }
+
+    @Override
+    public void fieldValueChanged(String fieldName, String newValue) {
+        if (fieldName.equals("errorMessage")) {
+            if (!newValue.equals("")) {
+                String msg = newValue.toString();
+                context.showToast(msg);
+                context.errorMessage = "";
+            }
+        }
     }
 }

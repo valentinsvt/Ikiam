@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.nth.ikiam.db.Foto;
+import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.Utils;
 
@@ -18,27 +19,42 @@ import java.util.concurrent.Executors;
 /**
  * Created by DELL on 23/07/2014.
  */
-public class SettingsFragment extends Fragment implements Button.OnClickListener {
+public class SettingsFragment extends Fragment implements Button.OnClickListener, FieldListener {
 
     Button btnUpload;
     Button btnDownload;
-    Context context;
-
-    public final static String EXTRA_MESSAGE = "com.nth.ikiam.MESSAGE";
+    MapActivity context;
 
     public SettingsFragment() {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = getActivity().getApplicationContext();
-        View view = inflater.inflate(R.layout.settings_layout, container, false);
-        btnUpload = (Button) view.findViewById(R.id.settings_btn_upload);
-        btnDownload = (Button) view.findViewById(R.id.settings_btn_download);
+    public void updateUploadButton() {
+        if (context != null) {
+            context.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    int cantFotos = Foto.countNotUploaded(context);
+                    String toUpload = getString(R.string.settings_btn_upload, cantFotos);
+                    btnUpload.setText(toUpload);
+                }
+            });
+        }
+    }
+
+    private void updateUploadBtn() {
         int cantFotos = Foto.countNotUploaded(context);
         String toUpload = getString(R.string.settings_btn_upload, cantFotos);
         btnUpload.setText(toUpload);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        context = (MapActivity) getActivity();
+        View view = inflater.inflate(R.layout.settings_layout, container, false);
+        btnUpload = (Button) view.findViewById(R.id.settings_btn_upload);
+        btnDownload = (Button) view.findViewById(R.id.settings_btn_download);
+        updateUploadBtn();
         btnUpload.setOnClickListener(this);
         btnDownload.setOnClickListener(this);
 
@@ -56,6 +72,18 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
             }
         } else if (view.getId() == btnDownload.getId()) { // download
 
+        }
+    }
+
+    @Override
+    public void fieldValueChanged(String fieldName, String newValue) {
+        if (fieldName.equals("errorMessage")) {
+            if (!newValue.equals("")) {
+                String msg = newValue.toString();
+                context.showToast(msg);
+                context.errorMessage = "";
+                updateUploadButton();
+            }
         }
     }
 }

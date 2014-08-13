@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
+import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Familia;
@@ -23,9 +24,9 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 
     List<Genero> generos;
 
-    Context context;
+    MapActivity context;
 
-    public EncyclopediaSecondLevelAdapter(Context context, int position, List<Genero> generos) {
+    public EncyclopediaSecondLevelAdapter(MapActivity context, int position, List<Genero> generos) {
         this.context = context;
         this.position = position;
         this.generos = generos;

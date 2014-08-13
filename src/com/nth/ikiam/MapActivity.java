@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MapActivity extends Activity  implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks,GooglePlayServicesClient.OnConnectionFailedListener{
+public class MapActivity extends Activity implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
     /*DRAWER*/
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -65,16 +65,16 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
     /*Interfaz*/
     private Button[] botones;
-    boolean continente=true;
+    boolean continente = true;
     Activity activity;
     /*Mapa*/
     private static GoogleMap map;
     private Polyline polyLine;
     private PolylineOptions rectOptions = new PolylineOptions().color(Color.RED);
-    private static LatLng location ;
+    private static LatLng location;
     LocationClient locationClient;
     Marker lastPosition;
-    HashMap<Marker,Foto> data;
+    HashMap<Marker, Foto> data;
 
     /*Google services*/
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -99,7 +99,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     List<Foto> fotos;
     /*Fin imagenes*/
 
-    String imagePathUpload="";
+    String imagePathUpload = "";
     AlertDialog dialog;
     View myView;
     public int screenHeight;
@@ -112,30 +112,36 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     public String esCientifico;
     public String errorMessage;
     List<FieldListener> listeners = new ArrayList<FieldListener>();
+
     public void setUserId(String id) {
         fireEvent("userId", id);
         this.userId = id;
     }
+
     public void setType(String type) {
         fireEvent("type", type);
         this.type = type;
     }
+
     public void setErrorMessage(String msg) {
+        System.out.println("::: SET ERROR MESSAGE::: " + msg);
         fireEvent("errorMessage", msg);
         this.errorMessage = msg;
     }
+
     public void addListener(FieldListener l) {
-        if(l != null) listeners.add(l);
+        if (l != null) listeners.add(l);
     }
 
     public void fireEvent(String fieldName, String newValue) {
-        for(FieldListener l : listeners) {
+        for (FieldListener l : listeners) {
             l.fieldValueChanged(fieldName, newValue);
         }
     }
-    public void showToast(final String msg){
+
+    public void showToast(final String msg) {
         final Activity a = this;
-        if (a != null ) {
+        if (a != null) {
             a.runOnUiThread(new Runnable() {
 
                 @Override
@@ -145,11 +151,13 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             });
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -157,11 +165,11 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
         /*preferencias*/
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        userId=settings.getString("user","-1");
-        name = settings.getString("name","-1");
-        type = settings.getString("type","-1");
-        email = settings.getString("email","-1");
-        esCientifico = settings.getString("esCientifico","-1");
+        userId = settings.getString("user", "-1");
+        name = settings.getString("name", "-1");
+        type = settings.getString("type", "-1");
+        email = settings.getString("email", "-1");
+        esCientifico = settings.getString("esCientifico", "-1");
         //System.out.println("variables name "+userId+"  name "+name);
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
@@ -170,9 +178,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened()) {
 
-        }else{
+        } else {
             SharedPreferences.Editor editor = settings.edit();
-            if(!settings.getString("user","-1").equals("-1") && !settings.getString("type","-1").equals("ikiam")) {
+            if (!settings.getString("user", "-1").equals("-1") && !settings.getString("type", "-1").equals("ikiam")) {
                 editor.putString("user", "-1");
                 editor.putString("login", "-1");
                 editor.putString("name", "-1");
@@ -257,7 +265,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     }
 
     private void restoreMe(Bundle state) {
-        if (state!=null) {
+        if (state != null) {
                 /*Implementar el restor*/
         }
 
@@ -284,8 +292,8 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        if(ruta!=null)
-            savedInstanceState.putInt("ruta", (int)ruta.id);
+        if (ruta != null)
+            savedInstanceState.putInt("ruta", (int) ruta.id);
         savedInstanceState.putInt("restore", 1);
         getFragmentManager().saveFragmentInstanceState(getFragmentManager().findFragmentById(R.id.mapF));
 //        savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
@@ -307,16 +315,16 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
     }
 
     @Override
-    public void onClick(View v){
-        if(v.getId()==botones[0].getId()){
+    public void onClick(View v) {
+        if (v.getId() == botones[0].getId()) {
 
-            if(!continente) {
+            if (!continente) {
                 location = new LatLng(-1.6477220517969353, -78.46435546875);
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
                 map.animateCamera(update);
                 botones[0].setText(R.string.map_galapagos_btn);
                 continente = true;
-            }else{
+            } else {
                 location = new LatLng(-0.4614207935306084, -90.615234375);
                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
                 map.animateCamera(update);
@@ -325,38 +333,37 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             }
         }
 
-        if(v.getId()==botones[1].getId()){
-            if(servicesConnected()){
-                if(!status) {
+        if (v.getId() == botones[1].getId()) {
+            if (servicesConnected()) {
+                if (!status) {
                     map.clear();
-                    ruta= new Ruta(this,"Ruta");
+                    ruta = new Ruta(this, "Ruta");
                     ruta.save();
                     this.startService(new Intent(this, SvtService.class));
                     doBindService();
                     //  sendMessageToService((int)ruta.id);
                     Location mCurrentLocation;
                     mCurrentLocation = locationClient.getLastLocation();
-                    location=new LatLng( mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-                    CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,19);
+                    location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+                    CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 19);
                     map.animateCamera(update);
                     polyLine = map.addPolyline(rectOptions);
                     botones[1].setText("Parar");
-                    camera = new ImageTableObserver(new Handler(),this);
+                    camera = new ImageTableObserver(new Handler(), this);
                     this.getContentResolver().registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, camera);
-                    status=true;
-                }else {
+                    status = true;
+                } else {
                     doUnbindService();
                     this.stopService(new Intent(this, SvtService.class));
                     botones[1].setText("Nueva ruta");
-                    ruta=null;
-                    status=false;
+                    ruta = null;
+                    status = false;
                 }
             }
 
         }
 
     }
-
 
 
     /*Google services*/
@@ -377,6 +384,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             return false;
         }
     }
+
     /*location services*/
     @Override
     public void onConnected(Bundle dataBundle) {
@@ -384,6 +392,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         mCurrentLocation = locationClient.getLastLocation();
         map.getMyLocation();
     }
+
     @Override
     public void onDisconnected() {
         // Display the connection status
@@ -418,10 +427,9 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         }
         LatLngBounds bounds = builder.build();
         int padding = (100);
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,padding);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         map.animateCamera(cu);
     }
-
 
 
     /*CLASES PARA COMUNICARSE CON SvtService*/
@@ -431,11 +439,12 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             doBindService();
         }
     }
+
     private void sendMessageToService(int intvaluetosend) {
         if (mIsBound) {
             if (mService != null) {
                 try {
-                    while (!attached){
+                    while (!attached) {
 
                     }
                     Message msg = Message.obtain(null, SvtService.MSG_SET_INT_VALUE, intvaluetosend, 0);
@@ -446,10 +455,12 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             }
         }
     }
+
     void doBindService() {
         this.bindService(new Intent(this, SvtService.class), mConnection, Context.BIND_AUTO_CREATE);
         mIsBound = true;
     }
+
     void doUnbindService() {
         if (mIsBound) {
             // If we have received the service, and hence registered with it, then now is the time to unregister.
@@ -468,7 +479,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         }
     }
 
-    public  void setUpMapIfNeeded() {
+    public void setUpMapIfNeeded() {
         //System.out.println("setUpMap if needed" +map);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapF)).getMap();
         //System.out.println("setUpMap if needed despues" +map);
@@ -479,22 +490,23 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
             // Check if we were successful in obtaining the map.
             if (map != null)
                 setUpMap();
-        }else{
+        } else {
             setUpMap();
         }
     }
-    private  void setUpMap() {
-        location=new LatLng(-1.6477220517969353, -78.46435546875);
-        CameraUpdate update= CameraUpdateFactory.newLatLngZoom(location,6);
+
+    private void setUpMap() {
+        location = new LatLng(-1.6477220517969353, -78.46435546875);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 6);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(final Marker marker){
-                if(data.get(marker)!=null){
+            public boolean onMarkerClick(final Marker marker) {
+                if (data.get(marker) != null) {
                     marker.showInfoWindow();
                     LayoutInflater inflater = activity.getLayoutInflater();
-                    myView= inflater.inflate(R.layout.dialog, null);
+                    myView = inflater.inflate(R.layout.dialog, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(R.string.map_activity_nuevaFoto);
                     builder.setView(myView);
@@ -525,7 +537,7 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
                     });
                     dialog = builder.create();
-                    ImageView img= (ImageView) myView.findViewById(R.id.image);
+                    ImageView img = (ImageView) myView.findViewById(R.id.image);
 
                     img.setImageBitmap(getFotoDialog(data.get(marker), screenWidth, 300));
                     dialog.show();
@@ -556,43 +568,43 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                     Double longitud = msg.getData().getDouble("logitud");
 //                    System.out.println("Str  Message recibed: " + latitud+"  "+longitud);
                     LatLng latlong = new LatLng(latitud, longitud);
-                    if(lastPosition==null)
+                    if (lastPosition == null)
                         lastPosition = map.addMarker(new MarkerOptions().position(latlong).title("Última posición registrada"));
                     else
                         lastPosition.setPosition(latlong);
                     updatePolyLine(latlong);
-                    if(lastestImageIndex!=0){
-                        System.out.println("Tomo foto "+lastestImageIndex);
+                    if (lastestImageIndex != 0) {
+                        System.out.println("Tomo foto " + lastestImageIndex);
                         imageItem = getLatestItem();
                         getFoto();
-                        if(imagenes.size()>lastSize) {
+                        if (imagenes.size() > lastSize) {
 //                            map.addMarker(new MarkerOptions().position(latlong).title("Sydney").snippet("Population: 4,627,300").icon(BitmapDescriptorFactory.fromBitmap(imagenes.get(lastIndex))));
                             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
                             Foto foto = new Foto(activity);
-                            Coordenada cord=new Coordenada(activity,latitud,longitud);
+                            Coordenada cord = new Coordenada(activity, latitud, longitud);
                             cord.save();
                             foto.setCoordenada(cord);
                             foto.setRuta(ruta);
-                            foto.path=imageItem.imagePath;
-                            foto.uploaded=0;
+                            foto.path = imageItem.imagePath;
+                            foto.uploaded = 0;
                             foto.save();
                             fotos.add(foto);
-                            Bitmap bmp = Bitmap.createBitmap(86,59, conf);
+                            Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
                             Canvas canvas1 = new Canvas(bmp);
                             Paint color = new Paint();
                             color.setTextSize(35);
                             color.setColor(Color.BLACK);//modify canvas
                             canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
-                                    R.drawable.pin3), 0,0, color);
-                            canvas1.drawBitmap(imagenes.get(lastIndex), 3,2, color);
+                                    R.drawable.pin3), 0, 0, color);
+                            canvas1.drawBitmap(imagenes.get(lastIndex), 3, 2, color);
 
                             Marker marker = map.addMarker(new MarkerOptions().position(latlong)
                                     .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                                     .anchor(0.5f, 1).title("Nueva fotografía"));
 
-                            data.put(marker,foto);
+                            data.put(marker, foto);
 
-                            lastSize=imagenes.size();
+                            lastSize = imagenes.size();
                             //queue.execute(new ImageUploader(activity, queue, imageItem, 0));
                         }
                     }
@@ -611,18 +623,18 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                 Message msg = Message.obtain(null, SvtService.MSG_REGISTER_CLIENT);
                 msg.replyTo = mMessenger;
                 mService.send(msg);
-                attached=true;
+                attached = true;
             } catch (RemoteException e) {
                 // In this case the service has crashed before we could even do anything with it
             }
-            if(ruta!=null){
+            if (ruta != null) {
                 try {
                     Message msg = Message.obtain(null, SvtService.MSG_SET_INT_VALUE);
                     msg.replyTo = mMessenger;
-                    msg.arg1=(int)ruta.id;
+                    msg.arg1 = (int) ruta.id;
                     mService.send(msg);
                     //System.out.println("Mando mensaje de ruta");
-                    attached=true;
+                    attached = true;
                 } catch (RemoteException e) {
                     // In this case the service has crashed before we could even do anything with it
                 }
@@ -639,39 +651,40 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
 
     /*IMAGES*/
-    public void setImageIndex(int index){
+    public void setImageIndex(int index) {
         //System.out.println("set image index " + index);
-        if(imagenes==null){
-            imagenes=  new ArrayList<Bitmap>();
+        if (imagenes == null) {
+            imagenes = new ArrayList<Bitmap>();
         }
-        if(index>=lastestImageIndex) {
+        if (index >= lastestImageIndex) {
             this.lastestImageIndex = index;
-        }else {
+        } else {
             /*Borro una foto*/
-            this.lastestImageIndex=0;
+            this.lastestImageIndex = 0;
         }
         //System.out.println("set image index fin "+this.lastestImageIndex);
     }
 
     /*Fotos*/
 
-    public void getFoto(){
-        if(imageItem!=null) {
+    public void getFoto() {
+        if (imageItem != null) {
             // System.out.println("path "+imageItem.imagePath);
             //System.out.println("images " + imagenes);
             Bitmap b = ImageUtils.decodeFile(imageItem.imagePath);
-            System.out.println("width "+b.getWidth()+"  "+b.getHeight());
+            System.out.println("width " + b.getWidth() + "  " + b.getHeight());
             imagenes.add(b);
             lastIndex++;
             lastestImageIndex = 0;
         }
 
     }
-    public Bitmap getFotoDialog(Foto image,int width,int heigth){
-        if(image!=null) {
+
+    public Bitmap getFotoDialog(Foto image, int width, int heigth) {
+        if (image != null) {
             // System.out.println("path "+imageItem.imagePath);
             //System.out.println("images " + image.imagePath+"  "+width+"  "+heigth);
-            Bitmap b = ImageUtils.decodeFile(image.path,width,heigth);
+            Bitmap b = ImageUtils.decodeFile(image.path, width, heigth);
             return b;
 
         }
@@ -679,22 +692,21 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
 
     }
 
-    public ImageItem getLatestItem()
-    {
+    public ImageItem getLatestItem() {
         // set vars
-        if(lastestImageIndex>0){
-            ImageItem item  = null;
-            String columns[] = new String[]{ MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE, MediaStore.Images.Media.MINI_THUMB_MAGIC };
+        if (lastestImageIndex > 0) {
+            ImageItem item = null;
+            String columns[] = new String[]{MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE, MediaStore.Images.Media.MINI_THUMB_MAGIC};
 
-            Uri image     = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, lastestImageIndex);
+            Uri image = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, lastestImageIndex);
             Cursor cursor = this.managedQuery(image, columns, null, null, null);
 
             // check if cursus has rows, if not break and exit loop
             if (cursor.moveToFirst()) {
                 //System.out.println("tiene rows "+cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MINI_THUMB_MAGIC)));
-                item           = new ImageItem();
-                item.prefs     = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
-                item.imageId   = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
+                item = new ImageItem();
+                item.prefs = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
+                item.imageId = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.Media._ID));
                 item.imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
                 item.imageName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DISPLAY_NAME));
                 item.imageType = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE));
@@ -709,7 +721,6 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         return null;
 
     }
-
 
 
     /*DRAWER*/
@@ -769,47 +780,38 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
                         .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                         .hide(fragmentManager.findFragmentById(R.id.content_frame))
                         .commit();
-                RelativeLayout mainLayout=(RelativeLayout)this.findViewById(R.id.rl2);
+                RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
                 mainLayout.setVisibility(View.VISIBLE);
 
-
-                fragment=null;
-
+                fragment = null;
                 break;
             case CAPTURA_POS:
                 fragment = new CapturaFragment();
+                this.addListener((FieldListener) fragment);
                 break;
-            //            case CAMERA_POS:
-//                fragment = new CameraFragment();
-//                break;
-//            case GALLERY_POS:
-//                fragment = new GalleryFragment();
-//                break;
             case ENCYCLOPEDIA_POS:
                 fragment = new EncyclopediaFragment();
                 break;
             case SETTINGS_POS:
                 fragment = new SettingsFragment();
+                this.addListener((FieldListener) fragment);
                 break;
             case LOGIN_POS:
-
                 fragment = new Loginfragment();
-                this.addListener((FieldListener)fragment);
+                this.addListener((FieldListener) fragment);
                 break;
             default:
-                fragment=null;
+                fragment = null;
                 break;
-
-
         }
-        if(fragment!=null){
+        if (fragment != null) {
             // System.out.println("fragment "+fragment);
             Bundle args = new Bundle();
             //args.putString("pathFolder", pathFolder);
             fragment.setArguments(args);
 
             FragmentManager fragmentManager = getFragmentManager();
-            RelativeLayout mainLayout=(RelativeLayout)this.findViewById(R.id.rl2);
+            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
             mainLayout.setVisibility(LinearLayout.GONE);
             fragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
@@ -823,7 +825,6 @@ public class MapActivity extends Activity  implements Button.OnClickListener, Go
         mDrawerList.setItemChecked(position, true);
         setTitle(mOptionsArray[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
-
 
 
     }

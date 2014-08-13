@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Genero;
@@ -17,11 +18,11 @@ import java.util.List;
  */
 public class CapturaNombreGeneroArrayAdapter extends ArrayAdapter<Genero> {
 
-    Context context;
+    MapActivity context;
     List<Genero> generos;
     int layoutResourceId;
 
-    public CapturaNombreGeneroArrayAdapter(Context context, int layoutResourceId, List<Genero> generos) {
+    public CapturaNombreGeneroArrayAdapter(MapActivity context, int layoutResourceId, List<Genero> generos) {
         super(context, layoutResourceId, generos);
 
         this.layoutResourceId = layoutResourceId;

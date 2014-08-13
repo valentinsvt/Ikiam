@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class EncyclopediaFragment extends Fragment {
 
-    Context context;
+    MapActivity context;
     String pathFolder;
 
     ExpandableListView expandableListView;
@@ -33,7 +33,7 @@ public class EncyclopediaFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = getActivity().getApplicationContext();
+        context = (MapActivity) getActivity();
 //        pathFolder = getArguments().getString("pathFolder");
 
         pathFolder = Utils.getFolder(context);
@@ -52,7 +52,7 @@ public class EncyclopediaFragment extends Fragment {
         List<Familia> familias = Familia.list(context);
 
         expandableListView = (ExpandableListView) view.findViewById(R.id.encyclopedia_level_1);
-        expandableListView.setAdapter(new EncyclopediaFirstLevelAdapter(context, (MapActivity) getActivity(), this, familias));
+        expandableListView.setAdapter(new EncyclopediaFirstLevelAdapter(context, this, familias));
 
 //        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 //
