@@ -142,6 +142,7 @@ public class Foto {
     }
 
     public void setCoordenada(Coordenada coordenada) {
+        System.out.println("set coord: " + coordenada.id);
         this.coordenada_id = coordenada.id;
     }
 

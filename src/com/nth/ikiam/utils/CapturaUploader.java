@@ -65,8 +65,8 @@ public class CapturaUploader implements Runnable {
      */
     public void run() {
         System.out.println("run del upload");
-//        String urlstr = "http://192.168.1.129:8080/ikiamServer/nthServer/uploadData";
-        String urlstr = "http://www.tedein.com.ec:8080/ikiamServer/nthServer/uploadData";
+        String urlstr = "http://192.168.1.129:8080/ikiamServer/uploadCaptura/uploadData";
+//        String urlstr = "http://www.tedein.com.ec:8080/ikiamServer/uploadCaptura/uploadData";
 
         try {
             // new file and and entity
@@ -144,7 +144,6 @@ public class CapturaUploader implements Runnable {
 
             addFormPart(dos, "keywords", foto.keywords);
             addFormPart(dos, "archivo", foto.path);
-            addFormPart(dos, "keywords", foto.keywords);
 
             if (coordenada != null) {
                 addFormPart(dos, "lat", "" + coordenada.latitud);

@@ -156,6 +156,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                             keywords += ", ";
                         }
                         keywords += keys[i];
+//                        System.out.println("i=" + i + "   " + keys[i] + "     " + keywords);
                     }
                     i++;
                 }
@@ -205,13 +206,25 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                 }
                 foto.setKeywords(keywords);
                 if (fotoLat != null && fotoLong != null) {
+                    System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
                     Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
+                    coordenada.save();
                     foto.setCoordenada(coordenada);
                 }
+                foto.save();
 
-                File file = new File(pathFolder, fotoPath);
-                fotoPath = file.getName();
-                file = new File(pathFolder, fotoPath);
+                String nuevoNombre;
+                if (genero != null && especie != null) {
+                    nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
+                    nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
+                } else {
+                    nuevoNombre = "na_na_" + foto.id;
+                }
+                nuevoNombre += ".jpg";
+
+//                File file = new File(pathFolder, fotoPath);
+//                fotoPath = file.getName();
+                File file = new File(pathFolder, nuevoNombre);
 ////                if (file.exists()) {
 ////                    file.delete();
 ////                }
@@ -228,7 +241,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                 }
                 //System.out.println("Path folder: " + pathFolder);
                 //System.out.println("Photo path: " + fotoPath);
-                foto.setPath(pathFolder + "/" + fotoPath);
+//                foto.setPath(pathFolder + "/" + fotoPath);
+                foto.setPath(pathFolder + "/" + nuevoNombre);
                 foto.setUploaded(0);
                 foto.save();
 //                String msg = "Foto guardada";
@@ -513,7 +527,11 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                     GeoDegree gd = new GeoDegree(exif);
                     fotoLat = gd.getLatitude();
                     fotoLong = gd.getLongitude();
-                    alerta(getString(R.string.captura_success_tag_gps));
+                    if (fotoLat != null && fotoLong != null) {
+                        alerta(getString(R.string.captura_success_tag_gps));
+                    } else {
+                        alerta(getString(R.string.captura_error_tag_gps));
+                    }
                 } catch (Exception e) {
                     alerta(getString(R.string.captura_error_tag_gps));
                     fotoLat = null;
