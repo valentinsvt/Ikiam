@@ -1,32 +1,27 @@
 package com.nth.ikiam;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.nth.ikiam.adapters.EncyclopediaEntriesListAdapter;
 import com.nth.ikiam.db.Entry;
-import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Foto;
-import com.nth.ikiam.image.ImageUtils;
 
 import java.util.List;
 
 /**
- * Created by DELL on 03/08/2014.
+ * Created by DELL on 12/08/2014.
  */
-public class EncyclopediaEntriesFragment extends ListFragment {
+public class GaleriaFragment extends ListFragment {
 
     MapActivity activity;
     List<Entry> entryList;
@@ -40,8 +35,7 @@ public class EncyclopediaEntriesFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         activity = (MapActivity) getActivity();
 
-        long especieId = getArguments().getLong("especie");
-        entryList = Entry.findAllByEspecie(activity, especieId);
+        entryList = Entry.findAllByEspecieIsNull(activity);
 
         EncyclopediaEntriesListAdapter adapter = new EncyclopediaEntriesListAdapter(getActivity(), entryList);
         setListAdapter(adapter);
@@ -102,6 +96,4 @@ public class EncyclopediaEntriesFragment extends ListFragment {
         img.setImageBitmap(activity.getFotoDialog(fotos.get(fotoPos), activity.screenWidth, 300));
         dialogTitle = R.string.encyclopedia_entries_dialog_title + " (" + (fotoPos + 1) + "/" + fotos.size() + ")";
     }
-
-
 }

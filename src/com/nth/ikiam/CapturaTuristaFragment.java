@@ -12,7 +12,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import com.nth.ikiam.listeners.*;
 import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
 import com.nth.ikiam.utils.Utils;
-//import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+//import com.nth.ikiam.utils.GeoDegree;
 
 /**
  * Created by luz on 25/07/14.
@@ -52,31 +52,15 @@ import java.util.concurrent.Executors;
  * and
  * edited Mar 20 at 6:18 by Thomas Vervest
  */
-public class CapturaFragment extends Fragment implements Button.OnClickListener, FieldListener {
+public class CapturaTuristaFragment extends Fragment implements Button.OnClickListener, FieldListener {
 
     private ImageButton[] botones;
-    private ToggleButton[] toggles;
-    String[] keys;
-    String[] statusString;
 
     private ImageView selectedImage;
 
     private TextView lblInfo;
 
     private EditText textoComentarios;
-
-    public CustomAutoCompleteView autocompleteNombreComun;
-    public CustomAutoCompleteView autocompleteFamilia;
-    public CustomAutoCompleteView autocompleteGenero;
-    public CustomAutoCompleteView autocompleteEspecie;
-
-    private Spinner spinnerColor1;
-    private Spinner spinnerColor2;
-
-    public CapturaNombreComunArrayAdapter nombreComunArrayAdapter;
-    public CapturaNombreFamiliaArrayAdapter nombreFamiliaArrayAdapter;
-    public CapturaNombreGeneroArrayAdapter nombreGeneroArrayAdapter;
-    public CapturaNombreEspecieArrayAdapter nombreEspecieArrayAdapter;
 
     private static final int GALLERY_REQUEST = 999;
     private static final int CAMERA_REQUEST = 1337;
@@ -102,9 +86,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
 
         pathFolder = Utils.getFolder(context);
 
-        View view = inflater.inflate(R.layout.captura_layout, container, false);
+        View view = inflater.inflate(R.layout.captura_turista_layout, container, false);
 
-        checkColores();
         activity = (MapActivity) getActivity();
         screenHeight = activity.screenHeight;
         screenWidth = activity.screenWidth;
@@ -112,10 +95,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
         textoComentarios = (EditText) view.findViewById(R.id.captura_comentarios_txt);
 
-        initSpinners(view);
-        initAutocompletes(view);
         initButtons(view);
-        initToggles(view);
         return view;
     }
 
@@ -125,7 +105,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
         Utils.hideSoftKeyboard(this.getActivity());
 
         if (v.getId() == botones[0].getId()) { // galeria
-            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 startActivityForResult(intent, GALLERY_REQUEST);
             } else {
@@ -140,71 +120,17 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
             }
         } else if (v.getId() == botones[2].getId() || v.getId() == botones[3].getId()) { // save || upload
             if (hayFoto) {
-                Color color1 = (Color) spinnerColor1.getSelectedItem();
-                Color color2 = (Color) spinnerColor2.getSelectedItem();
-                String nombreComun = autocompleteNombreComun.getText().toString().trim();
-                String nombreFamilia = autocompleteFamilia.getText().toString().trim();
-                String nombreGenero = autocompleteGenero.getText().toString().trim();
-                String nombreEspecie = autocompleteEspecie.getText().toString().trim();
-
                 String comentarios = textoComentarios.getText().toString().trim();
-                String keywords = "";
-                int i = 0;
-                for (ToggleButton toggle : toggles) {
-                    if (toggle.isChecked()) {
-                        if (!keywords.equals("")) {
-                            keywords += ", ";
-                        }
-                        keywords += keys[i];
-//                        System.out.println("i=" + i + "   " + keys[i] + "     " + keywords);
-                    }
-                    i++;
-                }
-                Familia familia = null;
-                Genero genero = null;
-                Especie especie = null;
-                Entry entry = null;
-                if (!nombreFamilia.equals("")) {
-                    familia = Familia.getByNombreOrCreate(context, nombreFamilia);
-                }
-                if (!nombreGenero.equals("")) {
-                    genero = Genero.getByNombreOrCreate(context, nombreGenero);
-                    if (familia != null) {
-                        genero.setFamilia(familia);
-                        genero.save();
-                    }
-                }
-                if (!nombreEspecie.equals("")) {
-                    especie = Especie.getByNombreOrCreate(context, nombreEspecie);
-                    if (genero != null) {
-                        especie.setGenero(genero);
-                    }
-                    if (color1 != null) {
-                        especie.setColor1(color1);
-                    }
-                    if (color2 != null && !color2.nombre.equals("none")) {
-                        especie.setColor2(color2);
-                    }
-                    if (!nombreComun.equals("")) {
-                        especie.setNombreComun(nombreComun);
-                    }
-                    especie.save();
 
-                    entry = new Entry(context);
-                    entry.setEspecie(especie);
-                    entry.setComentarios(comentarios);
-                    entry.setUploaded(0);
-                    entry.save();
-                }
+                Entry entry = new Entry(context);
+                entry.setComentarios(comentarios);
+                entry.setUploaded(0);
+                entry.save();
 
                 Foto foto = new Foto(context);
-                if (especie != null) {
-                    foto.setEspecie(especie);
-                }
                 if (entry != null) {
                     foto.setEntry(entry);
                 }
-                foto.setKeywords(keywords);
                 if (fotoLat != null && fotoLong != null) {
                     System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
                     Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
@@ -213,14 +139,7 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
                 }
                 foto.save();
 
-                String nuevoNombre;
-                if (genero != null && especie != null) {
-                    nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
-                    nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
-                } else {
-                    nuevoNombre = "na_na_" + foto.id;
-                }
-                nuevoNombre += ".jpg";
+                String nuevoNombre = "photo_" + foto.id + ".jpg";
 
 //                File file = new File(pathFolder, fotoPath);
 //                fotoPath = file.getName();
@@ -248,10 +167,16 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
 //                String msg = "Foto guardada";
                 //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                 if (v.getId() == botones[3].getId()) {
-                    // aqui hace upload al servidor.....
-                    ExecutorService queue = Executors.newSingleThreadExecutor();
-                    queue.execute(new CapturaUploader(context, queue, foto, 0));
-
+                    String id = context.userId; //id (faceboook - fb id, ikiam db.id
+                    if (id != null && !id.equals("-1")) {
+                        // aqui hace upload al servidor.....
+                        ExecutorService queue = Executors.newSingleThreadExecutor();
+                        queue.execute(new CapturaUploader(context, queue, foto, 0));
+                    } else {
+                        //redirect a login
+                        System.out.println("Login first!!!");
+                        context.selectItem(context.LOGIN_POS);
+                    }
 //                    msg += " y subida ";
                 } else {
                     alerta(getString(R.string.uploader_upload_success));
@@ -262,47 +187,9 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
-        } else {
-            for (ToggleButton toggle : toggles) {
-                updateStatus(v, toggle);
-            }
         }
     }
 
-    private void checkColores() {
-//        Color.empty(context);
-//        Familia.empty(context);
-//        Genero.empty(context);
-//        Especie.empty(context);
-//        Entry.empty(context);
-//        Foto.empty(context);
-//        Coordenada.empty(context);
-
-        if (Color.count(context) == 0) {
-            Color c0 = new Color(context, "none");
-            c0.save();
-            Color c1 = new Color(context, "azul");
-            c1.save();
-            Color c2 = new Color(context, "cafe");
-            c2.save();
-            Color c3 = new Color(context, "verde");
-            c3.save();
-            Color c4 = new Color(context, "naranja");
-            c4.save();
-            Color c5 = new Color(context, "rosa");
-            c5.save();
-            Color c6 = new Color(context, "violeta");
-            c6.save();
-            Color c7 = new Color(context, "rojo");
-            c7.save();
-            Color c8 = new Color(context, "blanco");
-            c8.save();
-            Color c9 = new Color(context, "amarillo");
-            c9.save();
-            Color c10 = new Color(context, "negro");
-            c10.save();
-        }
-    }
 
     private void initButtons(View view) {
         botones = new ImageButton[4];
@@ -315,187 +202,10 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
         }
     }
 
-    private void initToggles(View view) {
-        toggles = new ToggleButton[6];
-        toggles[0] = (ToggleButton) view.findViewById(R.id.captura_arbol_toggle);
-        toggles[1] = (ToggleButton) view.findViewById(R.id.captura_corteza_toggle);
-        toggles[2] = (ToggleButton) view.findViewById(R.id.captura_hoja_toggle);
-        toggles[3] = (ToggleButton) view.findViewById(R.id.captura_flor_toggle);
-        toggles[4] = (ToggleButton) view.findViewById(R.id.captura_fruta_toggle);
-        toggles[5] = (ToggleButton) view.findViewById(R.id.captura_animal_toggle);
-
-        keys = new String[6];
-        keys[0] = "arbol";
-        keys[1] = "corteza";
-        keys[2] = "hoja";
-        keys[3] = "flor";
-        keys[4] = "fruta";
-        keys[5] = "animal";
-
-        statusString = new String[6];
-        statusString[0] = getString(R.string.captura_tiene_arbol);
-        statusString[1] = getString(R.string.captura_tiene_corteza);
-        statusString[2] = getString(R.string.captura_tiene_hoja);
-        statusString[3] = getString(R.string.captura_tiene_flor);
-        statusString[4] = getString(R.string.captura_tiene_fruta);
-        statusString[5] = getString(R.string.captura_es_animal);
-
-        for (ToggleButton toggle : toggles) {
-            toggle.setOnClickListener(this);
-        }
-    }
-
-    private void initSpinners(View view) {
-        ArrayList<Color> colores1 = Color.listColores(context);
-        ArrayList<Color> colores2 = Color.list(context);
-
-        spinnerColor1 = (Spinner) view.findViewById(R.id.captura_color1_spinner);
-        spinnerColor1.setAdapter(new CapturaColorSpinnerAdapter(context, colores1));
-
-        spinnerColor2 = (Spinner) view.findViewById(R.id.captura_color2_spinner);
-        spinnerColor2.setAdapter(new CapturaColorSpinnerAdapter(context, colores2));
-    }
-
-    private void initAutocompletes(View view) {
-
-        final List<Familia> familiaList = Familia.list(context);
-        final List<Genero> generoList = Genero.list(context);
-        final List<Especie> especieList = Especie.list(context);
-
-        autocompleteNombreComun = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_comun);
-        autocompleteNombreComun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
-                RelativeLayout rl = (RelativeLayout) arg1;
-                TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteNombreComun.setText(tv.getText().toString());
-
-                String selection = tv.getText().toString();
-                Especie selected = null;
-
-                for (Especie especie : especieList) {
-                    if (especie.nombreComun.equals(selection)) {
-                        selected = especie;
-                        break;
-                    }
-                }
-                if (selected != null) {
-                    autocompleteFamilia.setText(selected.getGenero(context).getFamilia(context).nombre);
-                    autocompleteGenero.setText(selected.getGenero(context).nombre);
-                    autocompleteEspecie.setText(selected.nombre);
-                }
-            }
-        });
-        // add the listener so it will tries to suggest while the user types
-        autocompleteNombreComun.addTextChangedListener(new CapturaNombreComunAutocompleteTextChangedListener(context, this));
-        // ObjectItemData has no value at first
-        // set the custom ArrayAdapter
-        nombreComunArrayAdapter = new CapturaNombreComunArrayAdapter(context, R.layout.captura_autocomplete_list_item, especieList);
-        autocompleteNombreComun.setAdapter(nombreComunArrayAdapter);
-
-        autocompleteFamilia = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_familia);
-        autocompleteFamilia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
-                RelativeLayout rl = (RelativeLayout) arg1;
-                TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteFamilia.setText(tv.getText().toString());
-            }
-        });
-        // add the listener so it will tries to suggest while the user types
-        autocompleteFamilia.addTextChangedListener(new CapturaNombreFamiliaAutocompleteTextChangedListener(context, this));
-        // ObjectItemData has no value at first
-        // set the custom ArrayAdapter
-        nombreFamiliaArrayAdapter = new CapturaNombreFamiliaArrayAdapter(context, R.layout.captura_autocomplete_list_item, familiaList);
-        autocompleteFamilia.setAdapter(nombreFamiliaArrayAdapter);
-
-        autocompleteGenero = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_genero);
-        autocompleteGenero.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
-                RelativeLayout rl = (RelativeLayout) arg1;
-                TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteGenero.setText(tv.getText().toString());
-            }
-        });
-        // add the listener so it will tries to suggest while the user types
-        autocompleteGenero.addTextChangedListener(new CapturaNombreGeneroAutocompleteTextChangedListener(context, this));
-        // ObjectItemData has no value at first
-        // set the custom ArrayAdapter
-        nombreGeneroArrayAdapter = new CapturaNombreGeneroArrayAdapter(context, R.layout.captura_autocomplete_list_item, generoList);
-        autocompleteGenero.setAdapter(nombreGeneroArrayAdapter);
-
-        autocompleteEspecie = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_especie);
-        autocompleteEspecie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
-                RelativeLayout rl = (RelativeLayout) arg1;
-                TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteEspecie.setText(tv.getText().toString());
-            }
-        });
-        // add the listener so it will tries to suggest while the user types
-        autocompleteEspecie.addTextChangedListener(new CapturaNombreEspecieAutocompleteTextChangedListener(context, this));
-        // ObjectItemData has no value at first
-        // set the custom ArrayAdapter
-        nombreEspecieArrayAdapter = new CapturaNombreEspecieArrayAdapter(context, R.layout.captura_autocomplete_list_item, especieList);
-        autocompleteEspecie.setAdapter(nombreEspecieArrayAdapter);
-    }
-
     private void resetForm() {
         selectedImage.setImageDrawable(null);
-        for (ToggleButton toggle : toggles) {
-            toggle.setChecked(false);
-        }
-        spinnerColor1.setSelection(0);
-        spinnerColor2.setSelection(0);
-
-        autocompleteNombreComun.setText("");
-        autocompleteFamilia.setText("");
-        autocompleteGenero.setText("");
-        autocompleteEspecie.setText("");
-
         textoComentarios.setText("");
         hayFoto = false;
-    }
-
-    private void updateStatus(View view, ToggleButton toggleButton) {
-        if (hayFoto) {
-
-            if (view != null) {
-                if (view.getId() == toggles[5].getId()) { // si es animal se desactivan todos los otros
-                    for (int i = 0; i < 4; i++) {
-                        toggles[i].setChecked(false);
-                    }
-                } else {
-                    //desactiva el de animal
-                    toggles[5].setChecked(false);
-                }
-            }
-
-            String info = "";
-
-            int i = 0;
-            for (ToggleButton toggle : toggles) {
-                if (toggle.isChecked()) {
-                    if (!info.equals("")) {
-                        info += ", ";
-                    }
-                    info += statusString[i];
-                }
-                i++;
-            }
-//            lblInfo.setText(info);
-        } else {
-            if (toggleButton != null) {
-                toggleButton.setChecked(false);
-            }
-            alerta(getString(R.string.captura_error_seleccion));
-        }
     }
 
     private void alerta(String string) {
@@ -510,7 +220,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST || requestCode == CAMERA_REQUEST) {
                 hayFoto = true;
-                updateStatus(null, null);
                 MapActivity activity = (MapActivity) getActivity();
                 Bitmap thumb = getBitmapFromCameraData(data, activity, true);
                 selectedImage.setImageBitmap(thumb);

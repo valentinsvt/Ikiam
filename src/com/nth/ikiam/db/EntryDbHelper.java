@@ -130,6 +130,30 @@ public class EntryDbHelper extends DbHelper {
         return entries;
     }
 
+    public List<Entry> getAllEntriesByEspecieIsNull() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Entry> entries = new ArrayList<Entry>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_ENTRY +
+                " WHERE " + KEY_ESPECIE_ID + " is null ";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Entry e = setDatos(c);
+
+                // adding to entry list
+                entries.add(e);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return entries;
+    }
+
     public List<Entry> getAllEntriesByEspecie(Especie especie) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Entry> entries = new ArrayList<Entry>();

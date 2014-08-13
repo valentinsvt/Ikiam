@@ -193,7 +193,7 @@ public class MainActivity extends Activity {
                 startActivity(intent);
                 break;
             case CAPTURA_POS:
-                fragment = new CapturaFragment();
+                fragment = new CapturaCientificoFragment();
                 break;
             //            case CAMERA_POS:
 //                fragment = new CameraFragment();

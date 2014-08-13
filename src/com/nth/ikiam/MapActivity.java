@@ -57,11 +57,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mOptionsArray;
-    private final int MAP_POS = 0;
-    private final int CAPTURA_POS = 1;
-    private final int ENCYCLOPEDIA_POS = 2;
-    private final int SETTINGS_POS = 3;
-    private final int LOGIN_POS = 4;
+
+    public final int MAP_POS = 0;
+    public final int CAPTURA_POS = 1;
+    public final int ENCYCLOPEDIA_POS = 2;
+    public final int GALERIA_POS = 3;
+    public final int SETTINGS_POS = 4;
+    public final int LOGIN_POS = 5;
 
     /*Interfaz*/
     private Button[] botones;
@@ -212,11 +214,6 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         restoreMe(savedInstanceState);
         CheckIfServiceIsRunning();
         /*fin*/
-
-
-
-
-
 
         /*DRAWER*/
         mTitle = mDrawerTitle = getTitle();
@@ -765,14 +762,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
     }
 
-    private void selectItem(int position) {
+    public void selectItem(int position) {
         // update the main content by replacing fragments
         //System.out.println("pos? "+position);
         Fragment fragment;
         switch (position) {
             case MAP_POS:
                 // fragment = new NthMapFragment();
-
 
                 //System.out.println("map?");
                 FragmentManager fragmentManager = getFragmentManager();
@@ -786,10 +782,18 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 fragment = null;
                 break;
             case CAPTURA_POS:
-                fragment = new CapturaFragment();
+//                System.out.println(":::::cientifico:::: " + esCientifico);
+                if (esCientifico.trim().equals("-1")) {
+                    fragment = new CapturaTuristaFragment();
+                } else {
+                    fragment = new CapturaCientificoFragment();
+                }
                 this.addListener((FieldListener) fragment);
                 break;
             case ENCYCLOPEDIA_POS:
+                fragment = new EncyclopediaFragment();
+                break;
+            case GALERIA_POS:
                 fragment = new EncyclopediaFragment();
                 break;
             case SETTINGS_POS:

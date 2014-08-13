@@ -27,7 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // Database Name
 //    private static String DB_PATH = "/data/data/com.tmm.android.chuck/databases/";
-    private static String DB_PATH = Environment.getExternalStorageDirectory().getPath() + "/db/";
+    private static String DB_PATH = Environment.getExternalStorageDirectory().getPath() + "/Ikiam/db/";
     private static final String DATABASE_NAME = "ikiamDb.db";
 
     // Table Names
@@ -50,6 +50,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public DbHelper(Context context) {
         super(context, DB_PATH + DATABASE_NAME, null, DATABASE_VERSION);
+        new File(DB_PATH).mkdirs();
 //        System.out.println(DB_PATH + DATABASE_NAME);
         this.context = context;
     }

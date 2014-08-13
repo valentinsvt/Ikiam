@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <RelativeLayout
+        android:id="@+id/captura_botones_container"
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentTop="true">
+
+        <View
+            android:id="@id/captura_divider_hor"
+
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_alignParentBottom="true" />
+
+        <View
+            android:id="@id/captura_divider_vert"
+
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@id/captura_gallery_btn"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@android:string/cancel"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_action_new_picture"
+
+            android:layout_toLeftOf="@id/captura_divider_vert" />
+
+        <ImageButton
+            android:id="@id/captura_camera_btn"
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@android:string/ok"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_action_camera"
+
+            android:layout_toRightOf="@id/captura_divider_vert" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/captura_botones_container"
+        android:layout_above="@+id/captura_guardar_container"
+
+        android:paddingTop="12dp"
+
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout"
+
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:id="@id/captura_chosen_image_view"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_alignParentStart="true"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
+                android:minHeight="100dp"
+                android:minWidth="100dp" />
+
+
+            <TextView
+                android:id="@id/captura_info_label"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_below="@id/captura_chosen_image_view"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp" />
+
+            <EditText
+                android:id="@id/captura_comentarios_txt"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="8"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/captura_info_label"
+                android:password="false"
+                android:hint="@string/captura_comentarios_label" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/captura_guardar_container"
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:id="@id/captura_divider_hor"
+
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_alignParentTop="true" />
+
+        <ImageButton
+            android:id="@id/captura_save_upload_btn"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/global_upload"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_action_upload"
+
+            android:layout_toLeftOf="@id/captura_divider_vert2" />
+
+        <View
+            android:id="@id/captura_divider_vert2"
+
+            android:layout_width="1dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginTop="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_centerHorizontal="true" />
+
+        <ImageButton
+            android:id="@id/captura_save_btn"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/global_save"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_action_accept"
+
+            android:layout_toRightOf="@id/captura_divider_vert2" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

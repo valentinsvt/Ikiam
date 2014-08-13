@@ -1,10 +1,8 @@
 package com.nth.ikiam.listeners;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import com.nth.ikiam.CapturaFragment;
+import com.nth.ikiam.CapturaCientificoFragment;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.adapters.CapturaNombreComunArrayAdapter;
@@ -15,13 +13,13 @@ import java.util.List;
 /**
  * Created by luz on 04/08/14.
  */
-public class CapturaNombreComunAutocompleteTextChangedListener implements TextWatcher {
+public class CapturaCNombreComunAutocompleteTextChangedListener implements TextWatcher {
 
     public static final String TAG = "CapturaNombreComunAutocompleteTextChangedListener.java";
     MapActivity context;
-    CapturaFragment fragment;
+    CapturaCientificoFragment fragment;
 
-    public CapturaNombreComunAutocompleteTextChangedListener(MapActivity context, CapturaFragment fragment) {
+    public CapturaCNombreComunAutocompleteTextChangedListener(MapActivity context, CapturaCientificoFragment fragment) {
         this.context = context;
         this.fragment = fragment;
     }

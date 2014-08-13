@@ -150,6 +150,12 @@ public class CapturaUploader implements Runnable {
                 addFormPart(dos, "long", "" + coordenada.longitud);
             }
 
+            addFormPart(dos, "userId", context.userId); //id (faceboook - fb id, ikiam db.id
+            addFormPart(dos, "userName", context.name);
+            addFormPart(dos, "userType", context.type); //facebook || ikiam
+            addFormPart(dos, "userMail", context.email);
+            addFormPart(dos, "userCientifico", context.esCientifico); //N || S
+
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=foto-file ; filename=" + foto.path + lineEnd);
 
@@ -211,14 +217,16 @@ public class CapturaUploader implements Runnable {
     }
 
     private void addFormPart(DataOutputStream dos, String paramName, String value) throws Exception {
-        dos.writeBytes(twoHyphens + boundary + lineEnd);
-        dos.writeBytes("Content-Type: text/plain" + lineEnd);
-        dos.writeBytes("Content-Disposition: form-data; name=" + paramName + lineEnd);
-        if (!paramName.equals("fecha")) {
-            value = URLEncoder.encode(value, "utf-8");
+        if (value != null) {
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Type: text/plain" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=" + paramName + lineEnd);
+            if (!paramName.equals("fecha")) {
+                value = URLEncoder.encode(value, "utf-8");
+            }
+            dos.writeBytes(lineEnd + value + lineEnd);
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
         }
-        dos.writeBytes(lineEnd + value + lineEnd);
-        dos.writeBytes(twoHyphens + boundary + lineEnd);
     }
 
 }
