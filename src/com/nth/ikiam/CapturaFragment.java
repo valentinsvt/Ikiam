@@ -64,10 +64,6 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
     private TextView lblInfo;
 
     private EditText textoComentarios;
-//    private EditText textoFamilia;
-//    private EditText textoGenero;
-//    private EditText textoEspecie;
-//    private EditText textoNombreComun;
 
     public CustomAutoCompleteView autocompleteNombreComun;
     public CustomAutoCompleteView autocompleteFamilia;
@@ -289,6 +285,8 @@ public class CapturaFragment extends Fragment implements Button.OnClickListener,
             c8.save();
             Color c9 = new Color(context, "amarillo");
             c9.save();
+            Color c10 = new Color(context, "negro");
+            c10.save();
         }
     }
 

@@ -37,6 +37,7 @@
     <string name="global_color_rojo">Rojo</string>
     <string name="global_color_blanco">Blanco</string>
     <string name="global_color_amarillo">Amarillo</string>
+    <string name="global_color_negro">Negro</string>
 
     <string-array name="options_array">
         <item>Mapa</item>
