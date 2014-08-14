@@ -189,6 +189,19 @@ public class ImageUtils {
         }
         return null;
     }
+    public static Bitmap[] dobleBitmap(InputStream stream, int w, int h , int w2, int h2) {
+        try {
+            //Decode image size
+            Bitmap[] res = new Bitmap[2];
+            Bitmap b = BitmapFactory.decodeStream(stream);
+            res[0] = Bitmap.createScaledBitmap(b, w, h, false);
+            res[1] = Bitmap.createScaledBitmap(b, w2, h2, false);
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * rotates image

@@ -37,6 +37,7 @@ import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.DbHelper;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.db.Ruta;
+import com.nth.ikiam.image.AtraccionUi;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
@@ -78,6 +79,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     LocationClient locationClient;
     Marker lastPosition;
     HashMap<Marker, Foto> data;
+    HashMap<Marker, AtraccionUi> atracciones;
+    HashMap<Marker, Bitmap> fotosUsuario;
 
     /*Google services*/
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -203,6 +206,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         /*CORE*/
         setUpMapIfNeeded();
         data = new HashMap<Marker, Foto>();
+        atracciones = new HashMap<Marker, AtraccionUi>();
+        fotosUsuario = new HashMap<Marker, Bitmap>();
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
         botones = new Button[3];
@@ -436,13 +441,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.animateCamera(cu);
     }
 
-    public void setPing(final String title,int likes, final double latitud, final double longitud,final Bitmap foto){
+    public void setPing(final String title, final int likes, final double latitud, final double longitud,final Bitmap foto,final Bitmap fotoDialog){
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable(){
             @Override
             public void run(){
                 final LatLng pos = new LatLng(latitud,longitud);
-                System.out.println("pos "+pos.latitude+"  "+pos.longitude);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
                 Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
                 Canvas canvas1 = new Canvas(bmp);
@@ -455,7 +459,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
-                System.out.println("add marker "+marker+" "+map);
+                AtraccionUi atraccion = new AtraccionUi(title,fotoDialog,likes);
+                atracciones.put(marker,atraccion);
             }
         });
 
@@ -570,6 +575,40 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     ImageView img = (ImageView) myView.findViewById(R.id.image);
 
                     img.setImageBitmap(getFotoDialog(data.get(marker), screenWidth, 300));
+                    dialog.show();
+
+                    return true;
+                }
+                if (atracciones.get(marker) != null) {
+                    final AtraccionUi current = atracciones.get(marker);
+                    marker.showInfoWindow();
+                    LayoutInflater inflater = activity.getLayoutInflater();
+                    myView = inflater.inflate(R.layout.dialog, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(current.nombre);
+                    builder.setView(myView);
+
+                    builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+
+
+                    });
+                    String label = getString(R.string.map_activity_dialog_like);
+                    builder.setNeutralButton(label+" ("+current.likes+")", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                           /*aqui implementar like*/
+                            current.likes++;
+                            dialog.dismiss();
+                        }
+
+
+                    });
+                    dialog = builder.create();
+                    ImageView img = (ImageView) myView.findViewById(R.id.image);
+
+                    img.setImageBitmap(current.foto);
                     dialog.show();
 
                     return true;

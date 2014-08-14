@@ -100,6 +100,8 @@
     <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
     <string name="map_activity_atracciones">Atracciones</string>
+    <string name="map_activity_dialog_cerrar">Cerrar</string>
+    <string name="map_activity_dialog_like">Me gusta</string>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
     <string name="dialog_btn_borrar">Borrar</string>
