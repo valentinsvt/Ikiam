@@ -22,6 +22,7 @@ import com.nth.ikiam.db.*;
 import com.nth.ikiam.listeners.*;
 import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
+import com.nth.ikiam.utils.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 
 import java.io.File;
@@ -221,9 +222,9 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
             if (requestCode == GALLERY_REQUEST || requestCode == CAMERA_REQUEST) {
                 hayFoto = true;
                 MapActivity activity = (MapActivity) getActivity();
-                Bitmap thumb = getBitmapFromCameraData(data, activity, true);
+                Bitmap thumb = ImageUtils.getBitmapFromCameraData(data, activity, true);
                 selectedImage.setImageBitmap(thumb);
-                bitmap = getBitmapFromCameraData(data, activity, false);
+                bitmap = ImageUtils.getBitmapFromCameraData(data, activity, false);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = context.getContentResolver().query(data.getData(), filePathColumn, null, null, null);
@@ -249,139 +250,6 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 }
             }
         }
-    }
-
-    /**
-     * Use for decoding camera response data.
-     *
-     * @param data    : Intent
-     * @param context : Context
-     * @return : Bitmap
-     */
-    public static Bitmap getBitmapFromCameraData(Intent data, Context context, boolean resize) {
-        Uri selectedImage = data.getData();
-
-        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-        cursor.moveToFirst();
-        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-        String picturePath = cursor.getString(columnIndex);
-        Bitmap bitmap;
-        try {
-            ExifInterface exif = new ExifInterface(picturePath);
-            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            if (resize) {
-                bitmap = decodeFile(picturePath);
-                bitmap = rotateBitmap(bitmap, orientation);
-
-                cursor.close();
-            } else {
-                bitmap = BitmapFactory.decodeFile(picturePath);
-                bitmap = rotateBitmap(bitmap, orientation);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            bitmap = BitmapFactory.decodeFile(picturePath);
-        }
-        return bitmap;
-    }
-
-    /**
-     * Decodes image and scales it to reduce memory consumption
-     * http://stackoverflow.com/questions/477572/strange-out-of-memory-issue-while-loading-an-image-to-a-bitmap-object
-     * edited Jan 12 '12 at 12:33 by Fedor
-     * and
-     * edited Mar 20 at 6:18 by Thomas Vervest
-     *
-     * @param path: image path
-     * @return: Bitmap
-     */
-    private static Bitmap decodeFile(String path) {
-        File f = new File(path);
-        try {
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            //The new size we want to scale to
-//            final int REQUIRED_W = screenWidth / 4;
-//            final int REQUIRED_H = screenWidth / 4;
-            final int REQUIRED_W = 100;
-            final int REQUIRED_H = 100;
-
-//            System.out.println("reqW: " + REQUIRED_W + "    reqH: " + REQUIRED_H);
-
-            //Find the correct scale value. It should be the power of 2.
-            int scaleW = 1, scaleH = 1;
-            while (o.outWidth / scaleW / 2 >= REQUIRED_W)
-                scaleW *= 2;
-            while (o.outHeight / scaleH / 2 >= REQUIRED_H)
-                scaleH *= 2;
-
-//            System.out.println("scaleW: " + scaleW + "    scaleH: " + scaleH);
-//            System.out.println("scale: " + (Math.max(scaleH, scaleW)));
-
-            //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = Math.min(scaleH, scaleW);
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * rotates image
-     * http://stackoverflow.com/questions/20478765/how-to-get-the-correct-orientation-of-the-image-selected-from-the-default-image/20480741#20480741
-     * answered Dec 9 '13 at 21:04 by ramaral
-     *
-     * @param bitmap:      Bitmap
-     * @param orientation: orientation
-     * @return: Bitmap
-     */
-    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
-        try {
-            Matrix matrix = new Matrix();
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_NORMAL:
-                    return bitmap;
-                case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
-                    matrix.setScale(-1, 1);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    matrix.setRotate(180);
-                    break;
-                case ExifInterface.ORIENTATION_FLIP_VERTICAL:
-                    matrix.setRotate(180);
-                    matrix.postScale(-1, 1);
-                    break;
-                case ExifInterface.ORIENTATION_TRANSPOSE:
-                    matrix.setRotate(90);
-                    matrix.postScale(-1, 1);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    matrix.setRotate(90);
-                    break;
-                case ExifInterface.ORIENTATION_TRANSVERSE:
-                    matrix.setRotate(-90);
-                    matrix.postScale(-1, 1);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    matrix.setRotate(-90);
-                    break;
-                default:
-                    return bitmap;
-            }
-            Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            bitmap.recycle();
-            return bmRotated;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
     }
 
     @Override

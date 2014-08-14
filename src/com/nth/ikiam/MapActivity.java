@@ -794,7 +794,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 fragment = new EncyclopediaFragment();
                 break;
             case GALERIA_POS:
-                fragment = new EncyclopediaFragment();
+                fragment = new GaleriaFragment();
                 break;
             case SETTINGS_POS:
                 fragment = new SettingsFragment();

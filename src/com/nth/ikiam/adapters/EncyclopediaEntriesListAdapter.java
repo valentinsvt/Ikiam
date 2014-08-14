@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Entry;
 import com.nth.ikiam.db.Foto;
+import com.nth.ikiam.utils.ImageUtils;
 
 import java.io.File;
 import java.util.List;
@@ -60,7 +61,8 @@ public class EncyclopediaEntriesListAdapter extends ArrayAdapter<Entry> {
 
         File imgFile = new File(foto.path);
         if (imgFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath());
             imageView.setImageBitmap(myBitmap);
         }
 

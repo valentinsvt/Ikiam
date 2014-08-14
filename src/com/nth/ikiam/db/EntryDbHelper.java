@@ -135,7 +135,7 @@ public class EntryDbHelper extends DbHelper {
         List<Entry> entries = new ArrayList<Entry>();
 
         String selectQuery = "SELECT * FROM " + TABLE_ENTRY +
-                " WHERE " + KEY_ESPECIE_ID + " is null ";
+                " WHERE " + KEY_ESPECIE_ID + " = 0";
 
         logQuery(LOG, selectQuery);
 
