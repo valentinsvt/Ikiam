@@ -32,7 +32,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     // Table Names
     protected static final String TABLE_COLOR = "colores";
-    protected static final String TABLE_LUGAR = "lugares";
     protected static final String TABLE_FOTO = "fotos";
     protected static final String TABLE_FAMILIA = "familias";
     protected static final String TABLE_GENERO = "generos";

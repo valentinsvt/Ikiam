@@ -23,7 +23,7 @@ import com.nth.ikiam.db.*;
 import com.nth.ikiam.listeners.*;
 import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
-import com.nth.ikiam.utils.ImageUtils;
+import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 //import com.nth.ikiam.utils.GeoDegree;
 
@@ -519,9 +519,9 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 hayFoto = true;
                 updateStatus(null, null);
                 MapActivity activity = (MapActivity) getActivity();
-                Bitmap thumb = ImageUtils.getBitmapFromCameraData(data, activity, true);
+                Bitmap thumb = ImageUtils.getThumbnailFromCameraData(data, activity);
                 selectedImage.setImageBitmap(thumb);
-                bitmap = ImageUtils.getBitmapFromCameraData(data, activity, false);
+                bitmap = ImageUtils.getBitmapFromCameraData(data, activity);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = context.getContentResolver().query(data.getData(), filePathColumn, null, null, null);
