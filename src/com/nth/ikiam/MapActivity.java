@@ -41,6 +41,7 @@ import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.listeners.FieldListener;
+import com.nth.ikiam.utils.AtraccionDownloader;
 
 
 import java.util.ArrayList;
@@ -97,7 +98,6 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     List<Bitmap> imagenes;
     int lastIndex = -1;
     int lastSize = 0;
-    private ExecutorService queue = Executors.newSingleThreadExecutor();
     List<Foto> fotos;
     /*Fin imagenes*/
 
@@ -205,9 +205,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         data = new HashMap<Marker, Foto>();
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
-        botones = new Button[2];
+        botones = new Button[3];
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
+        botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
         for (int i = 0; i < botones.length; i++) {
             botones[i].setOnClickListener(this);
         }
@@ -314,6 +315,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     @Override
     public void onClick(View v) {
         if (v.getId() == botones[0].getId()) {
+            //Continente --> Galapagos
 
             if (!continente) {
                 location = new LatLng(-1.6477220517969353, -78.46435546875);
@@ -331,6 +333,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
 
         if (v.getId() == botones[1].getId()) {
+            //service de rutas
             if (servicesConnected()) {
                 if (!status) {
                     map.clear();
@@ -358,6 +361,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
             }
 
+        }
+
+        if (v.getId() == botones[2].getId()) {
+            ExecutorService queue = Executors.newSingleThreadExecutor();
+            queue.execute(new AtraccionDownloader(this, queue, 0));
         }
 
     }
@@ -426,6 +434,31 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         int padding = (100);
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         map.animateCamera(cu);
+    }
+
+    public void setPing(final String title,int likes, final double latitud, final double longitud,final Bitmap foto){
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable(){
+            @Override
+            public void run(){
+                final LatLng pos = new LatLng(latitud,longitud);
+                System.out.println("pos "+pos.latitude+"  "+pos.longitude);
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Canvas canvas1 = new Canvas(bmp);
+                Paint color = new Paint();
+                color.setTextSize(35);
+                color.setColor(Color.BLACK);//modify canvas
+                canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.pin3), 0, 0, color);
+                canvas1.drawBitmap(foto, 3, 2, color);
+                Marker marker = map.addMarker(new MarkerOptions().position(pos)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .anchor(0.5f, 1).title(title));
+                System.out.println("add marker "+marker+" "+map);
+            }
+        });
+
     }
 
 

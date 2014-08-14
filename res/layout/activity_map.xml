@@ -30,6 +30,13 @@
                 android:text="@string/map_service"
                 android:icon="@drawable/action_search"
                 android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
+        <Button
+                android:id="@+id/btnAtraccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_activity_atracciones"
+                android:icon="@drawable/action_search"
+                android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnService"/>
         <fragment
                 android:id="@+id/mapF"
                 android:name="com.google.android.gms.maps.MapFragment"

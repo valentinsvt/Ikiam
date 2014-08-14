@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  * Created by svt on 7/29/2014.
@@ -96,6 +97,17 @@ public class ImageUtils {
             System.out.println("out");
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static Bitmap decodeBitmap(InputStream stream,int w,int h) {
+
+        try {
+            //Decode image size
+            Bitmap b = BitmapFactory.decodeStream(stream);
+            return Bitmap.createScaledBitmap(b, w, h, false);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

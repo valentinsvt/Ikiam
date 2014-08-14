@@ -99,6 +99,7 @@
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
     <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
+    <string name="map_activity_atracciones">Atracciones</string>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
     <string name="dialog_btn_borrar">Borrar</string>
