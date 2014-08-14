@@ -819,6 +819,18 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         // Handle action buttons
         switch (item.getItemId()) {
             case R.id.search_btn_label:
+                Fragment fragment = new BusquedaFragment();
+                Bundle args = new Bundle();
+                //args.putString("pathFolder", pathFolder);
+                fragment.setArguments(args);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+                mainLayout.setVisibility(LinearLayout.GONE);
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                        .replace(R.id.content_frame, fragment)
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <ToggleButton
+        android:id="@id/captura_animal_toggle"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/captura_es_animal"
+        android:checked="false"
+        android:background="@drawable/ic_menu_animal"
+        android:textOff="@string/global_no"
+        android:textOn="@string/global_yes"
+        android:textStyle="bold"
+        android:textColor="#ffffffff"
+
+        android:layout_alignStart="@id/busqueda_color_spinner" />
+
+    <ToggleButton
+        android:id="@id/captura_arbol_toggle"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/captura_tiene_arbol"
+        android:checked="false"
+        android:background="@drawable/ic_menu_tree"
+        android:textOff="@string/global_no"
+        android:textOn="@string/global_yes"
+        android:textStyle="bold"
+        android:textColor="#ffffffff"
+
+        android:layout_alignTop="@id/captura_animal_toggle"
+        android:layout_toRightOf="@+id/captura_animal_toggle" />
+
+    <ToggleButton
+        android:id="@id/captura_corteza_toggle"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/captura_tiene_corteza"
+        android:checked="false"
+        android:background="@drawable/ic_menu_bark"
+        android:textOff="@string/global_no"
+        android:textOn="@string/global_yes"
+        android:textStyle="bold"
+        android:textColor="#ffffffff"
+
+        android:layout_alignTop="@id/captura_animal_toggle"
+        android:layout_toRightOf="@+id/captura_arbol_toggle" />
+
+    <ToggleButton
+        android:id="@id/captura_hoja_toggle"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/captura_tiene_hoja"
+        android:checked="false"
+        android:background="@drawable/ic_menu_leaf"
+        android:textOff="@string/global_no"
+        android:textOn="@string/global_yes"
+        android:textStyle="bold"
+
+        android:layout_alignTop="@id/captura_animal_toggle"
+        android:layout_toRightOf="@+id/captura_corteza_toggle" />
+
+    <ToggleButton
+        android:id="@id/captura_flor_toggle"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/captura_tiene_flor"
+        android:checked="false"
+        android:background="@drawable/ic_menu_flower"
+        android:textOff="@string/global_no"
+        android:textOn="@string/global_yes"
+        android:textStyle="bold"
+
+        android:layout_alignTop="@id/captura_animal_toggle"
+        android:layout_toRightOf="@id/captura_hoja_toggle" />
+
+    <ToggleButton
+        android:id="@id/captura_fruta_toggle"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="@string/captura_tiene_fruta"
+        android:background="@drawable/ic_menu_apple"
+        android:textOff="@string/global_no"
+        android:textOn="@string/global_yes"
+        android:checked="false"
+        android:textStyle="bold"
+
+        android:layout_alignTop="@id/captura_hoja_toggle"
+        android:layout_toRightOf="@id/captura_flor_toggle" />
+
+    <EditText
+        android:id="@+id/busqueda_nombre_comun"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/busqueda_nombre_comun"
+        android:layout_marginTop="20dp"
+
+        android:layout_below="@id/captura_animal_toggle"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/busqueda_color_lbl"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/busqueda_color"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+
+        android:layout_below="@+id/busqueda_nombre_comun"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@id/busqueda_color_spinner"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+
+        android:layout_below="@+id/busqueda_color_lbl"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

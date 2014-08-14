@@ -2,14 +2,10 @@ package com.nth.ikiam;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 
@@ -25,11 +21,8 @@ import com.nth.ikiam.utils.CapturaUploader;
 import com.nth.ikiam.utils.GeoDegree;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
-//import com.nth.ikiam.utils.GeoDegree;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;

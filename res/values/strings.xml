@@ -132,4 +132,7 @@
     <string name="login_ingresar">Ingresar</string>
     <string name="login_lbl_ingresar">Cuenta Ikiam</string>
     <string name="login_logout">Salir</string>
+    <string name="busqueda_nombre_cientifico">Nombre científico</string>
+    <string name="busqueda_color">Color</string>
+    <string name="busqueda_nombre_comun">Nombre común</string>
 </resources>

@@ -45,4 +45,5 @@
     <item name="captura_save_upload_btn" type="id">captura_save_upload_btn</item>
     <item name="captura_divider_vert2" type="id">captura_divider_vert2</item>
     <item name="settings_btn_reset_achievements" type="id" />
+    <item name="busqueda_color_spinner" type="id">busqueda_color_spinner</item>
 </resources>
