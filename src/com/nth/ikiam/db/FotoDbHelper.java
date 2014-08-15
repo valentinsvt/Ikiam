@@ -319,7 +319,11 @@ public class FotoDbHelper extends DbHelper {
             where = " AND " + where;
         }
 
-        selectQuery += " WHERE " + whereJoin + where;
+        if (!whereJoin.equals("") || !where.equals("")) {
+            where = " WHERE " + whereJoin + where;
+        }
+
+        selectQuery += where;
         System.out.println(selectQuery);
         /*
         SELECT * FROM fotos f, especies e, colores c1, colores c2 WHERE  f.especie_id = e.id AND  e.color_id = c1.id AND e.color2_id = c2.id AND f.keywords LIKE '%corteza%' AND f.keywords LIKE '%arbol%' AND e.nombre_comun_norm LIKE '%Test%' AND f.keywords LIKE '%animal%' AND c1.nombre = 'amarillo' OR c2.nombre = 'amarillo' AND f.keywords LIKE '%hoja%'

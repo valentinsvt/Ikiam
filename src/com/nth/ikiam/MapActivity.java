@@ -8,6 +8,7 @@ import android.content.*;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.*;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.*;
@@ -34,10 +35,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.*;
-import com.nth.ikiam.db.Coordenada;
-import com.nth.ikiam.db.DbHelper;
-import com.nth.ikiam.db.Foto;
-import com.nth.ikiam.db.Ruta;
+import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.AtraccionUi;
 import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
@@ -120,6 +118,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public String esCientifico;
     public String errorMessage;
     List<FieldListener> listeners = new ArrayList<FieldListener>();
+
+    public List<Entry> entriesBusqueda;
 
     public void setUserId(String id) {
         fireEvent("userId", id);
@@ -376,7 +376,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             Location mCurrentLocation;
             mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
-            selected=null;
+            selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
             location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
@@ -453,12 +453,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.animateCamera(cu);
     }
 
-    public void setPing(final String title, final int likes, final double latitud, final double longitud,final Bitmap foto,final Bitmap fotoDialog, final String url){
+    public void setPing(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String url) {
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable(){
+        handler.post(new Runnable() {
             @Override
-            public void run(){
-                final LatLng pos = new LatLng(latitud,longitud);
+            public void run() {
+                final LatLng pos = new LatLng(latitud, longitud);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
                 Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
                 Canvas canvas1 = new Canvas(bmp);
@@ -471,8 +471,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
-                AtraccionUi atraccion = new AtraccionUi(title,fotoDialog,likes,url);
-                atracciones.put(marker,atraccion);
+                AtraccionUi atraccion = new AtraccionUi(title, fotoDialog, likes, url);
+                atracciones.put(marker, atraccion);
             }
         });
 
@@ -595,11 +595,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 if (atracciones.get(marker) != null) {
                     marker.showInfoWindow();
                     //System.out.println("click "+marker+"  "+selected+"  "+(selected!=marker));
-                    if(selected==null) {
+                    if (selected == null) {
                         selected = marker;
-                    }else{
-                        if(selected.getId().equals(marker.getId())){
-                            selected=null;
+                    } else {
+                        if (selected.getId().equals(marker.getId())) {
+                            selected = null;
                             final AtraccionUi current = atracciones.get(marker);
                             LayoutInflater inflater = activity.getLayoutInflater();
                             myView = inflater.inflate(R.layout.dialog, null);
@@ -626,7 +626,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                             });
                             String label = getString(R.string.map_activity_dialog_like);
-                            builder.setNeutralButton(label+" ("+current.likes+")", new DialogInterface.OnClickListener() {
+                            builder.setNeutralButton(label + " (" + current.likes + ")", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                            /*aqui implementar like*/
                                     current.likes++;
@@ -640,7 +640,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                             img.setImageBitmap(current.foto);
                             dialog.show();
-                        }else{
+                        } else {
                             selected = marker;
                         }
                     }
@@ -984,8 +984,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
 
     /*Funcion para ver rutas desde el list*/
-    public void openRutaFragment(Ruta ruta){
-        this.ruta=ruta;
+    public void openRutaFragment(Ruta ruta) {
+        this.ruta = ruta;
         Fragment fragment = new RutaFragment();
         if (fragment != null) {
             Bundle args = new Bundle();

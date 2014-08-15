@@ -41,7 +41,11 @@ public class EncyclopediaEntriesFragment extends ListFragment {
         activity = (MapActivity) getActivity();
 
         long especieId = getArguments().getLong("especie");
-        entryList = Entry.findAllByEspecie(activity, especieId);
+        if (especieId != -1) {
+            entryList = Entry.findAllByEspecie(activity, especieId);
+        } else {
+            entryList = activity.entriesBusqueda;
+        }
 
         EncyclopediaEntriesListAdapter adapter = new EncyclopediaEntriesListAdapter(getActivity(), entryList);
         setListAdapter(adapter);

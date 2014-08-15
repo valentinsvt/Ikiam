@@ -2,6 +2,8 @@ package com.nth.ikiam;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.ListFragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
 import com.nth.ikiam.db.Color;
+import com.nth.ikiam.db.Entry;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.utils.Utils;
 
@@ -95,6 +98,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
 
     private void updateStatus() {
         String info = "";
+        data = new HashMap<String, String>();
         boolean plantaChecked = false;
         boolean animalChecked = false;
         int i = 0;
@@ -157,7 +161,22 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
     public void onClick(View v) {
         Utils.hideSoftKeyboard(this.getActivity());
         if (v.getId() == btnBuscar.getId()) {
-            List<Foto> fotos = Foto.busqueda(context, data);
+            updateStatus();
+            List<Entry> entries = Entry.busqueda(context, data);
+            data = new HashMap<String, String>();
+            context.entriesBusqueda = entries;
+
+            ListFragment fragment = new EncyclopediaEntriesFragment();
+            Bundle args = new Bundle();
+            args.putLong("especie", -1);
+            fragment.setArguments(args);
+
+            context.setTitle("Resultados");
+
+            FragmentManager fragmentManager = context.getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+//            System.out.println("HAY " + entries.size() + " ENTRIES EN EL RESULTADO");
         } else {
             updateStatus();
         }

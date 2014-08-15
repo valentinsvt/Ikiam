@@ -2,6 +2,7 @@ package com.nth.ikiam.db;
 
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -145,5 +146,10 @@ public class Entry {
     public static void empty(Context context) {
         EntryDbHelper e = new EntryDbHelper(context);
         e.deleteAllEntries();
+    }
+
+    public static List<Entry> busqueda(Context context, HashMap<String, String> data) {
+        EntryDbHelper e = new EntryDbHelper(context);
+        return e.getBusqueda(data);
     }
 }
