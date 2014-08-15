@@ -91,7 +91,7 @@
             android:layout_below="@+id/txt_descripcion"
             android:layout_alignEnd="@+id/btn_guardar_desc"/>
     <TextView
-            android:layout_width="150dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/ruta_lbl_altura"
@@ -187,23 +187,32 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button"
+            android:text="@string/ruta_ver_mapa"
+            android:id="@+id/ver_mapa"
             android:layout_alignStart="@+id/lbl_altura"
             android:layout_below="@+id/image_1"
             android:layout_marginTop="25dp"
+            android:textSize="12dp"
+            android:background="#d0000001"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textColor="#fffffef2"
             android:textStyle="bold|italic"
-
             />
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Button"
-            android:id="@+id/button2"
-            android:layout_toRightOf="@+id/button"
+            android:text="@string/ruta_subir"
+            android:id="@+id/compartir"
+            android:layout_toRightOf="@+id/ver_mapa"
             android:layout_below="@+id/image_1"
             android:layout_marginTop="25dp"
-            android:textStyle="bold|italic"/>
+            android:textSize="12dp"
+            android:background="#d0000001"
+            android:textColor="#fffffef2"
+            android:textStyle="bold|italic"
+            android:layout_marginLeft="15dp"
+            />
 
 
 

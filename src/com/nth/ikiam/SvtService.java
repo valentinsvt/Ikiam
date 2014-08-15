@@ -113,7 +113,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("MyService", "Service Started.");
+
         this.context=this;
         showNotification();
         locationClient = new LocationClient(this, this, this);
@@ -129,7 +129,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         // Set the icon, scrolling text and timestamp
         Notification notification = new Notification(R.drawable.ic_launcher, text, System.currentTimeMillis());
         // The PendingIntent to launch our activity if the user selects this notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MapActivity.class), 0);
         // Set the info for the views that show in the notification panel.
         notification.setLatestEventInfo(this, "Svt service", text, contentIntent);
         // Send the notification.
@@ -138,7 +138,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("MyService", "Received start id " + startId + ": " + intent);
+//        Log.i("MyService", "Received start id " + startId + ": " + intent);
         return START_STICKY; // run until explicitly stopped.
     }
 

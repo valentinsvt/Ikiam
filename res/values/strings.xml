@@ -154,4 +154,8 @@
     <string name="ruta_lbl_altura">Altura:</string>
     <string name="ruta_lbl_fotos">Fotos:</string>
     <string name="ruta_lbl_foto">fotos</string>
+    <string name="ruta_ver_mapa">Ver en el mapa</string>
+    <string name="ruta_subir">Compartir</string>
+    <string name="ruta_datos_guardados">Datos actualizados</string>
+    <string name="ruta_error_datos">Ingrese una descripción</string>
 </resources>
