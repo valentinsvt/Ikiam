@@ -45,11 +45,9 @@ public class RutasListAdapter extends ArrayAdapter<Ruta> {
 
         Ruta selected = rutas.get(position);
         String titulo;
-        if(selected.descripcion!="" && selected.descripcion!=null){
-            titulo=selected.descripcion;
-        }else{
-            titulo=selected.fecha;
-        }
+        titulo=selected.descripcion+"\n";
+        titulo+=selected.fecha;
+
 
 //        while (comentarios.length() < 150) {
 //            comentarios += " Lorem ipsum dolor sit amet ";
@@ -60,6 +58,7 @@ public class RutasListAdapter extends ArrayAdapter<Ruta> {
         }
         List<Foto> fotos = Foto.findAllByRuta(context, selected);
         Foto foto;
+        titulo+="\n"+fotos.size()+" fotos";
         if(fotos.size()>0) {
             foto = fotos.get(0);
             File imgFile = new File(foto.path);

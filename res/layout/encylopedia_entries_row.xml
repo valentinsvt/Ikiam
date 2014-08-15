@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/encyclopedia_entries_row_image"
 
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"

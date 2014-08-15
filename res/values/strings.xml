@@ -150,4 +150,8 @@
     <string name="busqueda_nombre_cientifico">Nombre científico</string>
     <string name="busqueda_color">Color</string>
     <string name="busqueda_nombre_comun">Nombre común</string>
+    <string name="ruta_lbl_distancia">Distancia recorrida:</string>
+    <string name="ruta_lbl_altura">Altura:</string>
+    <string name="ruta_lbl_fotos">Fotos:</string>
+    <string name="ruta_lbl_foto">fotos</string>
 </resources>

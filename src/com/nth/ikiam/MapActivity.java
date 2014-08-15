@@ -892,6 +892,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 fragmentManager.beginTransaction()
                         .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                         .hide(fragmentManager.findFragmentById(R.id.content_frame))
+                        .addToBackStack("")
                         .commit();
                 RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
                 mainLayout.setVisibility(View.VISIBLE);
@@ -940,7 +941,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             fragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .replace(R.id.content_frame, fragment)
+                    .addToBackStack("")
                     .commit();
+
             // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
             // update selected item and title, then close the drawer
@@ -993,6 +996,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             fragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .replace(R.id.content_frame, fragment)
+                    .addToBackStack("")
                     .commit();
         }
         setTitle(ruta.descripcion);
