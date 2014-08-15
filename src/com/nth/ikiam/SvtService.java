@@ -152,9 +152,11 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
 
         Location mCurrentLocation;
         mCurrentLocation = locationClient.getLastLocation();
+
         try{
             if(ruta!=null){
                 Coordenada cord = new Coordenada(this.context,mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude(),ruta);
+                cord.setAltitud(mCurrentLocation.getAltitude());
                 cord.save();
             }
         }catch (Exception e){

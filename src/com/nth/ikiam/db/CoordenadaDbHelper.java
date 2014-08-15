@@ -15,9 +15,10 @@ public class CoordenadaDbHelper extends DbHelper {
 
     private static final String KEY_LONGITUD = "longitud";
     private static final String KEY_LATITUD = "latitud";
+    private static final String KEY_ALTITUD = "altitud";
     private static final String KEY_RUTA = "ruta_id";
 
-    public static final String[] KEYS_COORDENADA = {KEY_LATITUD, KEY_LONGITUD, KEY_RUTA};
+    public static final String[] KEYS_COORDENADA = {KEY_LATITUD, KEY_LONGITUD, KEY_RUTA,KEY_ALTITUD};
 
     public CoordenadaDbHelper(Context context) {
         super(context);
@@ -165,6 +166,7 @@ public class CoordenadaDbHelper extends DbHelper {
         cord.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         cord.setLatitud(c.getDouble(c.getColumnIndex(KEY_LATITUD)));
         cord.setLongitud(c.getDouble(c.getColumnIndex(KEY_LONGITUD)));
+        cord.setAltitud(c.getDouble(c.getColumnIndex(KEY_ALTITUD)));
         cord.setRuta_id(c.getLong(c.getColumnIndex(KEY_RUTA)));
         return cord;
     }
@@ -176,6 +178,7 @@ public class CoordenadaDbHelper extends DbHelper {
         }
         values.put(KEY_LATITUD, coordenada.latitud);
         values.put(KEY_LONGITUD, coordenada.longitud);
+        values.put(KEY_ALTITUD, coordenada.altitud);
         if (coordenada.ruta_id != null) {
             values.put(KEY_RUTA, coordenada.ruta_id);
         }

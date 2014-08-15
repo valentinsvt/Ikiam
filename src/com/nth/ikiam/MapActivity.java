@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
+import android.webkit.WebView;
 import android.widget.*;
 import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
@@ -81,6 +82,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     HashMap<Marker, Foto> data;
     HashMap<Marker, AtraccionUi> atracciones;
     HashMap<Marker, Bitmap> fotosUsuario;
+    Marker selected;
 
     /*Google services*/
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -369,6 +371,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
 
         if (v.getId() == botones[2].getId()) {
+            map.clear();
+            Location mCurrentLocation;
+            mCurrentLocation = locationClient.getLastLocation();
+            atracciones.clear();
+            selected=null;
+            //System.out.println("Altura "+ mCurrentLocation.getAltitude());
+            location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
+            map.animateCamera(update);
             ExecutorService queue = Executors.newSingleThreadExecutor();
             queue.execute(new AtraccionDownloader(this, queue, 0));
         }
@@ -441,7 +452,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.animateCamera(cu);
     }
 
-    public void setPing(final String title, final int likes, final double latitud, final double longitud,final Bitmap foto,final Bitmap fotoDialog){
+    public void setPing(final String title, final int likes, final double latitud, final double longitud,final Bitmap foto,final Bitmap fotoDialog, final String url){
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable(){
             @Override
@@ -459,7 +470,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
-                AtraccionUi atraccion = new AtraccionUi(title,fotoDialog,likes);
+                AtraccionUi atraccion = new AtraccionUi(title,fotoDialog,likes,url);
                 atracciones.put(marker,atraccion);
             }
         });
@@ -538,6 +549,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
+
                 if (data.get(marker) != null) {
                     marker.showInfoWindow();
                     LayoutInflater inflater = activity.getLayoutInflater();
@@ -580,37 +592,57 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     return true;
                 }
                 if (atracciones.get(marker) != null) {
-                    final AtraccionUi current = atracciones.get(marker);
                     marker.showInfoWindow();
-                    LayoutInflater inflater = activity.getLayoutInflater();
-                    myView = inflater.inflate(R.layout.dialog, null);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(current.nombre);
-                    builder.setView(myView);
+                    //System.out.println("click "+marker+"  "+selected+"  "+(selected!=marker));
+                    if(selected==null) {
+                        selected = marker;
+                    }else{
+                        if(selected.getId().equals(marker.getId())){
+                            selected=null;
+                            final AtraccionUi current = atracciones.get(marker);
+                            LayoutInflater inflater = activity.getLayoutInflater();
+                            myView = inflater.inflate(R.layout.dialog, null);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                            builder.setTitle(current.nombre);
+                            builder.setView(myView);
+                            builder.setPositiveButton(R.string.map_activity_dialog_mas, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    String url = current.url;
+                                    try {
+                                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                        startActivity(myIntent);
+                                    } catch (ActivityNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
 
-                    builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
 
-
-                    });
-                    String label = getString(R.string.map_activity_dialog_like);
-                    builder.setNeutralButton(label+" ("+current.likes+")", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                            });
+                            String label = getString(R.string.map_activity_dialog_like);
+                            builder.setNeutralButton(label+" ("+current.likes+")", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                            /*aqui implementar like*/
-                            current.likes++;
-                            dialog.dismiss();
+                                    current.likes++;
+                                    dialog.dismiss();
+                                }
+
+
+                            });
+                            dialog = builder.create();
+                            ImageView img = (ImageView) myView.findViewById(R.id.image);
+
+                            img.setImageBitmap(current.foto);
+                            dialog.show();
+                        }else{
+                            selected = marker;
                         }
-
-
-                    });
-                    dialog = builder.create();
-                    ImageView img = (ImageView) myView.findViewById(R.id.image);
-
-                    img.setImageBitmap(current.foto);
-                    dialog.show();
-
+                    }
                     return true;
                 }
                 return false;
@@ -942,4 +974,6 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+
+
 }

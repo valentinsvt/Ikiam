@@ -11,6 +11,7 @@ public class Coordenada {
     public long id = 0;
     public double latitud;
     public double longitud;
+    public double altitud;
     public Long ruta_id;
     public CoordenadaDbHelper coordenadaDbHelper;
     public String fecha;
@@ -35,6 +36,13 @@ public class Coordenada {
     public Coordenada(Context context, double latitud, double longitud) {
         this.latitud = latitud;
         this.longitud = longitud;
+        this.coordenadaDbHelper = new CoordenadaDbHelper(context);
+        this.context = context;
+    }
+    public Coordenada(Context context, double latitud, double longitud , double altitud) {
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.altitud = altitud;
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
         this.context = context;
     }
@@ -102,6 +110,14 @@ public class Coordenada {
         } else {
             this.coordenadaDbHelper.updateCoordenada(this);
         }
+    }
+
+    public double getAltitud() {
+        return altitud;
+    }
+
+    public void setAltitud(double altitud) {
+        this.altitud = altitud;
     }
 
     public static Coordenada get(Context context, long id) {

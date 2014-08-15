@@ -102,6 +102,7 @@
     <string name="map_activity_atracciones">Atracciones</string>
     <string name="map_activity_dialog_cerrar">Cerrar</string>
     <string name="map_activity_dialog_like">Me gusta</string>
+    <string name="map_activity_dialog_mas">Ver más</string>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
     <string name="dialog_btn_borrar">Borrar</string>
