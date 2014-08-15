@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by DELL on 26/07/2014.
@@ -17,13 +19,13 @@ public class FotoDbHelper extends DbHelper {
     private static final String LOG = "FotoDbHelper";
 
     //  FOTO - column names
-    private static final String KEY_ESPECIE_ID = "especie_id";
-    private static final String KEY_ENTRY_ID = "entry_id";
-    private static final String KEY_COORDENADA = "coordenada";
-    private static final String KEY_KEYWORDS = "keywords";
-    private static final String KEY_PATH = "path";
-    private static final String KEY_UPLOADED = "uploaded";
-    private static final String KEY_RUTA_ID = "ruta_id";
+    public static final String KEY_ESPECIE_ID = "especie_id";
+    public static final String KEY_ENTRY_ID = "entry_id";
+    public static final String KEY_COORDENADA = "coordenada";
+    public static final String KEY_KEYWORDS = "keywords";
+    public static final String KEY_PATH = "path";
+    public static final String KEY_UPLOADED = "uploaded";
+    public static final String KEY_RUTA_ID = "ruta_id";
 
     public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_ENTRY_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_PATH, KEY_UPLOADED, KEY_RUTA_ID};
 
@@ -189,6 +191,7 @@ public class FotoDbHelper extends DbHelper {
         db.close();
         return fotos;
     }
+
     public List<Foto> getAllFotosByRuta(Ruta ruta) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Foto> fotos = new ArrayList<Foto>();
@@ -247,6 +250,80 @@ public class FotoDbHelper extends DbHelper {
 
         String selectQuery = "SELECT * FROM " + TABLE_FOTO +
                 " WHERE " + KEY_UPLOADED + " = " + uploaded;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto f = setDatos(c);
+
+                // adding to entry list
+                fotos.add(f);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return fotos;
+    }
+
+    public List<Foto> getBusqueda(HashMap<String, String> data) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Foto> fotos = new ArrayList<Foto>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_FOTO + " f";
+//        selectQuery += " OUTER JOIN " + TABLE_ESPECIE + " e ON f." + KEY_ESPECIE_ID + " = e." + KEY_ID;
+//        selectQuery += " OUTER JOIN " + TABLE_COLOR + " c1 ON e." + EspecieDbHelper.KEY_COLOR1_ID + " = c1." + KEY_ID;
+//        selectQuery += " OUTER JOIN " + TABLE_COLOR + " c2 ON e." + EspecieDbHelper.KEY_COLOR2_ID + " = c2." + KEY_ID;
+
+        String where = "";
+        String whereJoin = "";
+
+        boolean tieneEspecie = false;
+        boolean tieneColor = false;
+
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+            String key = entry.getKey();
+            String val = entry.getValue();
+//            System.out.println("*** " + entry.getKey() + "/" + entry.getValue());
+            if (!where.equals("")) {
+                where += " AND ";
+            }
+            if (key.startsWith("keyword")) {
+                where += "f." + KEY_KEYWORDS + " LIKE '%" + val + "%'";
+            } else if (key.equals("nombreComun")) {
+                tieneEspecie = true;
+                where += "e." + EspecieDbHelper.KEY_NOMBRE_COMUN_NORM + " LIKE '%" + val + "%'";
+            } else if (key.equals("color")) {
+                tieneColor = true;
+                where += "c1." + ColorDbHelper.KEY_NOMBRE + " = '" + val + "'";
+                where += " OR c2." + ColorDbHelper.KEY_NOMBRE + " = '" + val + "'";
+            }
+        }
+        if (tieneEspecie || tieneColor) {
+            selectQuery += ", " + TABLE_ESPECIE + " e";
+            whereJoin += " f." + KEY_ESPECIE_ID + " = e." + KEY_ID;
+        }
+        if (tieneColor) {
+            selectQuery += ", " + TABLE_COLOR + " c1";
+            if (!whereJoin.equals("")) {
+                whereJoin += " AND ";
+            }
+            whereJoin += " e." + EspecieDbHelper.KEY_COLOR1_ID + " = c1." + KEY_ID;
+            selectQuery += ", " + TABLE_COLOR + " c2";
+            whereJoin += " AND e." + EspecieDbHelper.KEY_COLOR2_ID + " = c2." + KEY_ID;
+        }
+
+        if (!whereJoin.equals("")) {
+            where = " AND " + where;
+        }
+
+        selectQuery += " WHERE " + whereJoin + where;
+        System.out.println(selectQuery);
+        /*
+        SELECT * FROM fotos f, especies e, colores c1, colores c2 WHERE  f.especie_id = e.id AND  e.color_id = c1.id AND e.color2_id = c2.id AND f.keywords LIKE '%corteza%' AND f.keywords LIKE '%arbol%' AND e.nombre_comun_norm LIKE '%Test%' AND f.keywords LIKE '%animal%' AND c1.nombre = 'amarillo' OR c2.nombre = 'amarillo' AND f.keywords LIKE '%hoja%'
+         */
 
         logQuery(LOG, selectQuery);
 

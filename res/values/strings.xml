@@ -81,6 +81,19 @@
     <string name="captura_tiene_hoja">Se ven las hojas</string>
     <string name="captura_tiene_flor">Se ven las flores</string>
 
+    <string name="buscar_buscar">Buscar fotos</string>
+    <string name="buscar_donde">donde se vea</string>
+    <string name="buscar_es_animal">de animales</string>
+    <string name="buscar_es_planta">de plantas</string>
+    <string name="buscar_es_animal_y_planta">de animales y plantas</string>
+    <string name="buscar_tiene_fruta">la fruta</string>
+    <string name="buscar_tiene_arbol">el árbol completo</string>
+    <string name="buscar_tiene_corteza">la corteza</string>
+    <string name="buscar_tiene_hoja">las hojas</string>
+    <string name="buscar_tiene_flor">las flores</string>
+    <string name="buscar_nombre_comun">de nombre común</string>
+    <string name="buscar_color">con color</string>
+
     <string name="captura_keyWord_animal">Animal</string>
     <string name="captura_keyWord_fruta">Fruta</string>
     <string name="captura_keyWord_arbol">Árbol</string>

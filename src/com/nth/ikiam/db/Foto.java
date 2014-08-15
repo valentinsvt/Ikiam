@@ -2,6 +2,7 @@ package com.nth.ikiam.db;
 
 import android.content.Context;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -248,6 +249,11 @@ public class Foto {
     public static void empty(Context context) {
         FotoDbHelper e = new FotoDbHelper(context);
         e.deleteAllFotos();
+    }
+
+    public static List<Foto> busqueda(Context context, HashMap<String, String> data) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getBusqueda(data);
     }
 
 }

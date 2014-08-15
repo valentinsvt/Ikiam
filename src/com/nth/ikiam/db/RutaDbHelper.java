@@ -14,7 +14,7 @@ import java.util.List;
 public class RutaDbHelper extends DbHelper {
     private static final String LOG = "RutaDbHelper";
 
-    private static final String KEY_DESCRIPCION = "descripcion";
+    public static final String KEY_DESCRIPCION = "descripcion";
 
     public static final String[] KEYS_RUTA = {KEY_DESCRIPCION};
 

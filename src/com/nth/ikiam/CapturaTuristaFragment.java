@@ -72,6 +72,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
     private String fotoPath;
     private Double fotoLat;
     private Double fotoLong;
+    private Double fotoAlt;
 
     boolean hayFoto = false;
 
@@ -135,6 +136,9 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 if (fotoLat != null && fotoLong != null) {
                     System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
                     Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
+                    if (fotoAlt != null) {
+                        coordenada.setAltitud(fotoAlt);
+                    }
                     coordenada.save();
                     foto.setCoordenada(coordenada);
                 }
@@ -237,6 +241,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                     GeoDegree gd = new GeoDegree(exif);
                     fotoLat = gd.getLatitude();
                     fotoLong = gd.getLongitude();
+                    fotoAlt = Double.parseDouble(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
                     if (fotoLat != null && fotoLong != null) {
                         alerta(getString(R.string.captura_success_tag_gps));
                     } else {
@@ -246,6 +251,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                     alerta(getString(R.string.captura_error_tag_gps));
                     fotoLat = null;
                     fotoLong = null;
+                    fotoAlt = null;
                     e.printStackTrace();
                 }
             }

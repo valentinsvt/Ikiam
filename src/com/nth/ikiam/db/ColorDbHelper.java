@@ -16,7 +16,7 @@ public class ColorDbHelper extends DbHelper {
 
     private static final String LOG = "ColorDbHelper";
 
-    private static final String KEY_NOMBRE = "nombre";
+    public static final String KEY_NOMBRE = "nombre";
 
     public static final String[] KEYS_COLOR = {KEY_NOMBRE};
 

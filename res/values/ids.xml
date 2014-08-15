@@ -46,4 +46,6 @@
     <item name="captura_divider_vert2" type="id">captura_divider_vert2</item>
     <item name="settings_btn_reset_achievements" type="id" />
     <item name="busqueda_color_spinner" type="id">busqueda_color_spinner</item>
+    <item name="busqueda_divider_hor" type="id">busqueda_divider_hor</item>
+    <item name="busqueda_buscar_btn" type="id">busqueda_buscar_btn</item>
 </resources>

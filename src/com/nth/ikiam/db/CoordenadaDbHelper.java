@@ -13,10 +13,10 @@ public class CoordenadaDbHelper extends DbHelper {
 
     private static final String LOG = "CoordenadaDbHelper";
 
-    private static final String KEY_LONGITUD = "longitud";
-    private static final String KEY_LATITUD = "latitud";
-    private static final String KEY_ALTITUD = "altitud";
-    private static final String KEY_RUTA = "ruta_id";
+    public static final String KEY_LONGITUD = "longitud";
+    public static final String KEY_LATITUD = "latitud";
+    public static final String KEY_ALTITUD = "altitud";
+    public static final String KEY_RUTA = "ruta_id";
 
     public static final String[] KEYS_COORDENADA = {KEY_LATITUD, KEY_LONGITUD, KEY_RUTA,KEY_ALTITUD};
 

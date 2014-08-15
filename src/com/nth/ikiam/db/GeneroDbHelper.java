@@ -15,9 +15,9 @@ public class GeneroDbHelper extends DbHelper {
 
     private static final String LOG = "GeneroDbHelper";
 
-    private static final String KEY_NOMBRE = "nombre";
-    private static final String KEY_NOMBRE_NORM = "nombre_norm";
-    private static final String KEY_FAMILIA_ID = "familia_id";
+    public static final String KEY_NOMBRE = "nombre";
+    public static final String KEY_NOMBRE_NORM = "nombre_norm";
+    public static final String KEY_FAMILIA_ID = "familia_id";
 
     public static final String[] KEYS_GENERO = {KEY_NOMBRE, KEY_NOMBRE_NORM, KEY_FAMILIA_ID};
 

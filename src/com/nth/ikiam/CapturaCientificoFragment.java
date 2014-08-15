@@ -81,6 +81,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
     private String fotoPath;
     private Double fotoLat;
     private Double fotoLong;
+    private Double fotoAlt;
 
     boolean hayFoto = false;
 
@@ -98,7 +99,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 
         View view = inflater.inflate(R.layout.captura_cientifico_layout, container, false);
 
-        checkColores();
+        Utils.checkColores(context);
         activity = (MapActivity) getActivity();
         screenHeight = activity.screenHeight;
         screenWidth = activity.screenWidth;
@@ -202,6 +203,9 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 if (fotoLat != null && fotoLong != null) {
                     System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
                     Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
+                    if (fotoAlt != null) {
+                        coordenada.setAltitud(fotoAlt);
+                    }
                     coordenada.save();
                     foto.setCoordenada(coordenada);
                 }
@@ -263,44 +267,13 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 alerta(getString(R.string.captura_error_seleccion));
             }
         } else {
-            for (ToggleButton toggle : toggles) {
-                updateStatus(v, toggle);
+            if (hayFoto) {
+                updateStatus(v);
+            } else {
+                ToggleButton toggle = (ToggleButton) v;
+                toggle.setChecked(false);
+                alerta(getString(R.string.captura_error_seleccion));
             }
-        }
-    }
-
-    private void checkColores() {
-//        Color.empty(context);
-//        Familia.empty(context);
-//        Genero.empty(context);
-//        Especie.empty(context);
-//        Entry.empty(context);
-//        Foto.empty(context);
-//        Coordenada.empty(context);
-
-        if (Color.count(context) == 0) {
-            Color c0 = new Color(context, "none");
-            c0.save();
-            Color c1 = new Color(context, "azul");
-            c1.save();
-            Color c2 = new Color(context, "cafe");
-            c2.save();
-            Color c3 = new Color(context, "verde");
-            c3.save();
-            Color c4 = new Color(context, "naranja");
-            c4.save();
-            Color c5 = new Color(context, "rosa");
-            c5.save();
-            Color c6 = new Color(context, "violeta");
-            c6.save();
-            Color c7 = new Color(context, "rojo");
-            c7.save();
-            Color c8 = new Color(context, "blanco");
-            c8.save();
-            Color c9 = new Color(context, "amarillo");
-            c9.save();
-            Color c10 = new Color(context, "negro");
-            c10.save();
         }
     }
 
@@ -463,39 +436,31 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         hayFoto = false;
     }
 
-    private void updateStatus(View view, ToggleButton toggleButton) {
-        if (hayFoto) {
-
-            if (view != null) {
-                if (view.getId() == toggles[5].getId()) { // si es animal se desactivan todos los otros
-                    for (int i = 0; i < 4; i++) {
-                        toggles[i].setChecked(false);
-                    }
-                } else {
-                    //desactiva el de animal
-                    toggles[5].setChecked(false);
+    private void updateStatus(View view) {
+        if (view != null) {
+            if (view.getId() == toggles[5].getId()) { // si es animal se desactivan todos los otros
+                for (int i = 0; i < 4; i++) {
+                    toggles[i].setChecked(false);
                 }
+            } else {
+                //desactiva el de animal
+                toggles[5].setChecked(false);
             }
-
-            String info = "";
-
-            int i = 0;
-            for (ToggleButton toggle : toggles) {
-                if (toggle.isChecked()) {
-                    if (!info.equals("")) {
-                        info += ", ";
-                    }
-                    info += statusString[i];
-                }
-                i++;
-            }
-//            lblInfo.setText(info);
-        } else {
-            if (toggleButton != null) {
-                toggleButton.setChecked(false);
-            }
-            alerta(getString(R.string.captura_error_seleccion));
         }
+
+        String info = "";
+
+        int i = 0;
+        for (ToggleButton toggle : toggles) {
+            if (toggle.isChecked()) {
+                if (!info.equals("")) {
+                    info += ", ";
+                }
+                info += statusString[i];
+            }
+            i++;
+        }
+//            lblInfo.setText(info);
     }
 
     private void alerta(String string) {
@@ -510,7 +475,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST || requestCode == CAMERA_REQUEST) {
                 hayFoto = true;
-                updateStatus(null, null);
+                updateStatus(null);
                 MapActivity activity = (MapActivity) getActivity();
                 Bitmap thumb = ImageUtils.getThumbnailFromCameraData(data, activity);
                 selectedImage.setImageBitmap(thumb);
@@ -527,6 +492,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                     GeoDegree gd = new GeoDegree(exif);
                     fotoLat = gd.getLatitude();
                     fotoLong = gd.getLongitude();
+                    fotoAlt = Double.parseDouble(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
                     if (fotoLat != null && fotoLong != null) {
                         alerta(getString(R.string.captura_success_tag_gps));
                     } else {
@@ -536,6 +502,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                     alerta(getString(R.string.captura_error_tag_gps));
                     fotoLat = null;
                     fotoLong = null;
+                    fotoAlt = null;
                     e.printStackTrace();
                 }
             }

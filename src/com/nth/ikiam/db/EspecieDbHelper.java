@@ -17,13 +17,13 @@ public class EspecieDbHelper extends DbHelper {
     private static final String LOG = "EspecieDbHelper";
 
     // ESPECIE Table - column names
-    private static final String KEY_NOMBRE_COMUN = "nombre_comun";
-    private static final String KEY_NOMBRE_COMUN_NORM = "nombre_comun_norm";
-    private static final String KEY_NOMBRE = "nombre";
-    private static final String KEY_NOMBRE_NORM = "nombre_norm";
-    private static final String KEY_COLOR1_ID = "color_id";
-    private static final String KEY_COLOR2_ID = "color2_id";
-    private static final String KEY_GENERO_ID = "genero_id";
+    public static final String KEY_NOMBRE_COMUN = "nombre_comun";
+    public static final String KEY_NOMBRE_COMUN_NORM = "nombre_comun_norm";
+    public static final String KEY_NOMBRE = "nombre";
+    public static final String KEY_NOMBRE_NORM = "nombre_norm";
+    public static final String KEY_COLOR1_ID = "color_id";
+    public static final String KEY_COLOR2_ID = "color2_id";
+    public static final String KEY_GENERO_ID = "genero_id";
 
     public static final String[] KEYS_ESPECIE = {KEY_NOMBRE_COMUN, KEY_NOMBRE_COMUN_NORM, KEY_NOMBRE, KEY_NOMBRE_NORM,
             KEY_GENERO_ID, KEY_COLOR1_ID, KEY_COLOR2_ID};

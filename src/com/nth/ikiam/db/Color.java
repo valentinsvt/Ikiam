@@ -59,7 +59,7 @@ public class Color {
     }
 
     public String toString() {
-        return "**" + nombre;
+        return nombre;
     }
 
     public void save() {

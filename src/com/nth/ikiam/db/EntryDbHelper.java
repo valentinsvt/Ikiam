@@ -17,9 +17,9 @@ public class EntryDbHelper extends DbHelper {
     private static final String LOG = "EntryDbHelper";
 
     //  ENTRY - column names
-    private static final String KEY_COMENTARIOS = "comentarios";
-    private static final String KEY_ESPECIE_ID = "especie_id";
-    private static final String KEY_UPLOADED = "uploaded";
+    public static final String KEY_COMENTARIOS = "comentarios";
+    public static final String KEY_ESPECIE_ID = "especie_id";
+    public static final String KEY_UPLOADED = "uploaded";
 
     public static final String[] KEYS_ENTRY = {KEY_ESPECIE_ID, KEY_COMENTARIOS, KEY_UPLOADED};
 

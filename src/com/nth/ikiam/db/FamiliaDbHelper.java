@@ -15,8 +15,8 @@ public class FamiliaDbHelper extends DbHelper {
 
     private static final String LOG = "FamiliaDbHelper";
 
-    private static final String KEY_NOMBRE = "nombre";
-    private static final String KEY_NOMBRE_NORM = "nombre_norm";
+    public static final String KEY_NOMBRE = "nombre";
+    public static final String KEY_NOMBRE_NORM = "nombre_norm";
 
     public static final String[] KEYS_FAMILIA = {KEY_NOMBRE, KEY_NOMBRE_NORM};
 
