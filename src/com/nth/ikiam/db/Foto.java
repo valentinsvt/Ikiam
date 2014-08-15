@@ -229,6 +229,12 @@ public class Foto {
         return e.getAllFotosByEntry(entry);
     }
 
+    public static List<Foto> findAllByRuta(Context context, Ruta ruta) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getAllFotosByRuta(ruta);
+    }
+
+
     public static List<Foto> findAllByKeyword(Context context, String keyword) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.getAllFotosByKeyword(keyword);

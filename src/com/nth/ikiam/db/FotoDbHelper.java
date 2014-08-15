@@ -189,6 +189,33 @@ public class FotoDbHelper extends DbHelper {
         db.close();
         return fotos;
     }
+    public List<Foto> getAllFotosByRuta(Ruta ruta) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Foto> fotos = new ArrayList<Foto>();
+
+//        String selectQuery = "SELECT * FROM " + TABLE_FOTO + " tf, " + TABLE_ESPECIE + " te " +
+//                "WHERE tf." + KEY_ESPECIE_ID + "=te." + KEY_ID +
+//                " AND te." + KEY_ID + "='" + especie.id + "' ";
+
+        String selectQuery = "SELECT * FROM " + TABLE_FOTO +
+                " WHERE " + KEY_RUTA_ID + " = " + ruta.id;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto f = setDatos(c);
+
+                // adding to foto list
+                fotos.add(f);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return fotos;
+    }
 
     public List<Foto> getAllFotosByKeyword(String keyword) {
         SQLiteDatabase db = this.getReadableDatabase();

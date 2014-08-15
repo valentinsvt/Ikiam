@@ -65,8 +65,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int CAPTURA_POS = 1;
     public final int ENCYCLOPEDIA_POS = 2;
     public final int GALERIA_POS = 3;
-    public final int SETTINGS_POS = 4;
-    public final int LOGIN_POS = 5;
+    public final int RUTAS_POS = 4;
+    public final int SETTINGS_POS = 5;
+    public final int LOGIN_POS = 6;
 
     /*Interfaz*/
     private Button[] botones;
@@ -912,6 +913,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             case GALERIA_POS:
                 fragment = new GaleriaFragment();
                 break;
+            case RUTAS_POS:
+                fragment = new RutasFragment();
+                break;
             case SETTINGS_POS:
                 fragment = new SettingsFragment();
                 this.addListener((FieldListener) fragment);
@@ -973,6 +977,25 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+
+    /*Funcion para ver rutas desde el list*/
+    public void openRutaFragment(Ruta ruta){
+        this.ruta=ruta;
+        Fragment fragment = new RutaFragment();
+        if (fragment != null) {
+            Bundle args = new Bundle();
+            fragment.setArguments(args);
+            FragmentManager fragmentManager = getFragmentManager();
+            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+            mainLayout.setVisibility(LinearLayout.GONE);
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+        }
+        setTitle(ruta.descripcion);
     }
 
 
