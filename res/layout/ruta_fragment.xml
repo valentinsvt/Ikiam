@@ -7,20 +7,20 @@
                 android:paddingRight="16dp">
         <ImageView
                 android:id="@+id/ruta_img"
-                android:layout_height="match_parent"
-                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:layout_width="80dp"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
                 />
         <TextView
                 android:id="@+id/ruta_descripcion"
                 android:layout_width="180dp"
-                android:layout_height="match_parent"
+                android:layout_height="80dp"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textColor="#333"
                 android:textSize="18sp"
-                android:layout_toRightOf="@+id/selection_profile_pic_ikiam"/>
+                android:layout_toRightOf="@+id/ruta_img" android:layout_alignParentEnd="true"/>
 
 
 
