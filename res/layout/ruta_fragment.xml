@@ -212,6 +212,8 @@
             android:textColor="#fffffef2"
             android:textStyle="bold|italic"
             android:layout_marginLeft="15dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             />
 
 

@@ -1,6 +1,8 @@
 package com.nth.ikiam;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
     private ImageButton[] imgBotones;
     List<Foto> fotos;
     List<Coordenada> cords;
+    List<ImageView> imgs;
     View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         ((TextView) view.findViewById(R.id.ruta_fecha)).setText(activity.ruta.fecha);
         fotos = Foto.findAllByRuta(activity, activity.ruta);
         cords = Coordenada.findAllByRuta(activity,activity.ruta);
+        imgs = new ArrayList<ImageView>();
         double distancia = 0;
         double alturaMinima = 0;
         double alturaMaxima = 0;
@@ -100,6 +105,8 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 }
 //                File file = new File(fotos.get(i).path);
                 ImageView im = (ImageView) view.findViewById(res);
+                im.setOnClickListener(this);
+                imgs.add(im);
                 Bitmap myBitmap = ImageUtils.decodeBitmap(fotos.get(i).path, 100, (int) Math.floor(100 * 0.5625));
                 im.setImageBitmap(myBitmap);
                 im.setVisibility(View.VISIBLE);
@@ -119,7 +126,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         botones[0] = (Button) view.findViewById(R.id.ver_mapa);
         botones[1] = (Button) view.findViewById(R.id.compartir);
         for (int i = 0; i < botones.length; i++) {
-          botones[i].setOnClickListener(this);
+            botones[i].setOnClickListener(this);
         }
         for (int i = 0; i < imgBotones.length; i++) {
             imgBotones[i].setOnClickListener(this);
@@ -143,11 +150,118 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             }
         }
         if (v.getId() == botones[0].getId()) {
-
+            /*Ver en el mapa*/
+            activity.showRuta(cords,fotos);
         }
         if (v.getId() == botones[1].getId()) {
 
         }
+        if(imgs.size()>0){
+            if (v.getId() == imgs.get(0).getId()) {
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View myView = inflater.inflate(R.layout.dialog, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(R.string.ruta_lbl_fotos);
+                builder.setView(myView);
+                builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+
+
+                });
+                activity.dialog = builder.create();
+                ImageView img = (ImageView) myView.findViewById(R.id.image);
+                img.setImageBitmap(activity.getFotoDialog(fotos.get(1), activity.screenWidth, 300));
+                activity.dialog.show();
+            }
+        }
+        if(imgs.size()>1){
+            if (v.getId() == imgs.get(1).getId()) {
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View myView = inflater.inflate(R.layout.dialog, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(R.string.ruta_lbl_fotos);
+                builder.setView(myView);
+                builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+
+
+                });
+                activity.dialog = builder.create();
+                ImageView img = (ImageView) myView.findViewById(R.id.image);
+                img.setImageBitmap(activity.getFotoDialog(fotos.get(2), activity.screenWidth, 300));
+                activity.dialog.show();
+            }
+        }
+        if(imgs.size()>2){
+            if (v.getId() == imgs.get(2).getId()) {
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View myView = inflater.inflate(R.layout.dialog, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(R.string.ruta_lbl_fotos);
+                builder.setView(myView);
+                builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+
+
+                });
+                activity.dialog = builder.create();
+                ImageView img = (ImageView) myView.findViewById(R.id.image);
+                img.setImageBitmap(activity.getFotoDialog(fotos.get(3), activity.screenWidth, 300));
+                activity.dialog.show();
+            }
+        }
+        if(imgs.size()>3){
+            if (v.getId() == imgs.get(3).getId()) {
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View myView = inflater.inflate(R.layout.dialog, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(R.string.ruta_lbl_fotos);
+                builder.setView(myView);
+                builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+
+
+                });
+                activity.dialog = builder.create();
+                ImageView img = (ImageView) myView.findViewById(R.id.image);
+                img.setImageBitmap(activity.getFotoDialog(fotos.get(4), activity.screenWidth, 300));
+                activity.dialog.show();
+            }
+        }
+        if(imgs.size()>4){
+            if (v.getId() == imgs.get(4).getId()) {
+                LayoutInflater inflater = activity.getLayoutInflater();
+                View myView = inflater.inflate(R.layout.dialog, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(R.string.ruta_lbl_fotos);
+                builder.setView(myView);
+                builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+
+
+                });
+                activity.dialog = builder.create();
+                ImageView img = (ImageView) myView.findViewById(R.id.image);
+                img.setImageBitmap(activity.getFotoDialog(fotos.get(5), activity.screenWidth, 300));
+                activity.dialog.show();
+            }
+        }
+
 
     }
 

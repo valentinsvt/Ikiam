@@ -676,7 +676,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         lastPosition.setPosition(latlong);
                     updatePolyLine(latlong);
                     if (lastestImageIndex != 0) {
-                        System.out.println("Tomo foto " + lastestImageIndex);
+                        //System.out.println("Tomo foto " + lastestImageIndex);
                         imageItem = getLatestItem();
                         getFoto();
                         if (imagenes.size() > lastSize) {
@@ -774,7 +774,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             // System.out.println("path "+imageItem.imagePath);
             //System.out.println("images " + imagenes);
             Bitmap b = ImageUtils.decodeFile(imageItem.imagePath);
-            System.out.println("width " + b.getWidth() + "  " + b.getHeight());
+            //System.out.println("width " + b.getWidth() + "  " + b.getHeight());
             imagenes.add(b);
             lastIndex++;
             lastestImageIndex = 0;
@@ -1000,6 +1000,45 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     .commit();
         }
         setTitle(ruta.descripcion);
+    }
+
+    public void showRuta(List<Coordenada> cords,List<Foto> fotos){
+        map.clear();
+        data.clear();
+        location = new LatLng(cords.get(0).getLatitud(), cords.get(0).getLongitud());
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 19);
+        map.animateCamera(update);
+        polyLine = map.addPolyline(rectOptions);
+        for(int i =0;i<fotos.size();i++){
+            Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+            Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+            Canvas canvas1 = new Canvas(bmp);
+            Paint color = new Paint();
+            color.setTextSize(35);
+            color.setColor(Color.BLACK);//modify canvas
+            canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                    R.drawable.pin3), 0, 0, color);
+            Bitmap b = ImageUtils.decodeFile(fotos.get(i).path);
+            canvas1.drawBitmap(b, 3, 2, color);
+            Coordenada co = fotos.get(i).getCoordenada(activity);
+            location = new LatLng(co.getLatitud(), co.getLongitud());
+            Marker marker = map.addMarker(new MarkerOptions().position(location)
+                    .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                    .anchor(0.5f, 1).title("Nueva fotografía"));
+            data.put(marker, fotos.get(i));
+        }
+        for(int i =0;i<cords.size();i++) {
+            updatePolyLine(new LatLng(cords.get(i).getLatitud(),cords.get(i).getLongitud()));
+            if(i==cords.size()-1){
+                map.addMarker(new MarkerOptions().position(new LatLng(cords.get(i).getLatitud(),cords.get(i).getLongitud())).title("Última posición registrada"));
+            }
+        }
+        showMap();
+
+    }
+
+    public void showMap(){
+        selectItem(0);
     }
 
 
