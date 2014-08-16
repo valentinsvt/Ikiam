@@ -29,7 +29,7 @@ public class ImageUtils {
      * @return : Bitmap
      */
     public static Bitmap getThumbnailFromCameraData(Intent data, Context context) {
-        return getBitmapFromCameraData(data, context, 100, 100);
+        return getBitmapFromCameraData(data, context, 185, 185);
     }
 
     public static Bitmap getBitmapFromCameraData(Intent data, Context context) {
@@ -48,18 +48,32 @@ public class ImageUtils {
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
-        Bitmap bitmap;
+        Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
         try {
             ExifInterface exif = new ExifInterface(picturePath);
             int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+//            bitmap = rotateBitmap(bitmap, orientation);
+
             if (resize) {
+//                int imageW = bitmap.getWidth();
+//                int imageH = bitmap.getHeight();
+//                int newW, newH;
+//                if (imageW > imageH) {
+//                    newW = w;
+//                    newH = (w * imageH) / imageW;
+//                } else {
+//                    newH = h;
+//                    newW = (h * imageW) / imageH;
+//                }
+//                System.out.println(">>>>>>>>>>>>>>> W=" + imageW + "         H=" + imageH);
+//                System.out.println(">>>>>>>>>>>>>>> W=" + newW + "         H=" + newH);
                 bitmap = ImageUtils.decodeBitmap(picturePath, w, h);
 //                bitmap = decodeFile(picturePath);
                 bitmap = rotateBitmap(bitmap, orientation);
+//                System.out.println(">>>>>>>>>>>>>>>***** W=" + bitmap.getWidth() + "         H=" + bitmap.getHeight());
 
                 cursor.close();
             } else {
-                bitmap = BitmapFactory.decodeFile(picturePath);
                 bitmap = rotateBitmap(bitmap, orientation);
             }
         } catch (Exception e) {
@@ -172,7 +186,18 @@ public class ImageUtils {
     public static Bitmap decodeBitmap(String path, int w, int h) {
         try {
             File f = new File(path);
-            return decodeBitmap(new FileInputStream(f), w, h);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            int imageW = bitmap.getWidth();
+            int imageH = bitmap.getHeight();
+            int newW, newH;
+            if (imageW > imageH) {
+                newW = w;
+                newH = (w * imageH) / imageW;
+            } else {
+                newH = h;
+                newW = (h * imageW) / imageH;
+            }
+            return decodeBitmap(new FileInputStream(f), newW, newH);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,7 +214,8 @@ public class ImageUtils {
         }
         return null;
     }
-    public static Bitmap[] dobleBitmap(InputStream stream, int w, int h , int w2, int h2) {
+
+    public static Bitmap[] dobleBitmap(InputStream stream, int w, int h, int w2, int h2) {
         try {
             //Decode image size
             Bitmap[] res = new Bitmap[2];

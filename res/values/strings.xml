@@ -26,6 +26,8 @@
     <string name="global_upload">Guardar y enviar al servidor</string>
     <string name="global_cancel">Cancelar</string>
     <string name="global_placeHolder">placeHolder</string>
+    <string name="global_min">min.</string>
+    <string name="global_max">max.</string>
 
     <string name="global_color_none">-Ninguno-</string>
     <string name="global_color_azul">Azul</string>
@@ -109,6 +111,7 @@
     <string name="captura_color1_label">Color principal</string>
     <string name="captura_color2_label">Color secundario</string>
 
+    <string name="captura_error_keywords">Por favor, selecciona un tipo de foto</string>
     <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
     <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
@@ -159,4 +162,10 @@
     <string name="ruta_datos_guardados">Datos actualizados</string>
     <string name="ruta_error_datos">Ingrese una descripción</string>
     <string name="uploader_no_login">Por favor crea una cuenta Ikiam o ingresa con tu cuenta de Facebook, desde la opción de menú: Login.</string>
+
+    <string name="especie_info_altura">Altitud</string>
+    <string name="especie_info_altura_min">Altitud mínima</string>
+    <string name="especie_info_altura_max">Altitud máxima</string>
+    <string name="especie_info_altura_avg">Altitud promedio</string>
+    <string name="especie_info_color_lbl">Color</string>
 </resources>

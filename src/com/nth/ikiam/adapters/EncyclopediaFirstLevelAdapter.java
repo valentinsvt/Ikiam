@@ -14,10 +14,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.nth.ikiam.EncyclopediaEntriesFragment;
-import com.nth.ikiam.EncyclopediaFragment;
-import com.nth.ikiam.MapActivity;
-import com.nth.ikiam.R;
+import com.nth.ikiam.*;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Genero;
@@ -70,7 +67,8 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
                 List<Especie> especies = Especie.findAllByGenero(activity, generos.get(gp));
                 Especie selected = especies.get(childPosition);
 
-                ListFragment fragment = new EncyclopediaEntriesFragment();
+//                ListFragment fragment = new EncyclopediaEntriesFragment();
+                Fragment fragment = new EncyclopediaEspecieInfoFragment();
                 Bundle args = new Bundle();
                 args.putLong("especie", selected.id);
                 fragment.setArguments(args);

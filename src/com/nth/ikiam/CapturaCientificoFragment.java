@@ -145,8 +145,10 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 String comentarios = textoComentarios.getText().toString().trim();
                 String keywords = "";
                 int i = 0;
+                boolean checked = false;
                 for (ToggleButton toggle : toggles) {
                     if (toggle.isChecked()) {
+                        checked = true;
                         if (!keywords.equals("")) {
                             keywords += ", ";
                         }
@@ -155,114 +157,118 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                     }
                     i++;
                 }
-                Familia familia = null;
-                Genero genero = null;
-                Especie especie = null;
-                Entry entry = null;
-                if (!nombreFamilia.equals("")) {
-                    familia = Familia.getByNombreOrCreate(context, nombreFamilia);
-                }
-                if (!nombreGenero.equals("")) {
-                    genero = Genero.getByNombreOrCreate(context, nombreGenero);
-                    if (familia != null) {
-                        genero.setFamilia(familia);
-                        genero.save();
-                    }
-                }
-                if (!nombreEspecie.equals("")) {
-                    especie = Especie.getByNombreOrCreate(context, nombreEspecie);
-                    if (genero != null) {
-                        especie.setGenero(genero);
-                    }
-                    if (color1 != null) {
-                        especie.setColor1(color1);
-                    }
-                    if (color2 != null && !color2.nombre.equals("none")) {
-                        especie.setColor2(color2);
-                    }
-                    if (!nombreComun.equals("")) {
-                        especie.setNombreComun(nombreComun);
-                    }
-                    especie.save();
-
-                    entry = new Entry(context);
-                    entry.setEspecie(especie);
-                    entry.setComentarios(comentarios);
-                    entry.setUploaded(0);
-                    entry.save();
-                }
-
-                Foto foto = new Foto(context);
-                if (especie != null) {
-                    foto.setEspecie(especie);
-                }
-                if (entry != null) {
-                    foto.setEntry(entry);
-                }
-                foto.setKeywords(keywords);
-                if (fotoLat != null && fotoLong != null) {
-                    System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
-                    Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
-                    if (fotoAlt != null) {
-                        coordenada.setAltitud(fotoAlt);
-                    }
-                    coordenada.save();
-                    foto.setCoordenada(coordenada);
-                }
-                foto.save();
-
-                String nuevoNombre;
-                if (genero != null && especie != null) {
-                    nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
-                    nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
+                if (!checked) {
+                    alerta(getString(R.string.captura_error_keywords));
                 } else {
-                    nuevoNombre = "na_na_" + foto.id;
-                }
-                nuevoNombre += ".jpg";
+                    Familia familia = null;
+                    Genero genero = null;
+                    Especie especie = null;
+                    Entry entry = null;
+                    if (!nombreFamilia.equals("")) {
+                        familia = Familia.getByNombreOrCreate(context, nombreFamilia);
+                    }
+                    if (!nombreGenero.equals("")) {
+                        genero = Genero.getByNombreOrCreate(context, nombreGenero);
+                        if (familia != null) {
+                            genero.setFamilia(familia);
+                            genero.save();
+                        }
+                    }
+                    if (!nombreEspecie.equals("")) {
+                        especie = Especie.getByNombreOrCreate(context, nombreEspecie);
+                        if (genero != null) {
+                            especie.setGenero(genero);
+                        }
+                        if (color1 != null) {
+                            especie.setColor1(color1);
+                        }
+                        if (color2 != null && !color2.nombre.equals("none")) {
+                            especie.setColor2(color2);
+                        }
+                        if (!nombreComun.equals("")) {
+                            especie.setNombreComun(nombreComun);
+                        }
+                        especie.save();
+
+                        entry = new Entry(context);
+                        entry.setEspecie(especie);
+                        entry.setComentarios(comentarios);
+                        entry.setUploaded(0);
+                        entry.save();
+                    }
+
+                    Foto foto = new Foto(context);
+                    if (especie != null) {
+                        foto.setEspecie(especie);
+                    }
+                    if (entry != null) {
+                        foto.setEntry(entry);
+                    }
+                    foto.setKeywords(keywords);
+                    if (fotoLat != null && fotoLong != null) {
+                        System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
+                        Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
+                        if (fotoAlt != null) {
+                            coordenada.setAltitud(fotoAlt);
+                        }
+                        coordenada.save();
+                        foto.setCoordenada(coordenada);
+                    }
+                    foto.save();
+
+                    String nuevoNombre;
+                    if (genero != null && especie != null) {
+                        nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
+                        nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
+                    } else {
+                        nuevoNombre = "na_na_" + foto.id;
+                    }
+                    nuevoNombre += ".jpg";
 
 //                File file = new File(pathFolder, fotoPath);
 //                fotoPath = file.getName();
-                File file = new File(pathFolder, nuevoNombre);
+                    File file = new File(pathFolder, nuevoNombre);
 ////                if (file.exists()) {
 ////                    file.delete();
 ////                }
-                try {
-                    if (!file.exists()) {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                        out.flush();
-                        out.close();
-                    }
+                    try {
+                        if (!file.exists()) {
+                            FileOutputStream out = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                            out.flush();
+                            out.close();
+                        }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //System.out.println("Path folder: " + pathFolder);
-                //System.out.println("Photo path: " + fotoPath);
-//                foto.setPath(pathFolder + "/" + fotoPath);
-                foto.setPath(pathFolder + "/" + nuevoNombre);
-                foto.setUploaded(0);
-                foto.save();
-//                String msg = "Foto guardada";
-                //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
-                if (v.getId() == botones[3].getId()) {
-                    String id = context.userId; //id (faceboook - fb id, ikiam db.id
-                    if (id != null && !id.equals("-1")) {
-                        // aqui hace upload al servidor.....
-                        ExecutorService queue = Executors.newSingleThreadExecutor();
-                        queue.execute(new CapturaUploader(context, queue, foto, 0));
-                    } else {
-                        //redirect a login
-                        System.out.println("Login first!!!");
-                        context.selectItem(context.LOGIN_POS);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                    //System.out.println("Path folder: " + pathFolder);
+                    //System.out.println("Photo path: " + fotoPath);
+//                foto.setPath(pathFolder + "/" + fotoPath);
+                    foto.setPath(pathFolder + "/" + nuevoNombre);
+                    foto.setUploaded(0);
+                    foto.save();
+//                String msg = "Foto guardada";
+                    //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
+                    if (v.getId() == botones[3].getId()) {
+                        String id = context.userId; //id (faceboook - fb id, ikiam db.id
+                        if (id != null && !id.equals("-1")) {
+                            // aqui hace upload al servidor.....
+                            ExecutorService queue = Executors.newSingleThreadExecutor();
+                            queue.execute(new CapturaUploader(context, queue, foto, 0));
+                        } else {
+                            //redirect a login
+                            System.out.println("Login first!!!");
+                            context.selectItem(context.LOGIN_POS);
+                        }
 //                    msg += " y subida ";
-                } else {
-                    alerta(getString(R.string.uploader_upload_success));
-                }
+                    } else {
+                        alerta(getString(R.string.uploader_upload_success));
+                    }
 //                alerta(msg + " exitosamente");
-                resetForm();
+                    resetForm();
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
+                }
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
             }
@@ -449,7 +455,6 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         }
 
         String info = "";
-
         int i = 0;
         for (ToggleButton toggle : toggles) {
             if (toggle.isChecked()) {
@@ -492,7 +497,11 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                     GeoDegree gd = new GeoDegree(exif);
                     fotoLat = gd.getLatitude();
                     fotoLong = gd.getLongitude();
-                    fotoAlt = Double.parseDouble(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
+                    String p = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE);
+                    String[] parts = p.split("/");
+                    Double alt = Double.parseDouble(parts[0]) / Double.parseDouble(parts[1]);
+//                    System.out.println("**************************" + alt + "     " + fotoLat + "       " + fotoLong);
+                    fotoAlt = alt;
                     if (fotoLat != null && fotoLong != null) {
                         alerta(getString(R.string.captura_success_tag_gps));
                     } else {

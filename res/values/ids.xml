@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="map_title_label" type="id" />
+
+    <item name="especie_info_relative_layout" type="id" />
     <item name="camera_title_label" type="id" />
     <item name="encyclopedia_title_label" type="id" />
     <item name="settings_title_label" type="id" />
