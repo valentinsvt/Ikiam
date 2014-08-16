@@ -158,4 +158,5 @@
     <string name="ruta_subir">Compartir</string>
     <string name="ruta_datos_guardados">Datos actualizados</string>
     <string name="ruta_error_datos">Ingrese una descripción</string>
+    <string name="uploader_no_login">Por favor crea una cuenta Ikiam o ingresa con tu cuenta de Facebook, desde la opción de menú: Login.</string>
 </resources>

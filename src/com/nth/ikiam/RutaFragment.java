@@ -154,7 +154,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             activity.showRuta(cords,fotos);
         }
         if (v.getId() == botones[1].getId()) {
-
+            /*Subir*/
         }
         if(imgs.size()>0){
             if (v.getId() == imgs.get(0).getId()) {

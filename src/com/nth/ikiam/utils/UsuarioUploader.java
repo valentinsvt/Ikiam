@@ -1,7 +1,5 @@
 package com.nth.ikiam.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import com.nth.ikiam.MapActivity;
 
 import java.io.BufferedReader;
