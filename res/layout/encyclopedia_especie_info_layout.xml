@@ -171,4 +171,90 @@
         android:layout_alignTop="@+id/especie_info_altura_lbl"
         android:layout_toRightOf="@+id/especie_info_altura_lbl" />
 
+    <TextView
+        android:id="@+id/especie_info_fotos"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/especie_info_fotos"
+        android:textStyle="bold"
+
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/especie_info_altura_lbl"/>
+
+    <ImageView
+        android:id="@+id/especie_info_foto1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/border"
+
+        android:padding="7dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/especie_info_fotos" />
+
+    <ImageView
+        android:id="@+id/especie_info_foto2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/border"
+
+        android:padding="7dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+
+        android:layout_alignTop="@id/especie_info_foto1"
+        android:layout_toRightOf="@id/especie_info_foto1" />
+
+    <ImageView
+        android:id="@+id/especie_info_foto3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/border"
+
+        android:padding="7dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+
+        android:layout_alignTop="@id/especie_info_foto1"
+        android:layout_toRightOf="@id/especie_info_foto2" />
+
+    <ImageView
+        android:id="@+id/especie_info_foto4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/border"
+
+        android:padding="7dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+
+        android:layout_alignTop="@id/especie_info_foto1"
+        android:layout_toRightOf="@id/especie_info_foto3" />
+
+    <ImageView
+        android:id="@+id/especie_info_foto5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/ic_launcher"
+        android:background="@drawable/border"
+
+        android:padding="7dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+
+        android:layout_alignTop="@id/especie_info_foto1"
+        android:layout_toRightOf="@id/especie_info_foto4" />
+
 </RelativeLayout>
