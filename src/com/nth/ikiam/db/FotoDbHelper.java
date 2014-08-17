@@ -272,13 +272,12 @@ public class FotoDbHelper extends DbHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Foto> fotos = new ArrayList<Foto>();
 
-        String selectQuery = "SELECT * FROM " + TABLE_FOTO + " f";
-//        selectQuery += " OUTER JOIN " + TABLE_ESPECIE + " e ON f." + KEY_ESPECIE_ID + " = e." + KEY_ID;
-//        selectQuery += " OUTER JOIN " + TABLE_COLOR + " c1 ON e." + EspecieDbHelper.KEY_COLOR1_ID + " = c1." + KEY_ID;
-//        selectQuery += " OUTER JOIN " + TABLE_COLOR + " c2 ON e." + EspecieDbHelper.KEY_COLOR2_ID + " = c2." + KEY_ID;
-
         String where = "";
         String whereJoin = "";
+        String whereKeywords = "";
+
+
+        String selectQuery = "SELECT f.* FROM " + TABLE_FOTO + " f";
 
         boolean tieneEspecie = false;
         boolean tieneColor = false;
@@ -291,18 +290,24 @@ public class FotoDbHelper extends DbHelper {
                 where += " AND ";
             }
             if (key.startsWith("keyword")) {
-                where += "f." + KEY_KEYWORDS + " LIKE '%" + val + "%'";
+                if (!whereKeywords.equals("")) {
+                    whereKeywords += " OR ";
+                }
+                whereKeywords += "f." + KEY_KEYWORDS + " LIKE '%" + val + "%'";
             } else if (key.equals("nombreComun")) {
                 tieneEspecie = true;
                 where += "e." + EspecieDbHelper.KEY_NOMBRE_COMUN_NORM + " LIKE '%" + val + "%'";
             } else if (key.equals("color")) {
                 tieneColor = true;
-                where += "c1." + ColorDbHelper.KEY_NOMBRE + " = '" + val + "'";
-                where += " OR c2." + ColorDbHelper.KEY_NOMBRE + " = '" + val + "'";
+                where += "(c1." + ColorDbHelper.KEY_NOMBRE + " = '" + val + "'";
+                where += " OR c2." + ColorDbHelper.KEY_NOMBRE + " = '" + val + "')";
             }
         }
         if (tieneEspecie || tieneColor) {
             selectQuery += ", " + TABLE_ESPECIE + " e";
+            if (!whereJoin.equals("")) {
+                whereJoin += " AND ";
+            }
             whereJoin += " f." + KEY_ESPECIE_ID + " = e." + KEY_ID;
         }
         if (tieneColor) {
@@ -314,20 +319,23 @@ public class FotoDbHelper extends DbHelper {
             selectQuery += ", " + TABLE_COLOR + " c2";
             whereJoin += " AND e." + EspecieDbHelper.KEY_COLOR2_ID + " = c2." + KEY_ID;
         }
-
-        if (!whereJoin.equals("")) {
-            where = " AND " + where;
-        }
-
+//        if (!where.equals("")) {
+//            where = " AND " + where;
+//        }
         if (!whereJoin.equals("") || !where.equals("")) {
             where = " WHERE " + whereJoin + where;
+        }
+        if (!whereKeywords.equals("")) {
+            whereKeywords = "(" + whereKeywords + ")";
+            if (where.equals("")) {
+                where = " WHERE " + whereKeywords;
+            } else {
+                where = " AND " + whereKeywords;
+            }
         }
 
         selectQuery += where;
         System.out.println(selectQuery);
-        /*
-        SELECT * FROM fotos f, especies e, colores c1, colores c2 WHERE  f.especie_id = e.id AND  e.color_id = c1.id AND e.color2_id = c2.id AND f.keywords LIKE '%corteza%' AND f.keywords LIKE '%arbol%' AND e.nombre_comun_norm LIKE '%Test%' AND f.keywords LIKE '%animal%' AND c1.nombre = 'amarillo' OR c2.nombre = 'amarillo' AND f.keywords LIKE '%hoja%'
-         */
 
         logQuery(LOG, selectQuery);
 
