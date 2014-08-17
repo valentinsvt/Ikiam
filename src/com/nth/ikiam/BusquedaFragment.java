@@ -162,19 +162,43 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
         Utils.hideSoftKeyboard(this.getActivity());
         if (v.getId() == btnBuscar.getId()) {
             updateStatus();
-            List<Entry> entries = Entry.busqueda(context, data);
-            data = new HashMap<String, String>();
-            context.entriesBusqueda = entries;
 
-            ListFragment fragment = new EncyclopediaEntriesFragment();
-            Bundle args = new Bundle();
-            args.putLong("especie", -1);
-            fragment.setArguments(args);
+//            List<Foto> fotos = Foto.busqueda(context, data);
+            context.fotosBusqueda = Foto.busqueda(context, data);
+//            for (Foto f : fotos) {
+//                System.out.println("******" + f.id);
+//            }
+            data = new HashMap<String, String>();
+
+            ListFragment fragment = new BusquedaResultsFragment();
+//            Bundle args = new Bundle();
+//            args.putLong("especie", -1);
+//            fragment.setArguments(args);
 
             context.setTitle("Resultados");
 
             FragmentManager fragmentManager = context.getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
+
+//            List<Entry> entries = Entry.busqueda(context, data);
+//            data = new HashMap<String, String>();
+//            context.entriesBusqueda = entries;
+//
+//            for (Entry entry : entries) {
+//                System.out.println("*************   " + entry.getEspecie(context).nombreComun);
+//            }
+
+
+//            ListFragment fragment = new EncyclopediaEntriesFragment();
+//            Bundle args = new Bundle();
+//            args.putLong("especie", -1);
+//            fragment.setArguments(args);
+//
+//            context.setTitle("Resultados");
+//
+//            FragmentManager fragmentManager = context.getFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 //            System.out.println("HAY " + entries.size() + " ENTRIES EN EL RESULTADO");
         } else {

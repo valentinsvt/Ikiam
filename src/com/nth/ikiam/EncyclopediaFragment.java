@@ -48,9 +48,7 @@ public class EncyclopediaFragment extends Fragment {
 //        for (Foto foto : Foto.list(context)) {
 //            System.out.println(foto.getPath());
 //        }
-
         List<Familia> familias = Familia.list(context);
-
         expandableListView = (ExpandableListView) view.findViewById(R.id.encyclopedia_level_1);
         expandableListView.setAdapter(new EncyclopediaFirstLevelAdapter(context, this, familias));
 
