@@ -158,7 +158,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
             lblInfoKeywords.setVisibility(View.VISIBLE);
             lblInfoKeywords.setText(info);
         } else {
-            lblInfoKeywords.setVisibility(View.INVISIBLE);
+            lblInfoKeywords.setVisibility(View.GONE);
         }
     }
 
@@ -177,7 +177,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
             lblInfoColor.setVisibility(View.VISIBLE);
             lblInfoColor.setText(info);
         } else {
-            lblInfoColor.setVisibility(View.INVISIBLE);
+            lblInfoColor.setVisibility(View.GONE);
         }
     }
 
@@ -197,7 +197,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
             lblInfoNC.setVisibility(View.VISIBLE);
             lblInfoNC.setText(info);
         } else {
-            lblInfoNC.setVisibility(View.INVISIBLE);
+            lblInfoNC.setVisibility(View.GONE);
         }
     }
 

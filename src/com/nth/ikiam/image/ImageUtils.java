@@ -8,12 +8,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Created by svt on 7/29/2014.
@@ -67,7 +65,8 @@ public class ImageUtils {
 //                }
 //                System.out.println(">>>>>>>>>>>>>>> W=" + imageW + "         H=" + imageH);
 //                System.out.println(">>>>>>>>>>>>>>> W=" + newW + "         H=" + newH);
-                bitmap = ImageUtils.decodeBitmap(picturePath, w, h);
+//                bitmap = ImageUtils.decodeBitmap(picturePath, w, h);
+                bitmap = decodeFile(picturePath, w, h);
 //                bitmap = decodeFile(picturePath);
                 bitmap = rotateBitmap(bitmap, orientation);
 //                System.out.println(">>>>>>>>>>>>>>>***** W=" + bitmap.getWidth() + "         H=" + bitmap.getHeight());
@@ -83,55 +82,63 @@ public class ImageUtils {
         return bitmap;
     }
 
-    /**
-     * Decodes image and scales it to reduce memory consumption
-     * http://stackoverflow.com/questions/477572/strange-out-of-memory-issue-while-loading-an-image-to-a-bitmap-object
-     * edited Jan 12 '12 at 12:33 by Fedor
-     * and
-     * edited Mar 20 at 6:18 by Thomas Vervest
-     *
-     * @param path: image path
-     * @return: Bitmap
-     */
-    public static Bitmap decodeFile(String path, int screenWidth, int screenHeight) {
-        File f = new File(path);
+    //    /**
+//     * Decodes image and scales it to reduce memory consumption
+//     * http://stackoverflow.com/questions/477572/strange-out-of-memory-issue-while-loading-an-image-to-a-bitmap-object
+//     * edited Jan 12 '12 at 12:33 by Fedor
+//     * and
+//     * edited Mar 20 at 6:18 by Thomas Vervest
+//     *
+//     * @param path: image path
+//     * @return: Bitmap
+//     */
+//    public static Bitmap decodeFile(String path, int screenWidth, int screenHeight) {
+//        File f = new File(path);
+//        try {
+//            //Decode image size
+//            BitmapFactory.Options o = new BitmapFactory.Options();
+//            o.inJustDecodeBounds = true;
+//            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+//
+//            //The new size we want to scale to
+//            final int REQUIRED_W = screenWidth - 10;
+//            final int REQUIRED_H = screenHeight / 2;
+//
+//            //Find the correct scale value. It should be the power of 2.
+//            int scale = 1;
+//            while (o.outWidth / scale / 2 >= REQUIRED_W && o.outHeight / scale / 2 >= REQUIRED_H)
+//                scale *= 2;
+//
+//            //Decode with inSampleSize
+//            BitmapFactory.Options o2 = new BitmapFactory.Options();
+//            o2.inSampleSize = scale;
+//            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+    public static Bitmap decodeFile(String path, int w, int h) {
+//        System.out.println("Decode File Nuevo......" + w + " x " + h);
+//        File f = new File(path);
         try {
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            int imageW = bitmap.getWidth();
+            int imageH = bitmap.getHeight();
+            int newW, newH;
+            if (imageW > imageH) {
+                newW = w;
+                newH = (w * imageH) / imageW;
+            } else {
+                newH = h;
+                newW = (h * imageW) / imageH;
+            }
+            Bitmap photo = Bitmap.createScaledBitmap(bitmap, newW, newH, false);
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
-            //The new size we want to scale to
-            final int REQUIRED_W = screenWidth - 10;
-            final int REQUIRED_H = screenHeight / 2;
-
-            //Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-////            while (o.outWidth / scale / 2 >= REQUIRED_SIZz E && o.outHeight / scale / 2 >= REQUIRED_SIZE)
-////                scale *= 2;
-            while (o.outWidth / scale / 2 >= REQUIRED_W && o.outHeight / scale / 2 >= REQUIRED_H)
-                scale *= 2;
-//            int scale = 1;
-//            if (o.outHeight > IMAGE_MAX_SIZE || o.outWidth > IMAGE_MAX_SIZE) {
-//                scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_SIZE /
-//                        (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
-//            }
-//            int scale = 1;
-//            if (o.outHeight > REQUIRED_H || o.outWidth > REQUIRED_W) {
-//                if (o.outHeight > REQUIRED_H) {
-//                    scale = (int) Math.pow(2, (int) Math.ceil(Math.log(REQUIRED_W /
-//                            (double) o.outWidth) / Math.log(0.5)));
-//                } else {
-//                    scale = (int) Math.pow(2, (int) Math.ceil(Math.log(REQUIRED_H /
-//                            (double) o.outHeight) / Math.log(0.5)));
-//                }
-//            }
-
-            //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
+            return photo;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -184,24 +191,25 @@ public class ImageUtils {
     }
 
     public static Bitmap decodeBitmap(String path, int w, int h) {
-        try {
-            File f = new File(path);
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
-            int imageW = bitmap.getWidth();
-            int imageH = bitmap.getHeight();
-            int newW, newH;
-            if (imageW > imageH) {
-                newW = w;
-                newH = (w * imageH) / imageW;
-            } else {
-                newH = h;
-                newW = (h * imageW) / imageH;
-            }
-            return decodeBitmap(new FileInputStream(f), newW, newH);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return decodeFile(path, w, h);
+//        try {
+//            File f = new File(path);
+//            Bitmap bitmap = BitmapFactory.decodeFile(path);
+//            int imageW = bitmap.getWidth();
+//            int imageH = bitmap.getHeight();
+//            int newW, newH;
+//            if (imageW > imageH) {
+//                newW = w;
+//                newH = (w * imageH) / imageW;
+//            } else {
+//                newH = h;
+//                newW = (h * imageW) / imageH;
+//            }
+//            return decodeBitmap(new FileInputStream(f), newW, newH);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     public static Bitmap decodeBitmap(InputStream stream, int w, int h) {

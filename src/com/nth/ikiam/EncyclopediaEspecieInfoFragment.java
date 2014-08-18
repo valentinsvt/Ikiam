@@ -47,7 +47,8 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     int fotoPos;
 
     Especie especie;
-    List<Foto> fotos;
+    //    List<Foto> fotos;
+    List<Entry> entries;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,19 +91,21 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         double altMin = 0, altMax = 0;
         boolean vert = false;
 
-        fotos = Foto.findAllByEspecie(context, especie);
+//        fotos = Foto.findAllByEspecie(context, especie);
+        entries = Entry.findAllByEspecie(context, especie);
         //especie_info_foto5
         //(ImageView) view.findViewById(R.id.especie_info_imagen);
         //im.setVisibility(View.VISIBLE);
 
-        imageViews = new ImageView[5];
+        imageViews = new ImageView[3];
         imageViews[0] = (ImageView) view.findViewById(R.id.especie_info_foto1);
         imageViews[1] = (ImageView) view.findViewById(R.id.especie_info_foto2);
         imageViews[2] = (ImageView) view.findViewById(R.id.especie_info_foto3);
-        imageViews[3] = (ImageView) view.findViewById(R.id.especie_info_foto4);
-        imageViews[4] = (ImageView) view.findViewById(R.id.especie_info_foto5);
+//        imageViews[3] = (ImageView) view.findViewById(R.id.especie_info_foto4);
+//        imageViews[4] = (ImageView) view.findViewById(R.id.especie_info_foto5);
 
-        int cantFotos = fotos.size();
+//        int cantFotos = fotos.size();
+        int cantFotos = entries.size();
         int showing = Math.min(imageViews.length, cantFotos);
         String strMostrando = getResources().getQuantityString(R.plurals.especie_info_fotos, cantFotos, cantFotos, showing);
 //        if (cantFotos == 1) {
@@ -112,47 +115,87 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
 //        }
         txtEspecieInfoFotos.setText(strMostrando);
 
-        if (fotos.size() > 0) {
-            Foto foto = fotos.get(0);
-            Coordenada coord = foto.getCoordenada(context);
-            altMin = coord.altitud;
-            altMax = coord.altitud;
-            File imgFile = new File(foto.path);
-            if (imgFile.exists()) {
-//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 200, 200);
-                int w = myBitmap.getWidth();
-                int h = myBitmap.getHeight();
-                if (h > w) {
-                    vert = true;
-                }
-                imgEspecieInfoImagen.setImageBitmap(myBitmap);
-            }
-            int i = 0;
-            for (Foto f : fotos) {
-                imgFile = new File(f.path);
+//        if (fotos.size() > 0) {
+        if (entries.size() > 0) {
+//            Foto foto = fotos.get(0);
+            Entry entry = entries.get(0);
+            List<Foto> fotos = Foto.findAllByEntry(context, entry);
+            if (fotos != null) {
+                Foto foto = fotos.get(0);
+                Coordenada coord = foto.getCoordenada(context);
+                altMin = coord.altitud;
+                altMax = coord.altitud;
+                File imgFile = new File(foto.path);
                 if (imgFile.exists()) {
-                    if (i < imageViews.length) {
-                        Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 150, 150);
-                        int w = myBitmap.getWidth();
-                        int h = myBitmap.getHeight();
-                        if (h > w) {
-                            System.out.println("foto es VERT");
-                        }
-                        imageViews[i].setImageBitmap(myBitmap);
-                        imageViews[i].setVisibility(View.VISIBLE);
-                        imageViews[i].setOnClickListener(this);
+//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+//                    Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 200, 200);
+                    Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 200, 200);
+                    int w = myBitmap.getWidth();
+                    int h = myBitmap.getHeight();
+                    if (h > w) {
+                        vert = true;
                     }
-                    coord = f.getCoordenada(context);
-                    if (coord != null && coord.altitud > 0) {
-                        if (coord.altitud < altMin) {
-                            altMin = coord.altitud;
-                        }
-                        if (coord.altitud > altMax) {
-                            altMax = coord.altitud;
+                    imgEspecieInfoImagen.setImageBitmap(myBitmap);
+                }
+
+                int screenWidth = context.screenWidth - 40;
+                int currentWidth = 0;
+                int idPrev = 0;
+                int highest = 0;
+                int idHighest = 0;
+
+                int i = 0;
+                for (Entry e : entries) {
+                    List<Foto> fotos1 = Foto.findAllByEntry(context, e);
+                    if (fotos1 != null) {
+                        Foto f = fotos1.get(0);
+                        imgFile = new File(f.path);
+                        if (imgFile.exists()) {
+                            if (i < imageViews.length) {
+                                ImageView curIV = imageViews[i];
+                                if (currentWidth == 0) {
+                                    idPrev = 0;
+                                }
+                                Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 150, 150);
+                                int w = myBitmap.getWidth();
+                                int h = myBitmap.getHeight();
+//                                if (h > w) {
+//                                    System.out.println("foto es VERT");
+//                                }
+                                curIV.setImageBitmap(myBitmap);
+                                curIV.setVisibility(View.VISIBLE);
+                                curIV.setOnClickListener(this);
+                                currentWidth += (w + 30);
+                                RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) curIV.getLayoutParams();
+                                if (idPrev > 0) {
+                                    p.addRule(RelativeLayout.RIGHT_OF, idPrev);
+//                                    p.setMargins(0, highest + 15, 0, 0);
+                                }
+                                if (currentWidth > screenWidth) {
+                                    p.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+                                    p.addRule(RelativeLayout.BELOW, idHighest);
+                                    p.setMargins(0, highest + 25, 0, 0);
+                                    currentWidth = 0;
+                                }
+                                curIV.setLayoutParams(p);
+                                idPrev = curIV.getId();
+                                if (h > highest) {
+                                    highest = h;
+                                    idHighest = curIV.getId();
+                                }
+                            }
+                            coord = f.getCoordenada(context);
+                            if (coord != null && coord.altitud > 0) {
+                                if (coord.altitud < altMin) {
+                                    altMin = coord.altitud;
+                                }
+                                if (coord.altitud > altMax) {
+                                    altMax = coord.altitud;
+                                }
+                            }
+                            i++;
                         }
                     }
-                    i++;
                 }
             }
 
@@ -252,18 +295,19 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         }
         fotoPos = i;
         LayoutInflater inflater = context.getLayoutInflater();
-        View v = inflater.inflate(R.layout.dialog, null);
-        final String t = getResources().getQuantityString(R.plurals.encyclopedia_entries_dialog_title, fotos.size());
+        View v = inflater.inflate(R.layout.especie_info_entry_dialog, null);
+        final String t = getResources().getQuantityString(R.plurals.encyclopedia_entries_dialog_title, entries.size());
         final AlertDialog.Builder builder = new AlertDialog.Builder(context).setView(v)
                 .setNeutralButton(R.string.dialog_btn_cerrar, null) //Set to null. We override the onclick
-                .setTitle(t + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
-        if (fotos.size() > 1) {
+                .setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
+        if (entries.size() > 1) {
             builder.setPositiveButton(R.string.dialog_btn_siguiente, null)
                     .setNegativeButton(R.string.dialog_btn_anterior, null);
         }
         final AlertDialog d = builder.create();
         final ImageView img = (ImageView) v.findViewById(R.id.image);
-        setFoto(img);
+        final TextView txt = (TextView) v.findViewById(R.id.textView);
+        setFoto(img, txt);
         d.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -281,23 +325,23 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                         if (fotoPos > 0) {
                             fotoPos -= 1;
                         } else {
-                            fotoPos = fotos.size() - 1;
+                            fotoPos = entries.size() - 1;
                         }
-                        setFoto(img);
-                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
+                        setFoto(img, txt);
+                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
                     }
                 });
                 Button siguiente = d.getButton(AlertDialog.BUTTON_POSITIVE);
                 siguiente.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (fotoPos < fotos.size() - 1) {
+                        if (fotoPos < entries.size() - 1) {
                             fotoPos += 1;
                         } else {
                             fotoPos = 0;
                         }
-                        setFoto(img);
-                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
+                        setFoto(img, txt);
+                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
                     }
                 });
             }
@@ -346,10 +390,27 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
 //        context.dialog.show();
     }
 
-    private void setFoto(ImageView img) {
-        System.out.println("SET FOTO " + fotoPos);
-        img.setImageBitmap(context.getFotoDialog(fotos.get(fotoPos), context.screenWidth, 300));
+    private void setFoto(ImageView img, TextView txt) {
+//        System.out.println("SET FOTO " + fotoPos);
+        Entry entry = entries.get(fotoPos);
+        List<Foto> fotos = Foto.findAllByEntry(context, entry);
+        if (fotos != null) {
+            String comentarios = entry.comentarios;
+            while (comentarios.length() < 3000) {
+                comentarios += " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies luctus imperdiet. Pellentesque libero erat, laoreet ac magna sit amet, blandit vulputate nisl. Nam dignissim non velit eget cursus. Aenean dui metus, vehicula a leo quis, tincidunt gravida est. Fusce semper nec purus quis consectetur. Vestibulum risus felis, accumsan vitae nulla eu, fringilla vulputate lectus. Nam scelerisque magna vel sollicitudin molestie. Nulla venenatis ipsum sem, nec dignissim lacus vestibulum eget. ";
+            }
+            comentarios = comentarios.trim();
+
+            Foto foto = fotos.get(0);
+            img.setImageBitmap(context.getFotoDialog(foto, context.screenWidth, 300));
+            if (comentarios.equals("")) {
+                txt.setVisibility(View.GONE);
+            } else {
+                txt.setText(comentarios);
+                txt.setVisibility(View.VISIBLE);
+            }
 //        dialogTitle = R.string.encyclopedia_entries_dialog_title + " (" + (fotoPos + 1) + "/" + fotos.size() + ")";
+        }
     }
 
     @Override

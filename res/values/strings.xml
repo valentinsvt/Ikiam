@@ -185,4 +185,5 @@
     <string name="share_name">Ikiam</string>
     <string name="share_caption">Descubre la biodiversidad ecuatoriana</string>
     <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
+    <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
 </resources>

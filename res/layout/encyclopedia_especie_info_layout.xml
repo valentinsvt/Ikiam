@@ -3,9 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingTop="20dp"
-    android:paddingRight="20dp"
+    android:padding="20dp"
     android:id="@+id/especie_info_relative_layout">
 
     <ImageView
@@ -180,7 +178,7 @@
         android:textStyle="bold"
 
         android:layout_marginTop="10dp"
-        android:layout_below="@+id/especie_info_altura_lbl"/>
+        android:layout_below="@+id/especie_info_altura_lbl" />
 
     <ImageView
         android:id="@+id/especie_info_foto1"
@@ -256,5 +254,16 @@
 
         android:layout_alignTop="@id/especie_info_foto1"
         android:layout_toRightOf="@id/especie_info_foto4" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_blue"
+        style="@style/ButtonText"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/encyclopedia_especie_info_ver_mapa" />
+
 
 </RelativeLayout>
