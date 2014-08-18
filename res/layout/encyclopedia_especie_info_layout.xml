@@ -176,7 +176,7 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/especie_info_fotos"
+        android:text="@string/ruta_lbl_fotos"
         android:textStyle="bold"
 
         android:layout_marginTop="10dp"

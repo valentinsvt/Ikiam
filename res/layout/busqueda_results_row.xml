@@ -14,16 +14,36 @@
         android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/encyclopedia_entries_row_comentarios"
+        android:id="@+id/encyclopedia_entries_row_nombre_comun"
 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textSize="12sp"
+        android:text="@string/captura_comentarios_label"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/encyclopedia_entries_row_image"
+        android:layout_toRightOf="@id/encyclopedia_entries_row_image" />
+
+    <TextView
+        android:id="@+id/encyclopedia_entries_row_nombre_cientifico"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:textSize="12sp"
-        android:text="@string/captura_comentarios_label" />
+        android:text="@string/captura_comentarios_label"
+        android:textStyle="italic"
+
+        android:layout_marginTop="7dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/encyclopedia_entries_row_nombre_comun"
+        android:layout_alignStart="@id/encyclopedia_entries_row_nombre_comun" />
+
 
 </RelativeLayout>

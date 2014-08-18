@@ -1,5 +1,7 @@
 package com.nth.ikiam;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +41,19 @@ public class BusquedaResultsFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        Especie selected = especiesList.get(position);
+        Fragment fragment = new EncyclopediaEspecieInfoFragment();
+        Bundle args = new Bundle();
+        args.putLong("especie", selected.id);
+        fragment.setArguments(args);
+
+        String nombre = selected.getNombreCientifico() + " (" + selected.nombreComun + ")";
+
+        activity.setTitle(nombre);
+
+        FragmentManager fragmentManager = activity.getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+
 //        Entry selectedEntry = entryList.get(position);
 //        fotos = Foto.findAllByEntry(activity, selectedEntry);
 //

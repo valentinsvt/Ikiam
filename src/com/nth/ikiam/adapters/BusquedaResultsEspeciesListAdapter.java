@@ -12,6 +12,7 @@ import com.nth.ikiam.R;
 import com.nth.ikiam.db.Entry;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Foto;
+import com.nth.ikiam.db.Genero;
 import com.nth.ikiam.image.ImageUtils;
 
 import java.io.File;
@@ -25,7 +26,7 @@ public class BusquedaResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
     private final List<Especie> especies;
 
     public BusquedaResultsEspeciesListAdapter(Context context, List<Especie> especies) {
-        super(context, R.layout.encylopedia_entries_row, especies);
+        super(context, R.layout.busqueda_results_row, especies);
         this.context = context;
         this.especies = especies;
     }
@@ -38,24 +39,28 @@ public class BusquedaResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
 //        System.out.println(rowView);
 
 //        TextView textViewNombre = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
-        TextView textViewComentarios = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_comentarios);
+        TextView textViewNCo = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
+        TextView textViewNCi = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_cientifico);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.encyclopedia_entries_row_image);
 
 //        System.out.println("POS " + position + "  " + entries.size());
 
-        Especie selectedEspecie= especies.get(position);
-        String comentarios = selectedEspecie.nombreComun;
+        Especie selectedEspecie = especies.get(position);
+        Genero genero = selectedEspecie.getGenero(context);
+        String nombreComun = selectedEspecie.nombreComun;
+        String nombreCientifico = genero.nombre + " " + selectedEspecie.nombre.toLowerCase();
 
-        while (comentarios.length() < 150) {
-            comentarios += " Lorem ipsum dolor sit amet ";
-        }
+//        while (comentarios.length() < 150) {
+//            comentarios += " Lorem ipsum dolor sit amet ";
+//        }
 
-        if (comentarios.length() > 127) {
-            comentarios = comentarios.substring(0, 127) + "...";
-        }
+//        if (nombreComun.length() > 127) {
+//            nombreComun = nombreComun.substring(0, 127) + "...";
+//        }
 
 //        textViewNombre.setText(selectedEntry.getEspecie().getNombreCientifico() + " (" + selectedEntry.getEspecie().nombreComun + ")");
-        textViewComentarios.setText(comentarios);
+        textViewNCo.setText(nombreComun);
+        textViewNCi.setText(nombreCientifico);
 
         List<Foto> fotos = Foto.findAllByEspecie(context, selectedEspecie);
         Foto foto = fotos.get(0);

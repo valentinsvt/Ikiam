@@ -137,7 +137,6 @@
     <string name="uploader_upload_error">Ha ocurrido un error, por favor intente más tarde</string>
     <string name="uploader_upload_success">Proceso exitoso</string>
 
-    <string name="encyclopedia_entries_dialog_title">Foto(s)</string>
     <string name="app_id">298464543671961</string>
     <string name="login_email">Email</string>
     <string name="login_password">Contraseña</string>
@@ -168,6 +167,16 @@
     <string name="especie_info_altura_max">Altitud máxima</string>
     <string name="especie_info_altura_avg">Altitud promedio</string>
     <string name="especie_info_color_lbl">Color</string>
-    <string name="especie_info_fotos">%1$d fotos, mostrando %2$d</string>
+    <!--<string name="especie_info_foto">%1$d foto, mostrando %2$d</string>-->
+    <!--<string name="especie_info_fotos">%1$d fotos, mostrando %2$d</string>-->
+    <plurals name="especie_info_fotos">
+        <item quantity="one">1 foto, mostrando 1</item>
+        <item quantity="other">%1$d fotos, mostrando %2$d</item>
+    </plurals>
+    <!--<string name="encyclopedia_entries_dialog_title">Foto(s)</string>-->
+    <plurals name="encyclopedia_entries_dialog_title">
+        <item quantity="one">Foto</item>
+        <item quantity="other">Fotos</item>
+    </plurals>
     <string name="ruta_compartir">Compartir</string>
 </resources>

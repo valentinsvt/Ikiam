@@ -63,7 +63,7 @@ public class EncyclopediaEntriesFragment extends ListFragment {
         final TextView com = (TextView) myView.findViewById(R.id.encyclopedia_entries_comentarios);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(R.string.encyclopedia_entries_dialog_title);
+//        builder.setTitle(R.string.encyclopedia_entries_dialog_title);
         builder.setView(myView);
 
         builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
@@ -104,7 +104,8 @@ public class EncyclopediaEntriesFragment extends ListFragment {
 
     private void setFoto(ImageView img) {
         img.setImageBitmap(activity.getFotoDialog(fotos.get(fotoPos), activity.screenWidth, 300));
-        dialogTitle = R.string.encyclopedia_entries_dialog_title + " (" + (fotoPos + 1) + "/" + fotos.size() + ")";
+//        dialogTitle = R.string.encyclopedia_entries_dialog_title + " (" + (fotoPos + 1) + "/" + fotos.size() + ")";
+//        dialogTitlegetResources().getQuantityString(R.plurals.especie_info_fotos, cantFotos, cantFotos, showing);
     }
 
 

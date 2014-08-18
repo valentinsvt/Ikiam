@@ -103,8 +103,13 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         imageViews[4] = (ImageView) view.findViewById(R.id.especie_info_foto5);
 
         int cantFotos = fotos.size();
-        int showing = imageViews.length;
-        String strMostrando = getString(R.string.especie_info_fotos, cantFotos, showing);
+        int showing = Math.min(imageViews.length, cantFotos);
+        String strMostrando = getResources().getQuantityString(R.plurals.especie_info_fotos, cantFotos, cantFotos, showing);
+//        if (cantFotos == 1) {
+//            strMostrando = getString(R.string.especie_info_foto, cantFotos, showing);
+//        } else {
+//            strMostrando = getString(R.string.especie_info_fotos, cantFotos, showing);
+//        }
         txtEspecieInfoFotos.setText(strMostrando);
 
         if (fotos.size() > 0) {
@@ -248,9 +253,10 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         fotoPos = i;
         LayoutInflater inflater = context.getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog, null);
+        final String t = getResources().getQuantityString(R.plurals.encyclopedia_entries_dialog_title, fotos.size());
         final AlertDialog.Builder builder = new AlertDialog.Builder(context).setView(v)
                 .setNeutralButton(R.string.dialog_btn_cerrar, null) //Set to null. We override the onclick
-                .setTitle(getString(R.string.encyclopedia_entries_dialog_title) + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
+                .setTitle(t + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
         if (fotos.size() > 1) {
             builder.setPositiveButton(R.string.dialog_btn_siguiente, null)
                     .setNegativeButton(R.string.dialog_btn_anterior, null);
@@ -278,7 +284,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                             fotoPos = fotos.size() - 1;
                         }
                         setFoto(img);
-                        d.setTitle(getString(R.string.encyclopedia_entries_dialog_title) + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
+                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
                     }
                 });
                 Button siguiente = d.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -291,7 +297,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                             fotoPos = 0;
                         }
                         setFoto(img);
-                        d.setTitle(getString(R.string.encyclopedia_entries_dialog_title) + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
+                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + fotos.size() + ")");
                     }
                 });
             }
