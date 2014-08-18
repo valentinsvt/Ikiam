@@ -151,15 +151,43 @@
                 android:layout_alignParentStart="true" />
 
             <TextView
-                android:id="@+id/busqueda_info_lbl"
+                android:id="@+id/busqueda_info_keywords_lbl"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
+                android:text="keywords"
+                android:visibility="gone"
+
                 android:layout_below="@id/busqueda_nombre_comun_txt"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/busqueda_info_color_lbl"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Color"
+                android:visibility="gone"
+
+                android:layout_below="@id/busqueda_info_keywords_lbl"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:id="@+id/busqueda_info_nc_lbl"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="nombre comun"
+                android:visibility="gone"
+
+                android:layout_below="@id/busqueda_info_color_lbl"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp" />
         </RelativeLayout>
     </ScrollView>
 

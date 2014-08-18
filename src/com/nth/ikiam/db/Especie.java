@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.text.Normalizer;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by DELL on 26/07/2014.
@@ -211,6 +212,11 @@ public class Especie {
     public static List<Especie> findAllByColor(Context context, Color color) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.getAllEspeciesByColor(color);
+    }
+
+    public static List<Especie> busqueda(Context context, Vector<String> keywords, String color, String nc) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.getBusqueda(keywords, color, nc);
     }
 
     public static List<Especie> findAllByGenero(Context context, Genero genero) {

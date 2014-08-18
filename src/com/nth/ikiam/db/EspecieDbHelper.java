@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by DELL on 26/07/2014.
@@ -86,6 +88,78 @@ public class EspecieDbHelper extends DbHelper {
             do {
                 Especie es = setDatos(c);
                 // adding to especie list
+                todos.add(es);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return todos;
+    }
+
+    public List<Especie> getBusqueda(Vector<String> keywords, String color, String nc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Especie> todos = new ArrayList<Especie>();
+        String sql;
+
+        String select = "SELECT  e.* ";
+        String from = " FROM " + TABLE_ESPECIE + " e";
+        String joins = "";
+        String where = "";
+        String groupBy = " GROUP BY e." + KEY_ID;
+
+        if (!color.equals("")) {
+            joins += " LEFT JOIN " + TABLE_COLOR + " c1 ON e." + KEY_COLOR1_ID + " = c1." + KEY_ID;
+            joins += " LEFT JOIN " + TABLE_COLOR + " c2 ON e." + KEY_COLOR2_ID + " = c2." + KEY_ID;
+
+            if (where.equals("")) {
+                where += " WHERE ";
+            } else {
+                where += " AND ";
+            }
+            where += " (c1." + ColorDbHelper.KEY_NOMBRE + " = '" + color + "'";
+            where += " OR c2." + ColorDbHelper.KEY_NOMBRE + " = '" + color + "')";
+        }
+
+        if (!nc.equals("")) {
+            if (where.equals("")) {
+                where += " WHERE ";
+            } else {
+                where += " AND ";
+            }
+            where += "LOWER(e." + KEY_NOMBRE_COMUN_NORM + ") LIKE '%" + Normalizer.normalize(nc, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase() + "%' ";
+        }
+
+        if (keywords.size() > 0) {
+            joins += " LEFT JOIN " + TABLE_FOTO + " f ON f." + FotoDbHelper.KEY_ESPECIE_ID + " = e." + KEY_ID;
+            if (where.equals("")) {
+                where += " WHERE ";
+            } else {
+                where += " AND ";
+            }
+            where += "(";
+            boolean first = true;
+            for (String keyword : keywords) {
+                if (first) {
+                    first = false;
+                } else {
+                    where += " OR ";
+                }
+                where += "f." + FotoDbHelper.KEY_KEYWORDS + " LIKE '%" + keyword + "%'";
+            }
+
+            where += ")";
+        }
+
+        sql = select + from + joins + where + groupBy;
+
+        logQuery(LOG, sql);
+
+        Cursor c = db.rawQuery(sql, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Especie es = setDatos(c);
+//                System.out.println("adding to especie list: " + es.id);
                 todos.add(es);
             } while (c.moveToNext());
         }

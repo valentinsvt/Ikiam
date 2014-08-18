@@ -138,6 +138,6 @@ public class DbHelper extends SQLiteOpenHelper {
 //    }
 
     protected void logQuery(String log, String query) {
-//        Log.e(log, query);
+        Log.e(log, query);
     }
 }

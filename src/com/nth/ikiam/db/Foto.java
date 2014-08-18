@@ -250,10 +250,4 @@ public class Foto {
         FotoDbHelper e = new FotoDbHelper(context);
         e.deleteAllFotos();
     }
-
-    public static List<Foto> busqueda(Context context, HashMap<String, String> data) {
-        FotoDbHelper e = new FotoDbHelper(context);
-        return e.getBusqueda(data);
-    }
-
 }

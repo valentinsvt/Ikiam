@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Entry;
+import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.image.ImageUtils;
 
@@ -19,14 +20,14 @@ import java.util.List;
 /**
  * Created by DELL on 03/08/2014.
  */
-public class BusquedaResultsFotosListAdapter extends ArrayAdapter<Foto> {
+public class BusquedaResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
     private final Context context;
-    private final List<Foto> fotos;
+    private final List<Especie> especies;
 
-    public BusquedaResultsFotosListAdapter(Context context, List<Foto> fotos) {
-        super(context, R.layout.encylopedia_entries_row, fotos);
+    public BusquedaResultsEspeciesListAdapter(Context context, List<Especie> especies) {
+        super(context, R.layout.encylopedia_entries_row, especies);
         this.context = context;
-        this.fotos = fotos;
+        this.especies = especies;
     }
 
     @Override
@@ -42,23 +43,23 @@ public class BusquedaResultsFotosListAdapter extends ArrayAdapter<Foto> {
 
 //        System.out.println("POS " + position + "  " + entries.size());
 
-        Foto selectedFoto = fotos.get(position);
-//        String comentarios = selectedEntry.comentarios;
+        Especie selectedEspecie= especies.get(position);
+        String comentarios = selectedEspecie.nombreComun;
 
-//        while (comentarios.length() < 150) {
-//            comentarios += " Lorem ipsum dolor sit amet ";
-//        }
+        while (comentarios.length() < 150) {
+            comentarios += " Lorem ipsum dolor sit amet ";
+        }
 
-//        if (comentarios.length() > 127) {
-//            comentarios = comentarios.substring(0, 127) + "...";
-//        }
-//
-//        Foto foto = Foto.findAllByEntry(context, selectedEntry).get(0);
+        if (comentarios.length() > 127) {
+            comentarios = comentarios.substring(0, 127) + "...";
+        }
 
 //        textViewNombre.setText(selectedEntry.getEspecie().getNombreCientifico() + " (" + selectedEntry.getEspecie().nombreComun + ")");
-//        textViewComentarios.setText(comentarios);
+        textViewComentarios.setText(comentarios);
 
-        File imgFile = new File(selectedFoto.path);
+        List<Foto> fotos = Foto.findAllByEspecie(context, selectedEspecie);
+        Foto foto = fotos.get(0);
+        File imgFile = new File(foto.path);
         if (imgFile.exists()) {
 //            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 //            Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 100, 100);
