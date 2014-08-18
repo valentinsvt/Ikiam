@@ -120,7 +120,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     List<FieldListener> listeners = new ArrayList<FieldListener>();
 
     public List<Entry> entriesBusqueda;
-    public List<Foto> fotosBusqueda;
+    public List<Especie> especiesBusqueda;
 
 
     public void setUserId(String id) {

@@ -8,23 +8,27 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.nth.ikiam.adapters.CapturaColorSpinnerAdapter;
 import com.nth.ikiam.db.Color;
 import com.nth.ikiam.db.Entry;
+import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by DELL on 13/08/2014.
  */
-public class BusquedaFragment extends Fragment implements Button.OnClickListener, AdapterView.OnItemSelectedListener, TextWatcher {
+public class BusquedaFragment extends Fragment implements Button.OnClickListener, AdapterView.OnItemSelectedListener,
+        TextWatcher, View.OnTouchListener {
     MapActivity context;
 
     ImageButton btnBuscar;
@@ -34,9 +38,13 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
 
     EditText nombreComunTxt;
 
-    TextView lblInfo;
+    TextView lblInfoKeywords;
+    TextView lblInfoColor;
+    TextView lblInfoNC;
 
-    HashMap<String, String> data;
+    Vector<String> searchKeywords;
+    String searchColor;
+    String searchNC;
 
     private Spinner spinnerColor;
 
@@ -44,18 +52,25 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = (MapActivity) getActivity();
         View view = inflater.inflate(R.layout.busqueda_layout, container, false);
+        view.setOnTouchListener(this);
         Utils.checkColores(context);
-        lblInfo = (TextView) view.findViewById(R.id.busqueda_info_lbl);
+
+        lblInfoKeywords = (TextView) view.findViewById(R.id.busqueda_info_keywords_lbl);
+        lblInfoColor = (TextView) view.findViewById(R.id.busqueda_info_color_lbl);
+        lblInfoNC = (TextView) view.findViewById(R.id.busqueda_info_nc_lbl);
+
         nombreComunTxt = (EditText) view.findViewById(R.id.busqueda_nombre_comun_txt);
         nombreComunTxt.addTextChangedListener(this);
         btnBuscar = (ImageButton) view.findViewById(R.id.busqueda_buscar_btn);
         btnBuscar.setOnClickListener(this);
 
-        data = new HashMap<String, String>();
+        searchKeywords = new Vector<String>();
+        searchColor = "";
+        searchNC = "";
 
         initSpinner(view);
         initToggles(view);
-        updateStatus();
+        updateAll();
         return view;
     }
 
@@ -96,9 +111,15 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
         }
     }
 
-    private void updateStatus() {
+    private void updateAll() {
+        updateKeywords();
+        updateColor();
+        updateNC();
+    }
+
+    private void updateKeywords() {
+        searchKeywords = new Vector<String>();
         String info = "";
-        data = new HashMap<String, String>();
         boolean plantaChecked = false;
         boolean animalChecked = false;
         int i = 0;
@@ -107,7 +128,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
                 if (!info.equals("")) {
                     info += ", ";
                 }
-                data.put("keyword_" + i, keys[i]);
+                searchKeywords.add(keys[i]);
                 if (i != 5) {
                     if (!plantaChecked) {
                         info += getString(R.string.buscar_donde) + " ";
@@ -133,16 +154,35 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
         if (!animalChecked && !plantaChecked) {
             info = "";
         }
+        if (!info.equals("")) {
+            lblInfoKeywords.setVisibility(View.VISIBLE);
+            lblInfoKeywords.setText(info);
+        } else {
+            lblInfoKeywords.setVisibility(View.INVISIBLE);
+        }
+    }
 
+    private void updateColor() {
+        String info = "";
         String color = spinnerColor.getSelectedItem().toString();
         if (!color.equals("none")) {
-            if (info.equals("")) {
-                info += getString(R.string.buscar_buscar) + " ";
+            searchColor = color;
+//            info += getString(R.string.buscar_color) + " " + color + " ";
+            int id = getResources().getIdentifier("global_color_" + color, "string", context.getPackageName());
+            if (id > 0) {
+                info = getString(R.string.buscar_buscar) + " " + getString(R.string.buscar_color) + " " + ((String) getResources().getText(id)).toLowerCase();
             }
-            data.put("color", color);
-            info += getString(R.string.buscar_color) + " " + color + " ";
         }
+        if (!info.equals("")) {
+            lblInfoColor.setVisibility(View.VISIBLE);
+            lblInfoColor.setText(info);
+        } else {
+            lblInfoColor.setVisibility(View.INVISIBLE);
+        }
+    }
 
+    private void updateNC() {
+        String info = "";
         String nombreComun = nombreComunTxt.getText().toString().trim();
         if (!nombreComun.equals("")) {
             if (info.equals("")) {
@@ -150,72 +190,64 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
             } else {
                 info += ", ";
             }
-            data.put("nombreComun", nombreComun);
+            searchNC = nombreComun;
             info += getString(R.string.buscar_nombre_comun) + " " + nombreComun + " ";
         }
-
-        lblInfo.setText(info);
+        if (!info.equals("")) {
+            lblInfoNC.setVisibility(View.VISIBLE);
+            lblInfoNC.setText(info);
+        } else {
+            lblInfoNC.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void onClick(View v) {
         Utils.hideSoftKeyboard(this.getActivity());
         if (v.getId() == btnBuscar.getId()) {
-            updateStatus();
+            updateAll();
 
-//            List<Foto> fotos = Foto.busqueda(context, data);
-            context.fotosBusqueda = Foto.busqueda(context, data);
-//            for (Foto f : fotos) {
-//                System.out.println("******" + f.id);
-//            }
-            data = new HashMap<String, String>();
+//            System.out.println("Keywords: " + searchKeywords);
+//            System.out.println("Color: " + searchColor);
+//            System.out.println("NC: " + searchNC);
 
+//            List<Especie> especies = Especie.busqueda(context, searchKeywords, searchColor, searchNC);
+            context.especiesBusqueda = Especie.busqueda(context, searchKeywords, searchColor, searchNC);
             ListFragment fragment = new BusquedaResultsFragment();
-//            Bundle args = new Bundle();
-//            args.putLong("especie", -1);
-//            fragment.setArguments(args);
-
-            context.setTitle("Resultados");
-
             FragmentManager fragmentManager = context.getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
-
-//            List<Entry> entries = Entry.busqueda(context, data);
-//            data = new HashMap<String, String>();
-//            context.entriesBusqueda = entries;
-//
-//            for (Entry entry : entries) {
-//                System.out.println("*************   " + entry.getEspecie(context).nombreComun);
+//            List<Foto> fotos = Foto.busqueda(context, data);
+//            context.fotosBusqueda = Foto.busqueda(context, data);
+//            for (Foto f : fotos) {
+//                System.out.println("******" + f.id);
 //            }
+//            data = new HashMap<String, String>();
 
-
-//            ListFragment fragment = new EncyclopediaEntriesFragment();
+//            ListFragment fragment = new BusquedaResultsFragment();
 //            Bundle args = new Bundle();
 //            args.putLong("especie", -1);
 //            fragment.setArguments(args);
-//
+
 //            context.setTitle("Resultados");
 //
 //            FragmentManager fragmentManager = context.getFragmentManager();
 //            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-
-//            System.out.println("HAY " + entries.size() + " ENTRIES EN EL RESULTADO");
         } else {
-            updateStatus();
+            updateKeywords();
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Utils.hideSoftKeyboard(this.getActivity());
-        updateStatus();
+        updateColor();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         Utils.hideSoftKeyboard(this.getActivity());
-        updateStatus();
+        updateColor();
     }
 
     @Override
@@ -225,11 +257,17 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-        updateStatus();
+        updateNC();
     }
 
     @Override
     public void afterTextChanged(Editable editable) {
 
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Utils.hideSoftKeyboard(context);
+        return false;
     }
 }

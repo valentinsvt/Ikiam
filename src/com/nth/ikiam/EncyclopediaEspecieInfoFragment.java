@@ -84,7 +84,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         Color c2 = especie.getColor2(context);
         if (c2 != null) {
             int id = getResources().getIdentifier("global_color_" + c2.nombre, "string", context.getPackageName());
-            color2 = id == 0 ? "" : (", " + (String) getResources().getText(id));
+            color2 = id == 0 ? "" : (", " + ((String) getResources().getText(id)));
         }
 
         double altMin = 0, altMax = 0;

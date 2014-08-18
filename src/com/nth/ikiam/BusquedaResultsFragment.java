@@ -1,18 +1,11 @@
 package com.nth.ikiam;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ListFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import com.nth.ikiam.adapters.BusquedaResultsFotosListAdapter;
-import com.nth.ikiam.adapters.EncyclopediaEntriesListAdapter;
-import com.nth.ikiam.db.Entry;
+import com.nth.ikiam.adapters.BusquedaResultsEspeciesListAdapter;
+import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Foto;
 
 import java.util.List;
@@ -23,7 +16,7 @@ import java.util.List;
 public class BusquedaResultsFragment extends ListFragment {
 
     MapActivity activity;
-    List<Foto> fotoList;
+    List<Especie> especiesList;
 
     int fotoPos = 0;
     String dialogTitle = "";
@@ -34,13 +27,13 @@ public class BusquedaResultsFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         activity = (MapActivity) getActivity();
 
-        fotoList = activity.fotosBusqueda;
+        especiesList = activity.especiesBusqueda;
 
 //        for (Foto foto : fotoList) {
 //            System.out.println("--------------------------- " + foto.id);
 //        }
 
-        BusquedaResultsFotosListAdapter adapter = new BusquedaResultsFotosListAdapter(getActivity(), fotoList);
+        BusquedaResultsEspeciesListAdapter adapter = new BusquedaResultsEspeciesListAdapter(getActivity(), especiesList);
         setListAdapter(adapter);
     }
 
