@@ -15,8 +15,9 @@ public class RutaDbHelper extends DbHelper {
     private static final String LOG = "RutaDbHelper";
 
     public static final String KEY_DESCRIPCION = "descripcion";
+    public static final String KEY__ID_REMOTO = "id_remoto";
 
-    public static final String[] KEYS_RUTA = {KEY_DESCRIPCION};
+    public static final String[] KEYS_RUTA = {KEY_DESCRIPCION,KEY__ID_REMOTO};
 
     public RutaDbHelper(Context context) {
         super(context);
@@ -125,6 +126,7 @@ public class RutaDbHelper extends DbHelper {
         r.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         r.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         r.setDescripcion(c.getString(c.getColumnIndex(KEY_DESCRIPCION)));
+        r.setIdRemoto(c.getString(c.getColumnIndex(KEY__ID_REMOTO)));
         return r;
     }
 
@@ -134,6 +136,7 @@ public class RutaDbHelper extends DbHelper {
             values.put(KEY_FECHA, getDateTime());
         }
         values.put(KEY_DESCRIPCION, ruta.descripcion);
+        values.put(KEY__ID_REMOTO,ruta.idRemoto);
         return values;
     }
 

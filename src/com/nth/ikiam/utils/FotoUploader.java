@@ -33,7 +33,7 @@ public class FotoUploader implements Runnable {
 
     @Override
     public void run() {
-        String urlstr = IP+"/uploadCaptura/uploadData";
+        String urlstr = IP+"ruta/fotoUploader";
         try {
             // new file and and entity
             File file = new File(foto.path);
@@ -68,12 +68,8 @@ public class FotoUploader implements Runnable {
                 addFormPart(dos, "long", "" + coordenada.longitud);
                 addFormPart(dos, "alt", "" + coordenada.altitud);
             }
+            addFormPart(dos, "ruta", ""+id);
 
-            addFormPart(dos, "userId", activity.userId); //id (faceboook - fb id, ikiam db.id
-            addFormPart(dos, "userName", activity.name);
-            addFormPart(dos, "userType", activity.type); //facebook || ikiam
-            addFormPart(dos, "userMail", activity.email);
-            addFormPart(dos, "userCientifico", activity.esCientifico); //N || S
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=foto-file ; filename=" + foto.path + lineEnd);

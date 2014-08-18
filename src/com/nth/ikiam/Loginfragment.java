@@ -180,7 +180,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
             }
         }
 
-        System.out.println("variables login " + activity.userId + "  name " + activity.name);
+       // System.out.println("variables login " + activity.userId + "  name " + activity.name);
 
 
         return view;
@@ -343,7 +343,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
-                                System.out.println("si user ? " + user.getId());
+                                //System.out.println("si user ? " + user.getId());
                                 // Set the id for the ProfilePictureView
                                 // view that in turn displays the profile picture.
                                 profilePictureView.setProfileId(user.getId());

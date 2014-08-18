@@ -3,6 +3,8 @@ package com.nth.ikiam;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,16 +12,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.facebook.UiLifecycleHelper;
+import com.facebook.*;
+import com.facebook.model.GraphUser;
 import com.google.android.gms.maps.model.LatLng;
 import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.image.ImageUtils;
+import com.nth.ikiam.utils.FotoUploader;
+import com.nth.ikiam.utils.RutaUploader;
 import com.nth.ikiam.utils.Utils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Svt on 8/15/2014.
@@ -32,12 +43,44 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
     List<Coordenada> cords;
     List<ImageView> imgs;
     View view;
+    private Button shareButton;
+    private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
+    private static final String PENDING_PUBLISH_KEY = "pendingPublishReauthorization";
+    private boolean pendingPublishReauthorization = false;
+    private UiLifecycleHelper uiHelper;
+    private static final int REAUTH_ACTIVITY_CODE = 100;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(final Session session, final SessionState state, final Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         activity = (MapActivity) getActivity();
         view = inflater.inflate(R.layout.ruta_fragment, container, false);
         view.setOnTouchListener(this);
+        uiHelper = new UiLifecycleHelper(activity, callback);
+        uiHelper.onCreate(savedInstanceState);
+        shareButton = (Button) view.findViewById(R.id.shareButton);
+        shareButton = (Button) view.findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishStory();
+            }
+        });
+        System.out.println("type "+activity.type);
+        if (activity.type.equals("facebook")) {
+            Session session = Session.getActiveSession();
+            makeMeRequest(session);
+            if (session != null && session.isOpened()) {
+                shareButton.setVisibility(View.VISIBLE);
+            }
+        }
         ImageView imagen = (ImageView) view.findViewById(R.id.ruta_img);
         TextView texto = (TextView) view.findViewById(R.id.txt_descripcion);
         texto.setText(activity.ruta.descripcion);
@@ -131,6 +174,10 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         for (int i = 0; i < imgBotones.length; i++) {
             imgBotones[i].setOnClickListener(this);
         }
+        if (savedInstanceState != null) {
+            pendingPublishReauthorization =
+                    savedInstanceState.getBoolean(PENDING_PUBLISH_KEY, false);
+        }
 
         return view;
     }
@@ -155,6 +202,8 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         }
         if (v.getId() == botones[1].getId()) {
             /*Subir*/
+            ExecutorService queue = Executors.newSingleThreadExecutor();
+            queue.execute(new RutaUploader(activity,activity.ruta,cords,fotos));
         }
         if(imgs.size()>0){
             if (v.getId() == imgs.get(0).getId()) {
@@ -264,7 +313,123 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
 
 
     }
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        System.out.println("Session state change "+state);
+        if (session != null && session.isOpened()) {
+            shareButton.setVisibility(View.VISIBLE);
+            if (pendingPublishReauthorization && state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
+                pendingPublishReauthorization = false;
+                System.out.println("run del publish");
+                publishStory();
+            }
+        } else if (state.isClosed()) {
+            shareButton.setVisibility(View.INVISIBLE);
+        }
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(PENDING_PUBLISH_KEY, pendingPublishReauthorization);
+        uiHelper.onSaveInstanceState(outState);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("activity result de ruta "+requestCode);
+        if (requestCode == REAUTH_ACTIVITY_CODE) {
+            uiHelper.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    private void makeMeRequest(final Session session) {
+        // Make an API call to get user data and define a
+        // new callback to handle the response.
+        Request request = Request.newMeRequest(session,
+                new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
 
+                        // If the response is successful
+                        if (session == Session.getActiveSession()) {
+                            if (user != null) {
+                                System.out.println("Make request "+user.getId()+"  "+user.getUsername()+"  "+user.getName());
+                            } else {
+                                System.out.println("no user? no session?");
+                            }
+                        }
+                        if (response.getError() != null) {
+                            // Handle errors, will do so later.
+                        }
+                    }
+                });
+        request.executeAsync();
+    }
+
+    private void publishStory() {
+        Session session = Session.getActiveSession();
+
+        if (session != null){
+
+            // Check for publish permissions
+            List<String> permissions = session.getPermissions();
+            if (!isSubsetOf(PERMISSIONS, permissions)) {
+                System.out.println("no permisos "+permissions);
+                pendingPublishReauthorization = true;
+                Session.NewPermissionsRequest newPermissionsRequest = new Session
+                        .NewPermissionsRequest(activity, PERMISSIONS);
+                session.requestNewPublishPermissions(newPermissionsRequest);
+                return;
+            }
+            System.out.println("paso?");
+            Bundle postParams = new Bundle();
+            postParams.putString("name", "Facebook SDK for Android");
+            postParams.putString("caption", "Build great social apps and get more installs.");
+            postParams.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
+            postParams.putString("link", "https://developers.facebook.com/android");
+            postParams.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+
+            Request.Callback callbackShare= new Request.Callback() {
+                public void onCompleted(Response response) {
+                    JSONObject graphResponse = response
+                            .getGraphObject()
+                            .getInnerJSONObject();
+                    String postId = null;
+                    try {
+                        postId = graphResponse.getString("id");
+                    } catch (JSONException e) {
+                        System.out.println("JSON error!!!! "+ e.getMessage());
+                    }
+                    FacebookRequestError error = response.getError();
+                    if (error != null) {
+                        Toast.makeText(getActivity()
+                                        .getApplicationContext(),
+                                error.getErrorMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity()
+                                        .getApplicationContext(),
+                                postId,
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+
+            Request request = new Request(session, "me/feed", postParams,
+                    HttpMethod.POST, callbackShare);
+
+            RequestAsyncTask task = new RequestAsyncTask(request);
+            task.execute();
+        }
+
+    }
+
+    private boolean isSubsetOf(Collection<String> subset, Collection<String> superset) {
+        for (String string : subset) {
+            if (!superset.contains(string)) {
+                return false;
+            }
+        }
+        return true;
+    }
     public double dist(double lat1,double long1,double lat2,double long2){
 
 
@@ -286,5 +451,22 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
     public boolean onTouch(View view, MotionEvent motionEvent) {
         Utils.hideSoftKeyboard(this.getActivity());
         return false;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
     }
 }

@@ -12,6 +12,7 @@ public class Ruta {
     public long id=0;
     public String descripcion;
     public String fecha;
+    public String idRemoto;
     public RutaDbHelper rutaDbHelper;
 
 
@@ -44,6 +45,13 @@ public class Ruta {
 
     public String getFecha() {
         return fecha;
+    }
+    public String getIdRemoto() {
+        return idRemoto;
+    }
+
+    public void setIdRemoto(String idRemoto) {
+        this.idRemoto = idRemoto;
     }
 
     public void setFecha(String fecha) {

@@ -67,17 +67,17 @@
             android:src="@drawable/ic_action_accept"
             />
     <TextView
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/ruta_lbl_distancia"
-        android:textSize="15sp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/lbl_ditancia"
-        android:paddingTop="10dp"
-        android:layout_below="@id/txt_descripcion"
-        android:layout_alignStart="@+id/ruta_img"
-        android:textStyle="bold|italic"/>
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/ruta_lbl_distancia"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/lbl_ditancia"
+            android:paddingTop="10dp"
+            android:layout_below="@id/txt_descripcion"
+            android:layout_alignStart="@+id/ruta_img"
+            android:textStyle="bold|italic"/>
     <TextView
             android:layout_width="150dp"
             android:layout_height="40dp"
@@ -214,6 +214,18 @@
             android:layout_marginLeft="15dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            />
+    <Button
+            android:id="@+id/shareButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"
+            android:text="@string/ruta_compartir"
+            android:layout_below="@+id/image_1"
+            android:layout_toRightOf="@+id/compartir"
             />
 
 

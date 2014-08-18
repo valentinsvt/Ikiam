@@ -33,7 +33,7 @@ public class RutaUploader implements Runnable {
 
     @Override
     public void run() {
-        String urlstr = IP+"userServer/createUser";
+        String urlstr = IP+"ruta/rutaUploader";
         try {
             if(context.userId.equals("-1") || context.userId==null){
                 context.setErrorMessage(context.getString(R.string.uploader_no_login));
@@ -43,7 +43,7 @@ public class RutaUploader implements Runnable {
 
                 URL url = new URL(urlstr);
                 int serverResponseCode = 0;
-                String parameters = "ruta="+ruta.descripcion+"&fecha="+ruta.fecha+"&coords=";
+                String parameters = "userId="+context.userId+"&nombre="+context.name+"&tipo=+"+context.type+"&ruta="+ruta.descripcion+"&fecha="+ruta.fecha+"&coords=";
                 String cordsParams="";
                 for(int i=0;i<cords.size();i++){
                     Coordenada current = cords.get(i);
@@ -81,6 +81,8 @@ public class RutaUploader implements Runnable {
                     System.out.println("response!!  "+response.toString());
                     if(isInteger(response.toString().trim())){
                         id_remoto=Integer.parseInt(response.toString().trim());
+                        ruta.idRemoto=response.toString().trim();
+                        ruta.save();
                         ExecutorService queue = Executors.newSingleThreadExecutor();
                         for(int i = 0;i<fotos.size();i++){
                             queue.execute(new FotoUploader(context,id_remoto,fotos.get(i)));
