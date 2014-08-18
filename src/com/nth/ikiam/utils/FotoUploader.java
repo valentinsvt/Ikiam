@@ -100,8 +100,7 @@ public class FotoUploader implements Runnable {
             serverResponseCode = conn.getResponseCode();
             String serverResponseMessage = conn.getResponseMessage();
 
-            Log.i("uploadFile", "HTTP Response is : "
-                    + serverResponseMessage + ": " + serverResponseCode);
+
 
             if (serverResponseCode == 200) {
                 System.out.print("completed "+foto.path);

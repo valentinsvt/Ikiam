@@ -35,6 +35,7 @@ public class RutaUploader implements Runnable {
     public void run() {
         String urlstr = IP+"ruta/rutaUploader";
         try {
+            System.out.println("ruta uploader  usuario "+context.userId);
             if(context.userId.equals("-1") || context.userId==null){
                 context.setErrorMessage(context.getString(R.string.uploader_no_login));
             }else{
@@ -78,18 +79,25 @@ public class RutaUploader implements Runnable {
                         response.append('\r');
                     }
                     rd.close();
-                    System.out.println("response!!  "+response.toString());
+                    System.out.println("response!! ruta  "+response.toString());
                     if(isInteger(response.toString().trim())){
-                        id_remoto=Integer.parseInt(response.toString().trim());
-                        ruta.idRemoto=response.toString().trim();
-                        ruta.save();
-                        ExecutorService queue = Executors.newSingleThreadExecutor();
-                        for(int i = 0;i<fotos.size();i++){
-                            queue.execute(new FotoUploader(context,id_remoto,fotos.get(i)));
+                        if(response.toString().trim().equals("-1")){
+                            //context.setErrorMessage("Ha ocurrido un error");
+                            System.out.println("me respondio huevadas");
+                        }else{
+                            id_remoto=Integer.parseInt(response.toString().trim());
+                            ruta.idRemoto=response.toString().trim();
+                            ruta.save();
+                            context.setRuta_remote_id(response.toString().trim());
+                            ExecutorService queue = Executors.newSingleThreadExecutor();
+                            for(int i = 0;i<fotos.size();i++){
+                                queue.execute(new FotoUploader(context,id_remoto,fotos.get(i)));
+                            }
                         }
 
                     }else{
-                        context.setErrorMessage(response.toString());
+                        System.out.println("me respondio huevadas");
+                       // context.setErrorMessage(response.toString());
 
                     }
                 }
@@ -100,7 +108,8 @@ public class RutaUploader implements Runnable {
 
 
         }catch (Exception e){
-            System.out.println("error upload usuario "+e.getMessage());
+            System.out.println("error upload usuario ");
+            e.printStackTrace();
         }
     }
     public static boolean isInteger(String s) {

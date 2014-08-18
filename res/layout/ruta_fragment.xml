@@ -217,15 +217,21 @@
             />
     <Button
             android:id="@+id/shareButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="25dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:visibility="invisible"
+            android:textSize="12dp"
             android:text="@string/ruta_compartir"
+            android:background="#48649F"
+            android:textColor="#fffffef2"
             android:layout_below="@+id/image_1"
             android:layout_toRightOf="@+id/compartir"
+            android:layout_marginLeft="15dp"
             />
 
 

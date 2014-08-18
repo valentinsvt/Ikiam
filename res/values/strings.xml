@@ -179,4 +179,10 @@
         <item quantity="other">Fotos</item>
     </plurals>
     <string name="ruta_compartir">Compartir</string>
+
+
+    <!--Strings para compartir la ruta de facebook-->
+    <string name="share_name">Ikiam</string>
+    <string name="share_caption">Descubre la biodiversidad ecuatoriana</string>
+    <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
 </resources>

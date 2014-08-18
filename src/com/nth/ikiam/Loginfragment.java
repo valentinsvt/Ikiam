@@ -339,7 +339,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
                 new Request.GraphUserCallback() {
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
-
+                        System.out.println("call back en login "+session+"  "+user);
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
                             if (user != null) {

@@ -1,5 +1,6 @@
 package com.nth.ikiam;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.image.ImageUtils;
+import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.FotoUploader;
 import com.nth.ikiam.utils.RutaUploader;
 import com.nth.ikiam.utils.Utils;
@@ -35,7 +37,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by Svt on 8/15/2014.
  */
-public class RutaFragment extends Fragment implements Button.OnClickListener, View.OnTouchListener {
+public class RutaFragment extends Fragment implements Button.OnClickListener, View.OnTouchListener,FieldListener {
     MapActivity activity;
     private Button[] botones;
     private ImageButton[] imgBotones;
@@ -70,11 +72,17 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                publishStory();
+                if(activity.ruta.idRemoto==null){
+                    ExecutorService queue = Executors.newSingleThreadExecutor();
+                    queue.execute(new RutaUploader(activity,activity.ruta,cords,fotos));
+                }else{
+                    publishStory();
+                }
+
             }
         });
         System.out.println("type "+activity.type);
-        if (activity.type.equals("facebook")) {
+        if (activity.type.equals("facebook") || activity.type.equals("-1")) {
             Session session = Session.getActiveSession();
             makeMeRequest(session);
             if (session != null && session.isOpened()) {
@@ -349,9 +357,15 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                     public void onCompleted(GraphUser user, Response response) {
 
                         // If the response is successful
+                        System.out.println("make request "+session+"  active "+Session.getActiveSession());
                         if (session == Session.getActiveSession()) {
+                            System.out.println("user? "+user);
                             if (user != null) {
-                                System.out.println("Make request "+user.getId()+"  "+user.getUsername()+"  "+user.getName());
+                                //System.out.println("username ruta "+user.getUsername()+" name  "+user.getName());
+                                //System.out.println("Make request "+user.getId()+"  "+user.getUsername()+"  "+user.getName());
+                                activity.userId=user.getId();
+                                activity.type="facebook";
+                                activity.name=user.getName();
                             } else {
                                 System.out.println("no user? no session?");
                             }
@@ -366,7 +380,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
 
     private void publishStory() {
         Session session = Session.getActiveSession();
-
+        String link = "http://www.tedein.com.ec:8080/ikiamServer/ruta/publish/";
         if (session != null){
 
             // Check for publish permissions
@@ -381,11 +395,11 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             }
             System.out.println("paso?");
             Bundle postParams = new Bundle();
-            postParams.putString("name", "Facebook SDK for Android");
-            postParams.putString("caption", "Build great social apps and get more installs.");
-            postParams.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
-            postParams.putString("link", "https://developers.facebook.com/android");
-            postParams.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+            postParams.putString("name", getString(R.string.share_name));
+            postParams.putString("caption", getString(R.string.share_caption));
+            postParams.putString("description", getString(R.string.share_description));
+            postParams.putString("link", link+activity.ruta.idRemoto);
+            postParams.putString("picture", "http://sphotos-e.ak.fbcdn.net/hphotos-ak-prn2/222461_472847872799797_1288982685_n.png");
 
             Request.Callback callbackShare= new Request.Callback() {
                 public void onCompleted(Response response) {
@@ -416,10 +430,38 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             Request request = new Request(session, "me/feed", postParams,
                     HttpMethod.POST, callbackShare);
 
-            RequestAsyncTask task = new RequestAsyncTask(request);
-            task.execute();
+            final RequestAsyncTask task = new RequestAsyncTask(request);
+            final Activity a = activity;
+            if (a != null) {
+                a.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        task.execute();
+                    }
+                });
+            }
+
         }
 
+    }
+
+    @Override
+    public void fieldValueChanged(String fieldName, String newValue) {
+        System.out.println(fieldName + " - got set with value - " + newValue);
+        if (fieldName.equals("ruta_remote_id")) {
+            System.out.println("tengo ruta id");
+            if(!newValue.equals("-1"))
+                publishStory();
+        }
+        if (fieldName.equals("errorMessage")) {
+            System.out.println("entro aca " + newValue);
+            if (!newValue.equals("")) {
+                String msg = newValue.toString();
+                activity.showToast(msg);
+                activity.errorMessage = "";
+            }
+        }
     }
 
     private boolean isSubsetOf(Collection<String> subset, Collection<String> superset) {

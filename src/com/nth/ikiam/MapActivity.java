@@ -25,7 +25,8 @@ import android.util.Log;
 import android.view.*;
 import android.webkit.WebView;
 import android.widget.*;
-import com.facebook.Session;
+import com.facebook.*;
+import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -117,11 +118,24 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public String email;
     public String esCientifico;
     public String errorMessage;
+    public String ruta_remote_id;
+    private UiLifecycleHelper uiHelper;
+    private static final int REAUTH_ACTIVITY_CODE = 100;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(final Session session, final SessionState state, final Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
     List<FieldListener> listeners = new ArrayList<FieldListener>();
 
     public List<Entry> entriesBusqueda;
     public List<Especie> especiesBusqueda;
 
+    public void setRuta_remote_id(String id) {
+        fireEvent("ruta_remote_id", id);
+        this.ruta_remote_id = id;
+    }
 
     public void setUserId(String id) {
         fireEvent("userId", id);
@@ -134,7 +148,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     public void setErrorMessage(String msg) {
-        System.out.println("::: SET ERROR MESSAGE::: " + msg);
+       // System.out.println("::: SET ERROR MESSAGE::: " + msg);
         fireEvent("errorMessage", msg);
         this.errorMessage = msg;
     }
@@ -162,11 +176,21 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
     }
 
+    private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
+        if (session != null && session.isOpened()) {
+            makeMeRequest(session);
+        } else {
+
+
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,21 +208,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         setContentView(R.layout.activity_map);
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
-
-        Session session = Session.getActiveSession();
-        if (session != null && session.isOpened()) {
-
-        } else {
-            SharedPreferences.Editor editor = settings.edit();
-            if (!settings.getString("user", "-1").equals("-1") && !settings.getString("type", "-1").equals("ikiam")) {
-                editor.putString("user", "-1");
-                editor.putString("login", "-1");
-                editor.putString("name", "-1");
-                editor.putString("email", "-1");
-                editor.putString("type", "-1");
-                editor.commit();
-            }
+        uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper.onCreate(savedInstanceState);
+        Session session;
+        if(type.equals("-1") || type.equals("facebook")){
+            session = Session.getActiveSession();
+            System.out.println("get active "+session);
+            makeMeRequest(session);
         }
+
 
         this.activity = this;
 
@@ -291,7 +309,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public void onResume() {
 
         super.onStart();
-
+        uiHelper.onResume();
 //        // TODO Auto-generated method stub
 
     }
@@ -307,13 +325,20 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 //        savedInstanceState.putInt(STATE_LEVEL, mCurrentLevel);
 
         // Always call the superclass so it can save the view hierarchy state
+        uiHelper.onSaveInstanceState(savedInstanceState);
         super.onSaveInstanceState(savedInstanceState);
-    }
 
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        uiHelper.onDestroy();
         try {
             doUnbindService();
             this.stopService(new Intent(this, SvtService.class));
@@ -990,6 +1015,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         this.ruta = ruta;
         Fragment fragment = new RutaFragment();
         if (fragment != null) {
+            this.addListener((FieldListener) fragment);
             Bundle args = new Bundle();
             fragment.setArguments(args);
             FragmentManager fragmentManager = getFragmentManager();
@@ -1041,6 +1067,40 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     public void showMap(){
         selectItem(0);
+    }
+
+    private void makeMeRequest(final Session session) {
+        System.out.println("get session map activity "+session+" ");
+        // Make an API call to get user data and define a
+        // new callback to handle the response.
+        Request request = Request.newMeRequest(session,
+                new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        // If the response is successful
+                        if (session == Session.getActiveSession()) {
+                            System.out.println("get session map  activity active "+session+" "+user);
+                            if (user != null) {
+                                System.out.println("username "+user.getUsername()+" name  "+user.getName());
+                                SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putString("user", user.getId());
+                                editor.putString("login", user.getUsername());
+                                editor.putString("name", user.getName());
+                                editor.putString("type", "facebook");
+                                userId = user.getId();
+                                name = user.getName();
+                                type = "facebook";
+                                editor.commit();
+
+                            }
+                        }
+                        if (response.getError() != null) {
+                            // Handle errors, will do so later.
+                        }
+                    }
+                });
+        request.executeAsync();
     }
 
 
