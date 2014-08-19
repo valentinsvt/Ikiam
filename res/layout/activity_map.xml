@@ -16,6 +16,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:context=".MapFragment"
+                    android:background="#000"
                     android:id="@+id/rl2">
         <Button
                 android:id="@+id/btnGalapagos"
@@ -23,7 +24,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:text="@string/map_galapagos_btn" />
+                android:text="@string/map_galapagos_btn"
+                android:textSize="12dp"
+                android:background="@drawable/button_green"
+                android:drawableLeft="@drawable/ic_drawer_map_light"
+                android:drawablePadding="5dip"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                />
 
         <Button
                 android:id="@+id/btnService"
@@ -31,14 +39,29 @@
                 android:layout_height="wrap_content"
                 android:text="@string/map_service"
                 android:icon="@drawable/action_search"
-                android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnGalapagos"/>
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/btnGalapagos"
+                android:textSize="12dp"
+                android:background="@drawable/button_green"
+                android:drawableLeft="@drawable/ic_action_import_export"
+                android:drawablePadding="0dip"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                />
         <Button
                 android:id="@+id/btnAtraccion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/map_activity_atracciones"
                 android:icon="@drawable/action_search"
-                android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnService"/>
+                android:layout_alignParentTop="true" android:layout_toLeftOf="@+id/btnService"
+                android:background="@drawable/button_green"
+                android:textSize="12dp"
+                android:drawableLeft="@drawable/ic_action_place"
+                android:drawablePadding="0dip"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                />
         <fragment
                 android:id="@+id/mapF"
                 android:name="com.google.android.gms.maps.MapFragment"

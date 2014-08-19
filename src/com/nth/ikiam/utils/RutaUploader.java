@@ -69,7 +69,7 @@ public class RutaUploader implements Runnable {
                 InputStream is = conn.getInputStream();
                 serverResponseCode = conn.getResponseCode();
 
-                System.out.println("response code "+serverResponseCode);
+               // System.out.println("response code "+serverResponseCode);
                 if (serverResponseCode == 200) {
                     BufferedReader rd = new BufferedReader(new InputStreamReader(is));
                     String line;
@@ -85,10 +85,12 @@ public class RutaUploader implements Runnable {
                             //context.setErrorMessage("Ha ocurrido un error");
                             System.out.println("me respondio huevadas");
                         }else{
-                            id_remoto=Integer.parseInt(response.toString().trim());
-                            ruta.idRemoto=response.toString().trim();
-                            ruta.save();
-                            context.setRuta_remote_id(response.toString().trim());
+                            if(ruta.idRemoto==null) {
+                                id_remoto = Integer.parseInt(response.toString().trim());
+                                ruta.idRemoto = response.toString().trim();
+                                ruta.save();
+                                context.setRuta_remote_id(response.toString().trim());
+                            }
                             ExecutorService queue = Executors.newSingleThreadExecutor();
                             for(int i = 0;i<fotos.size();i++){
                                 queue.execute(new FotoUploader(context,id_remoto,fotos.get(i)));

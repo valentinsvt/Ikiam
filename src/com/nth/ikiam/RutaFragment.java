@@ -45,6 +45,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
     List<Coordenada> cords;
     List<ImageView> imgs;
     View view;
+    private Button subir;
     private Button shareButton;
     private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
     private static final String PENDING_PUBLISH_KEY = "pendingPublishReauthorization";
@@ -67,7 +68,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         view.setOnTouchListener(this);
         uiHelper = new UiLifecycleHelper(activity, callback);
         uiHelper.onCreate(savedInstanceState);
-        shareButton = (Button) view.findViewById(R.id.shareButton);
+        subir = (Button) view.findViewById(R.id.compartir);
         shareButton = (Button) view.findViewById(R.id.shareButton);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,13 +82,20 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
 
             }
         });
-        System.out.println("type "+activity.type);
+        //System.out.println("type "+activity.type);
         if (activity.type.equals("facebook") || activity.type.equals("-1")) {
             Session session = Session.getActiveSession();
             makeMeRequest(session);
             if (session != null && session.isOpened()) {
                 shareButton.setVisibility(View.VISIBLE);
+                subir.setVisibility(View.GONE);
+            }else{
+                shareButton.setVisibility(View.GONE);
+                subir.setVisibility(View.VISIBLE);
             }
+        }else{
+            shareButton.setVisibility(View.GONE);
+            subir.setVisibility(View.VISIBLE);
         }
         ImageView imagen = (ImageView) view.findViewById(R.id.ruta_img);
         TextView texto = (TextView) view.findViewById(R.id.txt_descripcion);

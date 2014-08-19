@@ -178,7 +178,7 @@
         <item quantity="one">Foto</item>
         <item quantity="other">Fotos</item>
     </plurals>
-    <string name="ruta_compartir">Compartir</string>
+    <string name="ruta_compartir">Compartir en Facebook</string>
 
 
     <!--Strings para compartir la ruta de facebook-->
