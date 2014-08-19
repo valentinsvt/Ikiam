@@ -305,8 +305,8 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                     .setNegativeButton(R.string.dialog_btn_anterior, null);
         }
         final AlertDialog d = builder.create();
-        final ImageView img = (ImageView) v.findViewById(R.id.image);
-        final TextView txt = (TextView) v.findViewById(R.id.textView);
+        final ImageView img = (ImageView) v.findViewById(R.id.especie_info_dialog_image);
+        final TextView txt = (TextView) v.findViewById(R.id.especie_info_dialog_comentarios);
         setFoto(img, txt);
         d.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -396,13 +396,14 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         List<Foto> fotos = Foto.findAllByEntry(context, entry);
         if (fotos != null) {
             String comentarios = entry.comentarios;
-            while (comentarios.length() < 3000) {
+            while (comentarios.length() < 15000) {
                 comentarios += " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies luctus imperdiet. Pellentesque libero erat, laoreet ac magna sit amet, blandit vulputate nisl. Nam dignissim non velit eget cursus. Aenean dui metus, vehicula a leo quis, tincidunt gravida est. Fusce semper nec purus quis consectetur. Vestibulum risus felis, accumsan vitae nulla eu, fringilla vulputate lectus. Nam scelerisque magna vel sollicitudin molestie. Nulla venenatis ipsum sem, nec dignissim lacus vestibulum eget. ";
             }
             comentarios = comentarios.trim();
 
             Foto foto = fotos.get(0);
-            img.setImageBitmap(context.getFotoDialog(foto, context.screenWidth, 300));
+//            img.setImageBitmap(context.getFotoDialog(foto, context.screenWidth, 300));
+            img.setImageBitmap(ImageUtils.decodeFile(foto.path, context.screenWidth, 300));
             if (comentarios.equals("")) {
                 txt.setVisibility(View.GONE);
             } else {

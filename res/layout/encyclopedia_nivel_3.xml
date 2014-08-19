@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:paddingLeft="25dp"
+        android:paddingLeft="45dp"
         android:textColor="@android:color/black" />
 
 </RelativeLayout>

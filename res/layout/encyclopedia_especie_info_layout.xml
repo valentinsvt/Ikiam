@@ -258,11 +258,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_blue"
+        android:background="@drawable/button_black"
         style="@style/ButtonText"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/ic_action_map"
+        android:drawablePadding="5dip"
         android:text="@string/encyclopedia_especie_info_ver_mapa" />
 
 

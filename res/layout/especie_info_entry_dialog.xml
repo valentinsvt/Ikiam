@@ -3,33 +3,44 @@
 <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="20dp">
 
     <RelativeLayout
         android:id="@+id/body"
         android:layout_width="fill_parent"
-        android:layout_height="300dp">
+        android:layout_height="300dp"
+        android:layout_marginBottom="20dp">
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/especie_info_dialog_image"
 
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_launcher" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView"
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:layout_below="@+id/body"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"
+    <ScrollView
+        android:id="@+id/SCROLLER_ID"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
         android:background="@drawable/border"
-        android:padding="5dp"
-        android:layout_margin="10dp" />
+        android:padding="7dp"
+
+        android:layout_below="@+id/body">
+
+        <TextView
+            android:id="@+id/especie_info_dialog_comentarios"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+
+            android:text="text" />
+    </ScrollView>
 
 </RelativeLayout>
