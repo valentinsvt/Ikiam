@@ -148,7 +148,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     public void setErrorMessage(String msg) {
-       // System.out.println("::: SET ERROR MESSAGE::: " + msg);
+        // System.out.println("::: SET ERROR MESSAGE::: " + msg);
         fireEvent("errorMessage", msg);
         this.errorMessage = msg;
     }
@@ -237,6 +237,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
+        if(type.equals("Ikiam")){
+            if(esCientifico.equals("S"))
+                botones[2].setVisibility(View.GONE);
+        }
         for (int i = 0; i < botones.length; i++) {
             botones[i].setOnClickListener(this);
         }
