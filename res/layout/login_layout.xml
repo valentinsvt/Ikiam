@@ -61,14 +61,15 @@
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center"
                 android:textColor="#333"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:layout_toRightOf="@+id/selection_profile_pic_ikiam"/>
         <Button
                 android:layout_width="110dp"
                 android:layout_height="match_parent"
                 android:text="@string/login_logout"
                 android:id="@+id/button_logout_ikiam"
-                android:background="#d0000001"
+                android:background="@drawable/button_black"
+                android:drawableTop="@drawable/ic_action_undo"
                 android:textStyle="bold"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -90,7 +91,7 @@
                 android:layout_height="50dp"
                 android:text="@string/login_crear_cuenta"
                 android:id="@+id/button_crear"
-                android:background="#d0000001"
+                android:background="@drawable/button_black"
                 android:layout_alignParentTop="true" android:layout_alignParentStart="true" android:textStyle="bold"
                 android:textColor="#fffffef2" android:layout_marginTop="20dp"/>
         <TextView
@@ -145,7 +146,7 @@
                 android:layout_below="@+id/label_ingresar"
                 android:layout_alignParentStart="true"
                 android:textSize="16dp"
-                android:textStyle="italic"
+                android:textStyle="bold|italic"
                 android:layout_marginTop="15dp"
                 />
         <EditText
@@ -170,7 +171,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="15dp"
                 android:textSize="16dp"
-                android:textStyle="italic"/>
+                android:textStyle="bold|italic"/>
         <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -185,11 +186,12 @@
                 android:layout_height="45dp"
                 android:text="@string/login_ingresar"
                 android:id="@+id/button_login"
-                android:background="#d0000001"
                 android:textStyle="bold"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textColor="#fffffef2"
+                android:background="@drawable/button_black"
+                android:drawableLeft="@drawable/ic_action_person"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"/>
     </RelativeLayout>
@@ -224,7 +226,7 @@
                 android:layout_below="@+id/label_crearCuenta"
                 android:layout_alignParentStart="true"
                 android:textSize="16dp"
-                android:textStyle="italic"
+                android:textStyle="bold|italic"
                 android:layout_marginTop="15dp"
                 />
         <EditText
@@ -250,7 +252,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="18dp"
                 android:textSize="16dp"
-                android:textStyle="italic"/>
+                android:textStyle="bold|italic"/>
 
         <EditText
                 android:layout_width="wrap_content"
@@ -270,7 +272,7 @@
                 android:text="@string/login_apellido"
                 android:id="@+id/lbl_apellido"
                 android:layout_marginTop="15dp"
-                android:textStyle="italic"
+                android:textStyle="bold|italic"
                 android:layout_below="@+id/lbl_nombre"
                 android:layout_alignParentStart="true"
                 android:textSize="16dp"
@@ -297,7 +299,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="15dp"
                 android:textSize="16dp"
-                android:textStyle="italic"/>
+                android:textStyle="bold|italic"/>
         <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -318,7 +320,7 @@
                 android:layout_below="@+id/lbl_pass"
                 android:layout_alignParentStart="true"
                 android:textSize="16dp"
-                android:textStyle="italic"/>
+                android:textStyle="bold|italic"/>
         <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -335,7 +337,8 @@
                 android:layout_height="50dp"
                 android:text="@string/login_guardar"
                 android:id="@+id/button_guardar"
-                android:background="#d0000001"
+                android:background="@drawable/button_black"
+                android:drawableLeft="@drawable/ic_action_add_person"
                 android:textStyle="bold"
                 android:textColor="#fffffef2" android:layout_marginTop="30dp"
                 android:layout_below="@+id/lbl_confirm"/>

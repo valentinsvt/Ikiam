@@ -429,7 +429,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                     } else {
                         Toast.makeText(getActivity()
                                         .getApplicationContext(),
-                                postId,
+                                "Ruta compartida exitosamente",
                                 Toast.LENGTH_LONG).show();
                     }
                 }
@@ -460,7 +460,10 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         if (fieldName.equals("ruta_remote_id")) {
             System.out.println("tengo ruta id");
             if(!newValue.equals("-1"))
-                publishStory();
+                if(activity.old_id==null){
+                    publishStory();
+                }
+
         }
         if (fieldName.equals("errorMessage")) {
             System.out.println("entro aca " + newValue);

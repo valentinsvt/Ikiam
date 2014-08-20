@@ -23,7 +23,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
-import android.webkit.WebView;
 import android.widget.*;
 import com.facebook.*;
 import com.facebook.model.GraphUser;
@@ -31,10 +30,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.AtraccionUi;
@@ -67,7 +63,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int RUTAS_POS = 4;
     public final int SETTINGS_POS = 5;
     public final int LOGIN_POS = 6;
-
+    private static final int CAMERA_REQUEST = 1337;
     /*Interfaz*/
     private Button[] botones;
     boolean continente = true;
@@ -119,6 +115,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public String esCientifico;
     public String errorMessage;
     public String ruta_remote_id;
+    public String old_id;
     private UiLifecycleHelper uiHelper;
     private static final int REAUTH_ACTIVITY_CODE = 100;
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -131,9 +128,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     public List<Entry> entriesBusqueda;
     public List<Especie> especiesBusqueda;
+    public Marker markerSubir;
+    public LatLng posicionSubir;
 
     public void setRuta_remote_id(String id) {
         fireEvent("ruta_remote_id", id);
+        old_id=ruta_remote_id;
         this.ruta_remote_id = id;
     }
 
@@ -227,16 +227,19 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         fotos = new ArrayList<Foto>();
 
         /*CORE*/
+        locationClient = new LocationClient(this, this, this);
+        locationClient.connect();
         setUpMapIfNeeded();
         data = new HashMap<Marker, Foto>();
         atracciones = new HashMap<Marker, AtraccionUi>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
-        locationClient = new LocationClient(this, this, this);
-        locationClient.connect();
-        botones = new Button[3];
+
+        botones = new Button[5];
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
+        botones[3] = (Button) this.findViewById(R.id.btnEspecies);
+        botones[4] = (Button) this.findViewById(R.id.btnCamara);
         if(type.equals("Ikiam")){
             if(esCientifico.equals("S"))
                 botones[2].setVisibility(View.GONE);
@@ -416,6 +419,27 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             queue.execute(new AtraccionDownloader(this, queue, 0));
         }
 
+        if (v.getId() == botones[3].getId()) {
+            map.clear();
+            Location mCurrentLocation;
+            mCurrentLocation = locationClient.getLastLocation();
+            atracciones.clear();
+            selected = null;
+            //System.out.println("Altura "+ mCurrentLocation.getAltitude());
+            location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
+            map.animateCamera(update);
+            ExecutorService queue = Executors.newSingleThreadExecutor();
+            queue.execute(new AtraccionDownloader(this, queue, 0));
+        }
+        if (v.getId() == botones[4].getId()) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST);
+            }
+        }
+
+
     }
 
 
@@ -441,6 +465,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     /*location services*/
     @Override
     public void onConnected(Bundle dataBundle) {
+        System.out.println("connected");
         Location mCurrentLocation;
         mCurrentLocation = locationClient.getLastLocation();
         map.getMyLocation();
@@ -574,13 +599,39 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     private void setUpMap() {
+        //locationClient.getLastLocation();
         location = new LatLng(-1.6477220517969353, -78.46435546875);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 6);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                // Setting the position for the marker
+                markerOptions.position(latLng);
+                // Setting the title for the marker.
+                // This will be displayed on taping the marker
+                markerOptions.title(getString(R.string.map_subirFotoMarker));
+                // Clears the previously touched position
+                //googleMap.clear();
+                // Animating to the touched position
+                map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                // Placing a marker on the touched position
+                markerSubir = map.addMarker(markerOptions);
+                markerSubir.showInfoWindow();
+            }
+        });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
+                if(markerSubir!=null){
+                    if(marker.getId().equals(markerSubir.getId())){
+                        posicionSubir = marker.getPosition();
+                        selectItem(1);
+                    }
+                }
+
 
                 if (data.get(marker) != null) {
                     marker.showInfoWindow();
@@ -682,6 +733,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         });
 
     }
+
+
 
 
     class IncomingHandler extends Handler {
@@ -1017,6 +1070,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     /*Funcion para ver rutas desde el list*/
     public void openRutaFragment(Ruta ruta) {
         this.ruta = ruta;
+        this.old_id=null;
         Fragment fragment = new RutaFragment();
         if (fragment != null) {
             this.addListener((FieldListener) fragment);

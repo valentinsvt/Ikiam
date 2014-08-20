@@ -179,6 +179,7 @@
         <item quantity="other">Fotos</item>
     </plurals>
     <string name="ruta_compartir">Compartir en Facebook</string>
+    <string name="map_subirFotoMarker">Clic en el ping para subir una foto en esta posición</string>
 
 
     <!--Strings para compartir la ruta de facebook-->

@@ -123,8 +123,10 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
             if (fotos != null) {
                 Foto foto = fotos.get(0);
                 Coordenada coord = foto.getCoordenada(context);
-                altMin = coord.altitud;
-                altMax = coord.altitud;
+                if(coord!=null) {
+                    altMin = coord.altitud;
+                    altMax = coord.altitud;
+                }
                 File imgFile = new File(foto.path);
                 if (imgFile.exists()) {
 //            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
