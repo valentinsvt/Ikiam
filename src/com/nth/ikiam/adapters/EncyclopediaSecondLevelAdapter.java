@@ -16,8 +16,12 @@ import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.db.Genero;
 import com.nth.ikiam.image.ImageUtils;
+//import com.nth.ikiam.utils.ImageLoader;
 
 import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by luz on 01/08/14.
@@ -31,7 +35,11 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
     MapActivity context;
     EncyclopediaSecondLevelListView vista;
 
-    public EncyclopediaSecondLevelAdapter(MapActivity context, int position, List<Genero> generos,EncyclopediaSecondLevelListView vista) {
+//    int total;
+//    Vector<Especie> vEspecies;
+//    Vector<ImageView> vImageViews;
+
+    public EncyclopediaSecondLevelAdapter(MapActivity context, int position, List<Genero> generos, EncyclopediaSecondLevelListView vista) {
         this.context = context;
         this.position = position;
         this.generos = generos;
@@ -80,6 +88,13 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
         TextView itemCantFotos = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_cant_fotos);
         ImageView itemFoto = (ImageView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_image);
 
+//        vEspecies.add(especie);
+//        vImageViews.add(itemFoto);
+//        if (especies.size() == total) {
+//            ExecutorService queue = Executors.newSingleThreadExecutor();
+//            queue.execute(new ImageLoader(context, vImageViews, vEspecies));
+//        }
+
         itemNombreCientifico.setText(labelNombreCientifico);
         itemNombreComun.setText(labelNombreComun);
         itemCantFotos.setText(labelCantFotos);
@@ -94,7 +109,10 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 
         Genero genero = getGenero(position);
         especies = Especie.findAllByGenero(context, genero);
-        vista.especies=especies;
+        vista.especies = especies;
+//        total = especies.size();
+//        vEspecies = new Vector<Especie>();
+//        vImageViews = new Vector<ImageView>();
 //        System.out.println("pos=" + position + " gp=" + groupPosition + "  gen=" + genero.nombre + " count=" + Especie.countByGenero(context, genero));
         return especies.size();
     }

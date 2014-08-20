@@ -119,38 +119,74 @@ public class ImageUtils {
 //        return null;
 //    }
 
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     public static Bitmap decodeFile(String path, int w, int h) {
         return decodeFile(path, w, h, false);
     }
 
     public static Bitmap decodeFile(String path, int w, int h, boolean force) {
-//        System.out.println("Decode File Nuevo......" + w + " x " + h);
-//        File f = new File(path);
-        try {
-            Bitmap bitmap = BitmapFactory.decodeFile(path);
-            int imageW = bitmap.getWidth();
-            int imageH = bitmap.getHeight();
-            int newW = w;
-            int newH = h;
-//            int newW, newH;
-            if (!force) {
-                if (imageW > imageH) {
-                    newW = w;
-                    newH = (w * imageH) / imageW;
-                } else {
-                    newH = h;
-                    newW = (h * imageW) / imageH;
-                }
-            }
-            Bitmap photo = Bitmap.createScaledBitmap(bitmap, newW, newH, false);
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
 
-            return photo;
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, w, h);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeFile(path, options);
+        Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+
+
+////        System.out.println("Decode File Nuevo......" + w + " x " + h);
+////        File f = new File(path);
+//        try {
+//            Bitmap bitmap = BitmapFactory.decodeFile(path);
+        int imageW = bitmap.getWidth();
+        int imageH = bitmap.getHeight();
+        int newW = w;
+        int newH = h;
+//            int newW, newH;
+        if (!force) {
+            if (imageW > imageH) {
+                newW = w;
+                newH = (w * imageH) / imageW;
+            } else {
+                newH = h;
+                newW = (h * imageW) / imageH;
+            }
         }
-        return null;
+        Bitmap photo = Bitmap.createScaledBitmap(bitmap, newW, newH, false);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+
+        return photo;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     public static Bitmap decodeFile(String path) {
