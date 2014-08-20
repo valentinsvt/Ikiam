@@ -27,13 +27,15 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
     int position;
 
     List<Genero> generos;
-
+    List<Especie> especies;
     MapActivity context;
+    EncyclopediaSecondLevelListView vista;
 
-    public EncyclopediaSecondLevelAdapter(MapActivity context, int position, List<Genero> generos) {
+    public EncyclopediaSecondLevelAdapter(MapActivity context, int position, List<Genero> generos,EncyclopediaSecondLevelListView vista) {
         this.context = context;
         this.position = position;
         this.generos = generos;
+        this.vista = vista;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
     }
 
     public Especie getEspecie(int pos) {
+        System.out.println("wtf");
         List<Especie> especies = Especie.findAllByGenero(context, getGenero(position));
         return especies.get(pos);
     }
@@ -57,17 +60,8 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-//        TextView tv = new TextView(context);
-//        tv.setText("child " + groupPosition + " " + nivel3[childPosition]);
-//        tv.setTextColor(Color.BLACK);
-//        tv.setTextSize(20);
-//        tv.setPadding(15, 5, 5, 5);
-//        tv.setBackgroundColor(Color.YELLOW);
-//        tv.setLayoutParams(new ListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-//        return tv;
-//        System.out.println(getGenero(position).nombre);
         Genero genero = getGenero(position);
-        List<Especie> especies = Especie.findAllByGenero(context, genero);
+        //List<Especie> especies = Especie.findAllByGenero(context, genero);
         Especie especie = especies.get(childPosition);
 
         Foto foto = Foto.findByEspecie(context, especie);
@@ -95,9 +89,13 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
+        //System.out.println("count!!!");
+
         Genero genero = getGenero(position);
+        especies = Especie.findAllByGenero(context, genero);
+        vista.especies=especies;
 //        System.out.println("pos=" + position + " gp=" + groupPosition + "  gen=" + genero.nombre + " count=" + Especie.countByGenero(context, genero));
-        return Especie.countByGenero(context, genero);
+        return especies.size();
     }
 
     @Override
@@ -125,6 +123,7 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 //        tv.setBackgroundColor(Color.RED);
 //        tv.setLayoutParams(new ListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 //        return tv;
+
         String label = generos.get(position).nombre;
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
