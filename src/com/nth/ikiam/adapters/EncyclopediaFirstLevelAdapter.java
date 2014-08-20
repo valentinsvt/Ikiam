@@ -18,6 +18,7 @@ import com.nth.ikiam.*;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Genero;
+import com.nth.ikiam.utils.Utils;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 //        System.out.println("pos: " + groupPosition + " familia: " + getFamilia(groupPosition).nombre);
         EncyclopediaSecondLevelListView secondLevelexplv = new EncyclopediaSecondLevelListView(activity);
+//        Utils.setListViewHeightBasedOnChildren(secondLevelexplv);
         final List<Genero> generos = Genero.findAllByFamilia(activity, getFamilia(groupPosition));
         secondLevelexplv.setAdapter(new EncyclopediaSecondLevelAdapter(activity, childPosition, generos));
         secondLevelexplv.setGroupIndicator(null);
@@ -142,7 +144,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.encyclopedia_nivel_1, null);
         }
         TextView item = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_1_lbl);
-        item.setTypeface(null, Typeface.BOLD);
+//        item.setTypeface(null, Typeface.BOLD);
         item.setText(label);
         return convertView;
     }

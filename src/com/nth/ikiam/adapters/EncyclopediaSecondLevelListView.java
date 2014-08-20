@@ -15,10 +15,10 @@ public class EncyclopediaSecondLevelListView extends ExpandableListView {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(960,
-                MeasureSpec.AT_MOST);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(600,
-                MeasureSpec.AT_MOST);
+        System.out.println("<<<<<<<<<AQUI>>>>>>>>");
+        widthMeasureSpec = MeasureSpec.makeMeasureSpec(960, MeasureSpec.AT_MOST);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(1200, MeasureSpec.AT_MOST);
+        System.out.println("****************" + heightMeasureSpec + "*********************************");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

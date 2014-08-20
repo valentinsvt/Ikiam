@@ -398,9 +398,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         List<Foto> fotos = Foto.findAllByEntry(context, entry);
         if (fotos != null) {
             String comentarios = entry.comentarios;
-            while (comentarios.length() < 15000) {
-                comentarios += " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies luctus imperdiet. Pellentesque libero erat, laoreet ac magna sit amet, blandit vulputate nisl. Nam dignissim non velit eget cursus. Aenean dui metus, vehicula a leo quis, tincidunt gravida est. Fusce semper nec purus quis consectetur. Vestibulum risus felis, accumsan vitae nulla eu, fringilla vulputate lectus. Nam scelerisque magna vel sollicitudin molestie. Nulla venenatis ipsum sem, nec dignissim lacus vestibulum eget. ";
-            }
+//            while (comentarios.length() < 15000) {
+//                comentarios += " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies luctus imperdiet. Pellentesque libero erat, laoreet ac magna sit amet, blandit vulputate nisl. Nam dignissim non velit eget cursus. Aenean dui metus, vehicula a leo quis, tincidunt gravida est. Fusce semper nec purus quis consectetur. Vestibulum risus felis, accumsan vitae nulla eu, fringilla vulputate lectus. Nam scelerisque magna vel sollicitudin molestie. Nulla venenatis ipsum sem, nec dignissim lacus vestibulum eget. ";
+//            }
             comentarios = comentarios.trim();
 
             Foto foto = fotos.get(0);

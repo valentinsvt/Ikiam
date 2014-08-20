@@ -210,6 +210,11 @@ public class Foto {
         return e.countAllFotos();
     }
 
+    public static Foto findByEspecie(Context context, Especie especie) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getFotoByEspecie(especie);
+    }
+
     public static int countByEspecie(Context context, Especie especie) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.countFotosByEspecie(especie);

@@ -31,7 +31,7 @@
         android:id="@+id/encyclopedia_group_item_nivel_3_nombre_comun"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:text="level3 nombre comun Lorem ipsum dolor sit amet, consect etur adipiscing elit"
+        android:text="level3 nombre comun"
         android:textColor="@android:color/black"
         android:maxLines="3"
         android:layout_alignLeft="@id/encyclopedia_group_item_nivel_3_nombre_cientifico"
@@ -55,7 +55,7 @@
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Lorem ipsum dolor sit amet, consect etur adipiscing elit"
+        android:text="1"
         android:layout_marginLeft="5dp"
 
         android:layout_alignTop="@+id/imageView"

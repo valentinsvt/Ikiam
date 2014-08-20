@@ -6,12 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Familia;
+import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.db.Genero;
+import com.nth.ikiam.image.ImageUtils;
 
 import java.util.List;
 
@@ -62,16 +66,30 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
 //        tv.setLayoutParams(new ListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 //        return tv;
 //        System.out.println(getGenero(position).nombre);
-        List<Especie> especies = Especie.findAllByGenero(context, getGenero(position));
+        Genero genero = getGenero(position);
+        List<Especie> especies = Especie.findAllByGenero(context, genero);
         Especie especie = especies.get(childPosition);
-        String label = especie.nombre + " (" + especie.nombreComun + ")";
+
+        Foto foto = Foto.findByEspecie(context, especie);
+
+        int cantFotos = Foto.countByEspecie(context, especie);
+        String labelNombreCientifico = genero.nombre + " " + especie.nombre;
+        String labelNombreComun = especie.nombreComun;
+        String labelCantFotos = "" + cantFotos;
+
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.encyclopedia_nivel_3, null);
         }
-        TextView item = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_cientifico);
-//        item.setTypeface(null, Typeface.BOLD);
-        item.setText(label);
+        TextView itemNombreCientifico = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_cientifico);
+        TextView itemNombreComun = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_comun);
+        TextView itemCantFotos = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_cant_fotos);
+        ImageView itemFoto = (ImageView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_image);
+
+        itemNombreCientifico.setText(labelNombreCientifico);
+        itemNombreComun.setText(labelNombreComun);
+        itemCantFotos.setText(labelCantFotos);
+        itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 150, 150));
         return convertView;
     }
 
@@ -113,7 +131,7 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.encyclopedia_nivel_2, null);
         }
         TextView item = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_2_lbl);
-        item.setTypeface(null, Typeface.BOLD);
+//        item.setTypeface(null, Typeface.BOLD);
         item.setText(label);
         return convertView;
     }
