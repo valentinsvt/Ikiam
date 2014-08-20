@@ -69,8 +69,8 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.encyclopedia_nivel_3, null);
         }
-        TextView item = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_lbl);
-        item.setTypeface(null, Typeface.BOLD);
+        TextView item = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_cientifico);
+//        item.setTypeface(null, Typeface.BOLD);
         item.setText(label);
         return convertView;
     }

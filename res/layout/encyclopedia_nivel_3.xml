@@ -2,15 +2,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:paddingLeft="55dp">
+
+    <ImageView
+        android:id="@+id/encyclopedia_group_item_nivel_3_image"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginRight="10dp"
+
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_launcher" />
 
     <TextView
-        android:id="@+id/encyclopedia_group_item_nivel_3_lbl"
-        android:layout_width="match_parent"
+        android:id="@+id/encyclopedia_group_item_nivel_3_nombre_cientifico"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:paddingLeft="45dp"
-        android:textColor="@android:color/black" />
+        android:text="level3 nombre cientifico"
+        android:textColor="@android:color/black"
+
+        android:layout_toRightOf="@id/encyclopedia_group_item_nivel_3_image"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/encyclopedia_group_item_nivel_3_nombre_comun"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="level3 nombre comun Lorem ipsum dolor sit amet, consect etur adipiscing elit"
+        android:textColor="@android:color/black"
+        android:maxLines="3"
+
+        android:layout_alignLeft="@id/encyclopedia_group_item_nivel_3_nombre_cientifico"
+        android:layout_below="@id/encyclopedia_group_item_nivel_3_nombre_cientifico" />
+
+    <ImageView
+        android:id="@+id/imageView"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_drawer_fotos_dark_tiny"
+        android:layout_marginTop="7dp"
+
+        android:layout_alignParentEnd="false"
+        android:layout_below="@+id/encyclopedia_group_item_nivel_3_nombre_comun"
+        android:layout_alignLeft="@id/encyclopedia_group_item_nivel_3_nombre_cientifico" />
+
+    <TextView
+        android:id="@+id/encyclopedia_group_item_nivel_3_cant_fotos"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Lorem ipsum dolor sit amet, consect etur adipiscing elit"
+        android:layout_marginLeft="5dp"
+
+        android:layout_alignTop="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView" />
 
 </RelativeLayout>
