@@ -118,20 +118,29 @@ public class ImageUtils {
 //        }
 //        return null;
 //    }
+
     public static Bitmap decodeFile(String path, int w, int h) {
+        return decodeFile(path, w, h, false);
+    }
+
+    public static Bitmap decodeFile(String path, int w, int h, boolean force) {
 //        System.out.println("Decode File Nuevo......" + w + " x " + h);
 //        File f = new File(path);
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             int imageW = bitmap.getWidth();
             int imageH = bitmap.getHeight();
-            int newW, newH;
-            if (imageW > imageH) {
-                newW = w;
-                newH = (w * imageH) / imageW;
-            } else {
-                newH = h;
-                newW = (h * imageW) / imageH;
+            int newW = w;
+            int newH = h;
+//            int newW, newH;
+            if (!force) {
+                if (imageW > imageH) {
+                    newW = w;
+                    newH = (w * imageH) / imageW;
+                } else {
+                    newH = h;
+                    newW = (h * imageW) / imageH;
+                }
             }
             Bitmap photo = Bitmap.createScaledBitmap(bitmap, newW, newH, false);
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();

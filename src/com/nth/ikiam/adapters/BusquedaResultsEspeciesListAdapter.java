@@ -33,54 +33,105 @@ public class BusquedaResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.busqueda_results_row, parent, false);
-//        System.out.println(rowView);
 
-//        TextView textViewNombre = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
-        TextView textViewNCo = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
-        TextView textViewNCi = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_cientifico);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.encyclopedia_entries_row_image);
+        Especie especie = especies.get(position);
+        Genero genero = especie.getGenero(context);
+        String nombreComun = especie.nombreComun;
+        String nombreCientifico = genero.nombre + " " + especie.nombre.toLowerCase();
 
-//        System.out.println("POS " + position + "  " + entries.size());
-
-        Especie selectedEspecie = especies.get(position);
-        Genero genero = selectedEspecie.getGenero(context);
-        String nombreComun = selectedEspecie.nombreComun;
-        String nombreCientifico = genero.nombre + " " + selectedEspecie.nombre.toLowerCase();
-
-//        while (comentarios.length() < 150) {
-//            comentarios += " Lorem ipsum dolor sit amet ";
-//        }
-
-//        if (nombreComun.length() > 127) {
-//            nombreComun = nombreComun.substring(0, 127) + "...";
-//        }
-
-//        textViewNombre.setText(selectedEntry.getEspecie().getNombreCientifico() + " (" + selectedEntry.getEspecie().nombreComun + ")");
-        textViewNCo.setText(nombreComun);
-        textViewNCi.setText(nombreCientifico);
-
-        List<Foto> fotos = Foto.findAllByEspecie(context, selectedEspecie);
+        List<Foto> fotos = Foto.findAllByEspecie(context, especie);
         Foto foto = fotos.get(0);
         File imgFile = new File(foto.path);
-        if (imgFile.exists()) {
-//            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//            Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 100, 100);
-            Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100);
-            imageView.setImageBitmap(myBitmap);
+
+
+        int cantFotos = Foto.countByEspecie(context, especie);
+        String labelNombreCientifico = genero.nombre + " " + especie.nombre;
+        String labelNombreComun = especie.nombreComun;
+        String labelCantFotos = "" + cantFotos;
+
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.busqueda_results_row, null);
         }
+        TextView itemNombreCientifico = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_cientifico);
+        TextView itemNombreComun = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_comun);
+        TextView itemCantFotos = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_cant_fotos);
+        ImageView itemFoto = (ImageView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_image);
 
-        // change the icon for Windows and iPhone
-//        String s = values[position];
-//        if (s.startsWith("iPhone")) {
-//            imageView.setImageResource(R.drawable.no);
-//        } else {
-//            imageView.setImageResource(R.drawable.ok);
+        itemNombreCientifico.setText(labelNombreCientifico);
+        itemNombreComun.setText(labelNombreComun);
+        itemCantFotos.setText(labelCantFotos);
+        itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 100, 100, true));
+        return convertView;
+        /* **********************************************/
+
+//        LayoutInflater inflater = (LayoutInflater) context
+//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View rowView = inflater.inflate(R.layout.busqueda_results_row, parent, false);
+//        TextView textViewNCo = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
+//        TextView textViewNCi = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_cientifico);
+//        ImageView imageView = (ImageView) rowView.findViewById(R.id.encyclopedia_entries_row_image);
+//
+//        textViewNCo.setText(nombreComun);
+//        textViewNCi.setText(nombreCientifico);
+//        if (imgFile.exists()) {
+//            Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100);
+//            imageView.setImageBitmap(myBitmap);
 //        }
-
-        return rowView;
+//        return rowView;
     }
+
+//
+//    @Override
+//    public View getView(int position, View convertView, ViewGroup parent) {
+//        LayoutInflater inflater = (LayoutInflater) context
+//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View rowView = inflater.inflate(R.layout.busqueda_results_row, parent, false);
+////        System.out.println(rowView);
+//
+////        TextView textViewNombre = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
+//        TextView textViewNCo = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
+//        TextView textViewNCi = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_cientifico);
+//        ImageView imageView = (ImageView) rowView.findViewById(R.id.encyclopedia_entries_row_image);
+//
+////        System.out.println("POS " + position + "  " + entries.size());
+//
+//        Especie selectedEspecie = especies.get(position);
+//        Genero genero = selectedEspecie.getGenero(context);
+//        String nombreComun = selectedEspecie.nombreComun;
+//        String nombreCientifico = genero.nombre + " " + selectedEspecie.nombre.toLowerCase();
+//
+////        while (comentarios.length() < 150) {
+////            comentarios += " Lorem ipsum dolor sit amet ";
+////        }
+//
+////        if (nombreComun.length() > 127) {
+////            nombreComun = nombreComun.substring(0, 127) + "...";
+////        }
+//
+////        textViewNombre.setText(selectedEntry.getEspecie().getNombreCientifico() + " (" + selectedEntry.getEspecie().nombreComun + ")");
+//        textViewNCo.setText(nombreComun);
+//        textViewNCi.setText(nombreCientifico);
+//
+//        List<Foto> fotos = Foto.findAllByEspecie(context, selectedEspecie);
+//        Foto foto = fotos.get(0);
+//        File imgFile = new File(foto.path);
+//        if (imgFile.exists()) {
+////            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+////            Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 100, 100);
+//            Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100);
+//            imageView.setImageBitmap(myBitmap);
+//        }
+//
+//        // change the icon for Windows and iPhone
+////        String s = values[position];
+////        if (s.startsWith("iPhone")) {
+////            imageView.setImageResource(R.drawable.no);
+////        } else {
+////            imageView.setImageResource(R.drawable.ok);
+////        }
+//
+//        return rowView;
+//    }
 
 }

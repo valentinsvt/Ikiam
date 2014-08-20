@@ -31,7 +31,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
     EncyclopediaFragment fragment;
 
     List<Familia> familias;
-    List<Genero> generos;
+//    List<Genero> generos;
 
     public EncyclopediaFirstLevelAdapter(MapActivity activity, EncyclopediaFragment fragment, List<Familia> familias) {
         this.familias = familias;
@@ -58,8 +58,8 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
 //        System.out.println("pos: " + groupPosition + " familia: " + getFamilia(groupPosition).nombre);
         EncyclopediaSecondLevelListView secondLevelexplv = new EncyclopediaSecondLevelListView(activity);
 //        Utils.setListViewHeightBasedOnChildren(secondLevelexplv);
-        //final List<Genero> generos = Genero.findAllByFamilia(activity, getFamilia(groupPosition));
-        secondLevelexplv.setAdapter(new EncyclopediaSecondLevelAdapter(activity, childPosition, generos,secondLevelexplv));
+        final List<Genero> generos = Genero.findAllByFamilia(activity, getFamilia(groupPosition));
+        secondLevelexplv.setAdapter(new EncyclopediaSecondLevelAdapter(activity, childPosition, generos, secondLevelexplv));
         secondLevelexplv.setGroupIndicator(null);
         final int gp = childPosition;
 
@@ -111,8 +111,9 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         Familia familia = familias.get(groupPosition);
-        generos = Genero.findAllByFamilia(activity, familia);
-        return generos.size();
+//        generos = Genero.findAllByFamilia(activity, familia);
+//        return generos.size();
+        return Genero.countByFamilia(activity, familia);
     }
 
     @Override

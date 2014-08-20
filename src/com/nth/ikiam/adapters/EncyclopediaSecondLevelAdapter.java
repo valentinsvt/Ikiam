@@ -83,7 +83,8 @@ public class EncyclopediaSecondLevelAdapter extends BaseExpandableListAdapter {
         itemNombreCientifico.setText(labelNombreCientifico);
         itemNombreComun.setText(labelNombreComun);
         itemCantFotos.setText(labelCantFotos);
-        itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 150, 150));
+        itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 100, 100, true));
+
         return convertView;
     }
 
