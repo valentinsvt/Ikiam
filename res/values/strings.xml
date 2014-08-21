@@ -111,6 +111,11 @@
     <string name="captura_color1_label">Color principal</string>
     <string name="captura_color2_label">Color secundario</string>
 
+    <string name="captura_error_nombre_comun">Por favor, ingresa el nombre común de la especie</string>
+    <string name="captura_error_nombre_familia">Por favor, ingresa la familia de la especie</string>
+    <string name="captura_error_nombre_genero">Por favor, ingresa el género de la especie</string>
+    <string name="captura_error_nombre_especie">Por favor, ingresa el nombre de la especie</string>
+
     <string name="captura_error_keywords">Por favor, selecciona un tipo de foto</string>
     <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
@@ -135,7 +140,8 @@
     <string name="settings_reset_achievements">Reiniciar contadores de logros</string>
 
     <string name="uploader_upload_error">Ha ocurrido un error, por favor intente más tarde</string>
-    <string name="uploader_upload_success">Proceso exitoso</string>
+    <string name="uploader_upload_success">Foto guardada exitosamente</string>
+    <string name="uploader_upload_map">Foto guardada, mantenga presionado un punto en el mapa donde desee ubicarla.</string>
 
     <string name="app_id">298464543671961</string>
     <string name="login_email">Email</string>
@@ -180,6 +186,8 @@
     </plurals>
     <string name="ruta_compartir">Compartir en Facebook</string>
     <string name="map_subirFotoMarker">Clic en el ping para subir una foto en esta posición</string>
+    <string name="map_ubicar_foto_marker">Clic en el ping para ubicar la foto aquí</string>
+    <string name="map_foto_ubicada">Foto ubicada correctamente</string>
 
 
     <!--Strings para compartir la ruta de facebook-->
@@ -187,6 +195,6 @@
     <string name="share_caption">Descubre la biodiversidad ecuatoriana</string>
     <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
     <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
-    <string name="map_camara">Camara</string>
+    <string name="map_camara">Cámara</string>
     <string name="map_especies">Especies</string>
 </resources>

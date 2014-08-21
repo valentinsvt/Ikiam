@@ -2,12 +2,17 @@ package com.nth.ikiam.listeners;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import com.nth.ikiam.CapturaCientificoFragment;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
-import com.nth.ikiam.adapters.CapturaNombreEspecieArrayAdapter;
+import com.nth.ikiam.adapters.CapturaNombreFamiliaArrayAdapter;
 import com.nth.ikiam.adapters.CapturaNombreGeneroArrayAdapter;
-import com.nth.ikiam.db.Especie;
+import com.nth.ikiam.capturaAutocomplete.CustomAutoCompleteView;
+import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Genero;
 
 import java.util.List;
@@ -15,13 +20,13 @@ import java.util.List;
 /**
  * Created by luz on 04/08/14.
  */
-public class CapturaCNombreGeneroAutocompleteTextChangedListener implements TextWatcher {
+public class CapturaNombreFamiliaAutocompleteTextChangedListener implements TextWatcher {
 
     public static final String TAG = "CapturaNombreFamiliaAutocompleteTextChangedListener.java";
     MapActivity context;
     CapturaCientificoFragment fragment;
 
-    public CapturaCNombreGeneroAutocompleteTextChangedListener(MapActivity context, CapturaCientificoFragment fragment) {
+    public CapturaNombreFamiliaAutocompleteTextChangedListener(MapActivity context, CapturaCientificoFragment fragment) {
         this.context = context;
         this.fragment = fragment;
     }
@@ -29,7 +34,6 @@ public class CapturaCNombreGeneroAutocompleteTextChangedListener implements Text
     @Override
     public void afterTextChanged(Editable s) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -48,20 +52,17 @@ public class CapturaCNombreGeneroAutocompleteTextChangedListener implements Text
 //            Log.e(TAG, "User input: " + userInput);
 
             // update the adapater
-            fragment.nombreGeneroArrayAdapter.notifyDataSetChanged();
+            fragment.nombreFamiliaArrayAdapter.notifyDataSetChanged();
 
             // get suggestions from the database
-            List<Genero> myObjs = Genero.findAllByNombreLike(context, userInput.toString());
-
+            List<Familia> myObjs = Familia.findAllByNombreLike(context, userInput.toString());
             // update the nombreComunArrayAdapter
-            fragment.nombreGeneroArrayAdapter = new CapturaNombreGeneroArrayAdapter(context, R.layout.captura_autocomplete_list_item, myObjs);
-            fragment.autocompleteGenero.setAdapter(fragment.nombreGeneroArrayAdapter);
-
+            fragment.nombreFamiliaArrayAdapter = new CapturaNombreFamiliaArrayAdapter(context, R.layout.captura_autocomplete_list_item, myObjs);
+            fragment.autocompleteFamilia.setAdapter(fragment.nombreFamiliaArrayAdapter);
             if (myObjs.size() == 1) {
-                List<Especie> especies = Especie.findAllByGenero(context, myObjs.get(0));
-                fragment.nombreEspecieArrayAdapter = new CapturaNombreEspecieArrayAdapter(context, R.layout.captura_autocomplete_list_item, especies);
-                fragment.autocompleteEspecie.setAdapter(fragment.nombreEspecieArrayAdapter);
+                fragment.autocompleteGenero.addTextChangedListener(new CapturaNombreGeneroAutocompleteTextChangedListener(context, fragment, myObjs.get(0)));
             }
+
         } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (Exception e) {

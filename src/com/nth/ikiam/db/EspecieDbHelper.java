@@ -278,6 +278,29 @@ public class EspecieDbHelper extends DbHelper {
         return todos;
     }
 
+    public List<Especie> getAllEspeciesByGeneroAndNombreLike(Genero genero, String especie) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Especie> todos = new ArrayList<Especie>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ESPECIE +
+                " WHERE LOWER(" + KEY_NOMBRE_NORM + ") LIKE '%" + especie.toLowerCase() + "%'" +
+                " AND " + KEY_GENERO_ID + " = " + genero.id;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Especie es = setDatos(c);
+                // adding to especie list
+                todos.add(es);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return todos;
+    }
+
     public List<Especie> getAllEspeciesByNombreCientifico(String nombreCientifico) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Especie> todos = new ArrayList<Especie>();

@@ -234,6 +234,11 @@ public class Especie {
         return e.getAllEspeciesByNombreLike(especie);
     }
 
+    public static List<Especie> findAllByGeneroAndNombreLike(Context context, Genero genero, String especie) {
+        EspecieDbHelper e = new EspecieDbHelper(context);
+        return e.getAllEspeciesByGeneroAndNombreLike(genero, especie);
+    }
+
     public static List<Especie> findAllByNombreComunLike(Context context, String especie) {
         EspecieDbHelper e = new EspecieDbHelper(context);
         return e.getAllEspeciesByNombreComunLike(especie);

@@ -5,23 +5,28 @@ import android.text.TextWatcher;
 import com.nth.ikiam.CapturaCientificoFragment;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
-import com.nth.ikiam.adapters.CapturaNombreComunArrayAdapter;
+import com.nth.ikiam.adapters.CapturaNombreEspecieArrayAdapter;
+import com.nth.ikiam.adapters.CapturaNombreGeneroArrayAdapter;
 import com.nth.ikiam.db.Especie;
+import com.nth.ikiam.db.Familia;
+import com.nth.ikiam.db.Genero;
 
 import java.util.List;
 
 /**
  * Created by luz on 04/08/14.
  */
-public class CapturaCNombreComunAutocompleteTextChangedListener implements TextWatcher {
+public class CapturaNombreGeneroAutocompleteTextChangedListener implements TextWatcher {
 
-    public static final String TAG = "CapturaNombreComunAutocompleteTextChangedListener.java";
+    public static final String TAG = "CapturaNombreFamiliaAutocompleteTextChangedListener.java";
     MapActivity context;
     CapturaCientificoFragment fragment;
+    Familia familia;
 
-    public CapturaCNombreComunAutocompleteTextChangedListener(MapActivity context, CapturaCientificoFragment fragment) {
+    public CapturaNombreGeneroAutocompleteTextChangedListener(MapActivity context, CapturaCientificoFragment fragment, Familia familia) {
         this.context = context;
         this.fragment = fragment;
+        this.familia = familia;
     }
 
     @Override
@@ -46,16 +51,18 @@ public class CapturaCNombreComunAutocompleteTextChangedListener implements TextW
 //            Log.e(TAG, "User input: " + userInput);
 
             // update the adapater
-            fragment.nombreComunArrayAdapter.notifyDataSetChanged();
+            fragment.nombreGeneroArrayAdapter.notifyDataSetChanged();
 
             // get suggestions from the database
-            List<Especie> myObjs = Especie.findAllByNombreComunLike(context, userInput.toString());
+            List<Genero> myObjs = Genero.findAllByFamiliaAndNombreLike(context, familia, userInput.toString());
 
             // update the nombreComunArrayAdapter
-            fragment.nombreComunArrayAdapter = new CapturaNombreComunArrayAdapter(context, R.layout.captura_autocomplete_list_item, myObjs);
+            fragment.nombreGeneroArrayAdapter = new CapturaNombreGeneroArrayAdapter(context, R.layout.captura_autocomplete_list_item, myObjs);
+            fragment.autocompleteGenero.setAdapter(fragment.nombreGeneroArrayAdapter);
 
-            fragment.autocompleteNombreComun.setAdapter(fragment.nombreComunArrayAdapter);
-
+            if (myObjs.size() == 1) {
+                fragment.autocompleteEspecie.addTextChangedListener(new CapturaNombreEspecieAutocompleteTextChangedListener(context, fragment, myObjs.get(0)));
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (Exception e) {

@@ -30,6 +30,10 @@ public class ImageUtils {
         return getBitmapFromCameraData(data, context, 185, 185);
     }
 
+    public static Bitmap getThumbnail(String path, boolean force) {
+        return decodeFile(path, 185, 185, force);
+    }
+
     public static Bitmap getBitmapFromCameraData(Intent data, Context context) {
         return getBitmapFromCameraData(data, context, -1, -1);
     }

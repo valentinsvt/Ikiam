@@ -39,6 +39,7 @@ import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.AtraccionDownloader;
+import com.nth.ikiam.utils.Utils;
 
 
 import java.util.ArrayList;
@@ -102,7 +103,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     List<Foto> fotos;
     /*Fin imagenes*/
 
-    String imagePathUpload = "";
+    //    String imagePathUpload = "";
+    Foto imageToUpload;
     AlertDialog dialog;
     View myView;
     public int screenHeight;
@@ -131,9 +133,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public Marker markerSubir;
     public LatLng posicionSubir;
 
+    public Foto fotoSinCoords;
+
     public void setRuta_remote_id(String id) {
         fireEvent("ruta_remote_id", id);
-        old_id=ruta_remote_id;
+        old_id = ruta_remote_id;
         this.ruta_remote_id = id;
     }
 
@@ -197,6 +201,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         super.onCreate(savedInstanceState);
 
+        fotoSinCoords = null;
+        imageToUpload = null;
+
         /*preferencias*/
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         userId = settings.getString("user", "-1");
@@ -211,9 +218,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         Session session;
-        if(type.equals("-1") || type.equals("facebook")){
+        if (type.equals("-1") || type.equals("facebook")) {
             session = Session.getActiveSession();
-            System.out.println("get active "+session);
+            System.out.println("get active " + session);
             makeMeRequest(session);
         }
 
@@ -240,8 +247,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
         botones[3] = (Button) this.findViewById(R.id.btnEspecies);
         botones[4] = (Button) this.findViewById(R.id.btnCamara);
-        if(type.equals("Ikiam")){
-            if(esCientifico.equals("S"))
+        if (type.equals("Ikiam")) {
+            if (esCientifico.equals("S"))
                 botones[2].setVisibility(View.GONE);
         }
         for (int i = 0; i < botones.length; i++) {
@@ -336,6 +343,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         super.onSaveInstanceState(savedInstanceState);
 
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -612,7 +620,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 markerOptions.position(latLng);
                 // Setting the title for the marker.
                 // This will be displayed on taping the marker
-                markerOptions.title(getString(R.string.map_subirFotoMarker));
+                if (fotoSinCoords == null) {
+                    markerOptions.title(getString(R.string.map_subirFotoMarker));
+                } else {
+                    markerOptions.title(getString(R.string.map_ubicar_foto_marker));
+                }
                 // Clears the previously touched position
                 //googleMap.clear();
                 // Animating to the touched position
@@ -625,13 +637,16 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
-                if(markerSubir!=null){
-                    if(marker.getId().equals(markerSubir.getId())){
+                if (markerSubir != null) {
+                    if (marker.getId().equals(markerSubir.getId())) {
                         posicionSubir = marker.getPosition();
-                        selectItem(1);
+                        if (fotoSinCoords == null) {
+                            selectItem(CAPTURA_POS);
+                        } else {
+                            updateFotoSinCoords(posicionSubir);
+                        }
                     }
                 }
-
 
                 if (data.get(marker) != null) {
                     marker.showInfoWindow();
@@ -643,8 +658,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
-                            imagePathUpload = data.get(marker).path;
-                            selectItem(1);
+//                            imagePathUpload = data.get(marker).path;
+                            imageToUpload = data.get(marker);
+                            selectItem(CAPTURA_POS);
                             dialog.dismiss();
                         }
                     });
@@ -734,8 +750,20 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     }
 
-
-
+    private void updateFotoSinCoords(LatLng pos) {
+        Coordenada coord = new Coordenada(this);
+        coord.latitud = pos.latitude;
+        coord.longitud = pos.longitude;
+        coord.altitud = 0;
+        coord.save();
+        fotoSinCoords.setCoordenada(coord);
+        fotoSinCoords.save();
+        Toast.makeText(this, getString(R.string.map_foto_ubicada), Toast.LENGTH_LONG).show();
+        markerSubir.hideInfoWindow();
+        markerSubir.remove();
+        markerSubir = null;
+        fotoSinCoords = null;
+    }
 
     class IncomingHandler extends Handler {
         @Override
@@ -1070,7 +1098,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     /*Funcion para ver rutas desde el list*/
     public void openRutaFragment(Ruta ruta) {
         this.ruta = ruta;
-        this.old_id=null;
+        this.old_id = null;
         Fragment fragment = new RutaFragment();
         if (fragment != null) {
             this.addListener((FieldListener) fragment);
@@ -1088,14 +1116,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         setTitle(ruta.descripcion);
     }
 
-    public void showRuta(List<Coordenada> cords,List<Foto> fotos){
+    public void showRuta(List<Coordenada> cords, List<Foto> fotos) {
         map.clear();
         data.clear();
         location = new LatLng(cords.get(0).getLatitud(), cords.get(0).getLongitud());
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 19);
         map.animateCamera(update);
         polyLine = map.addPolyline(rectOptions);
-        for(int i =0;i<fotos.size();i++){
+        for (int i = 0; i < fotos.size(); i++) {
             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
             Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
             Canvas canvas1 = new Canvas(bmp);
@@ -1113,22 +1141,22 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     .anchor(0.5f, 1).title("Nueva fotografía"));
             data.put(marker, fotos.get(i));
         }
-        for(int i =0;i<cords.size();i++) {
-            updatePolyLine(new LatLng(cords.get(i).getLatitud(),cords.get(i).getLongitud()));
-            if(i==cords.size()-1){
-                map.addMarker(new MarkerOptions().position(new LatLng(cords.get(i).getLatitud(),cords.get(i).getLongitud())).title("Última posición registrada"));
+        for (int i = 0; i < cords.size(); i++) {
+            updatePolyLine(new LatLng(cords.get(i).getLatitud(), cords.get(i).getLongitud()));
+            if (i == cords.size() - 1) {
+                map.addMarker(new MarkerOptions().position(new LatLng(cords.get(i).getLatitud(), cords.get(i).getLongitud())).title("Última posición registrada"));
             }
         }
         showMap();
 
     }
 
-    public void showMap(){
-        selectItem(0);
+    public void showMap() {
+        selectItem(MAP_POS);
     }
 
     private void makeMeRequest(final Session session) {
-        System.out.println("get session map activity "+session+" ");
+        System.out.println("get session map activity " + session + " ");
         // Make an API call to get user data and define a
         // new callback to handle the response.
         Request request = Request.newMeRequest(session,
@@ -1137,9 +1165,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     public void onCompleted(GraphUser user, Response response) {
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
-                            System.out.println("get session map  activity active "+session+" "+user);
+                            System.out.println("get session map  activity active " + session + " " + user);
                             if (user != null) {
-                                System.out.println("username "+user.getUsername()+" name  "+user.getName());
+                                System.out.println("username " + user.getUsername() + " name  " + user.getName());
                                 SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putString("user", user.getId());

@@ -133,6 +133,30 @@ public class GeneroDbHelper extends DbHelper {
         return generos;
     }
 
+    public List<Genero> getAllGenerosByFamiliaAndNombreLike(Familia familia, String genero) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Genero> generos = new ArrayList<Genero>();
+        String selectQuery = "SELECT  * FROM " + TABLE_GENERO +
+                " WHERE LOWER(" + KEY_NOMBRE_NORM + ") LIKE '%" + genero.toLowerCase() + "%'" +
+                " AND " + KEY_FAMILIA_ID + " = " + familia.id;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Genero gn = setDatos(c);
+
+                // adding to tags list
+                generos.add(gn);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return generos;
+    }
+
     public List<Genero> getAllGenerosByFamilia(Familia familia) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Genero> generos = new ArrayList<Genero>();

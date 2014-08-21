@@ -144,6 +144,11 @@ public class Genero {
         return e.getAllGenerosByNombreLike(genero);
     }
 
+    public static List<Genero> findAllByFamiliaAndNombreLike(Context context, Familia familia, String genero) {
+        GeneroDbHelper e = new GeneroDbHelper(context);
+        return e.getAllGenerosByFamiliaAndNombreLike(familia, genero);
+    }
+
     public static List<Genero> findAllByFamilia(Context context, Familia familia) {
         GeneroDbHelper e = new GeneroDbHelper(context);
         return e.getAllGenerosByFamilia(familia);

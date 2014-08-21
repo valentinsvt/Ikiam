@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +25,7 @@ import com.nth.ikiam.utils.Utils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -111,6 +113,26 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         initAutocompletes(view);
         initButtons(view);
         initToggles(view);
+
+        if (context.imageToUpload != null) {
+            Foto fotoSubir = context.imageToUpload;
+
+            try {
+                ExifInterface exif = new ExifInterface(fotoSubir.path);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+                bitmap = ImageUtils.getThumbnail(fotoSubir.path, false);
+                bitmap = BitmapFactory.decodeFile(fotoSubir.path);
+                bitmap = ImageUtils.rotateBitmap(bitmap, orientation);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (bitmap != null) {
+                selectedImage.setImageBitmap(bitmap);
+            } else {
+                selectedImage.setImageBitmap(ImageUtils.getThumbnail(fotoSubir.path, false));
+            }
+        }
+
         return view;
     }
 
@@ -142,132 +164,160 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 String nombreGenero = autocompleteGenero.getText().toString().trim();
                 String nombreEspecie = autocompleteEspecie.getText().toString().trim();
 
-                String comentarios = textoComentarios.getText().toString().trim();
-                String keywords = "";
-                int i = 0;
-                boolean checked = false;
-                for (ToggleButton toggle : toggles) {
-                    if (toggle.isChecked()) {
-                        checked = true;
-                        if (!keywords.equals("")) {
-                            keywords += ", ";
-                        }
-                        keywords += keys[i];
-//                        System.out.println("i=" + i + "   " + keys[i] + "     " + keywords);
-                    }
-                    i++;
+                boolean ok = true;
+                if (nombreComun.equals("")) {
+                    ok = false;
+                    alerta(getString(R.string.captura_error_nombre_comun));
+                } else if (nombreFamilia.equals("")) {
+                    ok = false;
+                    alerta(getString(R.string.captura_error_nombre_familia));
+                } else if (nombreGenero.equals("")) {
+                    ok = false;
+                    alerta(getString(R.string.captura_error_nombre_genero));
+                } else if (nombreEspecie.equals("")) {
+                    ok = false;
+                    alerta(getString(R.string.captura_error_nombre_especie));
                 }
-                if (!checked) {
-                    alerta(getString(R.string.captura_error_keywords));
-                } else {
-                    Familia familia = null;
-                    Genero genero = null;
-                    Especie especie = null;
-                    Entry entry = null;
-                    if (!nombreFamilia.equals("")) {
-                        familia = Familia.getByNombreOrCreate(context, nombreFamilia);
-                    }
-                    if (!nombreGenero.equals("")) {
-                        genero = Genero.getByNombreOrCreate(context, nombreGenero);
-                        if (familia != null) {
-                            genero.setFamilia(familia);
-                            genero.save();
-                        }
-                    }
-                    if (!nombreEspecie.equals("")) {
-                        especie = Especie.getByNombreOrCreate(context, nombreEspecie);
-                        if (genero != null) {
-                            especie.setGenero(genero);
-                        }
-                        if (color1 != null) {
-                            especie.setColor1(color1);
-                        }
-                        if (color2 != null && !color2.nombre.equals("none")) {
-                            especie.setColor2(color2);
-                        }
-                        if (!nombreComun.equals("")) {
-                            especie.setNombreComun(nombreComun);
-                        }
-                        especie.save();
 
-                        entry = new Entry(context);
-                        entry.setEspecie(especie);
-                        entry.setComentarios(comentarios);
-                        entry.setUploaded(0);
-                        entry.save();
-                    }
-
-                    Foto foto = new Foto(context);
-                    if (especie != null) {
-                        foto.setEspecie(especie);
-                    }
-                    if (entry != null) {
-                        foto.setEntry(entry);
-                    }
-                    foto.setKeywords(keywords);
-                    if (fotoLat != null && fotoLong != null) {
-                        System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
-                        Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
-                        if (fotoAlt != null) {
-                            coordenada.setAltitud(fotoAlt);
+                if (ok) {
+                    String comentarios = textoComentarios.getText().toString().trim();
+                    String keywords = "";
+                    int i = 0;
+                    boolean checked = false;
+                    for (ToggleButton toggle : toggles) {
+                        if (toggle.isChecked()) {
+                            checked = true;
+                            if (!keywords.equals("")) {
+                                keywords += ", ";
+                            }
+                            keywords += keys[i];
+//                        System.out.println("i=" + i + "   " + keys[i] + "     " + keywords);
                         }
-                        coordenada.save();
-                        foto.setCoordenada(coordenada);
+                        i++;
                     }
-                    foto.save();
-
-                    String nuevoNombre;
-                    if (genero != null && especie != null) {
-                        nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
-                        nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
+                    if (!checked) {
+                        alerta(getString(R.string.captura_error_keywords));
                     } else {
-                        nuevoNombre = "na_na_" + foto.id;
-                    }
-                    nuevoNombre += ".jpg";
+                        Familia familia = null;
+                        Genero genero = null;
+                        Especie especie = null;
+                        Entry entry = null;
+                        if (!nombreFamilia.equals("")) {
+                            familia = Familia.getByNombreOrCreate(context, nombreFamilia);
+                        }
+                        if (!nombreGenero.equals("")) {
+                            genero = Genero.getByNombreOrCreate(context, nombreGenero);
+                            if (familia != null) {
+                                genero.setFamilia(familia);
+                                genero.save();
+                            }
+                        }
+                        if (!nombreEspecie.equals("")) {
+                            especie = Especie.getByNombreOrCreate(context, nombreEspecie);
+                            if (genero != null) {
+                                especie.setGenero(genero);
+                            }
+                            if (color1 != null) {
+                                especie.setColor1(color1);
+                            }
+                            if (color2 != null && !color2.nombre.equals("none")) {
+                                especie.setColor2(color2);
+                            }
+                            if (!nombreComun.equals("")) {
+                                especie.setNombreComun(nombreComun);
+                            }
+                            especie.save();
+
+                            entry = new Entry(context);
+                            entry.setEspecie(especie);
+                            entry.setComentarios(comentarios);
+                            entry.setUploaded(0);
+                            entry.save();
+                        }
+
+                        Foto foto = new Foto(context);
+                        if (especie != null) {
+                            foto.setEspecie(especie);
+                        }
+                        if (entry != null) {
+                            foto.setEntry(entry);
+                        }
+                        foto.setKeywords(keywords);
+                        Coordenada coordenada = null;
+                        if (fotoLat != null && fotoLong != null) {
+//                        System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
+                            coordenada = new Coordenada(context, fotoLat, fotoLong);
+                            if (fotoAlt != null) {
+                                coordenada.setAltitud(fotoAlt);
+                            }
+                            coordenada.save();
+                            foto.setCoordenada(coordenada);
+                        }
+                        foto.save();
+
+                        String nuevoNombre;
+                        if (genero != null && especie != null) {
+                            nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
+                            nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
+                        } else {
+                            nuevoNombre = "na_na_" + foto.id;
+                        }
+                        nuevoNombre += ".jpg";
 
 //                File file = new File(pathFolder, fotoPath);
 //                fotoPath = file.getName();
-                    File file = new File(pathFolder, nuevoNombre);
+                        File file = new File(pathFolder, nuevoNombre);
 ////                if (file.exists()) {
 ////                    file.delete();
 ////                }
-                    try {
-                        if (!file.exists()) {
-                            FileOutputStream out = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                            out.flush();
-                            out.close();
+                        try {
+                            if (!file.exists()) {
+                                FileOutputStream out = new FileOutputStream(file);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                                out.flush();
+                                out.close();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //System.out.println("Path folder: " + pathFolder);
+                        //System.out.println("Photo path: " + fotoPath);
+//                foto.setPath(pathFolder + "/" + fotoPath);
+                        foto.setPath(pathFolder + "/" + nuevoNombre);
+                        foto.setUploaded(0);
+                        foto.save();
+//                String msg = "Foto guardada";
+                        //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
+                        if (v.getId() == botones[3].getId()) {
+                            String id = context.userId; //id (faceboook - fb id, ikiam db.id
+                            if (id != null && !id.equals("-1")) {
+                                // aqui hace upload al servidor.....
+                                ExecutorService queue = Executors.newSingleThreadExecutor();
+                                queue.execute(new CapturaUploader(context, queue, foto, 0));
+                            } else {
+                                //redirect a login
+                                System.out.println("Login first!!!");
+                                context.selectItem(context.LOGIN_POS);
+                            }
+//                    msg += " y subida ";
+                        } else {
+//                            alerta(getString(R.string.uploader_upload_success));
+                        }
+//                alerta(msg + " exitosamente");
+                        resetForm();
+                        if (coordenada == null) {
+                            context.fotoSinCoords = foto;
+                            context.selectItem(context.MAP_POS);
+                            alerta(getString(R.string.uploader_upload_map));
+                        } else {
+                            if (v.getId() != botones[3].getId()) {
+                                alerta(getString(R.string.uploader_upload_success));
+                            }
                         }
 
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    //System.out.println("Path folder: " + pathFolder);
-                    //System.out.println("Photo path: " + fotoPath);
-//                foto.setPath(pathFolder + "/" + fotoPath);
-                    foto.setPath(pathFolder + "/" + nuevoNombre);
-                    foto.setUploaded(0);
-                    foto.save();
-//                String msg = "Foto guardada";
-                    //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
-                    if (v.getId() == botones[3].getId()) {
-                        String id = context.userId; //id (faceboook - fb id, ikiam db.id
-                        if (id != null && !id.equals("-1")) {
-                            // aqui hace upload al servidor.....
-                            ExecutorService queue = Executors.newSingleThreadExecutor();
-                            queue.execute(new CapturaUploader(context, queue, foto, 0));
-                        } else {
-                            //redirect a login
-                            System.out.println("Login first!!!");
-                            context.selectItem(context.LOGIN_POS);
-                        }
-//                    msg += " y subida ";
-                    } else {
-                        alerta(getString(R.string.uploader_upload_success));
-                    }
-//                alerta(msg + " exitosamente");
-                    resetForm();
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
+                    }
                 }
             } else {
                 alerta(getString(R.string.captura_error_seleccion));
@@ -338,7 +388,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
     private void initAutocompletes(View view) {
 
         final List<Familia> familiaList = Familia.list(context);
-        final List<Genero> generoList = Genero.list(context);
+//        final List<Genero> generoList = Genero.list(context);
         final List<Especie> especieList = Especie.list(context);
 
         autocompleteNombreComun = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_comun);
@@ -367,62 +417,91 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
             }
         });
         // add the listener so it will tries to suggest while the user types
-        autocompleteNombreComun.addTextChangedListener(new CapturaCNombreComunAutocompleteTextChangedListener(context, this));
+        autocompleteNombreComun.addTextChangedListener(new CapturaNombreComunAutocompleteTextChangedListener(context, this));
         // ObjectItemData has no value at first
         // set the custom ArrayAdapter
         nombreComunArrayAdapter = new CapturaNombreComunArrayAdapter(context, R.layout.captura_autocomplete_list_item, especieList);
         autocompleteNombreComun.setAdapter(nombreComunArrayAdapter);
 
         autocompleteFamilia = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_familia);
+        autocompleteGenero = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_genero);
+        autocompleteEspecie = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_especie);
+
+        final CapturaCientificoFragment thisFragment = this;
+
         autocompleteFamilia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
+//                System.out.println("CLICK: " + pos + "   ");
+
                 RelativeLayout rl = (RelativeLayout) arg1;
                 TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteFamilia.setText(tv.getText().toString());
+                String txt = tv.getText().toString();
+                Familia fam = null;
+                for (Familia familia : familiaList) {
+                    if (familia.nombre.equals(txt)) {
+                        fam = familia;
+                        break;
+                    }
+                }
+                if (fam != null) {
+//                    System.out.println("FAMILIA:::: " + fam.nombre);
+                    final List<Genero> generos = Genero.findAllByFamilia(context, fam);
+//                    for (Genero genero : generos) {
+//                        System.out.println("<<<>>>>>>>>>>>>>> " + genero.nombre);
+//                    }
+                    autocompleteGenero.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
+//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
+                            RelativeLayout rl = (RelativeLayout) arg1;
+                            TextView tv = (TextView) rl.getChildAt(0);
+                            String txt = tv.getText().toString();
+                            autocompleteGenero.setText(txt);
+                            Genero gen = null;
+                            for (Genero genero : generos) {
+                                if (genero.nombre.equals(txt)) {
+                                    gen = genero;
+                                    break;
+                                }
+                            }
+
+                            if (gen != null) {
+                                final List<Especie> especies = Especie.findAllByGenero(context, gen);
+                                autocompleteEspecie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
+//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
+                                        RelativeLayout rl = (RelativeLayout) arg1;
+                                        TextView tv = (TextView) rl.getChildAt(0);
+                                        autocompleteEspecie.setText(tv.getText().toString());
+                                    }
+                                });
+                                // add the listener so it will tries to suggest while the user types
+                                autocompleteEspecie.addTextChangedListener(new CapturaNombreEspecieAutocompleteTextChangedListener(context, thisFragment, gen));
+                                // ObjectItemData has no value at first
+                                // set the custom ArrayAdapter
+                                nombreEspecieArrayAdapter = new CapturaNombreEspecieArrayAdapter(context, R.layout.captura_autocomplete_list_item, especies);
+                                autocompleteEspecie.setAdapter(nombreEspecieArrayAdapter);
+                            }
+                        }
+                    });
+                    // add the listener so it will tries to suggest while the user types
+                    autocompleteGenero.addTextChangedListener(new CapturaNombreGeneroAutocompleteTextChangedListener(context, thisFragment, fam));
+                    // ObjectItemData has no value at first
+                    // set the custom ArrayAdapter
+                    nombreGeneroArrayAdapter = new CapturaNombreGeneroArrayAdapter(context, R.layout.captura_autocomplete_list_item, generos);
+                    autocompleteGenero.setAdapter(nombreGeneroArrayAdapter);
+                }
+                autocompleteFamilia.setText(txt);
             }
         });
         // add the listener so it will tries to suggest while the user types
-        autocompleteFamilia.addTextChangedListener(new CapturaCNombreFamiliaAutocompleteTextChangedListener(context, this));
+        autocompleteFamilia.addTextChangedListener(new CapturaNombreFamiliaAutocompleteTextChangedListener(context, this));
         // ObjectItemData has no value at first
         // set the custom ArrayAdapter
         nombreFamiliaArrayAdapter = new CapturaNombreFamiliaArrayAdapter(context, R.layout.captura_autocomplete_list_item, familiaList);
         autocompleteFamilia.setAdapter(nombreFamiliaArrayAdapter);
-
-        autocompleteGenero = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_genero);
-        autocompleteGenero.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
-                RelativeLayout rl = (RelativeLayout) arg1;
-                TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteGenero.setText(tv.getText().toString());
-            }
-        });
-        // add the listener so it will tries to suggest while the user types
-        autocompleteGenero.addTextChangedListener(new CapturaCNombreGeneroAutocompleteTextChangedListener(context, this));
-        // ObjectItemData has no value at first
-        // set the custom ArrayAdapter
-        nombreGeneroArrayAdapter = new CapturaNombreGeneroArrayAdapter(context, R.layout.captura_autocomplete_list_item, generoList);
-        autocompleteGenero.setAdapter(nombreGeneroArrayAdapter);
-
-        autocompleteEspecie = (CustomAutoCompleteView) view.findViewById(R.id.captura_autocomplete_nombre_especie);
-        autocompleteEspecie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
-//                System.out.println("CLICK: " + pos + "   " + especieList.get(pos).nombreComun);
-                RelativeLayout rl = (RelativeLayout) arg1;
-                TextView tv = (TextView) rl.getChildAt(0);
-                autocompleteEspecie.setText(tv.getText().toString());
-            }
-        });
-        // add the listener so it will tries to suggest while the user types
-        autocompleteEspecie.addTextChangedListener(new CapturaCNombreEspecieAutocompleteTextChangedListener(context, this));
-        // ObjectItemData has no value at first
-        // set the custom ArrayAdapter
-        nombreEspecieArrayAdapter = new CapturaNombreEspecieArrayAdapter(context, R.layout.captura_autocomplete_list_item, especieList);
-        autocompleteEspecie.setAdapter(nombreEspecieArrayAdapter);
     }
 
     private void resetForm() {

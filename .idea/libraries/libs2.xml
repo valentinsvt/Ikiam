@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="libs2">
+    <CLASSES>
+      <root url="jar://C:/android/facebook-android-sdk-3.16/facebook/libs/bolts.jar!/" />
+      <root url="jar://C:/android/facebook-android-sdk-3.16/facebook/libs/android-support-v4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
