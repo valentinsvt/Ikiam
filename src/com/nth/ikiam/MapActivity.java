@@ -660,6 +660,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         public void onClick(DialogInterface dialog, int id) {
 //                            imagePathUpload = data.get(marker).path;
                             imageToUpload = data.get(marker);
+//                            System.out.println("***************** ANTES: " + imageToUpload.path);
                             selectItem(CAPTURA_POS);
                             dialog.dismiss();
                         }

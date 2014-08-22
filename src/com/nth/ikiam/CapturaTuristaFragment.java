@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -53,7 +54,7 @@ import java.util.concurrent.Executors;
  * and
  * edited Mar 20 at 6:18 by Thomas Vervest
  */
-public class CapturaTuristaFragment extends Fragment implements Button.OnClickListener, FieldListener {
+public class CapturaTuristaFragment extends Fragment implements Button.OnClickListener, FieldListener, View.OnTouchListener {
 
     private ImageButton[] botones;
 
@@ -267,5 +268,11 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 context.errorMessage = "";
             }
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Utils.hideSoftKeyboard(context);
+        return false;
     }
 }

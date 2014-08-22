@@ -34,6 +34,10 @@ public class ImageUtils {
         return decodeFile(path, 185, 185, force);
     }
 
+    public static Bitmap getImage(String path) {
+        return decodeFile(path, 1024, 768, false);
+    }
+
     public static Bitmap getBitmapFromCameraData(Intent data, Context context) {
         return getBitmapFromCameraData(data, context, -1, -1);
     }

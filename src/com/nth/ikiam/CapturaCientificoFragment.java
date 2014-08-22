@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -48,7 +49,7 @@ import java.util.concurrent.Executors;
  * and
  * edited Mar 20 at 6:18 by Thomas Vervest
  */
-public class CapturaCientificoFragment extends Fragment implements Button.OnClickListener, FieldListener {
+public class CapturaCientificoFragment extends Fragment implements Button.OnClickListener, FieldListener, View.OnTouchListener {
 
     private ImageButton[] botones;
     private ToggleButton[] toggles;
@@ -86,6 +87,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
     private Double fotoAlt;
 
     boolean hayFoto = false;
+    boolean deMapa = false;
 
     MapActivity context;
     private String pathFolder;
@@ -117,20 +119,29 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         if (context.imageToUpload != null) {
             Foto fotoSubir = context.imageToUpload;
 
+            Bitmap thumb = null;
+
             try {
                 ExifInterface exif = new ExifInterface(fotoSubir.path);
                 int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-                bitmap = ImageUtils.getThumbnail(fotoSubir.path, false);
-                bitmap = BitmapFactory.decodeFile(fotoSubir.path);
+                thumb = ImageUtils.getThumbnail(fotoSubir.path, false);
+//                bitmap = BitmapFactory.decodeFile(fotoSubir.path);
+                thumb = ImageUtils.rotateBitmap(thumb, orientation);
+
+                bitmap = ImageUtils.getImage(fotoSubir.path);
                 bitmap = ImageUtils.rotateBitmap(bitmap, orientation);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (bitmap != null) {
-                selectedImage.setImageBitmap(bitmap);
+            if (thumb != null) {
+                System.out.println("not null");
+                selectedImage.setImageBitmap(thumb);
             } else {
+                System.out.println("si null");
                 selectedImage.setImageBitmap(ImageUtils.getThumbnail(fotoSubir.path, false));
             }
+            hayFoto = true;
+            deMapa = true;
         }
 
         return view;
@@ -244,14 +255,20 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                         }
                         foto.setKeywords(keywords);
                         Coordenada coordenada = null;
-                        if (fotoLat != null && fotoLong != null) {
+
+                        if (deMapa) {
+                            coordenada = foto.getCoordenada(context);
+//                            System.out.println("<<<<>>>> " + coordenada.latitud + "     " + coordenada.longitud);
+                        } else {
+                            if (fotoLat != null && fotoLong != null) {
 //                        System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
-                            coordenada = new Coordenada(context, fotoLat, fotoLong);
-                            if (fotoAlt != null) {
-                                coordenada.setAltitud(fotoAlt);
+                                coordenada = new Coordenada(context, fotoLat, fotoLong);
+                                if (fotoAlt != null) {
+                                    coordenada.setAltitud(fotoAlt);
+                                }
+                                coordenada.save();
+                                foto.setCoordenada(coordenada);
                             }
-                            coordenada.save();
-                            foto.setCoordenada(coordenada);
                         }
                         foto.save();
 
@@ -307,9 +324,11 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 //                alerta(msg + " exitosamente");
                         resetForm();
                         if (coordenada == null) {
-                            context.fotoSinCoords = foto;
-                            context.selectItem(context.MAP_POS);
-                            alerta(getString(R.string.uploader_upload_map));
+                            if (!deMapa) {
+                                context.fotoSinCoords = foto;
+                                context.selectItem(context.MAP_POS);
+                                alerta(getString(R.string.uploader_upload_map));
+                            }
                         } else {
                             if (v.getId() != botones[3].getId()) {
                                 alerta(getString(R.string.uploader_upload_success));
@@ -519,6 +538,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 
         textoComentarios.setText("");
         hayFoto = false;
+        deMapa = false;
     }
 
     private void updateStatus(View view) {
@@ -558,6 +578,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST || requestCode == CAMERA_REQUEST) {
+                deMapa = false;
                 hayFoto = true;
                 updateStatus(null);
                 MapActivity activity = (MapActivity) getActivity();
@@ -606,5 +627,11 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 context.errorMessage = "";
             }
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        Utils.hideSoftKeyboard(context);
+        return false;
     }
 }
