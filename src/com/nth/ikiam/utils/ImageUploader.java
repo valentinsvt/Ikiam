@@ -76,7 +76,8 @@ public class ImageUploader implements Runnable {
         // create items for http client
         System.out.println("run del upload");
         //UploadNotification notification = new UploadNotification(context, item.imageId, item.imageSize, item.imageName);
-        String urlstr = "http://10.0.0.3:8080/ikiamServer/nthServer/reciveFile";
+        final String IP = UtilsUploaders.getIp();
+        String urlstr = IP + "nthServer/reciveFile";
         //HttpClient client               = new DefaultHttpClient();
         //HttpPost post                   = new HttpPost(url);
 

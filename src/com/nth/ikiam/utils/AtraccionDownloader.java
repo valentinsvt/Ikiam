@@ -18,7 +18,8 @@ public class AtraccionDownloader implements Runnable {
     private MapActivity context;
     private ExecutorService queue;
     private int retries;
-    final String IP = "http://www.tedein.com.ec:8080/ikiamServer/";
+    //    final String IP = "http://www.tedein.com.ec:8080/ikiamServer/";
+    final String IP = UtilsUploaders.getIp();
 
     public AtraccionDownloader(MapActivity context, ExecutorService queue, int retries) {
         this.context = context;
