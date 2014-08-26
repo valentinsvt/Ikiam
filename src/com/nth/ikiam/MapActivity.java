@@ -1345,7 +1345,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                                 double x3 = (puntos.get(j).longitude + 180) * 360;
                                 double y3  = (puntos.get(j).latitude + 90) * 180;
                                 // System.out.println("ietracion "+puntos.get(j).latitude+" ; "+puntos.get(j).longitude+"  --->  "+x3+" ; "+y3);
-                                if(x3<x1 && y3<y1){
+                                if(x3<x1 && y2<y3){
                                     //System.out.println("paso es mas!");
                                     if(nuevo==null) {
                                         nuevo = puntos.get(j);
@@ -1373,7 +1373,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                                 double x3 = (puntos.get(j).longitude + 180) * 360;
                                 double y3  = (puntos.get(j).latitude + 90) * 180;
                                 // System.out.println("ietracion "+puntos.get(j).latitude+" ; "+puntos.get(j).longitude+"  --->  "+x3+" ; "+y3);
-                                if(x3<x1 && y3<y1){
+                                if(x3<x2 && y3>y2){
                                     //System.out.println("paso es mas!");
                                     if(nuevo==null) {
                                         nuevo = puntos.get(j);
@@ -1507,7 +1507,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 res = res + 1;
                 break;
             default:
-                return 0;
+                res=0;
 
         }
         SharedPreferences.Editor editor = settings.edit();
@@ -1517,6 +1517,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             editor.putFloat(nombre, res);
         }
         editor.commit();
+        checkAchiev(tipo,res);
         return res;
 
     }
