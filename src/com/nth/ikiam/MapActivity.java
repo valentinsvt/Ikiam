@@ -1232,17 +1232,18 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 color.setColor(Color.BLACK);//modify canvas
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
-                Bitmap b = ImageUtils.decodeFile(fotos.get(i).path);
+                Bitmap b = ImageUtils.decodeFile(fotos.get(j).path);
                 canvas1.drawBitmap(b, 3, 2, color);
-                Coordenada co = fotos.get(i).getCoordenada(activity);
+                Coordenada co = fotos.get(j).getCoordenada(activity);
                 location = new LatLng(co.getLatitud(), co.getLongitud());
                 Marker marker = map.addMarker(new MarkerOptions().position(location)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .anchor(0.5f, 1).title("Nueva fotografía"));
+                        .anchor(0.5f, 1).title(getString(R.string.map_activity_captura)+" "+fotos.get(j).fecha));
+
                 data.put(marker, fotos.get(i));
             }
-
         }
+        showMap();
     }
     public float updateAchivement(int update,int tipo){
         float res=0;

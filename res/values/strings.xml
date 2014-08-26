@@ -133,6 +133,7 @@
     <string name="dialog_btn_siguiente">Siguiente</string>
 
     <string name="map_activity_dialog">Nueva captura</string>
+    <string name="map_activity_captura">Captura</string>
 
     <string name="settings_btn_upload">Subir %1$d fotos</string>
     <string name="settings_btn_download">Descargar info</string>
