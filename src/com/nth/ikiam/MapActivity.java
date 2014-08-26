@@ -1250,6 +1250,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         LatLngBounds bounds = builder.build();
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         showMap();
+        setTitle(getString(R.string.captura_nombre_especie_label)+": "+especie.nombre);
+
     }
     public float updateAchivement(int update,int tipo){
         float res=0;
