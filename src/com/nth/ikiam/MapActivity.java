@@ -1284,15 +1284,19 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             double y1  = (puntos.get(i).latitude + 90) * 180;
             if(minX==0){
                 minX=x1;
+                masIzq=puntos.get(i);
             }
             if(minY==0){
                 minY=y1;
+                masBajo=puntos.get(i);
             }
             if(maxX==0){
                 maxX=x1;
+                masDer=puntos.get(i);
             }
             if(maxY==0){
                 maxY=y1;
+                masAlto=puntos.get(i);
             }
             if(x1>maxX) {
                 maxX = x1;
@@ -1317,39 +1321,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         System.out.println("mas bajo "+masBajo.latitude+" , "+masDer.longitude);
         System.out.println("mas der "+masDer.latitude+" , "+masDer.longitude);
 
-//        System.out.println("despues ----------- ");
-//        for(int i = 0;i<puntos.size();i++) {
-//            poly.add(puntos.get(i));
-//            System.out.println(" "+puntos.get(i).latitude+"  "+puntos.get(i).longitude);
-//        }
-
         puntosfinal.add(masAlto);
         puntosfinal.add(masIzq);
         puntosfinal.add(masBajo);
         puntosfinal.add(masDer);
-
-//        for(int i = 0;i<puntos.size();i++){
-//
-//            for (int j = i + 1; j < puntos.size(); j++) {
-//                int res = pointSort(puntos.get(i), puntos.get(j), masAlto);
-//                if (res < 0) {
-//                    aux = puntos.get(i);
-//                    puntos.set(i, puntos.get(j));
-//                    puntos.set(j, aux);
-//                }
-//
-//            }
-//        }
-
-
-
+        double maxDis = distancia(masAlto,masBajo);
         System.out.println("despues ----------- ");
-//        for(int i = 0;i<puntos.size();i++) {
-//
-//                poly.add(puntos.get(i));
-//                System.out.println(" " + puntos.get(i).latitude + "  " + puntos.get(i).longitude);
-//
-//        }
+
 
         for(int i = 0;i<puntosfinal.size()-1;i++) {
             LatLng current = puntosfinal.get(i);
@@ -1377,12 +1355,32 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     }
                     break;
                 case 2:
+                    LatLng nuevo = null;
+                    double nuevoX=0;
+                    System.out.println("current "+current.latitude+" ; "+current.longitude+"  --->  "+x1+" ; "+y1);
+                    System.out.println("next "+next.latitude+" ; "+next.longitude+"  --->  "+x2+" ; "+y2);
                     for (int j =0;j<puntos.size();j++){
-                        double x3 = (puntos.get(j).longitude + 180) * 360;
-                        if(x3>x2){
-                            poly.add(puntos.get(j));
+                        if(puntos.get(j)!=masAlto){
+                            double x3 = (puntos.get(j).longitude + 180) * 360;
+                            double y3  = (puntos.get(j).latitude + 90) * 180;
+                            System.out.println("ietracion "+puntos.get(j).latitude+" ; "+puntos.get(j).longitude+"  --->  "+x3+" ; "+y3);
+                            if(x3>x1 && y3>y1){
+                                System.out.println("paso es mas!");
+                                if(nuevo==null) {
+                                    nuevo = puntos.get(j);
+                                    nuevoX=x3;
+                                }else{
+                                    if(x3>nuevoX){
+                                        nuevo = puntos.get(j);
+                                        nuevoX=x3;
+                                    }
+                                }
+                            }
                         }
+
                     }
+                    if(nuevo!=null)
+                        poly.add(nuevo);
                     break;
             }
 
