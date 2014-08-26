@@ -46,6 +46,8 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     ImageView[] imageViews;
     int fotoPos;
 
+    Button btnMap;
+
     Especie especie;
     //    List<Foto> fotos;
     List<Entry> entries;
@@ -70,6 +72,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         txtEspecieInfoFotos = (TextView) view.findViewById(R.id.especie_info_fotos);
 
         imgEspecieInfoImagen = (ImageView) view.findViewById(R.id.especie_info_imagen);
+
+        btnMap = (Button) view.findViewById(R.id.especie_info_map_btn);
+        btnMap.setOnClickListener(this);
 
         long especieId = getArguments().getLong("especie");
         especie = Especie.get(context, especieId);
@@ -123,7 +128,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
             if (fotos != null) {
                 Foto foto = fotos.get(0);
                 Coordenada coord = foto.getCoordenada(context);
-                if(coord!=null) {
+                if (coord != null) {
                     altMin = coord.altitud;
                     altMax = coord.altitud;
                 }
@@ -200,50 +205,6 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                     }
                 }
             }
-
-//            int i = 0;
-//            //especie_info_relative_layout
-//            RelativeLayout rl = (RelativeLayout) view.findViewById(R.id.especie_info_relative_layout);
-//            Vector<ImageView> imageViews = new Vector<ImageView>();
-//            System.out.println("HAY " + fotos.size() + " FOTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//            for (Foto f : fotos) {
-//                imgFile = new File(f.path);
-//                if (imgFile.exists()) {
-//                    ImageView newImageView = new ImageView(context);
-//                    newImageView.setId(i);
-////            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//                    Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 150, 150);
-////                    int w = myBitmap.getWidth();
-////                    int h = myBitmap.getHeight();
-////                    if (h > w) {
-////                        System.out.println("foto " + i + " es VERT");
-////                    }
-//                    newImageView.setImageBitmap(myBitmap);
-//                    RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-//                            ViewGroup.LayoutParams.WRAP_CONTENT);
-//                    p.addRule(RelativeLayout.BELOW, R.id.especie_info_altura_lbl);
-//                    if (i == 0) {
-//                        p.addRule(RelativeLayout.ALIGN_START, R.id.especie_info_altura_lbl);
-//                    } else {
-//                        p.addRule(RelativeLayout.RIGHT_OF, imageViews.get(i - 1).getId());
-//                        p.setMargins(0, 0, 10, 0);
-//                    }
-//                    rl.addView(newImageView, p);
-//
-//                    imageViews.add(newImageView);
-//                    i++;
-//                }
-//                coord = f.getCoordenada(context);
-//                if (coord != null && coord.altitud > 0) {
-//                    if (coord.altitud < altMin) {
-//                        altMin = coord.altitud;
-//                    }
-//                    if (coord.altitud > altMax) {
-//                        altMax = coord.altitud;
-//                    }
-//                }
-//            }
-
         }
 
         txtEspecieInfoNombreComun.setText(especie.nombreComun);
@@ -289,107 +250,70 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     @Override
     public void onClick(View view) {
         Utils.hideSoftKeyboard(this.getActivity());
-        int i;
-        for (i = 0; i < imageViews.length; i++) {
-            if (view.getId() == imageViews[i].getId()) {
-                break;
+        if (view.getId() == btnMap.getId()) {
+            System.out.println("Mostrar mapa de la especie: " + especie.nombre);
+        } else {
+            int i;
+            for (i = 0; i < imageViews.length; i++) {
+                if (view.getId() == imageViews[i].getId()) {
+                    break;
+                }
             }
-        }
-        fotoPos = i;
-        LayoutInflater inflater = context.getLayoutInflater();
-        View v = inflater.inflate(R.layout.especie_info_entry_dialog, null);
-        final String t = getResources().getQuantityString(R.plurals.encyclopedia_entries_dialog_title, entries.size());
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context).setView(v)
-                .setNeutralButton(R.string.dialog_btn_cerrar, null) //Set to null. We override the onclick
-                .setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
-        if (entries.size() > 1) {
-            builder.setPositiveButton(R.string.dialog_btn_siguiente, null)
-                    .setNegativeButton(R.string.dialog_btn_anterior, null);
-        }
-        final AlertDialog d = builder.create();
-        final ImageView img = (ImageView) v.findViewById(R.id.especie_info_dialog_image);
-        final TextView txt = (TextView) v.findViewById(R.id.especie_info_dialog_comentarios);
-        setFoto(img, txt);
-        d.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button cerrar = d.getButton(AlertDialog.BUTTON_NEUTRAL);
-                cerrar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        d.dismiss();
-                    }
-                });
-                Button anterior = d.getButton(AlertDialog.BUTTON_NEGATIVE);
-                anterior.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (fotoPos > 0) {
-                            fotoPos -= 1;
-                        } else {
-                            fotoPos = entries.size() - 1;
-                        }
-                        setFoto(img, txt);
-                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
-                    }
-                });
-                Button siguiente = d.getButton(AlertDialog.BUTTON_POSITIVE);
-                siguiente.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (fotoPos < entries.size() - 1) {
-                            fotoPos += 1;
-                        } else {
-                            fotoPos = 0;
-                        }
-                        setFoto(img, txt);
-                        d.setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
-                    }
-                });
+            fotoPos = i;
+            LayoutInflater inflater = context.getLayoutInflater();
+            View v = inflater.inflate(R.layout.especie_info_entry_dialog, null);
+            final String t = getResources().getQuantityString(R.plurals.encyclopedia_entries_dialog_title, entries.size());
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context).setView(v)
+                    .setNeutralButton(R.string.dialog_btn_cerrar, null) //Set to null. We override the onclick
+                    .setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
+            if (entries.size() > 1) {
+                builder.setPositiveButton(R.string.dialog_btn_siguiente, null)
+                        .setNegativeButton(R.string.dialog_btn_anterior, null);
             }
-        });
-        d.show();
-//        LayoutInflater inflater = context.getLayoutInflater();
-//        View myView = inflater.inflate(R.layout.dialog, null);
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setTitle(R.string.ruta_lbl_fotos);
-//        builder.setView(myView);
-//        final ImageView img = (ImageView) myView.findViewById(R.id.image);
-//
-//        if (fotos.size() > 1) {
-//            builder.setNegativeButton(R.string.dialog_btn_anterior, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int id) {
-//                    System.out.println("ANTERIOR");
-////                    if (fotoPos > 0) {
-////                        fotoPos -= 1;
-////                        setFoto(img);
-////                    }
-//                }
-//            });
-//
-//            builder.setPositiveButton(R.string.dialog_btn_siguiente, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int id) {
-//                    System.out.println("SIGUIENTE");
-////                    if (fotoPos < fotos.size() - 1) {
-////                        fotoPos += 1;
-////                        setFoto(img);
-////                    }
-//                }
-//            });
-//        }
-//        builder.setNeutralButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int id) {
-//                System.out.println("CERRAR");
-////                dialog.dismiss();
-//            }
-//        });
-//        context.dialog = builder.create();
-////        img.setImageBitmap(context.getFotoDialog(fotos.get(i), context.screenWidth, 300));
-//        setFoto(img);
-//        context.dialog.show();
+            final AlertDialog d = builder.create();
+            final ImageView img = (ImageView) v.findViewById(R.id.especie_info_dialog_image);
+            final TextView txt = (TextView) v.findViewById(R.id.especie_info_dialog_comentarios);
+            setFoto(img, txt);
+            d.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button cerrar = d.getButton(AlertDialog.BUTTON_NEUTRAL);
+                    cerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            d.dismiss();
+                        }
+                    });
+                    Button anterior = d.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    anterior.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (fotoPos > 0) {
+                                fotoPos -= 1;
+                            } else {
+                                fotoPos = entries.size() - 1;
+                            }
+                            setFoto(img, txt);
+                            d.setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
+                        }
+                    });
+                    Button siguiente = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                    siguiente.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (fotoPos < entries.size() - 1) {
+                                fotoPos += 1;
+                            } else {
+                                fotoPos = 0;
+                            }
+                            setFoto(img, txt);
+                            d.setTitle(t + " (" + (fotoPos + 1) + "/" + entries.size() + ")");
+                        }
+                    });
+                }
+            });
+            d.show();
+        }
     }
 
     private void setFoto(ImageView img, TextView txt) {

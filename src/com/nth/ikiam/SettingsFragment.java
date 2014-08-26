@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import com.nth.ikiam.db.Foto;
 import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.CapturaUploader;
@@ -19,11 +21,13 @@ import java.util.concurrent.Executors;
 /**
  * Created by DELL on 23/07/2014.
  */
-public class SettingsFragment extends Fragment implements Button.OnClickListener, FieldListener {
+public class SettingsFragment extends Fragment implements Button.OnClickListener, FieldListener, CompoundButton.OnCheckedChangeListener {
 
     Button btnUpload;
     Button btnDownload;
     MapActivity context;
+
+    CheckBox checkAchievements;
 
     public SettingsFragment() {
 
@@ -54,6 +58,10 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         View view = inflater.inflate(R.layout.settings_layout, container, false);
         btnUpload = (Button) view.findViewById(R.id.settings_btn_upload);
         btnDownload = (Button) view.findViewById(R.id.settings_btn_download);
+
+        checkAchievements = (CheckBox) view.findViewById(R.id.settings_chk_achievements);
+        checkAchievements.setOnCheckedChangeListener(this);
+
         updateUploadBtn();
         btnUpload.setOnClickListener(this);
         btnDownload.setOnClickListener(this);
@@ -85,5 +93,10 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
                 updateUploadButton();
             }
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
     }
 }

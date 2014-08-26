@@ -40,6 +40,8 @@ public class DbHelper extends SQLiteOpenHelper {
     protected static final String TABLE_RUTA = "ruta";
     protected static final String TABLE_ENTRY = "entry";
 
+    protected static final String TABLE_ESTADISTICAS = "estadisticas";
+
     // Common column names
     protected static final String KEY_ID = "id";
     protected static final String KEY_FECHA = "fecha";
@@ -67,7 +69,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_LUGAR, KEYS_COMMON, LugarDbHelper.KEYS_LUGAR));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_RUTA, KEYS_COMMON, RutaDbHelper.KEYS_RUTA));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ENTRY, KEYS_COMMON, EntryDbHelper.KEYS_ENTRY));
-
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ESTADISTICAS, KEYS_COMMON, EstadisticasDbHelper.KEYS_ESTADISTICAS));
     }
 
     @Override
