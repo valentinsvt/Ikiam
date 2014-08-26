@@ -1220,6 +1220,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     public void mostrarEspecie(Especie especie){
         List<Entry> entry = Entry.findAllByEspecie(this,especie);
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        int padding = (100);
         for(int i = 0;i<entry.size();i++){
             Entry current = entry.get(i);
             List<Foto> fotos = Foto.findAllByEntry(activity,current);
@@ -1236,6 +1238,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 canvas1.drawBitmap(b, 3, 2, color);
                 Coordenada co = fotos.get(j).getCoordenada(activity);
                 location = new LatLng(co.getLatitud(), co.getLongitud());
+                builder.include(location);
                 Marker marker = map.addMarker(new MarkerOptions().position(location)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(getString(R.string.map_activity_captura)+" "+fotos.get(j).fecha));
@@ -1243,6 +1246,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 data.put(marker, fotos.get(i));
             }
         }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         showMap();
     }
     public float updateAchivement(int update,int tipo){
