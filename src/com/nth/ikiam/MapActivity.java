@@ -658,6 +658,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             @Override
             public boolean onMarkerClick(final Marker marker) {
                 if (markerSubir != null) {
+                    markerSubir.hideInfoWindow();
                     if (marker.getId().equals(markerSubir.getId())) {
                         posicionSubir = marker.getPosition();
                         if (fotoSinCoords == null) {
@@ -766,7 +767,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     }
                     return true;
                 }
-                return false;
+                return true;
             }
         });
 
@@ -774,6 +775,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     private void updateFotoSinCoords(LatLng pos) {
         Coordenada coord = new Coordenada(this);
+        markerSubir.hideInfoWindow();
         coord.latitud = pos.latitude;
         coord.longitud = pos.longitude;
         coord.altitud = 0;
@@ -781,7 +783,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         fotoSinCoords.setCoordenada(coord);
         fotoSinCoords.save();
         Toast.makeText(this, getString(R.string.map_foto_ubicada), Toast.LENGTH_LONG).show();
-        markerSubir.hideInfoWindow();
+        if(markerSubir.isInfoWindowShown())
+            markerSubir.hideInfoWindow();
         markerSubir.remove();
         markerSubir = null;
         fotoSinCoords = null;
@@ -1227,6 +1230,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         List<Entry> entry = Entry.findAllByEspecie(this,especie);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         int padding = (100);
+        PolygonOptions poly = new PolygonOptions();
+        int fillColor = Color.argb(150,68,134,246);
+        poly.strokeColor(fillColor);
+        poly.fillColor(fillColor);
+
+
+        List<LatLng> puntos = new ArrayList<LatLng>();
+        List<LatLng> puntos2  = new ArrayList<LatLng>();
+        List<LatLng> puntosfinal  = new ArrayList<LatLng>();
         for(int i = 0;i<entry.size();i++){
             Entry current = entry.get(i);
             List<Foto> fotos = Foto.findAllByEntry(activity,current);
@@ -1243,19 +1255,192 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 canvas1.drawBitmap(b, 3, 2, color);
                 Coordenada co = fotos.get(j).getCoordenada(activity);
                 location = new LatLng(co.getLatitud(), co.getLongitud());
+                puntos.add(location);
+                puntos2.add(location);
                 builder.include(location);
+//                Marker marker = map.addMarker(new MarkerOptions().position(location)
+//                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+//                        .anchor(0.5f, 1).title(getString(R.string.map_activity_captura)+" "+fotos.get(j).fecha));
                 Marker marker = map.addMarker(new MarkerOptions().position(location)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .anchor(0.5f, 1).title(getString(R.string.map_activity_captura)+" "+fotos.get(j).fecha));
-
-                data.put(marker, fotos.get(i));
+                        .anchor(0.5f, 1).title(" "+location.latitude+" , "+location.longitude));
+                marker.showInfoWindow();
+                data.put(marker, fotos.get(j));
             }
         }
+        LatLng aux;
+
+
+        LatLng masAlto=null;
+        LatLng masBajo=null;
+        LatLng masDer=null ;
+        LatLng masIzq=null;
+        double maxX=0;
+        double minX=0;
+        double minY=0;
+        double maxY=0;
+        for(int i = 0;i<puntos.size();i++){
+            double x1 = (puntos.get(i).longitude + 180) * 360;
+            double y1  = (puntos.get(i).latitude + 90) * 180;
+            if(minX==0){
+                minX=x1;
+            }
+            if(minY==0){
+                minY=y1;
+            }
+            if(maxX==0){
+                maxX=x1;
+            }
+            if(maxY==0){
+                maxY=y1;
+            }
+            if(x1>maxX) {
+                maxX = x1;
+                masDer=puntos.get(i);
+            }
+            if(y1>maxY) {
+                maxY = y1;
+                masAlto=puntos.get(i);
+            }
+            if(x1<minX) {
+                minX = x1;
+                masIzq=puntos.get(i);
+            }
+            if(y1<minY) {
+                minY =y1 ;
+                masBajo=puntos.get(i);
+            }
+
+        }
+        System.out.println("mas alto "+masAlto.latitude+" , "+masDer.longitude);
+        System.out.println("mas izq "+masIzq.latitude+" , "+masIzq.longitude);
+        System.out.println("mas bajo "+masBajo.latitude+" , "+masDer.longitude);
+        System.out.println("mas der "+masDer.latitude+" , "+masDer.longitude);
+
+//        System.out.println("despues ----------- ");
+//        for(int i = 0;i<puntos.size();i++) {
+//            poly.add(puntos.get(i));
+//            System.out.println(" "+puntos.get(i).latitude+"  "+puntos.get(i).longitude);
+//        }
+
+        puntosfinal.add(masAlto);
+        puntosfinal.add(masIzq);
+        puntosfinal.add(masBajo);
+        puntosfinal.add(masDer);
+
+//        for(int i = 0;i<puntos.size();i++){
+//
+//            for (int j = i + 1; j < puntos.size(); j++) {
+//                int res = pointSort(puntos.get(i), puntos.get(j), masAlto);
+//                if (res < 0) {
+//                    aux = puntos.get(i);
+//                    puntos.set(i, puntos.get(j));
+//                    puntos.set(j, aux);
+//                }
+//
+//            }
+//        }
+
+
+
+        System.out.println("despues ----------- ");
+//        for(int i = 0;i<puntos.size();i++) {
+//
+//                poly.add(puntos.get(i));
+//                System.out.println(" " + puntos.get(i).latitude + "  " + puntos.get(i).longitude);
+//
+//        }
+
+        for(int i = 0;i<puntosfinal.size()-1;i++) {
+            LatLng current = puntosfinal.get(i);
+            poly.add(current);
+            LatLng next = puntosfinal.get(i + 1);
+            double x1 = (current.longitude + 180) * 360;
+            double y1  = (current.latitude + 90) * 180;
+            double x2 = (next.longitude + 180) * 360;
+            double y2  = (next.latitude + 90) * 180;
+            switch (i){
+                case 0:
+                    for (int j =0;j<puntos.size();j++){
+                        double x3 = (puntos.get(j).longitude + 180) * 360;
+                        if(x3<x2){
+                            poly.add(puntos.get(j));
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int j =0;j<puntos.size();j++){
+                        double x3 = (puntos.get(j).longitude + 180) * 360;
+                        if(x3<x2){
+                            poly.add(puntos.get(j));
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int j =0;j<puntos.size();j++){
+                        double x3 = (puntos.get(j).longitude + 180) * 360;
+                        if(x3>x2){
+                            poly.add(puntos.get(j));
+                        }
+                    }
+                    break;
+            }
+
+        }
+        Polygon polygon = map.addPolygon(poly);
+
         LatLngBounds bounds = builder.build();
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        map.animateCamera(cu);
         showMap();
         setTitle(getString(R.string.captura_nombre_especie_label)+": "+especie.nombre);
 
+    }
+
+    public double  pendiente(LatLng p1,LatLng p2){
+        double x1 = (p1.longitude + 180) * 360;
+        double y1  = (p1.latitude + 90) * 180;
+        double x2 = (p2.longitude + 180) * 360;
+        double y2  = (p2.latitude + 90) * 180;
+        double dX = x2 - x1;
+        double dY = y2 - y1;
+        return dY / dX;
+    }
+    public double  distancia(LatLng p1,LatLng p2){
+        double x1 = (p1.longitude + 180) * 360;
+        double y1  = (p1.latitude + 90) * 180;
+        double x2 = (p2.longitude + 180) * 360;
+        double y2  = (p2.latitude + 90) * 180;
+        double dX = x2 - x1;
+        double dY = y2 - y1;
+        return Math.sqrt((dX*dX) + (dY*dY));
+    }
+
+    public int  pointSort(LatLng p1, LatLng p2,LatLng upper) {
+        // Exclude the 'upper' point from the sort (which should come first).
+        if(p1 == upper) return -1;
+        if(p2 == upper) return 1;
+
+        // Find the slopes of 'p1' and 'p2' when a line is
+        // drawn from those points through the 'upper' point.
+        double m1 = pendiente(p1,upper);
+        double m2 = pendiente(p2,upper);
+
+        // 'p1' and 'p2' are on the same line towards 'upper'.
+        if(m1 == m2) {
+            // The point closest to 'upper' will come first.
+//            return p1.distance(upper) < p2.distance(upper) ? -1 : 1;
+            return  (distancia(p1,upper) < distancia(p2,upper))?-1:1;
+        }
+
+        // If 'p1' is to the right of 'upper' and 'p2' is the the left.
+        if(m1 <= 0 && m2 > 0) return -1;
+
+        // If 'p1' is to the left of 'upper' and 'p2' is the the right.
+        if(m1 > 0 && m2 <= 0) return 1;
+
+        // It seems that both slopes are either positive, or negative.
+        return m1 > m2 ? -1 : 1;
     }
 
     public float updateAchivement(int update, int tipo) {
@@ -1304,6 +1489,37 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         queue.execute(new AchievementChecker(this, tipo, cant));
 
 
+    }
+    public float getAchievement(int tipo){
+        float res = 0;
+        String nombre = "";
+        SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
+
+        switch (tipo) {
+            case ACHIEV_FOTOS:
+                nombre = "fotos";
+                res = (float) settings.getInt(nombre, 0);
+
+                break;
+            case ACHIEV_DISTANCIA:
+                nombre = "distancia";
+                res = settings.getFloat(nombre, 0);
+
+                break;
+            case ACHIEV_UPLOADS:
+                nombre = "uploads";
+                res = (float) settings.getInt(nombre, 0);
+
+                break;
+            case ACHIEV_SHARE:
+                nombre = "shares";
+                res = settings.getInt(nombre, 0);
+
+                break;
+            default:
+                return 0;
+        }
+        return res;
     }
 
 //    @Override
