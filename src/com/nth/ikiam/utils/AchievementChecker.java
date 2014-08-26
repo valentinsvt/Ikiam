@@ -19,22 +19,22 @@ public class AchievementChecker implements Runnable {
     MapActivity activity;
     int tipo;
     float cant;
-    public final int ACHIEV_FOTOS=1;
-    public final int ACHIEV_DISTANCIA=2;
-    public final int ACHIEV_UPLOADS=3;
-    public final int ACHIEV_SHARE=4;
+    public final int ACHIEV_FOTOS = 1;
+    public final int ACHIEV_DISTANCIA = 2;
+    public final int ACHIEV_UPLOADS = 3;
+    public final int ACHIEV_SHARE = 4;
 
-    public AchievementChecker(MapActivity activity,int tipo,float cant){
-        this.activity=activity;
-        this.tipo=tipo;
-        this.cant=cant;
+    public AchievementChecker(MapActivity activity, int tipo, float cant) {
+        this.activity = activity;
+        this.tipo = tipo;
+        this.cant = cant;
     }
 
     @Override
     public void run() {
         List<Logro> logros = Logro.findAllByTipoAndNotCompleto(activity, this.tipo);
         for (Logro logro : logros) {
-            if(cant>=logro.cantidad){
+            if (cant >= logro.cantidad) {
                 logro.setCompleto(1);
                 logro.save();
                 NotificationCompat.Builder mBuilder =

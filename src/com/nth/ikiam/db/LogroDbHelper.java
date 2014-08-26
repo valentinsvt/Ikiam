@@ -16,9 +16,10 @@ public class LogroDbHelper extends DbHelper {
     private static final String LOG = "LogroDbHelper";
 
     public static final String KEY_CODIGO = "codigo";
+    public static final String KEY_CANTIDAD = "cantidad";
     public static final String KEY_COMPLETO = "completo";
 
-    public static final String[] KEYS_LOGRO = {KEY_CODIGO, KEY_COMPLETO};
+    public static final String[] KEYS_LOGRO = {KEY_CODIGO, KEY_CANTIDAD, KEY_COMPLETO};
 
     public LogroDbHelper(Context context) {
         super(context);
@@ -39,7 +40,7 @@ public class LogroDbHelper extends DbHelper {
 
     public long createLogro(Logro logro) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = setValues(logro, true);
+        ContentValues values = setValues(logro);
 
         // insert row
         long res = db.insert(TABLE_LOGRO, null, values);
@@ -114,14 +115,12 @@ public class LogroDbHelper extends DbHelper {
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_LOGRO +
                 " WHERE " + KEY_COMPLETO + " = 1";
         Cursor c = db.rawQuery(selectQuery, null);
-        db.close();
+        int cant = 0;
         if (c.moveToFirst()) {
-            int count = c.getInt(c.getColumnIndex("count"));
-            db.close();
-            return count;
+            cant = c.getInt(c.getColumnIndex("count"));
         }
         db.close();
-        return 0;
+        return cant;
     }
 
     public List<Logro> getLogroByCodigo(String logro) {
@@ -177,21 +176,17 @@ public class LogroDbHelper extends DbHelper {
         cl.setId(c.getLong((c.getColumnIndex(KEY_ID))));
         cl.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         cl.setCodigo(c.getInt(c.getColumnIndex(KEY_CODIGO)));
+        cl.setCantidad(c.getDouble(c.getColumnIndex(KEY_CANTIDAD)));
         cl.setCompleto(c.getInt(c.getColumnIndex(KEY_COMPLETO)));
         return cl;
     }
 
-    private ContentValues setValues(Logro logro, boolean fecha) {
+    private ContentValues setValues(Logro logro) {
         ContentValues values = new ContentValues();
-        if (fecha) {
-            values.put(KEY_FECHA, getDateTime());
-        }
+        values.put(KEY_FECHA, getDateTime());
         values.put(KEY_CODIGO, logro.codigo);
+        values.put(KEY_CANTIDAD, logro.cantidad);
         values.put(KEY_COMPLETO, logro.completo);
         return values;
-    }
-
-    private ContentValues setValues(Logro logro) {
-        return setValues(logro, false);
     }
 }

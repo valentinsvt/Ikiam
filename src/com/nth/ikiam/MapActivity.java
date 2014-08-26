@@ -38,6 +38,7 @@ import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.AchievementChecker;
 import com.nth.ikiam.utils.AtraccionDownloader;
+import com.nth.ikiam.utils.LogrosChecker;
 import com.nth.ikiam.utils.Utils;
 
 
@@ -64,10 +65,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int SETTINGS_POS = 5;
     public final int LOGIN_POS = 6;
 
-    public final int ACHIEV_FOTOS=1;
-    public final int ACHIEV_DISTANCIA=2;
-    public final int ACHIEV_UPLOADS=3;
-    public final int ACHIEV_SHARE=4;
+    public final int ACHIEV_FOTOS = 1;
+    public final int ACHIEV_DISTANCIA = 2;
+    public final int ACHIEV_UPLOADS = 3;
+    public final int ACHIEV_SHARE = 4;
 
     private final static String TAG_MAP = "TAG_MAP_FRAGMENT";
     private final static String TAG_CAPTURA_C = "TAG_CAPTURA_C_FRAGMENT";
@@ -216,6 +217,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         super.onCreate(savedInstanceState);
 
+        DbHelper helper = new DbHelper(this);
+        helper.getWritableDatabase();
+
+        ExecutorService queue = Executors.newSingleThreadExecutor();
+        queue.execute(new LogrosChecker(this));
+
         fotoSinCoords = null;
         imageToUpload = null;
 
@@ -228,8 +235,6 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         esCientifico = settings.getString("esCientifico", "-1");
         //System.out.println("variables name "+userId+"  name "+name);
         setContentView(R.layout.activity_map);
-        DbHelper helper = new DbHelper(this);
-        helper.getWritableDatabase();
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         Session session;
@@ -238,7 +243,6 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             System.out.println("get active " + session);
             makeMeRequest(session);
         }
-
 
         this.activity = this;
 
@@ -1253,50 +1257,51 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         setTitle(getString(R.string.captura_nombre_especie_label)+": "+especie.nombre);
 
     }
-    public float updateAchivement(int update,int tipo){
-        float res=0;
-        String nombre="";
+
+    public float updateAchivement(int update, int tipo) {
+        float res = 0;
+        String nombre = "";
         SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
 
-        switch (tipo){
+        switch (tipo) {
             case ACHIEV_FOTOS:
-                nombre="fotos";
-                res = (float)settings.getInt(nombre,0);
-                res=res+1;
+                nombre = "fotos";
+                res = (float) settings.getInt(nombre, 0);
+                res = res + 1;
                 break;
             case ACHIEV_DISTANCIA:
-                nombre="distancia";
+                nombre = "distancia";
                 res = settings.getFloat(nombre, 0);
-                res=res+1;
+                res = res + 1;
                 break;
             case ACHIEV_UPLOADS:
-                nombre="uploads";
-                res = (float)settings.getInt(nombre,0);
-                res=res+1;
+                nombre = "uploads";
+                res = (float) settings.getInt(nombre, 0);
+                res = res + 1;
                 break;
-            case  ACHIEV_SHARE:
-                nombre="shares";
-                res = settings.getInt(nombre,0);
-                res=res+1;
+            case ACHIEV_SHARE:
+                nombre = "shares";
+                res = settings.getInt(nombre, 0);
+                res = res + 1;
                 break;
             default:
-               return  0;
+                return 0;
 
         }
         SharedPreferences.Editor editor = settings.edit();
-        if(!nombre.equals("distancia")) {
-            editor.putInt(nombre,(int)res);
-        }else{
-            editor.putFloat(nombre,res);
+        if (!nombre.equals("distancia")) {
+            editor.putInt(nombre, (int) res);
+        } else {
+            editor.putFloat(nombre, res);
         }
         editor.commit();
         return res;
 
     }
 
-    public void checkAchiev(int tipo,float cant){
+    public void checkAchiev(int tipo, float cant) {
         ExecutorService queue = Executors.newSingleThreadExecutor();
-        queue.execute(new AchievementChecker(this,tipo,cant));
+        queue.execute(new AchievementChecker(this, tipo, cant));
 
 
     }
