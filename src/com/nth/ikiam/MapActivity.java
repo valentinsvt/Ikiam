@@ -63,6 +63,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int SETTINGS_POS = 5;
     public final int LOGIN_POS = 6;
 
+    public final int ACHIEV_FOTOS=1;
+    public final int ACHIEV_DISTANCIA=2;
+    public final int ACHIEV_UPLOADS=3;
+    public final int ACHIEV_SHARE=4;
+
     private final static String TAG_MAP = "TAG_MAP_FRAGMENT";
     private final static String TAG_CAPTURA_C = "TAG_CAPTURA_C_FRAGMENT";
     private final static String TAG_CAPTURA_T = "TAG_CAPTURA_T_FRAGMENT";
@@ -1210,6 +1215,64 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     }
                 });
         request.executeAsync();
+    }
+
+    public void mostrarEspecie(Especie especie){
+        List<Entry> entry = Entry.findAllByEspecie(this,especie);
+        for(int i = 0;i<entry.size();i++){
+            Entry current = entry.get(i);
+            List<Foto> fotos = Foto.findAllByEntry(activity,current);
+            for(int j=0;j<fotos.size();j++){
+
+            }
+
+        }
+    }
+    public float updateAchivement(int update,int tipo){
+        float res=0;
+        String nombre="";
+        SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
+
+        switch (tipo){
+            case ACHIEV_FOTOS:
+                nombre="fotos";
+                res = (float)settings.getInt(nombre,0);
+                res=res+1;
+                break;
+            case ACHIEV_DISTANCIA:
+                nombre="distancia";
+                res = settings.getFloat(nombre, 0);
+                res=res+1;
+                break;
+            case ACHIEV_UPLOADS:
+                nombre="uploads";
+                res = (float)settings.getInt(nombre,0);
+                res=res+1;
+                break;
+            case  ACHIEV_SHARE:
+                nombre="shares";
+                res = settings.getInt(nombre,0);
+                res=res+1;
+                break;
+            default:
+               return  0;
+
+        }
+        SharedPreferences.Editor editor = settings.edit();
+        if(!nombre.equals("distancia")) {
+            editor.putInt(nombre,(int)res);
+        }else{
+            editor.putFloat(nombre,res);
+        }
+        editor.commit();
+        return res;
+
+    }
+
+    public void checkAchiev(int tipo,float cant){
+
+
+
     }
 
 //    @Override

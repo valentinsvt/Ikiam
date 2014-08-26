@@ -65,7 +65,7 @@ public class Logro {
         this.completo = completo;
     }
 
-    public List<Logro> findAllByTipoAndNotCompleto(Context context, int tipo) {
+    public static List<Logro> findAllByTipoAndNotCompleto(Context context, int tipo) {
         LogroDbHelper e = new LogroDbHelper(context);
         return e.getAllLogrosByTipoAndNotCompleto(tipo);
     }
