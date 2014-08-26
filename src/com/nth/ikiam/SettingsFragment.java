@@ -2,6 +2,7 @@ package com.nth.ikiam;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,13 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         btnDownload = (Button) view.findViewById(R.id.settings_btn_download);
 
         checkAchievements = (CheckBox) view.findViewById(R.id.settings_chk_achievements);
+        SharedPreferences settings = context.getSharedPreferences(context.PREFS_NAME, 0);
+        int logros = settings.getInt("logros", 0);
+        if (logros == 1) {
+            checkAchievements.setChecked(true);
+        } else {
+            checkAchievements.setChecked(false);
+        }
         checkAchievements.setOnCheckedChangeListener(this);
 
         updateUploadBtn();
@@ -97,6 +105,11 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+        if (checkAchievements.isChecked()) {
+            SharedPreferences settings = context.getSharedPreferences(context.PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("logros", 1);
+            editor.commit();
+        }
     }
 }
