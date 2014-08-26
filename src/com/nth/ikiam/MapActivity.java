@@ -1219,6 +1219,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     public void mostrarEspecie(Especie especie){
+        map.clear();
         List<Entry> entry = Entry.findAllByEspecie(this,especie);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         int padding = (100);
