@@ -1443,7 +1443,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         return m1 > m2 ? -1 : 1;
     }
 
-    public float updateAchivement(int update, int tipo) {
+    public float updateAchivement( int tipo) {
         float res = 0;
         String nombre = "";
         SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
