@@ -26,10 +26,7 @@ import com.nth.ikiam.utils.GeoDegree;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -76,11 +73,13 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
     private Double fotoAlt;
 
     boolean hayFoto = false;
+    boolean deMapa = false;
 
     MapActivity context;
     private String pathFolder;
     private Bitmap bitmap;
     MapActivity activity;
+    Foto fotoSubir;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +89,9 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
         pathFolder = Utils.getFolder(context);
 
         View view = inflater.inflate(R.layout.captura_turista_layout, container, false);
+        View scrollview = view.findViewById(R.id.captura_turista_scroll_view);
+//        view.setOnTouchListener(this);
+        scrollview.setOnTouchListener(this);
 
         activity = (MapActivity) getActivity();
         screenHeight = activity.screenHeight;
@@ -99,6 +101,33 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
         textoComentarios = (EditText) view.findViewById(R.id.captura_comentarios_txt);
 
         initButtons(view);
+        if (context.imageToUpload != null) {
+            fotoSubir = context.imageToUpload;
+//            System.out.println("----------------- CAPTURA ------------------ " + fotoSubir.getCoordenada(context).latitud);
+            Bitmap thumb = null;
+
+            try {
+                ExifInterface exif = new ExifInterface(fotoSubir.path);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+                thumb = ImageUtils.getThumbnail(fotoSubir.path, false);
+//                bitmap = BitmapFactory.decodeFile(fotoSubir.path);
+                thumb = ImageUtils.rotateBitmap(thumb, orientation);
+
+                bitmap = ImageUtils.getImage(fotoSubir.path);
+                bitmap = ImageUtils.rotateBitmap(bitmap, orientation);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (thumb != null) {
+//                System.out.println("not null");
+                selectedImage.setImageBitmap(thumb);
+            } else {
+                System.out.println("si null");
+                selectedImage.setImageBitmap(ImageUtils.getThumbnail(fotoSubir.path, false));
+            }
+            hayFoto = true;
+            deMapa = true;
+        }
         return view;
     }
 
@@ -130,22 +159,31 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 entry.setUploaded(0);
                 entry.save();
 
-                Foto foto = new Foto(context);
-                if (entry != null) {
-                    foto.setEntry(entry);
+                if (!deMapa) {
+                    fotoSubir = new Foto(context);
                 }
-                if (fotoLat != null && fotoLong != null) {
-                    System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
-                    Coordenada coordenada = new Coordenada(context, fotoLat, fotoLong);
-                    if (fotoAlt != null) {
-                        coordenada.setAltitud(fotoAlt);
-                    }
-                    coordenada.save();
-                    foto.setCoordenada(coordenada);
-                }
-                foto.save();
 
-                String nuevoNombre = "photo_" + foto.id + ".jpg";
+                if (entry != null) {
+                    fotoSubir.setEntry(entry);
+                }
+                Coordenada coordenada = null;
+                if (deMapa) {
+                    coordenada = fotoSubir.getCoordenada(context);
+//                            System.out.println("<<<<>>>> " + coordenada.latitud + "     " + coordenada.longitud);
+                } else {
+                    if (fotoLat != null && fotoLong != null) {
+//                        System.out.println("COORDENADA::: " + fotoLat + "," + fotoLong);
+                        coordenada = new Coordenada(context, fotoLat, fotoLong);
+                        if (fotoAlt != null) {
+                            coordenada.setAltitud(fotoAlt);
+                        }
+                        coordenada.save();
+                        fotoSubir.setCoordenada(coordenada);
+                    }
+                }
+                fotoSubir.save();
+
+                String nuevoNombre = "photo_" + fotoSubir.id + ".jpg";
 
 //                File file = new File(pathFolder, fotoPath);
 //                fotoPath = file.getName();
@@ -167,9 +205,9 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 //System.out.println("Path folder: " + pathFolder);
                 //System.out.println("Photo path: " + fotoPath);
 //                foto.setPath(pathFolder + "/" + fotoPath);
-                foto.setPath(pathFolder + "/" + nuevoNombre);
-                foto.setUploaded(0);
-                foto.save();
+                fotoSubir.setPath(pathFolder + "/" + nuevoNombre);
+                fotoSubir.setUploaded(0);
+                fotoSubir.save();
 //                String msg = "Foto guardada";
                 //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                 if (v.getId() == botones[3].getId()) {
@@ -177,7 +215,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                     if (id != null && !id.equals("-1")) {
                         // aqui hace upload al servidor.....
                         ExecutorService queue = Executors.newSingleThreadExecutor();
-                        queue.execute(new CapturaUploader(context, queue, foto, 0));
+                        queue.execute(new CapturaUploader(context, queue, fotoSubir, 0));
                     } else {
                         //redirect a login
                         System.out.println("Login first!!!");
@@ -189,6 +227,18 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 }
 //                alerta(msg + " exitosamente");
                 resetForm();
+                if (coordenada == null) {
+                    if (!deMapa) {
+                        context.fotoSinCoords = fotoSubir;
+                        context.selectItem(context.MAP_POS);
+                        alerta(getString(R.string.uploader_upload_map));
+                    }
+                } else {
+                    if (v.getId() != botones[3].getId()) {
+                        alerta(getString(R.string.uploader_upload_success));
+                    }
+                    context.imageToUpload = null;
+                }
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
             } else {
                 alerta(getString(R.string.captura_error_seleccion));

@@ -1,9 +1,6 @@
 package com.nth.ikiam;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.app.*;
 import android.content.*;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -25,6 +22,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.facebook.*;
+import com.facebook.android.Util;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -64,6 +62,16 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int RUTAS_POS = 4;
     public final int SETTINGS_POS = 5;
     public final int LOGIN_POS = 6;
+
+    private final static String TAG_MAP = "TAG_MAP_FRAGMENT";
+    private final static String TAG_CAPTURA_C = "TAG_CAPTURA_C_FRAGMENT";
+    private final static String TAG_CAPTURA_T = "TAG_CAPTURA_T_FRAGMENT";
+    private final static String TAG_ENCYCLOPEDIA = "TAG_ENCYCLOPEDIA_FRAGMENT";
+    private final static String TAG_GALERIA = "TAG_GALERIA_FRAGMENT";
+    private final static String TAG_RUTAS = "TAG_RUTAS_FRAGMENT";
+    private final static String TAG_SETTINGS = "TAG_SETTINGS_FRAGMENT";
+    private final static String TAG_LOGIN = "TAG_LOGIN_FRAGMENT";
+
     private static final int CAMERA_REQUEST = 1337;
     /*Interfaz*/
     private Button[] botones;
@@ -134,6 +142,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public LatLng posicionSubir;
 
     public Foto fotoSinCoords;
+
 
     public void setRuta_remote_id(String id) {
         fireEvent("ruta_remote_id", id);
@@ -634,6 +643,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 markerSubir.showInfoWindow();
             }
         });
+        final Context context = this;
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
@@ -660,9 +670,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         public void onClick(DialogInterface dialog, int id) {
 //                            imagePathUpload = data.get(marker).path;
                             imageToUpload = data.get(marker);
+//                            dialog.dismiss();
 //                            System.out.println("***************** ANTES: " + imageToUpload.path);
-                            selectItem(CAPTURA_POS);
-                            dialog.dismiss();
+//                            System.out.println("*************** MAPA*************** " + imageToUpload.getCoordenada(context).latitud);
+                            selectItem(CAPTURA_POS, false);
                         }
                     });
                     builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
@@ -993,8 +1004,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     public void selectItem(int position) {
+        selectItem(position, true);
+    }
+
+    public void selectItem(int position, boolean drawer) {
         // update the main content by replacing fragments
         //System.out.println("pos? "+position);
+        Utils.hideSoftKeyboard(this);
         Fragment fragment;
         switch (position) {
             case MAP_POS:
@@ -1044,9 +1060,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
         if (fragment != null) {
             // System.out.println("fragment "+fragment);
-            Bundle args = new Bundle();
+//            Bundle args = new Bundle();
             //args.putString("pathFolder", pathFolder);
-            fragment.setArguments(args);
+//            fragment.setArguments(args);
 
             FragmentManager fragmentManager = getFragmentManager();
             RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
@@ -1056,17 +1072,23 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     .replace(R.id.content_frame, fragment)
                     .addToBackStack("")
                     .commit();
+//            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+//            mainLayout.setVisibility(LinearLayout.GONE);
+//            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace(R.id.content_frame, fragment);
+//            transaction.addToBackStack(null);
+//            transaction.commit();
 
             // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
             // update selected item and title, then close the drawer
 
         }
-        mDrawerList.setItemChecked(position, true);
         setTitle(mOptionsArray[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
-
-
+        if (drawer) {
+            mDrawerList.setItemChecked(position, true);
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     @Override
@@ -1190,5 +1212,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         request.executeAsync();
     }
 
-
+//    @Override
+//    public void onBackPressed() {
+////        System.out.println("on back pressed");
+//        final Fragment fragment = getFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+//
+//        if (fragment.allowBackPressed()) { // and then you define a method allowBackPressed with the logic to allow back pressed or not
+//            super.onBackPressed();
+//        }
+//    }
 }

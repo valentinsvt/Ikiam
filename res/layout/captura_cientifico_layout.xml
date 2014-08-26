@@ -65,7 +65,7 @@
     </RelativeLayout>
 
     <ScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/captura_cientifico_scroll_view"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             android:id="@+id/relative_layout"
 
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@id/captura_chosen_image_view"

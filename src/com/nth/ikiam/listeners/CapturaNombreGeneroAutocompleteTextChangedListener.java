@@ -54,6 +54,7 @@ public class CapturaNombreGeneroAutocompleteTextChangedListener implements TextW
             fragment.nombreGeneroArrayAdapter.notifyDataSetChanged();
 
             // get suggestions from the database
+//            System.out.println("FAMILIA   " + familia.nombre);
             List<Genero> myObjs = Genero.findAllByFamiliaAndNombreLike(context, familia, userInput.toString());
 
             // update the nombreComunArrayAdapter

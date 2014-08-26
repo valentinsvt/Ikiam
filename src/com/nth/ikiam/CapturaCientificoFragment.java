@@ -93,6 +93,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
     private String pathFolder;
     private Bitmap bitmap;
     MapActivity activity;
+    Foto fotoSubir;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,6 +103,9 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         pathFolder = Utils.getFolder(context);
 
         View view = inflater.inflate(R.layout.captura_cientifico_layout, container, false);
+        View scrollview = view.findViewById(R.id.captura_cientifico_scroll_view);
+//        view.setOnTouchListener(this);
+        scrollview.setOnTouchListener(this);
 
         Utils.checkColores(context);
         activity = (MapActivity) getActivity();
@@ -117,8 +121,8 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         initToggles(view);
 
         if (context.imageToUpload != null) {
-            Foto fotoSubir = context.imageToUpload;
-
+            fotoSubir = context.imageToUpload;
+//            System.out.println("----------------- CAPTURA ------------------ " + fotoSubir.getCoordenada(context).latitud);
             Bitmap thumb = null;
 
             try {
@@ -134,7 +138,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 e.printStackTrace();
             }
             if (thumb != null) {
-                System.out.println("not null");
+//                System.out.println("not null");
                 selectedImage.setImageBitmap(thumb);
             } else {
                 System.out.println("si null");
@@ -246,18 +250,21 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                             entry.save();
                         }
 
-                        Foto foto = new Foto(context);
+                        if (!deMapa) {
+                            fotoSubir = new Foto(context);
+                        }
+
                         if (especie != null) {
-                            foto.setEspecie(especie);
+                            fotoSubir.setEspecie(especie);
                         }
                         if (entry != null) {
-                            foto.setEntry(entry);
+                            fotoSubir.setEntry(entry);
                         }
-                        foto.setKeywords(keywords);
+                        fotoSubir.setKeywords(keywords);
                         Coordenada coordenada = null;
 
                         if (deMapa) {
-                            coordenada = foto.getCoordenada(context);
+                            coordenada = fotoSubir.getCoordenada(context);
 //                            System.out.println("<<<<>>>> " + coordenada.latitud + "     " + coordenada.longitud);
                         } else {
                             if (fotoLat != null && fotoLong != null) {
@@ -267,17 +274,17 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                                     coordenada.setAltitud(fotoAlt);
                                 }
                                 coordenada.save();
-                                foto.setCoordenada(coordenada);
+                                fotoSubir.setCoordenada(coordenada);
                             }
                         }
-                        foto.save();
+                        fotoSubir.save();
 
                         String nuevoNombre;
                         if (genero != null && especie != null) {
-                            nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + foto.id;
+                            nuevoNombre = genero.nombre + "_" + especie.nombre + "_" + fotoSubir.id;
                             nuevoNombre = nuevoNombre.replaceAll("[^a-zA-Z_0-9]", "_");
                         } else {
-                            nuevoNombre = "na_na_" + foto.id;
+                            nuevoNombre = "na_na_" + fotoSubir.id;
                         }
                         nuevoNombre += ".jpg";
 
@@ -301,9 +308,9 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                         //System.out.println("Path folder: " + pathFolder);
                         //System.out.println("Photo path: " + fotoPath);
 //                foto.setPath(pathFolder + "/" + fotoPath);
-                        foto.setPath(pathFolder + "/" + nuevoNombre);
-                        foto.setUploaded(0);
-                        foto.save();
+                        fotoSubir.setPath(pathFolder + "/" + nuevoNombre);
+                        fotoSubir.setUploaded(0);
+                        fotoSubir.save();
 //                String msg = "Foto guardada";
                         //System.out.println("foto: " + foto.id + "entry: " + entry.id + "  especie: " + especie.id + "   " + especie.nombre + "  (" + genero.nombre + " " + genero.id + ")" + "  (" + familia.nombre + " " + familia.id + ")");
                         if (v.getId() == botones[3].getId()) {
@@ -311,7 +318,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                             if (id != null && !id.equals("-1")) {
                                 // aqui hace upload al servidor.....
                                 ExecutorService queue = Executors.newSingleThreadExecutor();
-                                queue.execute(new CapturaUploader(context, queue, foto, 0));
+                                queue.execute(new CapturaUploader(context, queue, fotoSubir, 0));
                             } else {
                                 //redirect a login
                                 System.out.println("Login first!!!");
@@ -325,7 +332,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                         resetForm();
                         if (coordenada == null) {
                             if (!deMapa) {
-                                context.fotoSinCoords = foto;
+                                context.fotoSinCoords = fotoSubir;
                                 context.selectItem(context.MAP_POS);
                                 alerta(getString(R.string.uploader_upload_map));
                             }
@@ -333,6 +340,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                             if (v.getId() != botones[3].getId()) {
                                 alerta(getString(R.string.uploader_upload_success));
                             }
+                            context.imageToUpload = null;
                         }
 
 //                System.out.println("Save: <" + keywords + "> <" + comentarios + ">");
@@ -631,7 +639,8 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        Utils.hideSoftKeyboard(context);
+//        System.out.println("ON TOUCH");
+//        Utils.hideSoftKeyboard(context);
         return false;
     }
 }
