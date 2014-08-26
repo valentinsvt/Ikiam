@@ -24,16 +24,18 @@ public class FotoUploader implements Runnable {
     String lineEnd = "\r\n";
     String twoHyphens = "--";
     String boundary = "*****";
-    final String IP = "http://www.tedein.com.ec:8080/ikiamServer/";
+    //    final String IP = "http://www.tedein.com.ec:8080/ikiamServer/";
+    final String IP = UtilsUploaders.getIp();
+
     public FotoUploader(MapActivity context, int id_remoto, Foto foto) {
-        this.activity=context;
-        this.id=id_remoto;
-        this.foto=foto;
+        this.activity = context;
+        this.id = id_remoto;
+        this.foto = foto;
     }
 
     @Override
     public void run() {
-        String urlstr = IP+"ruta/fotoUploader";
+        String urlstr = IP + "ruta/fotoUploader";
         try {
             // new file and and entity
             File file = new File(foto.path);
@@ -61,14 +63,14 @@ public class FotoUploader implements Runnable {
 
             dos = new DataOutputStream(conn.getOutputStream());
             Coordenada coordenada = null;
-            coordenada=foto.getCoordenada(activity);
+            coordenada = foto.getCoordenada(activity);
             addFormPart(dos, "archivo", foto.path);
             if (coordenada != null) {
                 addFormPart(dos, "lat", "" + coordenada.latitud);
                 addFormPart(dos, "long", "" + coordenada.longitud);
                 addFormPart(dos, "alt", "" + coordenada.altitud);
             }
-            addFormPart(dos, "ruta", ""+id);
+            addFormPart(dos, "ruta", "" + id);
 
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
@@ -101,9 +103,8 @@ public class FotoUploader implements Runnable {
             String serverResponseMessage = conn.getResponseMessage();
 
 
-
             if (serverResponseCode == 200) {
-                System.out.print("completed "+foto.path);
+                System.out.print("completed " + foto.path);
             } else {
                 System.out.println("NOT COMPLETED: " + serverResponseCode + "   " + serverResponseMessage);
             }
