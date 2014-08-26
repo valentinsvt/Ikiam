@@ -36,6 +36,7 @@ import com.nth.ikiam.image.ImageItem;
 import com.nth.ikiam.image.ImageTableObserver;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.listeners.FieldListener;
+import com.nth.ikiam.utils.AchievementChecker;
 import com.nth.ikiam.utils.AtraccionDownloader;
 import com.nth.ikiam.utils.Utils;
 
@@ -1223,7 +1224,22 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             Entry current = entry.get(i);
             List<Foto> fotos = Foto.findAllByEntry(activity,current);
             for(int j=0;j<fotos.size();j++){
-
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Canvas canvas1 = new Canvas(bmp);
+                Paint color = new Paint();
+                color.setTextSize(35);
+                color.setColor(Color.BLACK);//modify canvas
+                canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.pin3), 0, 0, color);
+                Bitmap b = ImageUtils.decodeFile(fotos.get(i).path);
+                canvas1.drawBitmap(b, 3, 2, color);
+                Coordenada co = fotos.get(i).getCoordenada(activity);
+                location = new LatLng(co.getLatitud(), co.getLongitud());
+                Marker marker = map.addMarker(new MarkerOptions().position(location)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .anchor(0.5f, 1).title("Nueva fotografía"));
+                data.put(marker, fotos.get(i));
             }
 
         }
@@ -1270,7 +1286,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     public void checkAchiev(int tipo,float cant){
-
+        ExecutorService queue = Executors.newSingleThreadExecutor();
+        queue.execute(new AchievementChecker(this,tipo,cant));
 
 
     }
