@@ -328,6 +328,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                         } else {
 //                            alerta(getString(R.string.uploader_upload_success));
                         }
+                        context.updateAchivement(context.ACHIEV_FOTOS);
 //                alerta(msg + " exitosamente");
                         resetForm();
                         if (coordenada == null) {

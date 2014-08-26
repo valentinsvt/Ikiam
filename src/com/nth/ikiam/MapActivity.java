@@ -1523,10 +1523,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     public void checkAchiev(int tipo, float cant) {
-        ExecutorService queue = Executors.newSingleThreadExecutor();
-        queue.execute(new AchievementChecker(this, tipo, cant));
-
-
+        SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
+        if(settings.getInt("logros", 0) == 1) {
+            ExecutorService queue = Executors.newSingleThreadExecutor();
+            queue.execute(new AchievementChecker(this, tipo, cant));
+        }
     }
     public float getAchievement(int tipo){
         float res = 0;
