@@ -202,6 +202,8 @@ public class CapturaUploader implements Runnable {
                 foto.save();
                 foto.getEntry(context).save();
                 context.setErrorMessage(context.getString(R.string.uploader_upload_success));
+                context.updateAchivement(context.ACHIEV_UPLOADS);
+                context.checkAchiev(context.ACHIEV_UPLOADS, context.getAchievement(context.ACHIEV_UPLOADS));
             } else {
                 System.out.println("NOT COMPLETED: " + serverResponseCode + "   " + serverResponseMessage);
             }

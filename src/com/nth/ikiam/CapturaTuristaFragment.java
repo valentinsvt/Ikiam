@@ -225,6 +225,8 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 } else {
                     alerta(getString(R.string.uploader_upload_success));
                 }
+                context.updateAchivement(context.ACHIEV_FOTOS);
+                context.checkAchiev(context.ACHIEV_FOTOS, context.getAchievement(context.ACHIEV_FOTOS));
 //                alerta(msg + " exitosamente");
                 resetForm();
                 if (coordenada == null) {

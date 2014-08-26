@@ -105,11 +105,13 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        int val = 0;
         if (checkAchievements.isChecked()) {
-            SharedPreferences settings = context.getSharedPreferences(context.PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putInt("logros", 1);
-            editor.commit();
+            val = 1;
         }
+        SharedPreferences settings = context.getSharedPreferences(context.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("logros", val);
+        editor.commit();
     }
 }

@@ -1,46 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_alignParentStart="true">
 
-    <Button
-        android:id="@+id/settings_btn_upload"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_btn_upload"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/settings_btn_download"
+            <Button
+                android:id="@+id/settings_btn_upload"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_btn_download"
-        android:layout_alignTop="@+id/settings_btn_upload"
-        android:layout_toRightOf="@+id/settings_chk_achievements" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_btn_upload"
+                android:background="@drawable/button_blue"
+                style="@style/ButtonText"
 
-    <CheckBox
-        android:id="@+id/settings_chk_achievements"
+                android:layout_marginTop="20dp" />
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_chk_achevements"
-        android:layout_marginTop="32dp"
-        android:checked="false"
-        android:layout_below="@+id/settings_btn_upload"
-        android:layout_alignParentStart="true" />
+            <Button
+                android:id="@+id/settings_btn_download"
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings_reset_achievements"
-        android:id="@id/settings_btn_reset_achievements"
-        android:layout_below="@+id/settings_chk_achievements"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp" />
-</RelativeLayout>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_btn_download"
+                android:background="@drawable/button_green"
+                style="@style/ButtonText"
+
+                android:layout_marginTop="20dp" />
+
+            <CheckBox
+                android:id="@+id/settings_chk_achievements"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_chk_achevements"
+                android:layout_marginTop="32dp"
+                android:checked="false" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_reset_achievements"
+                android:id="@id/settings_btn_reset_achievements"
+                android:background="@drawable/button_black"
+                style="@style/ButtonText"
+
+                android:layout_marginTop="15dp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

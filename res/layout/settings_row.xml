@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/settings_titulo"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:text="level3 nombre cientifico"
+        android:textColor="@android:color/black"
+
+        android:layout_toRightOf="@id/encyclopedia_group_item_nivel_3_image"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/settings_descripcion"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:text="level3 nombre comun"
+        android:textColor="@android:color/black"
+        android:maxLines="3"
+        android:layout_alignLeft="@id/encyclopedia_group_item_nivel_3_nombre_cientifico"
+        android:layout_below="@id/settings_titulo" />
+
+</RelativeLayout>

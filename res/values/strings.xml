@@ -198,4 +198,23 @@
     <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
     <string name="map_camara">Cámara</string>
     <string name="map_especies">Especies</string>
+
+    <string name="achievement_titulo">Has desbloqueado un logro!</string>
+    <plurals name="achievement_foto">
+        <item quantity="one">Felicidades! Has agregado tu primera foto!</item>
+        <item quantity="other">Felicidades! Has agregado %1$d fotos!</item>
+    </plurals>
+    <plurals name="achievement_upload">
+        <item quantity="one">Felicidades! Has subido tu primera foto!</item>
+        <item quantity="other">Felicidades! Has subido %1$d fotos!</item>
+    </plurals>
+    <plurals name="achievement_share">
+        <item quantity="one">Felicidades! Has compartido tu primera foto!</item>
+        <item quantity="other">Felicidades! Has compartido %1$d fotos!</item>
+    </plurals>
+    <plurals name="achievement_distancia">
+        <item quantity="one">Felicidades! Has recorrido tu primer kilómetro!</item>
+        <item quantity="other">Felicidades! Has recorrido %1$d kilómetros!</item>
+    </plurals>
+
 </resources>

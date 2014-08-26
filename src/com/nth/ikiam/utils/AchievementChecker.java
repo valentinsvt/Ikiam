@@ -32,27 +32,49 @@ public class AchievementChecker implements Runnable {
 
     @Override
     public void run() {
+
+        int pluralId = 0;
+
+        switch (tipo) {
+            case ACHIEV_FOTOS:
+                pluralId = R.plurals.achievement_foto;
+                break;
+            case ACHIEV_DISTANCIA:
+                pluralId = R.plurals.achievement_distancia;
+                break;
+            case ACHIEV_UPLOADS:
+                pluralId = R.plurals.achievement_upload;
+                break;
+            case ACHIEV_SHARE:
+                pluralId = R.plurals.achievement_share;
+                break;
+        }
+
         List<Logro> logros = Logro.findAllByTipoAndNotCompleto(activity, this.tipo);
         for (Logro logro : logros) {
             if (cant >= logro.cantidad) {
+                String strAchiev = "";
+                if (pluralId > 0) {
+                    strAchiev = activity.getResources().getQuantityString(pluralId, (int) cant, cant);
+                }
                 logro.setCompleto(1);
                 logro.save();
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this.activity)
                                 .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle(activity.getString(R.string.app_name))
-                                .setContentText(activity.getString(R.string.app_name));
-// Creates an explicit intent for an Activity in your app
+                                .setContentTitle(activity.getString(R.string.achievement_titulo))
+                                .setContentText(strAchiev);
+                // Creates an explicit intent for an Activity in your app
                 Intent resultIntent = new Intent(this.activity, MapActivity.class);
 
-// The stack builder object will contain an artificial back stack for the
-// started Activity.
-// This ensures that navigating backward from the Activity leads out of
-// your application to the Home screen.
+                // The stack builder object will contain an artificial back stack for the
+                // started Activity.
+                // This ensures that navigating backward from the Activity leads out of
+                // your application to the Home screen.
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(this.activity);
-// Adds the back stack for the Intent (but not the Intent itself)
+                // Adds the back stack for the Intent (but not the Intent itself)
                 stackBuilder.addParentStack(MapActivity.class);
-// Adds the Intent that starts the Activity to the top of the stack
+                // Adds the Intent that starts the Activity to the top of the stack
                 stackBuilder.addNextIntent(resultIntent);
                 PendingIntent resultPendingIntent =
                         stackBuilder.getPendingIntent(
@@ -62,7 +84,7 @@ public class AchievementChecker implements Runnable {
                 mBuilder.setContentIntent(resultPendingIntent);
                 NotificationManager mNotificationManager =
                         (NotificationManager) this.activity.getSystemService(Context.NOTIFICATION_SERVICE);
-// mId allows you to update the notification later on.
+                // mId allows you to update the notification later on.
                 mNotificationManager.notify(1, mBuilder.build());
             }
         }
