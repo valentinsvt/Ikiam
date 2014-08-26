@@ -109,6 +109,21 @@ public class LogroDbHelper extends DbHelper {
         return logroes;
     }
 
+    public int countLogrosCompletos() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  count(*) count FROM " + TABLE_LOGRO +
+                " WHERE " + KEY_COMPLETO + " = 1";
+        Cursor c = db.rawQuery(selectQuery, null);
+        db.close();
+        if (c.moveToFirst()) {
+            int count = c.getInt(c.getColumnIndex("count"));
+            db.close();
+            return count;
+        }
+        db.close();
+        return 0;
+    }
+
     public List<Logro> getLogroByCodigo(String logro) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Logro> logroes = new ArrayList<Logro>();
@@ -150,7 +165,7 @@ public class LogroDbHelper extends DbHelper {
         db.close();
     }
 
-    public void deleteAllLogroes() {
+    public void deleteAllLogros() {
         String sql = "DELETE FROM " + TABLE_LOGRO;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(sql);

@@ -21,6 +21,14 @@ public class Logro {
         logroDbHelper = new LogroDbHelper(context);
     }
 
+    public void save() {
+        if (this.id == 0) {
+            this.id = this.logroDbHelper.createLogro(this);
+        } else {
+            this.logroDbHelper.updateLogro(this);
+        }
+    }
+
     public long getId() {
         return id;
     }
@@ -68,5 +76,10 @@ public class Logro {
     public static List<Logro> findAllByTipoAndNotCompleto(Context context, int tipo) {
         LogroDbHelper e = new LogroDbHelper(context);
         return e.getAllLogrosByTipoAndNotCompleto(tipo);
+    }
+
+    public static int countCompletos(Context context) {
+        LogroDbHelper e = new LogroDbHelper(context);
+        return e.countLogrosCompletos();
     }
 }
