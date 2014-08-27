@@ -104,9 +104,8 @@ public class BusquedaDownloader implements Runnable {
                 rd.close();
 //                System.out.println("response busqueda!!  " + response.toString());
                 String respuesta = response.toString();
-                System.out.println("RESPONSE " + respuesta);
-                String[] especies = respuesta.split("&");
-
+//                System.out.println("RESPONSE " + respuesta);
+                context.strEspeciesList = respuesta;
                 progressDialog.hide();
                 //""+usu.id+";"+usu.email+";"+usu.nombre+";"+usu.apellido+";"+usu.esCientifico
             }

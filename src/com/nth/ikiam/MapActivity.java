@@ -146,6 +146,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public List<Especie> especiesBusqueda;
     public Marker markerSubir;
     public LatLng posicionSubir;
+    public String strEspeciesList;
 
     public Foto fotoSinCoords;
 

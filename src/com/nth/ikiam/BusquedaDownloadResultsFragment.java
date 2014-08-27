@@ -21,18 +21,39 @@ import java.util.List;
 public class BusquedaDownloadResultsFragment extends ListFragment {
 
     MapActivity activity;
-    List<Especie> especiesList;
-
-    int fotoPos = 0;
-    String dialogTitle = "";
-    List<Foto> fotos;
+    List<String> especiesList;
+    String strEspeciesList;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activity = (MapActivity) getActivity();
 
-        especiesList = activity.especiesBusqueda;
+        String[] especies = strEspeciesList.split("&");
+
+        for (String especie : especies) {
+            especiesList.add(especie);
+        }
+//            String[] datos = especie.split(";");
+//            /*
+//            str += e.nombreComun + ";" + e.genero?.familia?.nombre + ";" + e.genero?.nombre + ";" + e.nombre + ";" + e.color1.color
+//            if (e.color2) {
+//                str += ";" + e.color2.color
+//            }
+//             */
+//            String nombreComun = datos[0];
+//            String nombreFamilia = datos[1];
+//            String nombreGenero = datos[2];
+//            String nombreEspecie = datos[3];
+//            String color1 = datos[4];
+//            String color2 = "";
+//            if (datos.length == 6) {
+//                color2 = datos[5];
+//            }
+//        }
+
+
+//        especiesList = activity.especiesBusqueda;
 
 //        for (Foto foto : fotoList) {
 //            System.out.println("--------------------------- " + foto.id);
@@ -44,18 +65,18 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Especie selected = especiesList.get(position);
-        Fragment fragment = new EncyclopediaEspecieInfoFragment();
-        Bundle args = new Bundle();
-        args.putLong("especie", selected.id);
-        fragment.setArguments(args);
-
-        String nombre = selected.getNombreCientifico() + " (" + selected.nombreComun + ")";
-
-        activity.setTitle(nombre);
-
-        FragmentManager fragmentManager = activity.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+//        Especie selected = especiesList.get(position);
+//        Fragment fragment = new EncyclopediaEspecieInfoFragment();
+//        Bundle args = new Bundle();
+//        args.putLong("especie", selected.id);
+//        fragment.setArguments(args);
+//
+//        String nombre = selected.getNombreCientifico() + " (" + selected.nombreComun + ")";
+//
+//        activity.setTitle(nombre);
+//
+//        FragmentManager fragmentManager = activity.getFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 //        Entry selectedEntry = entryList.get(position);
 //        fotos = Foto.findAllByEntry(activity, selectedEntry);
