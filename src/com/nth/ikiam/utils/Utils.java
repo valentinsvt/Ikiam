@@ -22,6 +22,18 @@ import java.io.File;
  */
 public class Utils {
 
+
+    public static String getStringResourceByName(Context c, String aString) {
+        String packageName = c.getPackageName();
+        int resId = c.getResources().getIdentifier(aString, "string", packageName);
+        if (resId == 0) {
+            return aString;
+        } else {
+            return c.getString(resId);
+        }
+    }
+
+
     public static boolean isNetworkAvailable(Context context) {
         // Get Connectivity Manager class object from Systems Service
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
+import com.nth.ikiam.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -47,17 +48,7 @@ public class CapturaColorSpinnerAdapter extends BaseAdapter {
         LayoutInflater inflater = ((Activity) c).getLayoutInflater();
         View row = inflater.inflate(R.layout.captura_select_row, parent, false);
         TextView sub = (TextView) row.findViewById(R.id.captura_row_color_label);
-        sub.setText(getStringResourceByName("global_color_" + cur_obj.getNombre()));
+        sub.setText(Utils.getStringResourceByName(c, "global_color_" + cur_obj.getNombre()));
         return row;
-    }
-
-    private String getStringResourceByName(String aString) {
-        String packageName = c.getPackageName();
-        int resId = c.getResources().getIdentifier(aString, "string", packageName);
-        if (resId == 0) {
-            return aString;
-        } else {
-            return c.getString(resId);
-        }
     }
 }

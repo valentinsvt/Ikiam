@@ -52,7 +52,12 @@ public class BusquedaResultsFragment extends ListFragment {
         activity.setTitle(nombre);
 
         FragmentManager fragmentManager = activity.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+//        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack("")
+                .commit();
 
 //        Entry selectedEntry = entryList.get(position);
 //        fotos = Foto.findAllByEntry(activity, selectedEntry);

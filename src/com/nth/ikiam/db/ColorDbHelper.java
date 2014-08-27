@@ -132,6 +132,26 @@ public class ColorDbHelper extends DbHelper {
         return colores;
     }
 
+    public Color getColorByNombre(String color) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Color colorObj = new Color(this.context);
+        String selectQuery = "SELECT  * FROM " + TABLE_COLOR +
+                " WHERE " + KEY_NOMBRE + " = '" + color + "' LIMIT 1";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                colorObj = setDatos(c);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return colorObj;
+    }
+
     public int countAllColores() {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_COLOR;

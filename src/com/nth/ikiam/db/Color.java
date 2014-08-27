@@ -100,6 +100,11 @@ public class Color {
         return e.getAllColoresByNombre(color);
     }
 
+    public static Color findByNombre(Context context, String color) {
+        ColorDbHelper e = new ColorDbHelper(context);
+        return e.getColorByNombre(color);
+    }
+
     public static void empty(Context context) {
         ColorDbHelper e = new ColorDbHelper(context);
         e.deleteAllColores();

@@ -52,6 +52,7 @@ public class DescargaBusquedaFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        Utils.hideSoftKeyboard(context);
         if (v.getId() == btnBuscar.getId()) {
             if (Utils.isNetworkAvailable(context)) {
                 String nombreComun = txtNombreComun.getText().toString().trim();
@@ -59,28 +60,26 @@ public class DescargaBusquedaFragment extends Fragment implements View.OnClickLi
                 String nombreGenero = txtNombreGenero.getText().toString().trim();
                 String nombreEspecie = txtNombreEspecie.getText().toString().trim();
 
-                boolean ok = true;
+//                boolean ok = true;
 
-                if (!nombreGenero.equals("") && nombreFamilia.equals("")) {
-                    alerta(getString(R.string.captura_error_nombre_familia));
-                    ok = false;
-                }
-                if (!nombreEspecie.equals("") && nombreGenero.equals("")) {
-                    alerta(getString(R.string.captura_error_nombre_genero));
-                    ok = false;
-                }
+//                if (!nombreGenero.equals("") && nombreFamilia.equals("")) {
+//                    alerta(getString(R.string.captura_error_nombre_familia));
+//                    ok = false;
+//                }
+//                if (!nombreEspecie.equals("") && nombreGenero.equals("")) {
+//                    alerta(getString(R.string.captura_error_nombre_genero));
+//                    ok = false;
+//                }
 
-                if (ok) {
-                    progressDialog = new ProgressDialog(context);
-                    progressDialog.setTitle(getString(R.string.descarga_busqueda_buscando));
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    progressDialog.show();
+//                if (ok) {
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setTitle(getString(R.string.descarga_busqueda_buscando));
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
 
-                    ExecutorService queue = Executors.newSingleThreadExecutor();
-                  //  queue.execute(new BusquedaDownloader(context, queue, 0, nombreComun, nombreFamilia, nombreGenero, nombreEspecie));
-                }
-
-
+                ExecutorService queue = Executors.newSingleThreadExecutor();
+                queue.execute(new BusquedaDownloader(context, queue, 0, nombreComun, nombreFamilia, nombreGenero, nombreEspecie, progressDialog));
+//                }
             }
         }
     }

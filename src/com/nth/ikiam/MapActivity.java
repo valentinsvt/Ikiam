@@ -196,13 +196,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
     }
 
-    public void showDownloadedEspecies(final String msg) {
+    public void showDownloadedEspecies(final String msg, final ProgressDialog progressDialog) {
         final Activity a = this;
         if (a != null) {
             a.runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
+                    progressDialog.hide();
                     Fragment fragment = new BusquedaDownloadResultsFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rl2);

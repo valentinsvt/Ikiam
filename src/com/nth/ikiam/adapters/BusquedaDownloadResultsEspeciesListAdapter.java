@@ -14,7 +14,22 @@ import com.nth.ikiam.db.Genero;
 import com.nth.ikiam.image.ImageUtils;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+import com.nth.ikiam.MapActivity;
+import com.nth.ikiam.R;
+import com.nth.ikiam.db.Color;
+import com.nth.ikiam.utils.Utils;
+
+import java.util.ArrayList;
 
 /**
  * Created by DELL on 03/08/2014.
@@ -22,6 +37,18 @@ import java.util.List;
 public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<String> {
     private final Context context;
     private final List<String> especies;
+
+    String nombreCientifico;
+    String nombreComun;
+    String nombreFamilia;
+    String nombreGenero;
+    String nombreEspecie;
+    String idEspecie;
+    String idFoto1;
+    String idFoto2;
+    String idFoto3;
+    String color1;
+    String color2;
 
     public BusquedaDownloadResultsEspeciesListAdapter(Context context, List<String> especies) {
         super(context, R.layout.busqueda_download_results_row, especies);
@@ -32,96 +59,58 @@ public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<Str
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        String especie = especies.get(position);
-        String[] datos = especie.split(";");
+        try {
+            String especie = especies.get(position);
+            String[] datos = especie.split(";");
 
-        String nombreComun = datos[0];
-        String nombreFamilia = datos[1];
-        String nombreGenero = datos[2];
-        String nombreEspecie = datos[3];
-        String color1 = datos[4];
-        String color2 = "";
-        if (datos.length == 6) {
-            color2 = datos[5];
-        }
+            nombreComun = URLDecoder.decode(datos[0].trim(), "UTF-8");
+            nombreFamilia = URLDecoder.decode(datos[1].trim(), "UTF-8");
+            nombreGenero = URLDecoder.decode(datos[2].trim(), "UTF-8");
+            nombreEspecie = URLDecoder.decode(datos[3].trim(), "UTF-8");
+            idEspecie = datos[4];
+            color1 = URLDecoder.decode(datos[5].trim(), "UTF-8");
+            color2 = "";
+            if (datos.length >= 7) {
+                color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
+            }
+            if (datos.length >= 8) {
+                idFoto1 = datos[7];
+            }
+            if (datos.length >= 9) {
+                idFoto2 = datos[8];
+            }
+            if (datos.length >= 10) {
+                idFoto3 = datos[0];
+            }
 
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.busqueda_download_results_row, null);
+            nombreCientifico = nombreGenero + " " + nombreEspecie.toLowerCase();
+
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.busqueda_download_results_row, null);
+            }
+            TextView itemNombreCientifico = (TextView) convertView.findViewById(R.id.busqueda_download_result_nombre_cientifico);
+            TextView itemNombreComun = (TextView) convertView.findViewById(R.id.busqueda_download_result_nombre_comun);
+            TextView itemNombreFamilia = (TextView) convertView.findViewById(R.id.busqueda_download_result_nombre_familia);
+            TextView itemColor1 = (TextView) convertView.findViewById(R.id.busqueda_download_result_color1);
+            TextView itemColor2 = (TextView) convertView.findViewById(R.id.busqueda_download_result_color2);
+
+            itemNombreCientifico.setText(nombreCientifico);
+            itemNombreComun.setText(nombreComun);
+            itemNombreFamilia.setText(nombreFamilia);
+//            System.out.println("COLOR 1 :" + color1 + ":       COLOR 2 :" + color2 + ":");
+            itemColor1.setText(Utils.getStringResourceByName(context, "global_color_" + color1));
+            if (color2.equals("")) {
+                itemColor2.setText(color2);
+                itemColor2.setVisibility(View.GONE);
+            } else {
+                itemColor2.setText(Utils.getStringResourceByName(context, "global_color_" + color2));
+                itemColor2.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        TextView itemNombreCientifico = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_cientifico);
-        TextView itemNombreComun = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_comun);
 
         return convertView;
-        /* **********************************************/
-
-//        LayoutInflater inflater = (LayoutInflater) context
-//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View rowView = inflater.inflate(R.layout.busqueda_results_row, parent, false);
-//        TextView textViewNCo = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
-//        TextView textViewNCi = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_cientifico);
-//        ImageView imageView = (ImageView) rowView.findViewById(R.id.encyclopedia_entries_row_image);
-//
-//        textViewNCo.setText(nombreComun);
-//        textViewNCi.setText(nombreCientifico);
-//        if (imgFile.exists()) {
-//            Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100);
-//            imageView.setImageBitmap(myBitmap);
-//        }
-//        return rowView;
     }
-
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        LayoutInflater inflater = (LayoutInflater) context
-//                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View rowView = inflater.inflate(R.layout.busqueda_results_row, parent, false);
-////        System.out.println(rowView);
-//
-////        TextView textViewNombre = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
-//        TextView textViewNCo = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_comun);
-//        TextView textViewNCi = (TextView) rowView.findViewById(R.id.encyclopedia_entries_row_nombre_cientifico);
-//        ImageView imageView = (ImageView) rowView.findViewById(R.id.encyclopedia_entries_row_image);
-//
-////        System.out.println("POS " + position + "  " + entries.size());
-//
-//        Especie selectedEspecie = especies.get(position);
-//        Genero genero = selectedEspecie.getGenero(context);
-//        String nombreComun = selectedEspecie.nombreComun;
-//        String nombreCientifico = genero.nombre + " " + selectedEspecie.nombre.toLowerCase();
-//
-////        while (comentarios.length() < 150) {
-////            comentarios += " Lorem ipsum dolor sit amet ";
-////        }
-//
-////        if (nombreComun.length() > 127) {
-////            nombreComun = nombreComun.substring(0, 127) + "...";
-////        }
-//
-////        textViewNombre.setText(selectedEntry.getEspecie().getNombreCientifico() + " (" + selectedEntry.getEspecie().nombreComun + ")");
-//        textViewNCo.setText(nombreComun);
-//        textViewNCi.setText(nombreCientifico);
-//
-//        List<Foto> fotos = Foto.findAllByEspecie(context, selectedEspecie);
-//        Foto foto = fotos.get(0);
-//        File imgFile = new File(foto.path);
-//        if (imgFile.exists()) {
-////            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-////            Bitmap myBitmap = ImageUtils.decodeBitmap(imgFile.getAbsolutePath(), 100, 100);
-//            Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100);
-//            imageView.setImageBitmap(myBitmap);
-//        }
-//
-//        // change the icon for Windows and iPhone
-////        String s = values[position];
-////        if (s.startsWith("iPhone")) {
-////            imageView.setImageResource(R.drawable.no);
-////        } else {
-////            imageView.setImageResource(R.drawable.ok);
-////        }
-//
-//        return rowView;
-//    }
-
 }

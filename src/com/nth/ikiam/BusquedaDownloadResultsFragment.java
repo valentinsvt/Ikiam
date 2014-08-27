@@ -1,18 +1,22 @@
 package com.nth.ikiam;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.nth.ikiam.adapters.BusquedaDownloadResultsEspeciesListAdapter;
 import com.nth.ikiam.adapters.BusquedaResultsEspeciesListAdapter;
-import com.nth.ikiam.db.Especie;
-import com.nth.ikiam.db.Foto;
+import com.nth.ikiam.db.*;
 
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,49 +26,99 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
     MapActivity activity;
     List<String> especiesList;
-    String strEspeciesList;
+    BusquedaDownloadResultsEspeciesListAdapter adapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activity = (MapActivity) getActivity();
 
-        String[] especies = strEspeciesList.split("&");
-
+        String[] especies = activity.strEspeciesList.split("&");
+        especiesList = new ArrayList<String>();
         for (String especie : especies) {
             especiesList.add(especie);
         }
-//            String[] datos = especie.split(";");
-//            /*
-//            str += e.nombreComun + ";" + e.genero?.familia?.nombre + ";" + e.genero?.nombre + ";" + e.nombre + ";" + e.color1.color
-//            if (e.color2) {
-//                str += ";" + e.color2.color
-//            }
-//             */
-//            String nombreComun = datos[0];
-//            String nombreFamilia = datos[1];
-//            String nombreGenero = datos[2];
-//            String nombreEspecie = datos[3];
-//            String color1 = datos[4];
-//            String color2 = "";
-//            if (datos.length == 6) {
-//                color2 = datos[5];
-//            }
-//        }
 
-
-//        especiesList = activity.especiesBusqueda;
-
-//        for (Foto foto : fotoList) {
-//            System.out.println("--------------------------- " + foto.id);
-//        }
-
-        BusquedaDownloadResultsEspeciesListAdapter adapter = new BusquedaDownloadResultsEspeciesListAdapter(getActivity(), especiesList);
+        adapter = new BusquedaDownloadResultsEspeciesListAdapter(getActivity(), especiesList);
         setListAdapter(adapter);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+
+        final String selected = especiesList.get(position);
+
+        final int positionToRemove = position;
+
+        System.out.println("SELECTED:::::: " + selected);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(R.string.descarga_busqueda_download_confirmacion)
+                .setTitle(R.string.descarga_busqueda_download_title);
+
+        // Add the buttons
+        builder.setPositiveButton(R.string.global_ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                try {
+                    String[] datos = selected.split(";");
+                    String nombreComun = URLDecoder.decode(datos[0].trim(), "UTF-8");
+                    String nombreFamilia = URLDecoder.decode(datos[1].trim(), "UTF-8");
+                    String nombreGenero = URLDecoder.decode(datos[2].trim(), "UTF-8");
+                    String nombreEspecie = URLDecoder.decode(datos[3].trim(), "UTF-8");
+                    String idEspecie = datos[4];
+                    String color1 = URLDecoder.decode(datos[5].trim(), "UTF-8");
+                    String color2 = "";
+                    String idFoto1 = "";
+                    String idFoto2 = "";
+                    String idFoto3 = "";
+                    if (datos.length >= 7) {
+                        color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
+                    }
+                    if (datos.length >= 8) {
+                        idFoto1 = datos[7];
+                    }
+                    if (datos.length >= 9) {
+                        idFoto2 = datos[8];
+                    }
+                    if (datos.length >= 10) {
+                        idFoto3 = datos[0];
+                    }
+
+                    Familia nuevaFamilia = Familia.getByNombreOrCreate(activity, nombreFamilia);
+                    Genero nuevoGenero = Genero.getByNombreOrCreate(activity, nombreGenero);
+                    nuevoGenero.setFamilia(nuevaFamilia);
+                    nuevoGenero.save();
+                    Especie nuevaEspecie = Especie.getByNombreOrCreate(activity, nombreEspecie);
+                    Color nuevoColor1 = Color.findByNombre(activity, color1);
+                    Color nuevoColor2 = Color.findByNombre(activity, color2);
+                    nuevaEspecie.nombreComun = nombreComun;
+                    nuevaEspecie.setGenero(nuevoGenero);
+                    nuevaEspecie.setColor1(nuevoColor1);
+                    nuevaEspecie.setColor2(nuevoColor2);
+                    nuevaEspecie.save();
+
+                    especiesList.remove(positionToRemove);
+                    adapter.notifyDataSetChanged();
+
+                    Toast.makeText(activity, getString(R.string.descarga_busqueda_download_ok), Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.global_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+        // Set other dialog properties
+
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
 //        Especie selected = especiesList.get(position);
 //        Fragment fragment = new EncyclopediaEspecieInfoFragment();
 //        Bundle args = new Bundle();

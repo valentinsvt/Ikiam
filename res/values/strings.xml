@@ -148,13 +148,17 @@
     <string name="settings_reset_achievements">Reiniciar estadísticas</string>
     <string name="settings_show_estadisticas">Ver estadísticas</string>
     <string name="settings_estadisticas">Estadísticas</string>
-    <string name="settings_descargar">Descargar</string>
+    <string name="settings_descargar">Descargar especies</string>
 
     <string name="descarga_busqueda_info">Ingrese uno o más campos para buscar en el servidor</string>
     <string name="descarga_busqueda_buscando">Buscando…</string>
     <string name="descarga_busqueda_buscando_info">Por favor espere mientras se efectúa la búsqueda en el servidor</string>
 
-    <string name="estadisticas_reset_confirmacion">Está seguro de querer reiniciar a 0 todas las estadísticas guardadas?</string>
+    <string name="descarga_busqueda_download_title">Descargar especie</string>
+    <string name="descarga_busqueda_download_confirmacion">¿Está seguro de querer descargar esta especie a su dispositivo móvil?</string>
+    <string name="descarga_busqueda_download_ok">Especie descargada</string>
+
+    <string name="estadisticas_reset_confirmacion">¿Está seguro de querer reiniciar a 0 todas las estadísticas guardadas?</string>
     <string name="estadisticas_reset_ok">Estadísticas reiniciadas</string>
 
     <string name="estadisticas_fotos_tomadas_lbl">Fotos tomadas</string>
