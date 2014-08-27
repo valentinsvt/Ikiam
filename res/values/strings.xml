@@ -219,6 +219,8 @@
     <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
 
     <string name="achievement_titulo">Has desbloqueado un logro!</string>
+    <string name="tools_latitud">Latitud</string>
+    <string name="tools_longitud">Longitud</string>
     <plurals name="achievement_foto">
         <item quantity="one">Felicidades! Has agregado tu primera foto!</item>
         <item quantity="other">Felicidades! Has agregado %1$d fotos!</item>
