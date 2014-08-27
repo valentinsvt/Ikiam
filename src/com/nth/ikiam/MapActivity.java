@@ -195,6 +195,27 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
     }
 
+    public void showDownloadedEspecies(final String msg) {
+        final Activity a = this;
+        if (a != null) {
+            a.runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    Fragment fragment = new BusquedaDownloadResultsFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rl2);
+                    mainLayout.setVisibility(LinearLayout.GONE);
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                            .replace(R.id.content_frame, fragment)
+                            .addToBackStack("")
+                            .commit();
+                }
+            });
+        }
+    }
+
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
         if (session != null && session.isOpened()) {
             makeMeRequest(session);

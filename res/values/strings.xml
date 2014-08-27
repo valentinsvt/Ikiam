@@ -41,6 +41,8 @@
     <string name="global_color_amarillo">Amarillo</string>
     <string name="global_color_negro">Negro</string>
 
+    <string name="global_error_no_connection">No se pudo conectar a Internet.</string>
+
     <string-array name="options_array">
         <item>Mapa</item>
         <item>Nueva captura</item>
@@ -74,6 +76,12 @@
     <string name="map_continente_btn">Continente</string>
     <string name="map_locate_btn">Mi ubicación</string>
     <string name="map_service">Nueva Ruta</string>
+    <string name="map_subirFotoMarker">Clic en el ping para subir una foto en esta posición</string>
+    <string name="map_ubicar_foto_marker">Clic en el ping para ubicar la foto aquí</string>
+    <string name="map_foto_ubicada">Foto ubicada correctamente</string>
+    <string name="map_camara">Cámara</string>
+    <string name="map_especies">Especies</string>
+    <string name="map_limpiar">Limpiar</string>
 
     <string name="captura_es_animal">Es un animal</string>
     <string name="captura_es_planta">Es una planta</string>
@@ -115,25 +123,24 @@
     <string name="captura_error_nombre_familia">Por favor, ingresa la familia de la especie</string>
     <string name="captura_error_nombre_genero">Por favor, ingresa el género de la especie</string>
     <string name="captura_error_nombre_especie">Por favor, ingresa el nombre de la especie</string>
-
     <string name="captura_error_keywords">Por favor, selecciona un tipo de foto</string>
     <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
     <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
+
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
     <string name="map_activity_atracciones">Atracciones</string>
     <string name="map_activity_dialog_cerrar">Cerrar</string>
     <string name="map_activity_dialog_like">Me gusta</string>
     <string name="map_activity_dialog_mas">Ver más</string>
+    <string name="map_activity_dialog">Nueva captura</string>
+    <string name="map_activity_captura">Captura</string>
 
     <string name="dialog_btn_cerrar">Cerrar</string>
     <string name="dialog_btn_borrar">Borrar</string>
     <string name="dialog_btn_descargar">Subir</string>
     <string name="dialog_btn_anterior">Anterior</string>
     <string name="dialog_btn_siguiente">Siguiente</string>
-
-    <string name="map_activity_dialog">Nueva captura</string>
-    <string name="map_activity_captura">Captura</string>
 
     <string name="settings_btn_upload">Subir %1$d fotos</string>
     <string name="settings_btn_download">Descargar info</string>
@@ -142,6 +149,10 @@
     <string name="settings_show_estadisticas">Ver estadísticas</string>
     <string name="settings_estadisticas">Estadísticas</string>
     <string name="settings_descargar">Descargar</string>
+
+    <string name="descarga_busqueda_info">Ingrese uno o más campos para buscar en el servidor</string>
+    <string name="descarga_busqueda_buscando">Buscando…</string>
+    <string name="descarga_busqueda_buscando_info">Por favor espere mientras se efectúa la búsqueda en el servidor</string>
 
     <string name="estadisticas_reset_confirmacion">Está seguro de querer reiniciar a 0 todas las estadísticas guardadas?</string>
     <string name="estadisticas_reset_ok">Estadísticas reiniciadas</string>
@@ -167,9 +178,11 @@
     <string name="login_ingresar">Ingresar</string>
     <string name="login_lbl_ingresar">Cuenta Ikiam</string>
     <string name="login_logout">Salir</string>
+
     <string name="busqueda_nombre_cientifico">Nombre científico</string>
     <string name="busqueda_color">Color</string>
     <string name="busqueda_nombre_comun">Nombre común</string>
+
     <string name="ruta_lbl_distancia">Distancia recorrida:</string>
     <string name="ruta_lbl_altura">Altura:</string>
     <string name="ruta_lbl_fotos">Fotos:</string>
@@ -177,9 +190,12 @@
     <string name="ruta_ver_mapa">Ver en el mapa</string>
     <string name="ruta_subir">Compartir</string>
     <string name="ruta_datos_guardados">Datos actualizados</string>
+    <string name="ruta_compartir">Compartir en Facebook</string>
     <string name="ruta_error_datos">Ingrese una descripción</string>
+
     <string name="uploader_no_login">Por favor crea una cuenta Ikiam o ingresa con tu cuenta de Facebook, desde la opción de menú: Login.</string>
 
+    <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
     <string name="especie_info_altura">Altitud</string>
     <string name="especie_info_altura_min">Altitud mínima</string>
     <string name="especie_info_altura_max">Altitud máxima</string>
@@ -196,20 +212,11 @@
         <item quantity="one">Foto</item>
         <item quantity="other">Fotos</item>
     </plurals>
-    <string name="ruta_compartir">Compartir en Facebook</string>
-    <string name="map_subirFotoMarker">Clic en el ping para subir una foto en esta posición</string>
-    <string name="map_ubicar_foto_marker">Clic en el ping para ubicar la foto aquí</string>
-    <string name="map_foto_ubicada">Foto ubicada correctamente</string>
-
 
     <!--Strings para compartir la ruta de facebook-->
     <string name="share_name">Ikiam</string>
     <string name="share_caption">Descubre la biodiversidad ecuatoriana</string>
     <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
-    <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
-    <string name="map_camara">Cámara</string>
-    <string name="map_especies">Especies</string>
-    <string name="map_limpiar">Limpiar</string>
 
     <string name="achievement_titulo">Has desbloqueado un logro!</string>
     <plurals name="achievement_foto">

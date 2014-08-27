@@ -52,4 +52,6 @@
     <item name="busqueda_buscar_btn" type="id">busqueda_buscar_btn</item>
     <item name="ruta_frame_fecha" type="id">Fecha:</item>
     <item name="settings_btn_estadisticas" type="id">settings_btn_estadisticas</item>
+    <item name="descarga_busqueda_divider_hor" type="id">descarga_busqueda_divider_hor</item>
+    <item name="descarga_busqueda_buscar_btn" type="id">descarga_busqueda_buscar_btn</item>
 </resources>

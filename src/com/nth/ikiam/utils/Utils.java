@@ -2,12 +2,15 @@ package com.nth.ikiam.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
@@ -18,6 +21,22 @@ import java.io.File;
  * Created by DELL on 30/07/2014.
  */
 public class Utils {
+
+    public static boolean isNetworkAvailable(Context context) {
+        // Get Connectivity Manager class object from Systems Service
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get Network Info from connectivity Manager
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        Toast.makeText(context, context.getString(R.string.global_error_no_connection), Toast.LENGTH_LONG).show();
+        return false;
+    }
 
     public static String getFolder(Context context) {
         String pathFolder;

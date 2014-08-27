@@ -6,13 +6,143 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/descarga_busqueda_info"
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:textStyle="bold"
+        android:text="@string/descarga_busqueda_info"
+        android:textAppearance="?android:attr/textAppearanceMedium"
 
+        android:layout_marginBottom="15dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@id/captura_nombre_comun_label"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/captura_nombre_comun_label"
+        android:textStyle="bold|italic"
+
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/descarga_busqueda_info"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:id="@+id/descarga_busqueda_nombre_comun"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoText="true"
+        android:hint="@string/captura_nombre_comun_label"
+
+        android:layout_below="@id/descarga_busqueda_info"
+        android:layout_toRightOf="@id/captura_nombre_comun_label" />
+
+    <TextView
+        android:id="@id/captura_nombre_familia_label"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/captura_nombre_familia_label"
+        android:textStyle="bold|italic"
+
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/captura_nombre_comun_label"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:id="@+id/descarga_busqueda_nombre_familia"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoText="true"
+        android:hint="@string/captura_nombre_familia_label"
+
+        android:layout_below="@id/descarga_busqueda_nombre_comun"
+        android:layout_toRightOf="@id/captura_nombre_familia_label" />
+
+    <TextView
+        android:id="@id/captura_nombre_genero_label"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/captura_nombre_genero_label"
+        android:textStyle="bold|italic"
+
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/captura_nombre_familia_label"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:id="@+id/descarga_busqueda_nombre_genero"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoText="true"
+        android:hint="@string/captura_nombre_genero_label"
+
+        android:layout_below="@id/descarga_busqueda_nombre_familia"
+        android:layout_toRightOf="@id/captura_nombre_genero_label" />
+
+    <TextView
+        android:id="@id/captura_nombre_especie_label"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/captura_nombre_especie_label"
+        android:textStyle="bold|italic"
+
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/captura_nombre_genero_label"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:id="@+id/descarga_busqueda_nombre_especie"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoText="true"
+        android:hint="@string/captura_nombre_especie_label"
+
+        android:layout_below="@id/descarga_busqueda_nombre_genero"
+        android:layout_toRightOf="@id/captura_nombre_especie_label" />
+
+    <RelativeLayout
+        android:id="@+id/descarga_busqueda_btn_container"
+
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:id="@id/descarga_busqueda_divider_hor"
+
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip"
+            android:background="?android:attr/dividerVertical"
+            android:layout_alignParentTop="true" />
+
+        <ImageButton
+            android:id="@id/descarga_busqueda_buscar_btn"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:text="@string/global_upload"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_action_search"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
 </RelativeLayout>

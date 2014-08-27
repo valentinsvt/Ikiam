@@ -101,14 +101,9 @@ public class LoginUploader implements Runnable {
                     context.esCientifico = parts[4];
                     context.setType("ikiam");
                 }
-
             }
-
-
             dos.flush();
             dos.close();
-
-
         } catch (Exception e) {
             System.out.println("error login " + e);
             for (StackTraceElement ste : e.getStackTrace()) {
