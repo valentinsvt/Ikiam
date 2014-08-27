@@ -19,11 +19,11 @@ import java.util.List;
 /**
  * Created by DELL on 03/08/2014.
  */
-public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
+public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<String> {
     private final Context context;
-    private final List<Especie> especies;
+    private final List<String> especies;
 
-    public BusquedaDownloadResultsEspeciesListAdapter(Context context, List<Especie> especies) {
+    public BusquedaDownloadResultsEspeciesListAdapter(Context context, List<String> especies) {
         super(context, R.layout.busqueda_download_results_row, especies);
         this.context = context;
         this.especies = especies;
@@ -32,34 +32,26 @@ public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<Esp
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Especie especie = especies.get(position);
-        Genero genero = especie.getGenero(context);
-        String nombreComun = especie.nombreComun;
-        String nombreCientifico = genero.nombre + " " + especie.nombre.toLowerCase();
+        String especie = especies.get(position);
+        String[] datos = especie.split(";");
 
-        List<Foto> fotos = Foto.findAllByEspecie(context, especie);
-        Foto foto = fotos.get(0);
-        File imgFile = new File(foto.path);
-
-
-        int cantFotos = Foto.countByEspecie(context, especie);
-        String labelNombreCientifico = genero.nombre + " " + especie.nombre;
-        String labelNombreComun = especie.nombreComun;
-        String labelCantFotos = "" + cantFotos;
+        String nombreComun = datos[0];
+        String nombreFamilia = datos[1];
+        String nombreGenero = datos[2];
+        String nombreEspecie = datos[3];
+        String color1 = datos[4];
+        String color2 = "";
+        if (datos.length == 6) {
+            color2 = datos[5];
+        }
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.busqueda_results_row, null);
+            convertView = infalInflater.inflate(R.layout.busqueda_download_results_row, null);
         }
         TextView itemNombreCientifico = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_cientifico);
         TextView itemNombreComun = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_nombre_comun);
-        TextView itemCantFotos = (TextView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_cant_fotos);
-        ImageView itemFoto = (ImageView) convertView.findViewById(R.id.encyclopedia_group_item_nivel_3_image);
 
-        itemNombreCientifico.setText(labelNombreCientifico);
-        itemNombreComun.setText(labelNombreComun);
-        itemCantFotos.setText(labelCantFotos);
-        itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 100, 100, true));
         return convertView;
         /* **********************************************/
 
