@@ -77,7 +77,7 @@ public class DescargaBusquedaFragment extends Fragment implements View.OnClickLi
                     progressDialog.show();
 
                     ExecutorService queue = Executors.newSingleThreadExecutor();
-                    queue.execute(new BusquedaDownloader(context, queue, 0, nombreComun, nombreFamilia, nombreGenero, nombreEspecie));
+                  //  queue.execute(new BusquedaDownloader(context, queue, 0, nombreComun, nombreFamilia, nombreGenero, nombreEspecie));
                 }
 
 

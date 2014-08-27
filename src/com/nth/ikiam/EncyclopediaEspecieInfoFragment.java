@@ -9,10 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
@@ -102,12 +99,13 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         //(ImageView) view.findViewById(R.id.especie_info_imagen);
         //im.setVisibility(View.VISIBLE);
 
-        imageViews = new ImageView[3];
+        imageViews = new ImageView[6];
         imageViews[0] = (ImageView) view.findViewById(R.id.especie_info_foto1);
         imageViews[1] = (ImageView) view.findViewById(R.id.especie_info_foto2);
         imageViews[2] = (ImageView) view.findViewById(R.id.especie_info_foto3);
-//        imageViews[3] = (ImageView) view.findViewById(R.id.especie_info_foto4);
-//        imageViews[4] = (ImageView) view.findViewById(R.id.especie_info_foto5);
+        imageViews[3] = (ImageView) view.findViewById(R.id.especie_info_foto4);
+        imageViews[4] = (ImageView) view.findViewById(R.id.especie_info_foto5);
+        imageViews[5] = (ImageView) view.findViewById(R.id.especie_info_foto6);
 
 //        int cantFotos = fotos.size();
         int cantFotos = entries.size();
@@ -163,7 +161,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                                 if (currentWidth == 0) {
                                     idPrev = 0;
                                 }
-                                Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 150, 150);
+                                Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100, true);
                                 int w = myBitmap.getWidth();
                                 int h = myBitmap.getHeight();
 //                                if (h > w) {
@@ -172,7 +170,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                                 curIV.setImageBitmap(myBitmap);
                                 curIV.setVisibility(View.VISIBLE);
                                 curIV.setOnClickListener(this);
-                                currentWidth += (w + 30);
+                               /* currentWidth += (w + 30);
                                 RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) curIV.getLayoutParams();
                                 if (idPrev > 0) {
                                     p.addRule(RelativeLayout.RIGHT_OF, idPrev);
@@ -190,7 +188,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                                     highest = h;
                                     idHighest = curIV.getId();
                                 }
+                                 */
                             }
+
                             coord = f.getCoordenada(context);
                             if (coord != null && coord.altitud > 0) {
                                 if (coord.altitud < altMin) {
@@ -273,7 +273,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
             }
             final AlertDialog d = builder.create();
             final ImageView img = (ImageView) v.findViewById(R.id.especie_info_dialog_image);
-            final TextView txt = (TextView) v.findViewById(R.id.especie_info_dialog_comentarios);
+            final EditText txt = (EditText) v.findViewById(R.id.especie_info_dialog_comentarios);
             setFoto(img, txt);
             d.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
@@ -282,6 +282,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                     cerrar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Entry entry = entries.get(fotoPos);
+                            entry.comentarios=txt.getText().toString().trim();
+                            entry.save();
                             d.dismiss();
                         }
                     });
@@ -289,6 +292,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                     anterior.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Entry entry = entries.get(fotoPos);
+                            entry.comentarios=txt.getText().toString().trim();
+                            entry.save();
                             if (fotoPos > 0) {
                                 fotoPos -= 1;
                             } else {
@@ -302,6 +308,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                     siguiente.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Entry entry = entries.get(fotoPos);
+                            entry.comentarios=txt.getText().toString().trim();
+                            entry.save();
                             if (fotoPos < entries.size() - 1) {
                                 fotoPos += 1;
                             } else {
@@ -317,7 +326,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         }
     }
 
-    private void setFoto(ImageView img, TextView txt) {
+    private void setFoto(ImageView img, EditText txt) {
 //        System.out.println("SET FOTO " + fotoPos);
         Entry entry = entries.get(fotoPos);
         List<Foto> fotos = Foto.findAllByEntry(context, entry);
@@ -335,6 +344,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                 txt.setVisibility(View.GONE);
             } else {
                 txt.setText(comentarios);
+                txt.setSelection(txt.getText().length());
                 txt.setVisibility(View.VISIBLE);
             }
 //        dialogTitle = R.string.encyclopedia_entries_dialog_title + " (" + (fotoPos + 1) + "/" + fotos.size() + ")";
