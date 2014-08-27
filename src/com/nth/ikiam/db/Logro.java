@@ -82,4 +82,9 @@ public class Logro {
         LogroDbHelper e = new LogroDbHelper(context);
         return e.countLogrosCompletos();
     }
+
+    public static int count(Context context) {
+        LogroDbHelper e = new LogroDbHelper(context);
+        return e.countLogros();
+    }
 }

@@ -466,7 +466,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             }
         }
         if (v.getId() == botones[5].getId()) {
-           map.clear();
+            map.clear();
         }
 
 
@@ -786,7 +786,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         fotoSinCoords.setCoordenada(coord);
         fotoSinCoords.save();
         Toast.makeText(this, getString(R.string.map_foto_ubicada), Toast.LENGTH_LONG).show();
-        if(markerSubir.isInfoWindowShown())
+        if (markerSubir.isInfoWindowShown())
             markerSubir.hideInfoWindow();
         markerSubir.remove();
         markerSubir = null;
@@ -1228,22 +1228,22 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         request.executeAsync();
     }
 
-    public void mostrarEspecie(Especie especie){
+    public void mostrarEspecie(Especie especie) {
         map.clear();
-        List<Entry> entry = Entry.findAllByEspecie(this,especie);
+        List<Entry> entry = Entry.findAllByEspecie(this, especie);
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         int padding = (100);
         PolygonOptions poly = new PolygonOptions();
-        int fillColor = Color.argb(150,68,134,246);
+        int fillColor = Color.argb(150, 68, 134, 246);
         poly.strokeColor(fillColor);
         poly.fillColor(fillColor);
 
         List<LatLng> puntos = new ArrayList<LatLng>();
-        List<LatLng> puntosfinal  = new ArrayList<LatLng>();
-        for(int i = 0;i<entry.size();i++){
+        List<LatLng> puntosfinal = new ArrayList<LatLng>();
+        for (int i = 0; i < entry.size(); i++) {
             Entry current = entry.get(i);
-            List<Foto> fotos = Foto.findAllByEntry(activity,current);
-            for(int j=0;j<fotos.size();j++){
+            List<Foto> fotos = Foto.findAllByEntry(activity, current);
+            for (int j = 0; j < fotos.size(); j++) {
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
                 Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
                 Canvas canvas1 = new Canvas(bmp);
@@ -1260,7 +1260,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 builder.include(location);
                 Marker marker = map.addMarker(new MarkerOptions().position(location)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .anchor(0.5f, 1).title(getString(R.string.map_activity_captura)+" "+fotos.get(j).fecha));
+                        .anchor(0.5f, 1).title(getString(R.string.map_activity_captura) + " " + fotos.get(j).fecha));
                 // Marker marker = map.addMarker(new MarkerOptions().position(location)
                 //       .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                 //     .anchor(0.5f, 1).title(" "+location.latitude+" , "+location.longitude));
@@ -1268,49 +1268,49 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 data.put(marker, fotos.get(j));
             }
         }
-        if(puntos.size()>2){
-            LatLng masAlto=null;
-            LatLng masBajo=null;
-            LatLng masDer=null ;
-            LatLng masIzq=null;
-            double maxX=0;
-            double minX=0;
-            double minY=0;
-            double maxY=0;
-            for(int i = 0;i<puntos.size();i++){
+        if (puntos.size() > 2) {
+            LatLng masAlto = null;
+            LatLng masBajo = null;
+            LatLng masDer = null;
+            LatLng masIzq = null;
+            double maxX = 0;
+            double minX = 0;
+            double minY = 0;
+            double maxY = 0;
+            for (int i = 0; i < puntos.size(); i++) {
                 double x1 = (puntos.get(i).longitude + 180) * 360;
-                double y1  = (puntos.get(i).latitude + 90) * 180;
-                if(minX==0){
-                    minX=x1;
-                    masIzq=puntos.get(i);
-                }
-                if(minY==0){
-                    minY=y1;
-                    masBajo=puntos.get(i);
-                }
-                if(maxX==0){
-                    maxX=x1;
-                    masDer=puntos.get(i);
-                }
-                if(maxY==0){
-                    maxY=y1;
-                    masAlto=puntos.get(i);
-                }
-                if(x1>maxX) {
-                    maxX = x1;
-                    masDer=puntos.get(i);
-                }
-                if(y1>maxY) {
-                    maxY = y1;
-                    masAlto=puntos.get(i);
-                }
-                if(x1<minX) {
+                double y1 = (puntos.get(i).latitude + 90) * 180;
+                if (minX == 0) {
                     minX = x1;
-                    masIzq=puntos.get(i);
+                    masIzq = puntos.get(i);
                 }
-                if(y1<minY) {
-                    minY =y1 ;
-                    masBajo=puntos.get(i);
+                if (minY == 0) {
+                    minY = y1;
+                    masBajo = puntos.get(i);
+                }
+                if (maxX == 0) {
+                    maxX = x1;
+                    masDer = puntos.get(i);
+                }
+                if (maxY == 0) {
+                    maxY = y1;
+                    masAlto = puntos.get(i);
+                }
+                if (x1 > maxX) {
+                    maxX = x1;
+                    masDer = puntos.get(i);
+                }
+                if (y1 > maxY) {
+                    maxY = y1;
+                    masAlto = puntos.get(i);
+                }
+                if (x1 < minX) {
+                    minX = x1;
+                    masIzq = puntos.get(i);
+                }
+                if (y1 < minY) {
+                    minY = y1;
+                    masBajo = puntos.get(i);
                 }
 
             }
@@ -1323,101 +1323,101 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             puntosfinal.add(masIzq);
             puntosfinal.add(masBajo);
             puntosfinal.add(masDer);
-            double maxDis = distancia(masAlto,masBajo);
+            double maxDis = distancia(masAlto, masBajo);
 
-            for(int i = 0;i<puntosfinal.size()-1;i++) {
+            for (int i = 0; i < puntosfinal.size() - 1; i++) {
                 LatLng current = puntosfinal.get(i);
                 poly.add(current);
                 LatLng next = puntosfinal.get(i + 1);
                 double x1 = (current.longitude + 180) * 360;
-                double y1  = (current.latitude + 90) * 180;
+                double y1 = (current.latitude + 90) * 180;
                 double x2 = (next.longitude + 180) * 360;
-                double y2  = (next.latitude + 90) * 180;
+                double y2 = (next.latitude + 90) * 180;
                 LatLng nuevo = null;
-                double nuevoX=0;
-                switch (i){
+                double nuevoX = 0;
+                switch (i) {
                     case 0:
                         nuevo = null;
-                        nuevoX=0;
+                        nuevoX = 0;
                         // System.out.println("current "+current.latitude+" ; "+current.longitude+"  --->  "+x1+" ; "+y1);
                         //System.out.println("next "+next.latitude+" ; "+next.longitude+"  --->  "+x2+" ; "+y2);
-                        for (int j =0;j<puntos.size();j++){
-                            if(puntos.get(j)!=masIzq){
+                        for (int j = 0; j < puntos.size(); j++) {
+                            if (puntos.get(j) != masIzq) {
                                 double x3 = (puntos.get(j).longitude + 180) * 360;
-                                double y3  = (puntos.get(j).latitude + 90) * 180;
+                                double y3 = (puntos.get(j).latitude + 90) * 180;
                                 // System.out.println("ietracion "+puntos.get(j).latitude+" ; "+puntos.get(j).longitude+"  --->  "+x3+" ; "+y3);
-                                if(x3<x1 && y2<y3){
+                                if (x3 < x1 && y2 < y3) {
                                     //System.out.println("paso es mas!");
-                                    if(nuevo==null) {
+                                    if (nuevo == null) {
                                         nuevo = puntos.get(j);
-                                        nuevoX=x3;
-                                    }else{
-                                        if(x3<nuevoX){
+                                        nuevoX = x3;
+                                    } else {
+                                        if (x3 < nuevoX) {
                                             nuevo = puntos.get(j);
-                                            nuevoX=x3;
+                                            nuevoX = x3;
                                         }
                                     }
                                 }
                             }
 
                         }
-                        if(nuevo!=null)
+                        if (nuevo != null)
                             poly.add(nuevo);
                         break;
                     case 1:
                         nuevo = null;
-                        nuevoX=0;
+                        nuevoX = 0;
                         // System.out.println("current "+current.latitude+" ; "+current.longitude+"  --->  "+x1+" ; "+y1);
                         //System.out.println("next "+next.latitude+" ; "+next.longitude+"  --->  "+x2+" ; "+y2);
-                        for (int j =0;j<puntos.size();j++){
-                            if(puntos.get(j)!=masBajo){
+                        for (int j = 0; j < puntos.size(); j++) {
+                            if (puntos.get(j) != masBajo) {
                                 double x3 = (puntos.get(j).longitude + 180) * 360;
-                                double y3  = (puntos.get(j).latitude + 90) * 180;
+                                double y3 = (puntos.get(j).latitude + 90) * 180;
                                 // System.out.println("ietracion "+puntos.get(j).latitude+" ; "+puntos.get(j).longitude+"  --->  "+x3+" ; "+y3);
-                                if(x3<x2 && y3>y2){
+                                if (x3 < x2 && y3 > y2) {
                                     //System.out.println("paso es mas!");
-                                    if(nuevo==null) {
+                                    if (nuevo == null) {
                                         nuevo = puntos.get(j);
-                                        nuevoX=x3;
-                                    }else{
-                                        if(x3<nuevoX){
+                                        nuevoX = x3;
+                                    } else {
+                                        if (x3 < nuevoX) {
                                             nuevo = puntos.get(j);
-                                            nuevoX=x3;
+                                            nuevoX = x3;
                                         }
                                     }
                                 }
                             }
 
                         }
-                        if(nuevo!=null)
+                        if (nuevo != null)
                             poly.add(nuevo);
                         break;
                     case 2:
                         nuevo = null;
-                        nuevoX=0;
+                        nuevoX = 0;
                         // System.out.println("current "+current.latitude+" ; "+current.longitude+"  --->  "+x1+" ; "+y1);
                         //System.out.println("next "+next.latitude+" ; "+next.longitude+"  --->  "+x2+" ; "+y2);
-                        for (int j =0;j<puntos.size();j++){
-                            if(puntos.get(j)!=masAlto){
+                        for (int j = 0; j < puntos.size(); j++) {
+                            if (puntos.get(j) != masAlto) {
                                 double x3 = (puntos.get(j).longitude + 180) * 360;
-                                double y3  = (puntos.get(j).latitude + 90) * 180;
+                                double y3 = (puntos.get(j).latitude + 90) * 180;
                                 // System.out.println("ietracion "+puntos.get(j).latitude+" ; "+puntos.get(j).longitude+"  --->  "+x3+" ; "+y3);
-                                if(x3>x1 && y3>y1){
+                                if (x3 > x1 && y3 > y1) {
                                     //System.out.println("paso es mas!");
-                                    if(nuevo==null) {
+                                    if (nuevo == null) {
                                         nuevo = puntos.get(j);
-                                        nuevoX=x3;
-                                    }else{
-                                        if(x3>nuevoX){
+                                        nuevoX = x3;
+                                    } else {
+                                        if (x3 > nuevoX) {
                                             nuevo = puntos.get(j);
-                                            nuevoX=x3;
+                                            nuevoX = x3;
                                         }
                                     }
                                 }
                             }
 
                         }
-                        if(nuevo!=null)
+                        if (nuevo != null)
                             poly.add(nuevo);
                         break;
                 }
@@ -1431,57 +1431,86 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         map.animateCamera(cu);
         showMap();
-        setTitle(getString(R.string.captura_nombre_especie_label)+": "+especie.nombre);
+        setTitle(getString(R.string.captura_nombre_especie_label) + ": " + especie.nombre);
 
     }
 
-    public double  pendiente(LatLng p1,LatLng p2){
+    public double pendiente(LatLng p1, LatLng p2) {
         double x1 = (p1.longitude + 180) * 360;
-        double y1  = (p1.latitude + 90) * 180;
+        double y1 = (p1.latitude + 90) * 180;
         double x2 = (p2.longitude + 180) * 360;
-        double y2  = (p2.latitude + 90) * 180;
+        double y2 = (p2.latitude + 90) * 180;
         double dX = x2 - x1;
         double dY = y2 - y1;
         return dY / dX;
     }
-    public double  distancia(LatLng p1,LatLng p2){
+
+    public double distancia(LatLng p1, LatLng p2) {
         double x1 = (p1.longitude + 180) * 360;
-        double y1  = (p1.latitude + 90) * 180;
+        double y1 = (p1.latitude + 90) * 180;
         double x2 = (p2.longitude + 180) * 360;
-        double y2  = (p2.latitude + 90) * 180;
+        double y2 = (p2.latitude + 90) * 180;
         double dX = x2 - x1;
         double dY = y2 - y1;
-        return Math.sqrt((dX*dX) + (dY*dY));
+        return Math.sqrt((dX * dX) + (dY * dY));
     }
 
-    public int  pointSort(LatLng p1, LatLng p2,LatLng upper) {
+    public int pointSort(LatLng p1, LatLng p2, LatLng upper) {
         // Exclude the 'upper' point from the sort (which should come first).
-        if(p1 == upper) return -1;
-        if(p2 == upper) return 1;
+        if (p1 == upper) return -1;
+        if (p2 == upper) return 1;
 
         // Find the slopes of 'p1' and 'p2' when a line is
         // drawn from those points through the 'upper' point.
-        double m1 = pendiente(p1,upper);
-        double m2 = pendiente(p2,upper);
+        double m1 = pendiente(p1, upper);
+        double m2 = pendiente(p2, upper);
 
         // 'p1' and 'p2' are on the same line towards 'upper'.
-        if(m1 == m2) {
+        if (m1 == m2) {
             // The point closest to 'upper' will come first.
 //            return p1.distance(upper) < p2.distance(upper) ? -1 : 1;
-            return  (distancia(p1,upper) < distancia(p2,upper))?-1:1;
+            return (distancia(p1, upper) < distancia(p2, upper)) ? -1 : 1;
         }
 
         // If 'p1' is to the right of 'upper' and 'p2' is the the left.
-        if(m1 <= 0 && m2 > 0) return -1;
+        if (m1 <= 0 && m2 > 0) return -1;
 
         // If 'p1' is to the left of 'upper' and 'p2' is the the right.
-        if(m1 > 0 && m2 <= 0) return 1;
+        if (m1 > 0 && m2 <= 0) return 1;
 
         // It seems that both slopes are either positive, or negative.
         return m1 > m2 ? -1 : 1;
     }
 
-    public float updateAchivement( int tipo) {
+    public void setAchivement(int tipo, float valor) {
+        String nombre = "";
+        SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
+
+        switch (tipo) {
+            case ACHIEV_FOTOS:
+                nombre = "fotos";
+                break;
+            case ACHIEV_DISTANCIA:
+                nombre = "distancia";
+                break;
+            case ACHIEV_UPLOADS:
+                nombre = "uploads";
+                break;
+            case ACHIEV_SHARE:
+                nombre = "shares";
+                break;
+
+        }
+        SharedPreferences.Editor editor = settings.edit();
+        if (!nombre.equals("distancia")) {
+            editor.putInt(nombre, (int) valor);
+        } else {
+            editor.putFloat(nombre, valor);
+        }
+        editor.commit();
+    }
+
+    public float updateAchivement(int tipo) {
         float res = 0;
         String nombre = "";
         SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
@@ -1508,7 +1537,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 res = res + 1;
                 break;
             default:
-                res=0;
+                res = 0;
 
         }
         SharedPreferences.Editor editor = settings.edit();
@@ -1518,19 +1547,19 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             editor.putFloat(nombre, res);
         }
         editor.commit();
-        checkAchiev(tipo,res);
+        checkAchiev(tipo, res);
         return res;
-
     }
 
     public void checkAchiev(int tipo, float cant) {
         SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);
-        if(settings.getInt("logros", 0) == 1) {
+        if (settings.getInt("logros", 0) == 1) {
             ExecutorService queue = Executors.newSingleThreadExecutor();
             queue.execute(new AchievementChecker(this, tipo, cant));
         }
     }
-    public float getAchievement(int tipo){
+
+    public float getAchievement(int tipo) {
         float res = 0;
         String nombre = "";
         SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, 0);

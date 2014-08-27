@@ -49,10 +49,22 @@
                 android:checked="false" />
 
             <Button
+                android:id="@id/settings_btn_estadisticas"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_show_estadisticas"
+                android:background="@drawable/button_black"
+                style="@style/ButtonText"
+
+                android:layout_marginTop="15dp" />
+
+            <Button
+                android:id="@id/settings_btn_reset_achievements"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_reset_achievements"
-                android:id="@id/settings_btn_reset_achievements"
                 android:background="@drawable/button_black"
                 style="@style/ButtonText"
 

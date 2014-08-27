@@ -138,7 +138,18 @@
     <string name="settings_btn_upload">Subir %1$d fotos</string>
     <string name="settings_btn_download">Descargar info</string>
     <string name="settings_chk_achevements">Contabilizar logros</string>
-    <string name="settings_reset_achievements">Reiniciar contadores de logros</string>
+    <string name="settings_reset_achievements">Reiniciar estadísticas</string>
+    <string name="settings_show_estadisticas">Ver estadísticas</string>
+    <string name="settings_estadisticas">Estadísticas</string>
+    <string name="settings_descargar">Descargar</string>
+
+    <string name="estadisticas_reset_confirmacion">Está seguro de querer reiniciar a 0 todas las estadísticas guardadas?</string>
+    <string name="estadisticas_reset_ok">Estadísticas reiniciadas</string>
+
+    <string name="estadisticas_fotos_tomadas_lbl">Fotos tomadas</string>
+    <string name="estadisticas_fotos_subidas_lbl">Fotos subidas</string>
+    <string name="estadisticas_fotos_compartidas_lbl">Fotos compartidas</string>
+    <string name="estadisticas_distancia_recorrida_lbl">Distancia recorrida</string>
 
     <string name="uploader_upload_error">Ha ocurrido un error, por favor intente más tarde</string>
     <string name="uploader_upload_success">Foto guardada exitosamente</string>

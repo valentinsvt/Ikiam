@@ -30,7 +30,7 @@ public class LogrosChecker implements Runnable {
 
     @Override
     public void run() {
-        if (Logro.countCompletos(activity) == 0) {
+        if (Logro.count(activity) == 0) {
             Double cantidades[] = {1d, 5d, 10d, 50d, 100d};
             for (Double cantidad : cantidades) {
                 Logro logro = new Logro(activity);

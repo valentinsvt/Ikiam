@@ -123,6 +123,18 @@ public class LogroDbHelper extends DbHelper {
         return cant;
     }
 
+    public int countLogros() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  count(*) count FROM " + TABLE_LOGRO;
+        Cursor c = db.rawQuery(selectQuery, null);
+        int cant = 0;
+        if (c.moveToFirst()) {
+            cant = c.getInt(c.getColumnIndex("count"));
+        }
+        db.close();
+        return cant;
+    }
+
     public List<Logro> getLogroByCodigo(String logro) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Logro> logroes = new ArrayList<Logro>();
