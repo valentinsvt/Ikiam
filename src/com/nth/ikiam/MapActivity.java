@@ -280,13 +280,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         atracciones = new HashMap<Marker, AtraccionUi>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
 
-        botones = new Button[6];
+        botones = new Button[7];
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
         botones[3] = (Button) this.findViewById(R.id.btnEspecies);
         botones[4] = (Button) this.findViewById(R.id.btnCamara);
         botones[5] = (Button) this.findViewById(R.id.btnLimpiar);
+        botones[6] = (Button) this.findViewById(R.id.btnTools);
         if (type.equals("Ikiam")) {
             if (esCientifico.equals("S"))
                 botones[2].setVisibility(View.GONE);
@@ -489,6 +490,17 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         if (v.getId() == botones[5].getId()) {
             map.clear();
         }
+        if (v.getId() == botones[6].getId()) {
+            Fragment fragment = new ToolsFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+            mainLayout.setVisibility(LinearLayout.GONE);
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack("")
+                    .commit();
+        }
 
 
     }
@@ -652,7 +664,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     private void setUpMap() {
         //locationClient.getLastLocation();
         location = new LatLng(-1.6477220517969353, -78.46435546875);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 6);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
