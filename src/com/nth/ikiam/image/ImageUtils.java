@@ -189,7 +189,7 @@ public class ImageUtils {
         Bitmap photo = Bitmap.createScaledBitmap(bitmap, newW, newH, false);
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
-
+        System.out.println("size : "+photo.getHeight()+"  "+photo.getWidth());
         return photo;
 //        } catch (Exception e) {
 //            e.printStackTrace();

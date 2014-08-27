@@ -251,7 +251,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     public void onClick(View view) {
         Utils.hideSoftKeyboard(this.getActivity());
         if (view.getId() == btnMap.getId()) {
-            System.out.println("Mostrar mapa de la especie: " + especie.nombre);
+            //System.out.println("Mostrar mapa de la especie: " + especie.nombre);
             context.mostrarEspecie(especie);
         } else {
             int i;

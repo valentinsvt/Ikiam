@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.facebook.*;
-import com.facebook.android.Util;
 import com.facebook.model.GraphUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -260,12 +259,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         atracciones = new HashMap<Marker, AtraccionUi>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
 
-        botones = new Button[5];
+        botones = new Button[6];
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
         botones[3] = (Button) this.findViewById(R.id.btnEspecies);
         botones[4] = (Button) this.findViewById(R.id.btnCamara);
+        botones[5] = (Button) this.findViewById(R.id.btnLimpiar);
         if (type.equals("Ikiam")) {
             if (esCientifico.equals("S"))
                 botones[2].setVisibility(View.GONE);
@@ -464,6 +464,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             if (takePictureIntent.resolveActivity(this.getPackageManager()) != null) {
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST);
             }
+        }
+        if (v.getId() == botones[5].getId()) {
+           map.clear();
         }
 
 
@@ -1311,18 +1314,16 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
 
             }
-            System.out.println("mas alto "+masAlto.latitude+" , "+masDer.longitude);
-            System.out.println("mas izq "+masIzq.latitude+" , "+masIzq.longitude);
-            System.out.println("mas bajo "+masBajo.latitude+" , "+masDer.longitude);
-            System.out.println("mas der "+masDer.latitude+" , "+masDer.longitude);
+            // System.out.println("mas alto "+masAlto.latitude+" , "+masDer.longitude);
+            // System.out.println("mas izq "+masIzq.latitude+" , "+masIzq.longitude);
+            // System.out.println("mas bajo "+masBajo.latitude+" , "+masDer.longitude);
+            // System.out.println("mas der "+masDer.latitude+" , "+masDer.longitude);
 
             puntosfinal.add(masAlto);
             puntosfinal.add(masIzq);
             puntosfinal.add(masBajo);
             puntosfinal.add(masDer);
             double maxDis = distancia(masAlto,masBajo);
-            System.out.println("despues ----------- ");
-
 
             for(int i = 0;i<puntosfinal.size()-1;i++) {
                 LatLng current = puntosfinal.get(i);

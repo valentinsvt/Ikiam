@@ -198,6 +198,7 @@
     <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
     <string name="map_camara">Cámara</string>
     <string name="map_especies">Especies</string>
+    <string name="map_limpiar">Limpiar</string>
 
     <string name="achievement_titulo">Has desbloqueado un logro!</string>
     <plurals name="achievement_foto">
