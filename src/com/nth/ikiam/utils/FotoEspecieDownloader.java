@@ -96,6 +96,7 @@ public class FotoEspecieDownloader implements Runnable {
                     Entry nuevoEntry = new Entry(context);
                     nuevoEntry.setEspecie(especie);
                     nuevoEntry.uploaded = 1;
+                    nuevoEntry.comentarios = "";
                     nuevoEntry.save();
 
                     Foto nuevaFoto = new Foto(context);

@@ -342,7 +342,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
             Foto foto = fotos.get(0);
 //            img.setImageBitmap(context.getFotoDialog(foto, context.screenWidth, 300));
             img.setImageBitmap(ImageUtils.decodeFile(foto.path, context.screenWidth, 300));
-            if (comentarios.equals("")) {
+            if (comentarios == null || comentarios.equals("")) {
                 txt.setVisibility(View.GONE);
             } else {
                 txt.setText(comentarios);
