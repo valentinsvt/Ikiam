@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.os.Bundle;
 import com.nth.ikiam.utils.Compass;
@@ -56,8 +59,9 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
 
         public void onProviderDisabled(String provider) {}
     };
-
-
+    private ImageView image;
+    private float currentDegree = 0f;
+    TextView tvHeading;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tools_layout, container, false);
@@ -67,7 +71,7 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100*30, 5, locationListener);
         Location location =  locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         activity = (MapActivity) getActivity();
-        myCompass = (Compass)view.findViewById(R.id.mycompass);
+        //myCompass = (Compass)view.findViewById(R.id.mycompass);
         latitud =(TextView) view.findViewById(R.id.lbl_valor_latitud);
         longitud =(TextView) view.findViewById(R.id.lbl_valor_longitud);
         altura =(TextView) view.findViewById(R.id.lbl_valor_altura);
@@ -76,8 +80,13 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
         altura.setText("" + location.getAltitude() + " m");
 
         sensorManager = (SensorManager)activity.getSystemService(activity.SENSOR_SERVICE);
-        sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        //sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //sensorMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        image = (ImageView) view.findViewById(R.id.imageViewCompass);
+
+        // TextView that will tell the user what degree is he heading
+        tvHeading = (TextView) view.findViewById(R.id.tvHeading);
+
 
         valuesAccelerometer = new float[3];
         valuesMagneticField = new float[3];
@@ -99,7 +108,7 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch(event.sensor.getType()){
+     /*   switch(event.sensor.getType()){
             case Sensor.TYPE_ACCELEROMETER:
                 for(int i =0; i < 3; i++){
                     valuesAccelerometer[i] = event.values[i];
@@ -130,7 +139,28 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
             //readingRoll.setText("Roll: " + String.valueOf(roll));
             myCompass.setPadding(10,10,10,10);
             myCompass.update(matrixValues[0]);
-        }
+        }*/
+        // get the angle around the z-axis rotated
+
+        float degree = Math.round(event.values[0]);
+        tvHeading.setText("Heading: " + Float.toString(degree) + " degrees");
+        // create a rotation animation (reverse turn degree degrees)
+        RotateAnimation ra = new RotateAnimation(
+                currentDegree,
+                        -degree,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+        0.5f);
+
+        // how long the animation will take place
+        ra.setDuration(210);
+        // set the animation after the end of the reservation status
+        ra.setFillAfter(true);
+        // Start the animation
+        image.startAnimation(ra);
+        currentDegree = -degree;
+
+
     }
 
     @Override
@@ -139,22 +169,28 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
     }
     @Override
     public void onResume() {
-        sensorManager.registerListener(this,
+        /*sensorManager.registerListener(this,
                 sensorAccelerometer,
                 SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this,
                 sensorMagneticField,
-                SensorManager.SENSOR_DELAY_NORMAL);
+                SensorManager.SENSOR_DELAY_NORMAL);*/
+
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+
         super.onResume();
 
     }
 
     @Override
     public void onPause() {
-        sensorManager.unregisterListener(this,
+        /*sensorManager.unregisterListener(this,
                 sensorAccelerometer);
         sensorManager.unregisterListener(this,
                 sensorMagneticField);
+                */
+        sensorManager.unregisterListener(this);
+
         super.onPause();
 
     }
