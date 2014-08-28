@@ -30,6 +30,7 @@ import com.nth.ikiam.db.Color;
 import com.nth.ikiam.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by DELL on 03/08/2014.
@@ -44,9 +45,7 @@ public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<Str
     String nombreGenero;
     String nombreEspecie;
     String idEspecie;
-    String idFoto1;
-    String idFoto2;
-    String idFoto3;
+
     String color1;
     String color2;
 
@@ -71,16 +70,9 @@ public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<Str
             color1 = URLDecoder.decode(datos[5].trim(), "UTF-8");
             color2 = "";
             if (datos.length >= 7) {
-                color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
-            }
-            if (datos.length >= 8) {
-                idFoto1 = datos[7];
-            }
-            if (datos.length >= 9) {
-                idFoto2 = datos[8];
-            }
-            if (datos.length >= 10) {
-                idFoto3 = datos[0];
+                if (!datos[6].equals("-")) {
+                    color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
+                }
             }
 
             nombreCientifico = nombreGenero + " " + nombreEspecie.toLowerCase();

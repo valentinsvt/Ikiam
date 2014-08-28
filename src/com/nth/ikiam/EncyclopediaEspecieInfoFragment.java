@@ -283,7 +283,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                         @Override
                         public void onClick(View view) {
                             Entry entry = entries.get(fotoPos);
-                            entry.comentarios=txt.getText().toString().trim();
+                            entry.comentarios = txt.getText().toString().trim();
                             entry.save();
                             d.dismiss();
                         }
@@ -293,7 +293,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                         @Override
                         public void onClick(View view) {
                             Entry entry = entries.get(fotoPos);
-                            entry.comentarios=txt.getText().toString().trim();
+                            entry.comentarios = txt.getText().toString().trim();
                             entry.save();
                             if (fotoPos > 0) {
                                 fotoPos -= 1;
@@ -309,7 +309,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
                         @Override
                         public void onClick(View view) {
                             Entry entry = entries.get(fotoPos);
-                            entry.comentarios=txt.getText().toString().trim();
+                            entry.comentarios = txt.getText().toString().trim();
                             entry.save();
                             if (fotoPos < entries.size() - 1) {
                                 fotoPos += 1;
@@ -335,7 +335,9 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
 //            while (comentarios.length() < 15000) {
 //                comentarios += " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ultricies luctus imperdiet. Pellentesque libero erat, laoreet ac magna sit amet, blandit vulputate nisl. Nam dignissim non velit eget cursus. Aenean dui metus, vehicula a leo quis, tincidunt gravida est. Fusce semper nec purus quis consectetur. Vestibulum risus felis, accumsan vitae nulla eu, fringilla vulputate lectus. Nam scelerisque magna vel sollicitudin molestie. Nulla venenatis ipsum sem, nec dignissim lacus vestibulum eget. ";
 //            }
-            comentarios = comentarios.trim();
+            if (comentarios != null) {
+                comentarios = comentarios.trim();
+            }
 
             Foto foto = fotos.get(0);
 //            img.setImageBitmap(context.getFotoDialog(foto, context.screenWidth, 300));

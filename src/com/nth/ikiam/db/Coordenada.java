@@ -39,7 +39,8 @@ public class Coordenada {
         this.coordenadaDbHelper = new CoordenadaDbHelper(context);
         this.context = context;
     }
-    public Coordenada(Context context, double latitud, double longitud , double altitud) {
+
+    public Coordenada(Context context, double latitud, double longitud, double altitud) {
         this.latitud = latitud;
         this.longitud = longitud;
         this.altitud = altitud;
@@ -139,6 +140,11 @@ public class Coordenada {
     public static List<Coordenada> findAllByRuta(Context context, Ruta ruta) {
         CoordenadaDbHelper e = new CoordenadaDbHelper(context);
         return e.getAllCoordenadasByRuta(ruta);
+    }
+
+    public static List<Coordenada> findAllByCoords(Context context, double lat, double lon, double alt) {
+        CoordenadaDbHelper e = new CoordenadaDbHelper(context);
+        return e.getAllCoordenadasByCoords(lat, lon, alt);
     }
 
     public static void empty(Context context) {

@@ -18,7 +18,7 @@ public class CoordenadaDbHelper extends DbHelper {
     public static final String KEY_ALTITUD = "altitud";
     public static final String KEY_RUTA = "ruta_id";
 
-    public static final String[] KEYS_COORDENADA = {KEY_LATITUD, KEY_LONGITUD, KEY_RUTA,KEY_ALTITUD};
+    public static final String[] KEYS_COORDENADA = {KEY_LATITUD, KEY_LONGITUD, KEY_RUTA, KEY_ALTITUD};
 
     public CoordenadaDbHelper(Context context) {
         super(context);
@@ -92,6 +92,31 @@ public class CoordenadaDbHelper extends DbHelper {
         List<Coordenada> coordenadas = new ArrayList<Coordenada>();
         String selectQuery = "SELECT  * FROM " + TABLE_COORDENADA +
                 " WHERE " + KEY_RUTA + " = " + ruta.id;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Coordenada cl = setDatos(c);
+
+                // adding to tags list
+                coordenadas.add(cl);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return coordenadas;
+    }
+
+    public List<Coordenada> getAllCoordenadasByCoords(double lat, double lon, double alt) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Coordenada> coordenadas = new ArrayList<Coordenada>();
+        String selectQuery = "SELECT  * FROM " + TABLE_COORDENADA +
+                " WHERE " + KEY_LATITUD + " = " + lat +
+                " AND " + KEY_LONGITUD + " = " + lon +
+                " AND " + KEY_ALTITUD + " = " + alt;
 
         logQuery(LOG, selectQuery);
 

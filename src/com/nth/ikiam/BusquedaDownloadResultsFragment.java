@@ -14,10 +14,14 @@ import android.widget.Toast;
 import com.nth.ikiam.adapters.BusquedaDownloadResultsEspeciesListAdapter;
 import com.nth.ikiam.adapters.BusquedaResultsEspeciesListAdapter;
 import com.nth.ikiam.db.*;
+import com.nth.ikiam.utils.FotoEspecieDownloader;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by DELL on 27/08/2014.
@@ -69,20 +73,30 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
                     String idEspecie = datos[4];
                     String color1 = URLDecoder.decode(datos[5].trim(), "UTF-8");
                     String color2 = "";
-                    String idFoto1 = "";
-                    String idFoto2 = "";
-                    String idFoto3 = "";
+                    Vector<String> fotosPaths = new Vector<String>();
+                    Vector<String> fotosLats = new Vector<String>();
+                    Vector<String> fotosLongs = new Vector<String>();
+                    Vector<String> fotosAlts = new Vector<String>();
                     if (datos.length >= 7) {
                         color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
                     }
                     if (datos.length >= 8) {
-                        idFoto1 = datos[7];
+                        fotosPaths.add(datos[7]);
+                        fotosLats.add(datos[8]);
+                        fotosLongs.add(datos[9]);
+                        fotosAlts.add(datos[10]);
                     }
-                    if (datos.length >= 9) {
-                        idFoto2 = datos[8];
+                    if (datos.length >= 12) {
+                        fotosPaths.add(datos[11]);
+                        fotosLats.add(datos[12]);
+                        fotosLongs.add(datos[13]);
+                        fotosAlts.add(datos[14]);
                     }
-                    if (datos.length >= 10) {
-                        idFoto3 = datos[0];
+                    if (datos.length >= 16) {
+                        fotosPaths.add(datos[15]);
+                        fotosLats.add(datos[16]);
+                        fotosLongs.add(datos[17]);
+                        fotosAlts.add(datos[18]);
                     }
 
                     Familia nuevaFamilia = Familia.getByNombreOrCreate(activity, nombreFamilia);
@@ -100,6 +114,9 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
                     especiesList.remove(positionToRemove);
                     adapter.notifyDataSetChanged();
+
+                    ExecutorService queue = Executors.newSingleThreadExecutor();
+                    queue.execute(new FotoEspecieDownloader(activity, queue, 0, fotosPaths, fotosLats, fotosLongs, fotosAlts, nuevaEspecie));
 
                     Toast.makeText(activity, getString(R.string.descarga_busqueda_download_ok), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
