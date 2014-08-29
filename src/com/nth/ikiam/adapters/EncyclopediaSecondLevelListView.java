@@ -23,7 +23,7 @@ public class EncyclopediaSecondLevelListView extends ExpandableListView {
         int h = 600;
         if(especies!=null){
             if(especies.size()>0)
-                h=especies.size()*220;
+                h=especies.size()*620;
         }
         widthMeasureSpec = MeasureSpec.makeMeasureSpec(960, MeasureSpec.AT_MOST);
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(h, MeasureSpec.AT_MOST);
