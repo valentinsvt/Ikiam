@@ -17,8 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Bundle;
-import com.nth.ikiam.utils.Compass;
+
 
 /**
  * Created by svt on 8/27/2014.
@@ -45,7 +44,7 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
     private float[] matrixValues;
 
     TextView readingAzimuth, readingPitch, readingRoll;
-    Compass myCompass;
+
     // Define a listener that responds to location updates
     LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
@@ -143,7 +142,7 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
         // get the angle around the z-axis rotated
 
         float degree = Math.round(event.values[0]);
-        tvHeading.setText("Heading: " + Float.toString(degree) + " degrees");
+        tvHeading.setText("Orientación: " + Float.toString(degree) + " grados");
         // create a rotation animation (reverse turn degree degrees)
         RotateAnimation ra = new RotateAnimation(
                 currentDegree,

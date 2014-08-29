@@ -7,15 +7,13 @@
 
     <TextView
         android:id="@+id/descarga_busqueda_info"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/descarga_busqueda_info"
         android:textAppearance="?android:attr/textAppearanceMedium"
-
         android:layout_marginBottom="15dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:id="@id/captura_nombre_comun_label"

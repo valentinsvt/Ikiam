@@ -49,6 +49,7 @@
         <item>Enciclopedia</item>
         <item>Galería</item>
         <item>Rutas</item>
+        <item>Ikiam Web</item>
         <item>Configuración</item>
         <item>Login</item>
     </string-array>
@@ -201,7 +202,7 @@
 
     <string name="uploader_no_login">Por favor crea una cuenta Ikiam o ingresa con tu cuenta de Facebook, desde la opción de menú: Login.</string>
 
-    <string name="encyclopedia_especie_info_ver_mapa">Ver en el mapa</string>
+    <string name="encyclopedia_especie_info_ver_mapa">Ver habitat</string>
     <string name="especie_info_altura">Altitud</string>
     <string name="especie_info_altura_min">Altitud mínima</string>
     <string name="especie_info_altura_max">Altitud máxima</string>
@@ -227,6 +228,9 @@
     <string name="achievement_titulo">Has desbloqueado un logro!</string>
     <string name="tools_latitud">Latitud</string>
     <string name="tools_longitud">Longitud</string>
+    <string name="map_tools">Brujula</string>
+    <string name="especies_info_internet">Internet</string>
+    <string name="especie_info_ikiam">Ikiam</string>
     <plurals name="achievement_foto">
         <item quantity="one">Felicidades! Has agregado tu primera foto!</item>
         <item quantity="other">Felicidades! Has agregado %1$d fotos!</item>

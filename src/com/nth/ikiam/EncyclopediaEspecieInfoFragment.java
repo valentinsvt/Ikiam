@@ -3,7 +3,9 @@ package com.nth.ikiam;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +15,7 @@ import android.widget.*;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
+import com.nth.ikiam.utils.UtilsUploaders;
 
 import java.io.File;
 import java.util.List;
@@ -44,6 +47,8 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     int fotoPos;
 
     Button btnMap;
+    Button btnWeb;
+    Button btnIkiam;
 
     Especie especie;
     //    List<Foto> fotos;
@@ -72,7 +77,10 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
 
         btnMap = (Button) view.findViewById(R.id.especie_info_map_btn);
         btnMap.setOnClickListener(this);
-
+        btnWeb = (Button) view.findViewById(R.id.especie_info_web);
+        btnWeb.setOnClickListener(this);
+        btnIkiam = (Button) view.findViewById(R.id.especie_info_ikiam);
+        btnIkiam.setOnClickListener(this);
         long especieId = getArguments().getLong("especie");
         especie = Especie.get(context, especieId);
         Genero genero = especie.getGenero(context);
@@ -250,10 +258,25 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     @Override
     public void onClick(View view) {
         Utils.hideSoftKeyboard(this.getActivity());
+        boolean band=false;
         if (view.getId() == btnMap.getId()) {
             //System.out.println("Mostrar mapa de la especie: " + especie.nombre);
             context.mostrarEspecie(especie);
-        } else {
+            band=true;
+        }
+        if (view.getId() == btnWeb.getId()) {
+            String url = "http://en.wikipedia.org/wiki/"+especie.nombre;
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(myIntent);
+            band=true;
+        }
+        if (view.getId() == btnIkiam.getId()) {
+            String url = UtilsUploaders.getIp()+especie.nombre;
+            Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(myIntent);
+            band=true;
+        }
+        if(!band){
             int i;
             for (i = 0; i < imageViews.length; i++) {
                 if (view.getId() == imageViews[i].getId()) {

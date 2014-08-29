@@ -256,16 +256,38 @@
 
     <Button
         android:id="@+id/especie_info_map_btn"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_black"
         style="@style/ButtonText"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:drawableLeft="@drawable/ic_action_map"
         android:drawablePadding="5dip"
-        android:text="@string/encyclopedia_especie_info_ver_mapa" />
+        android:text="@string/encyclopedia_especie_info_ver_mapa" android:textSize="11dp"/>
+    <Button
+            android:id="@+id/especie_info_web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_black"
+            style="@style/ButtonText"
+            android:layout_alignParentBottom="true"
+            android:drawableLeft="@drawable/ic_action_web_site"
+            android:drawablePadding="5dip"
+            android:text="@string/especies_info_internet"
+            android:layout_toRightOf="@+id/especie_info_map_btn"
+            android:textSize="11dp"/>
+    <Button
+            android:id="@+id/especie_info_ikiam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_black"
+            style="@style/ButtonText"
+            android:layout_alignParentBottom="true"
+            android:drawableLeft="@drawable/ic_app_icon"
+            android:drawablePadding="5dip"
+            android:text="@string/especie_info_ikiam"
+            android:layout_toRightOf="@+id/especie_info_web"
+            android:textSize="11dp"/>
 
 
 </RelativeLayout>

@@ -61,8 +61,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int ENCYCLOPEDIA_POS = 2;
     public final int GALERIA_POS = 3;
     public final int RUTAS_POS = 4;
-    public final int SETTINGS_POS = 5;
-    public final int LOGIN_POS = 6;
+    public final int IKIAM_WEB_POS = 5;
+    public final int SETTINGS_POS = 6;
+    public final int LOGIN_POS = 7;
+
 
     public final int ACHIEV_FOTOS = 1;
     public final int ACHIEV_DISTANCIA = 2;
@@ -1097,6 +1099,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             case RUTAS_POS:
                 fragment = new RutasFragment();
                 break;
+            case IKIAM_WEB_POS:
+                fragment = new DescargaBusquedaFragment();
+                break;
             case SETTINGS_POS:
                 fragment = new SettingsFragment();
                 this.addListener((FieldListener) fragment);
@@ -1230,7 +1235,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     private void makeMeRequest(final Session session) {
-        System.out.println("get session map activity " + session + " ");
+       // System.out.println("get session map activity " + session + " ");
         // Make an API call to get user data and define a
         // new callback to handle the response.
         Request request = Request.newMeRequest(session,
