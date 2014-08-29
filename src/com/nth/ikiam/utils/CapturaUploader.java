@@ -71,6 +71,7 @@ public class CapturaUploader implements Runnable {
         String urlstr = IP + "uploadCaptura/uploadData";
 
         try {
+            FileInputStream fileInputStream = null;
             // new file and and entity
             File file = new File(foto.path);
 //            System.out.println("PATH::: " + foto.path);
@@ -81,7 +82,9 @@ public class CapturaUploader implements Runnable {
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
             int maxBufferSize = 1 * 1024 * 1024;
-            FileInputStream fileInputStream = new FileInputStream(file);
+            if (file.exists()) {
+                fileInputStream = new FileInputStream(file);
+            }
             URL url = new URL(urlstr);
             int serverResponseCode = 0;
 
@@ -163,24 +166,26 @@ public class CapturaUploader implements Runnable {
 
             dos.writeBytes(lineEnd);
 
+            if (file.exists()) {
 //            create a buffer of  maximum size
-            bytesAvailable = fileInputStream.available();
-
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            buffer = new byte[bufferSize];
-
-            // read file and write it into form...
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-            while (bytesRead > 0) {
-                dos.write(buffer, 0, bufferSize);
                 bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-            }
 
-            // send multipart form data necesssary after file data...
-            dos.writeBytes(lineEnd);
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
+
+                // read file and write it into form...
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                while (bytesRead > 0) {
+                    dos.write(buffer, 0, bufferSize);
+                    bytesAvailable = fileInputStream.available();
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                }
+
+                // send multipart form data necesssary after file data...
+                dos.writeBytes(lineEnd);
+            }
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
 //            os.write((delimiter + boundary + "\r\n").getBytes());
@@ -208,8 +213,10 @@ public class CapturaUploader implements Runnable {
                 System.out.println("NOT COMPLETED: " + serverResponseCode + "   " + serverResponseMessage);
             }
 
-            //close the streams //
-            fileInputStream.close();
+            if (file.exists()) {
+                //close the streams //
+                fileInputStream.close();
+            }
             dos.flush();
             dos.close();
         } catch (Exception e) {
