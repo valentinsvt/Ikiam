@@ -114,6 +114,23 @@
                         android:layout_marginRight="2dp"
                         android:layout_marginBottom="2dp"
                         />
+
+                <Button
+                        android:id="@+id/btnTipo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/map_tipo"
+                        android:icon="@drawable/ic_action_undo"
+                        android:layout_alignParentTop="true"
+                        android:layout_toLeftOf="@+id/btnTools"
+                        android:background="@drawable/button_green"
+                        android:textSize="12dp"
+                        android:drawableTop="@drawable/ic_action_map"
+                        android:drawablePadding="0dip"
+                        android:layout_marginRight="2dp"
+                        android:layout_marginBottom="2dp"
+                        />
+
                 <Button
                         android:id="@+id/btnLimpiar"
                         android:layout_width="wrap_content"

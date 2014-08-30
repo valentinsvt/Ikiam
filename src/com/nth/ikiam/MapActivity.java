@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
@@ -64,7 +65,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int IKIAM_WEB_POS = 5;
     public final int SETTINGS_POS = 6;
     public final int LOGIN_POS = 7;
+    public final int TOOLS_POS = 17;
+    public final int BUSQUEDA_POS = 18;
 
+
+    public int activeFragment=0;
 
     public final int ACHIEV_FOTOS = 1;
     public final int ACHIEV_DISTANCIA = 2;
@@ -96,7 +101,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     HashMap<Marker, AtraccionUi> atracciones;
     HashMap<Marker, Bitmap> fotosUsuario;
     Marker selected;
-
+    int tipoMapa = 0;
     /*Google services*/
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     /*Fin mapa*/
@@ -284,7 +289,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         atracciones = new HashMap<Marker, AtraccionUi>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
 
-        botones = new Button[7];
+        botones = new Button[8];
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
@@ -292,6 +297,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         botones[4] = (Button) this.findViewById(R.id.btnCamara);
         botones[5] = (Button) this.findViewById(R.id.btnLimpiar);
         botones[6] = (Button) this.findViewById(R.id.btnTools);
+        botones[7] = (Button) this.findViewById(R.id.btnTipo);
         if (type.equals("Ikiam")) {
             if (esCientifico.equals("S"))
                 botones[2].setVisibility(View.GONE);
@@ -504,6 +510,30 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     .replace(R.id.content_frame, fragment)
                     .addToBackStack("")
                     .commit();
+            setTitle(getString(R.string.map_tools));
+            activeFragment=TOOLS_POS;
+        }
+        if (v.getId() == botones[7].getId()) {
+            tipoMapa++;
+            switch (tipoMapa){
+                case 0:
+                    map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    break;
+                case 1:
+                    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                    break;
+                case 2:
+                    map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                    break;
+                case 3:
+                    map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                    break;
+                default:
+                    map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                    tipoMapa=0;
+                    break;
+            }
+
         }
 
 
@@ -671,6 +701,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
+        map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
@@ -1041,6 +1072,64 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                         .replace(R.id.content_frame, fragment)
                         .commit();
+                activeFragment=BUSQUEDA_POS;
+                return true;
+            case R.id.menu_help:
+                LayoutInflater inflater = getLayoutInflater();
+                View v = inflater.inflate(R.layout.help_layout, null);
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this).setView(v)
+                        .setTitle(getString(R.string.help_help));
+                builder.setPositiveButton(R.string.dialog_btn_cerrar, null);
+
+                final AlertDialog d = builder.create();
+                final TextView txt = (TextView) v.findViewById(R.id.help_container);
+                switch (activeFragment){
+                    case MAP_POS:
+                        txt.setText(getString(R.string.help_map));
+                        break;
+                    case CAPTURA_POS:
+                        txt.setText(getString(R.string.help_captura));
+                        break;
+                    case ENCYCLOPEDIA_POS:
+                        txt.setText(getString(R.string.help_enciclopedia));
+                        break;
+                    case GALERIA_POS:
+                        txt.setText(getString(R.string.help_galeria));
+                        break;
+                    case RUTAS_POS:
+                        txt.setText(getString(R.string.help_rutas));
+                        break;
+                    case IKIAM_WEB_POS:
+                        txt.setText(getString(R.string.help_ikiam_web));
+                        break;
+                    case SETTINGS_POS:
+                        txt.setText(getString(R.string.help_configuracion));
+                        break;
+                    case LOGIN_POS:
+                        txt.setText(getString(R.string.help_login));
+                        break;
+                    case BUSQUEDA_POS:
+                        txt.setText(getString(R.string.help_busqueda));
+                        break;
+                    case TOOLS_POS:
+                        txt.setText(getString(R.string.help_tools));
+                        break;
+                }
+                d.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button cerrar = d.getButton(AlertDialog.BUTTON_POSITIVE);
+                        cerrar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                d.dismiss();
+                            }
+                        });
+
+                    }
+                });
+                d.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1080,6 +1169,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 mainLayout.setVisibility(View.VISIBLE);
 
                 fragment = null;
+                activeFragment=MAP_POS;
                 break;
             case CAPTURA_POS:
 //                System.out.println(":::::cientifico:::: " + esCientifico);
@@ -1089,26 +1179,33 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     fragment = new CapturaCientificoFragment();
                 }
                 this.addListener((FieldListener) fragment);
+                activeFragment=CAPTURA_POS;
                 break;
             case ENCYCLOPEDIA_POS:
                 fragment = new EncyclopediaFragment();
+                activeFragment=ENCYCLOPEDIA_POS;
                 break;
             case GALERIA_POS:
                 fragment = new GaleriaFragment();
+                activeFragment=GALERIA_POS;
                 break;
             case RUTAS_POS:
                 fragment = new RutasFragment();
+                activeFragment=RUTAS_POS;
                 break;
             case IKIAM_WEB_POS:
                 fragment = new DescargaBusquedaFragment();
+                activeFragment=IKIAM_WEB_POS;
                 break;
             case SETTINGS_POS:
                 fragment = new SettingsFragment();
                 this.addListener((FieldListener) fragment);
+                activeFragment = SETTINGS_POS;
                 break;
             case LOGIN_POS:
                 fragment = new Loginfragment();
                 this.addListener((FieldListener) fragment);
+                activeFragment=LOGIN_POS;
                 break;
             default:
                 fragment = null;
@@ -1123,6 +1220,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             FragmentManager fragmentManager = getFragmentManager();
             RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
             mainLayout.setVisibility(LinearLayout.GONE);
+
             fragmentManager.beginTransaction()
                     .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .replace(R.id.content_frame, fragment)
@@ -1235,7 +1333,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     private void makeMeRequest(final Session session) {
-       // System.out.println("get session map activity " + session + " ");
+        // System.out.println("get session map activity " + session + " ");
         // Make an API call to get user data and define a
         // new callback to handle the response.
         Request request = Request.newMeRequest(session,

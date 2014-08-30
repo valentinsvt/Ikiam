@@ -19,6 +19,30 @@
     <string name="app_name">Ikiam</string>
     <string name="menu_title">Ikiam</string>
 
+    <string name="help_help">Ayuda</string>
+    <string name="help_map">
+        La pantalla mapa muestra la ubicación geográfica del usuario y de las fotos tomadas dentro de la aplicación.\n
+       Botones:\n
+       Galapagos: reubica el mapa de tal forma que enfoque a las Islas Galapagos.\n
+       Nueva Ruta: la aplicación empezará a monitorear la posición geográfica del usuario y la actividad de la cámara de fotos, para mostrarlas en el mapa.\n
+       Cámara: abre la aplicación de la cámara de fotos.\n
+       Atracciones: descarga del servidor Ikiam, las principales atracciónes turisticas del Ecuador.\n
+       Especies: descarga del servidor Ikiam, las principales especies del Ecuador.\n
+       Brujula: abre una ventana con información de la posición actual del usuario, y una brujula.\n
+       Tipo: cambia el tipo de terreno que se muestra en el mapa.\n
+       Limipiar: borrar todos los marcadores y fotos del mapa.
+
+    </string>
+    <string name="help_captura">Ayuda captura</string>
+    <string name="help_enciclopedia">Ayuda enciclopedia</string>
+    <string name="help_galeria">Ayuda galeria</string>
+    <string name="help_rutas">Ayuda rutas</string>
+    <string name="help_configuracion">Ayuda configuracion</string>
+    <string name="help_login">Ayuda login</string>
+    <string name="help_busqueda">Ayuda busqueda</string>
+    <string name="help_tools">Ayuda tools</string>
+    <string name="help_ikiam_web">Ayuda ikiam</string>
+
     <string name="global_yes">Sí</string>
     <string name="global_no">No</string>
     <string name="global_ok">Aceptar</string>
@@ -231,6 +255,7 @@
     <string name="map_tools">Brujula</string>
     <string name="especies_info_internet">Internet</string>
     <string name="especie_info_ikiam">Ikiam</string>
+    <string name="map_tipo">Tipo</string>
     <plurals name="achievement_foto">
         <item quantity="one">Felicidades! Has agregado tu primera foto!</item>
         <item quantity="other">Felicidades! Has agregado %1$d fotos!</item>

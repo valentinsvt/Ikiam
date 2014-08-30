@@ -19,4 +19,8 @@
           android:icon="@drawable/action_search"
           android:title="@string/search_btn_label"
           android:showAsAction="ifRoom|withText" />
+    <item android:id="@+id/menu_help"
+          android:icon="@drawable/ic_action_help"
+          android:title="@string/search_btn_label"
+          android:showAsAction="ifRoom|withText" />
 </menu>
