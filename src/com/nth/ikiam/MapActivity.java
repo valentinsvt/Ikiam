@@ -1167,6 +1167,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         .commit();
                 activeFragment=BUSQUEDA_POS;
                 return true;
+            case R.id.ver_fotos_usuario:
+                verFotosUsuario();
+                return true;
             case R.id.menu_help:
                 LayoutInflater inflater = getLayoutInflater();
                 View v = inflater.inflate(R.layout.help_layout, null);
@@ -1267,6 +1270,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
     }
 
+
+
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -1289,8 +1294,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             switch (position) {
                 case MAP_POS_T:
                     // fragment = new NthMapFragment();
-
-                    //System.out.println("map?");
+                   // System.out.println("map?");
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()
                             .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
@@ -1556,6 +1560,46 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     }
                 });
         request.executeAsync();
+    }
+
+    private void verFotosUsuario() {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        List<Entry> entrys = new ArrayList<Entry>();
+        entrys=Entry.list(this);
+        int padding = (100);
+        for (Entry entry : entrys) {
+            List<Foto> fotos = Foto.findAllByEntry(activity, entry);
+            for (int j = 0; j < fotos.size(); j++) {
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Canvas canvas1 = new Canvas(bmp);
+                Paint color = new Paint();
+                color.setTextSize(35);
+                color.setColor(Color.BLACK);//modify canvas
+                canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.pin3), 0, 0, color);
+                Bitmap b = ImageUtils.decodeFile(fotos.get(j).path);
+                canvas1.drawBitmap(b, 3, 2, color);
+                Coordenada co = fotos.get(j).getCoordenada(activity);
+                if(co!=null){
+                    location = new LatLng(co.getLatitud(), co.getLongitud());
+                    Marker marker = map.addMarker(new MarkerOptions().position(location)
+                            .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                            .anchor(0.5f, 1).title(getString(R.string.map_activity_captura) + " " + fotos.get(j).fecha));
+                    builder.include(location);
+                    data.put(marker, fotos.get(j));
+                }
+
+            }
+        }
+        LatLngBounds bounds = builder.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        map.animateCamera(cu);
+        if(activeFragment!=MAP_POS)
+            showMap();
+        setTitle(getString(R.string.menu_fotos_usuario) );
+
+
     }
 
     public void mostrarEspecie(Especie especie) {

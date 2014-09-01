@@ -260,7 +260,7 @@
     <string name="achievement_titulo">Has desbloqueado un logro!</string>
     <string name="tools_latitud">Latitud</string>
     <string name="tools_longitud">Longitud</string>
-    <string name="map_tools">Brujula</string>
+    <string name="map_tools">Brújula</string>
     <string name="especies_info_internet">Internet</string>
     <string name="especie_info_ikiam">Ikiam</string>
     <string name="map_tipo">Tipo</string>
@@ -280,5 +280,5 @@
         <item quantity="one">Felicidades! Has recorrido tu primer kilómetro!</item>
         <item quantity="other">Felicidades! Has recorrido %1$d kilómetros!</item>
     </plurals>
-
+ <string name="menu_fotos_usuario">Fotos del usuario</string>
 </resources>
