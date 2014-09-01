@@ -67,10 +67,18 @@
 
     <string name="global_error_no_connection">No se pudo conectar a Internet.</string>
 
-    <string-array name="options_array">
+    <string-array name="options_array_cientifico">
         <item>Mapa</item>
         <item>Nueva captura</item>
         <item>Enciclopedia</item>
+        <item>Rutas</item>
+        <item>Ikiam Web</item>
+        <item>Configuración</item>
+        <item>Login</item>
+    </string-array>
+    <string-array name="options_array_turista">
+        <item>Mapa</item>
+        <item>Nueva captura</item>
         <item>Galería</item>
         <item>Rutas</item>
         <item>Ikiam Web</item>

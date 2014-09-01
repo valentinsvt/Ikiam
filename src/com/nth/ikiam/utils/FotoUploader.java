@@ -1,7 +1,6 @@
 package com.nth.ikiam.utils;
 
-import android.util.Log;
-import com.nth.ikiam.MainActivity;
+
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.*;

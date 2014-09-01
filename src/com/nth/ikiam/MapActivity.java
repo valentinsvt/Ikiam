@@ -31,15 +31,9 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
 import com.nth.ikiam.db.*;
-import com.nth.ikiam.image.AtraccionUi;
-import com.nth.ikiam.image.ImageItem;
-import com.nth.ikiam.image.ImageTableObserver;
-import com.nth.ikiam.image.ImageUtils;
+import com.nth.ikiam.image.*;
 import com.nth.ikiam.listeners.FieldListener;
-import com.nth.ikiam.utils.AchievementChecker;
-import com.nth.ikiam.utils.AtraccionDownloader;
-import com.nth.ikiam.utils.LogrosChecker;
-import com.nth.ikiam.utils.Utils;
+import com.nth.ikiam.utils.*;
 
 
 import java.util.ArrayList;
@@ -60,11 +54,19 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int MAP_POS = 0;
     public final int CAPTURA_POS = 1;
     public final int ENCYCLOPEDIA_POS = 2;
-    public final int GALERIA_POS = 3;
-    public final int RUTAS_POS = 4;
-    public final int IKIAM_WEB_POS = 5;
-    public final int SETTINGS_POS = 6;
-    public final int LOGIN_POS = 7;
+    public final int GALERIA_POS = -1;
+    public final int RUTAS_POS = 3;
+    public final int IKIAM_WEB_POS = 4;
+    public final int SETTINGS_POS = 5;
+    public final int LOGIN_POS = 6;
+    public final int MAP_POS_T = 0;
+    public final int CAPTURA_POS_T = 1;
+    public final int ENCYCLOPEDIA_POS_T = -1;
+    public final int GALERIA_POS_T = 2;
+    public final int RUTAS_POS_T = 3;
+    public final int IKIAM_WEB_POS_T = 4;
+    public final int SETTINGS_POS_T = 5;
+    public final int LOGIN_POS_T = 6;
     public final int TOOLS_POS = 17;
     public final int BUSQUEDA_POS = 18;
 
@@ -99,6 +101,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     Marker lastPosition;
     HashMap<Marker, Foto> data;
     HashMap<Marker, AtraccionUi> atracciones;
+    HashMap<Marker, EspecieUi> especies;
     HashMap<Marker, Bitmap> fotosUsuario;
     Marker selected;
     int tipoMapa = 0;
@@ -133,6 +136,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public static final String PREFS_NAME = "IkiamSettings";
     public String userId;
     public String name;
+    public String titulo;
     public String type;
     public String email;
     public String esCientifico;
@@ -287,6 +291,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         setUpMapIfNeeded();
         data = new HashMap<Marker, Foto>();
         atracciones = new HashMap<Marker, AtraccionUi>();
+        especies = new HashMap<Marker, EspecieUi>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
 
         botones = new Button[8];
@@ -311,7 +316,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         /*DRAWER*/
         mTitle = mDrawerTitle = getTitle();
-        mOptionsArray = getResources().getStringArray(R.array.options_array);
+        if(!esCientifico.equals("-1")){
+            mOptionsArray = getResources().getStringArray(R.array.options_array_cientifico);
+
+        }else{
+            mOptionsArray = getResources().getStringArray(R.array.options_array_turista);
+
+        }
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout2);
         mDrawerList = (ListView) findViewById(R.id.left_drawer2);
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -426,7 +438,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 continente = true;
             } else {
                 location = new LatLng(-0.4614207935306084, -90.615234375);
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
                 map.animateCamera(update);
                 botones[0].setText(R.string.map_continente_btn);
                 continente = false;
@@ -469,6 +481,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             Location mCurrentLocation;
             mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
+            especies.clear();
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
             location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -483,13 +496,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             Location mCurrentLocation;
             mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
+            especies.clear();
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
             location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
             map.animateCamera(update);
             ExecutorService queue = Executors.newSingleThreadExecutor();
-            queue.execute(new AtraccionDownloader(this, queue, 0));
+            queue.execute(new EspeciesDownloader(this, queue, 0));
         }
         if (v.getId() == botones[4].getId()) {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -630,6 +644,30 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         });
 
     }
+    public void setPingEspecie(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String desc) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final LatLng pos = new LatLng(latitud, longitud);
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Canvas canvas1 = new Canvas(bmp);
+                Paint color = new Paint();
+                color.setTextSize(35);
+                color.setColor(Color.BLACK);//modify canvas
+                canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.pin3), 0, 0, color);
+                canvas1.drawBitmap(foto, 3, 2, color);
+                Marker marker = map.addMarker(new MarkerOptions().position(pos)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .anchor(0.5f, 1).title(title));
+                EspecieUi especieUi = new EspecieUi(title, fotoDialog, likes, desc);
+                especies.put(marker, especieUi);
+            }
+        });
+
+    }
 
 
     /*CLASES PARA COMUNICARSE CON SvtService*/
@@ -741,6 +779,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
 
                 if (data.get(marker) != null) {
+                    System.out.println("click data");
                     marker.showInfoWindow();
                     LayoutInflater inflater = activity.getLayoutInflater();
                     myView = inflater.inflate(R.layout.dialog, null);
@@ -786,7 +825,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
                 if (atracciones.get(marker) != null) {
                     marker.showInfoWindow();
-                    //System.out.println("click "+marker+"  "+selected+"  "+(selected!=marker));
+                    System.out.println("click  atracc "+marker+"  "+selected+"  "+(selected!=marker));
                     if (selected == null) {
                         selected = marker;
                     } else {
@@ -831,6 +870,60 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             ImageView img = (ImageView) myView.findViewById(R.id.image);
 
                             img.setImageBitmap(current.foto);
+                            dialog.show();
+                        } else {
+                            selected = marker;
+                        }
+                    }
+                    return true;
+                }
+                if (especies.get(marker) != null) {
+                    marker.showInfoWindow();
+                    System.out.println("especie "+marker+"  "+selected+"  "+(selected!=marker));
+                    if (selected == null) {
+                        selected = marker;
+                    } else {
+                        if (selected.getId().equals(marker.getId())) {
+                            selected = null;
+                            final EspecieUi current = especies.get(marker);
+                            LayoutInflater inflater = activity.getLayoutInflater();
+                            myView = inflater.inflate(R.layout.especie_map_dialog, null);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                            builder.setTitle(current.nombre);
+                            builder.setView(myView);
+                            builder.setPositiveButton(R.string.map_activity_dialog_mas, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                    try {
+
+                                    } catch (ActivityNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+
+
+                            });
+                            String label = getString(R.string.map_activity_dialog_like);
+                            builder.setNeutralButton(label + " (" + current.likes + ")", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                           /*aqui implementar like*/
+                                    current.likes++;
+                                    dialog.dismiss();
+                                }
+
+
+                            });
+                            dialog = builder.create();
+                            ImageView img = (ImageView) myView.findViewById(R.id.especie_info_dialog_image);
+                            img.setImageBitmap(current.foto);
+                            TextView txt = (TextView) myView.findViewById(R.id.especie_info_dialog_comentarios);
+                            txt.setText(current.desc);
                             dialog.show();
                         } else {
                             selected = marker;
@@ -1084,38 +1177,76 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                 final AlertDialog d = builder.create();
                 final TextView txt = (TextView) v.findViewById(R.id.help_container);
-                switch (activeFragment){
-                    case MAP_POS:
-                        txt.setText(getString(R.string.help_map));
-                        break;
-                    case CAPTURA_POS:
-                        txt.setText(getString(R.string.help_captura));
-                        break;
-                    case ENCYCLOPEDIA_POS:
-                        txt.setText(getString(R.string.help_enciclopedia));
-                        break;
-                    case GALERIA_POS:
-                        txt.setText(getString(R.string.help_galeria));
-                        break;
-                    case RUTAS_POS:
-                        txt.setText(getString(R.string.help_rutas));
-                        break;
-                    case IKIAM_WEB_POS:
-                        txt.setText(getString(R.string.help_ikiam_web));
-                        break;
-                    case SETTINGS_POS:
-                        txt.setText(getString(R.string.help_configuracion));
-                        break;
-                    case LOGIN_POS:
-                        txt.setText(getString(R.string.help_login));
-                        break;
-                    case BUSQUEDA_POS:
-                        txt.setText(getString(R.string.help_busqueda));
-                        break;
-                    case TOOLS_POS:
-                        txt.setText(getString(R.string.help_tools));
-                        break;
+                if(esCientifico.equals("-1")){
+                    switch (activeFragment){
+                        case MAP_POS_T:
+                            txt.setText(getString(R.string.help_map));
+                            break;
+                        case CAPTURA_POS_T:
+                            txt.setText(getString(R.string.help_captura));
+                            break;
+                        case ENCYCLOPEDIA_POS_T:
+                            txt.setText(getString(R.string.help_enciclopedia));
+                            break;
+                        case GALERIA_POS_T:
+                            txt.setText(getString(R.string.help_galeria));
+                            break;
+                        case RUTAS_POS_T:
+                            txt.setText(getString(R.string.help_rutas));
+                            break;
+                        case IKIAM_WEB_POS_T:
+                            txt.setText(getString(R.string.help_ikiam_web));
+                            break;
+                        case SETTINGS_POS_T:
+                            txt.setText(getString(R.string.help_configuracion));
+                            break;
+                        case LOGIN_POS_T:
+                            txt.setText(getString(R.string.help_login));
+                            break;
+                        case BUSQUEDA_POS:
+                            txt.setText(getString(R.string.help_busqueda));
+                            break;
+                        case TOOLS_POS:
+                            txt.setText(getString(R.string.help_tools));
+                            break;
+
+                    }
+                }else{
+                    switch (activeFragment){
+                        case MAP_POS:
+                            txt.setText(getString(R.string.help_map));
+                            break;
+                        case CAPTURA_POS:
+                            txt.setText(getString(R.string.help_captura));
+                            break;
+                        case ENCYCLOPEDIA_POS:
+                            txt.setText(getString(R.string.help_enciclopedia));
+                            break;
+                        case GALERIA_POS:
+                            txt.setText(getString(R.string.help_galeria));
+                            break;
+                        case RUTAS_POS:
+                            txt.setText(getString(R.string.help_rutas));
+                            break;
+                        case IKIAM_WEB_POS:
+                            txt.setText(getString(R.string.help_ikiam_web));
+                            break;
+                        case SETTINGS_POS:
+                            txt.setText(getString(R.string.help_configuracion));
+                            break;
+                        case LOGIN_POS:
+                            txt.setText(getString(R.string.help_login));
+                            break;
+                        case BUSQUEDA_POS:
+                            txt.setText(getString(R.string.help_busqueda));
+                            break;
+                        case TOOLS_POS:
+                            txt.setText(getString(R.string.help_tools));
+                            break;
+
+                    }
                 }
+
                 d.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
@@ -1153,64 +1284,125 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         // update the main content by replacing fragments
         //System.out.println("pos? "+position);
         Utils.hideSoftKeyboard(this);
-        Fragment fragment;
-        switch (position) {
-            case MAP_POS:
-                // fragment = new NthMapFragment();
+        Fragment fragment=null;
+        if(esCientifico.equals("-1")){
+            switch (position) {
+                case MAP_POS_T:
+                    // fragment = new NthMapFragment();
 
-                //System.out.println("map?");
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                        .hide(fragmentManager.findFragmentById(R.id.content_frame))
-                        .addToBackStack("")
-                        .commit();
-                RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
-                mainLayout.setVisibility(View.VISIBLE);
+                    //System.out.println("map?");
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                            .hide(fragmentManager.findFragmentById(R.id.content_frame))
+                            .addToBackStack("")
+                            .commit();
+                    RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+                    mainLayout.setVisibility(View.VISIBLE);
 
-                fragment = null;
-                activeFragment=MAP_POS;
-                break;
-            case CAPTURA_POS:
+                    fragment = null;
+                    activeFragment=MAP_POS;
+                    break;
+                case CAPTURA_POS_T:
 //                System.out.println(":::::cientifico:::: " + esCientifico);
-                if (esCientifico.trim().equals("-1")) {
-                    fragment = new CapturaTuristaFragment();
-                } else {
-                    fragment = new CapturaCientificoFragment();
-                }
-                this.addListener((FieldListener) fragment);
-                activeFragment=CAPTURA_POS;
-                break;
-            case ENCYCLOPEDIA_POS:
-                fragment = new EncyclopediaFragment();
-                activeFragment=ENCYCLOPEDIA_POS;
-                break;
-            case GALERIA_POS:
-                fragment = new GaleriaFragment();
-                activeFragment=GALERIA_POS;
-                break;
-            case RUTAS_POS:
-                fragment = new RutasFragment();
-                activeFragment=RUTAS_POS;
-                break;
-            case IKIAM_WEB_POS:
-                fragment = new DescargaBusquedaFragment();
-                activeFragment=IKIAM_WEB_POS;
-                break;
-            case SETTINGS_POS:
-                fragment = new SettingsFragment();
-                this.addListener((FieldListener) fragment);
-                activeFragment = SETTINGS_POS;
-                break;
-            case LOGIN_POS:
-                fragment = new Loginfragment();
-                this.addListener((FieldListener) fragment);
-                activeFragment=LOGIN_POS;
-                break;
-            default:
-                fragment = null;
-                break;
+                    if (esCientifico.trim().equals("-1")) {
+                        fragment = new CapturaTuristaFragment();
+                    } else {
+                        fragment = new CapturaCientificoFragment();
+                    }
+                    this.addListener((FieldListener) fragment);
+                    activeFragment=CAPTURA_POS;
+                    break;
+                case ENCYCLOPEDIA_POS_T:
+                    fragment = new EncyclopediaFragment();
+                    activeFragment=ENCYCLOPEDIA_POS;
+                    break;
+                case GALERIA_POS_T:
+                    fragment = new GaleriaFragment();
+                    activeFragment=GALERIA_POS;
+                    break;
+                case RUTAS_POS_T:
+                    fragment = new RutasFragment();
+                    activeFragment=RUTAS_POS;
+                    break;
+                case IKIAM_WEB_POS_T:
+                    fragment = new DescargaBusquedaFragment();
+                    activeFragment=IKIAM_WEB_POS;
+                    break;
+                case SETTINGS_POS_T:
+                    fragment = new SettingsFragment();
+                    this.addListener((FieldListener) fragment);
+                    activeFragment = SETTINGS_POS;
+                    break;
+                case LOGIN_POS_T:
+                    fragment = new Loginfragment();
+                    this.addListener((FieldListener) fragment);
+                    activeFragment=LOGIN_POS;
+                    break;
+                default:
+                    fragment = null;
+                    break;
+            }
+        }else{
+            switch (position) {
+                case MAP_POS:
+                    // fragment = new NthMapFragment();
+
+                    //System.out.println("map?");
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                            .hide(fragmentManager.findFragmentById(R.id.content_frame))
+                            .addToBackStack("")
+                            .commit();
+                    RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+                    mainLayout.setVisibility(View.VISIBLE);
+
+                    fragment = null;
+                    activeFragment=MAP_POS;
+                    break;
+                case CAPTURA_POS:
+//                System.out.println(":::::cientifico:::: " + esCientifico);
+                    if (esCientifico.trim().equals("-1")) {
+                        fragment = new CapturaTuristaFragment();
+                    } else {
+                        fragment = new CapturaCientificoFragment();
+                    }
+                    this.addListener((FieldListener) fragment);
+                    activeFragment=CAPTURA_POS;
+                    break;
+                case ENCYCLOPEDIA_POS:
+                    fragment = new EncyclopediaFragment();
+                    activeFragment=ENCYCLOPEDIA_POS;
+                    break;
+                case GALERIA_POS:
+                    fragment = new GaleriaFragment();
+                    activeFragment=GALERIA_POS;
+                    break;
+                case RUTAS_POS:
+                    fragment = new RutasFragment();
+                    activeFragment=RUTAS_POS;
+                    break;
+                case IKIAM_WEB_POS:
+                    fragment = new DescargaBusquedaFragment();
+                    activeFragment=IKIAM_WEB_POS;
+                    break;
+                case SETTINGS_POS:
+                    fragment = new SettingsFragment();
+                    this.addListener((FieldListener) fragment);
+                    activeFragment = SETTINGS_POS;
+                    break;
+                case LOGIN_POS:
+                    fragment = new Loginfragment();
+                    this.addListener((FieldListener) fragment);
+                    activeFragment=LOGIN_POS;
+                    break;
+                default:
+                    fragment = null;
+                    break;
+            }
         }
+
         if (fragment != null) {
             // System.out.println("fragment "+fragment);
 //            Bundle args = new Bundle();
@@ -1344,7 +1536,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         if (session == Session.getActiveSession()) {
                             System.out.println("get session map  activity active " + session + " " + user);
                             if (user != null) {
-                                System.out.println("username " + user.getUsername() + " name  " + user.getName());
+                                //System.out.println("username " + user.getUsername() + " name  " + user.getName());
                                 SharedPreferences settings = activity.getSharedPreferences(PREFS_NAME, 0);
                                 SharedPreferences.Editor editor = settings.edit();
                                 editor.putString("user", user.getId());

@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import com.nth.ikiam.MainActivity;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.NthMapFragment;
 
