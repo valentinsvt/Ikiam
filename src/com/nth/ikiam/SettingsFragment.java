@@ -32,6 +32,7 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
     Button btnDownload;
     Button btnEstadisticas;
     Button btnResetEstadisticas;
+    Button btnVerLogros;
     MapActivity context;
 
     CheckBox checkAchievements;
@@ -67,6 +68,7 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         btnDownload = (Button) view.findViewById(R.id.settings_btn_download);
         btnEstadisticas = (Button) view.findViewById(R.id.settings_btn_estadisticas);
         btnResetEstadisticas = (Button) view.findViewById(R.id.settings_btn_reset_achievements);
+        btnVerLogros = (Button) view.findViewById(R.id.settings_btn_show_logros);
 
         checkAchievements = (CheckBox) view.findViewById(R.id.settings_chk_achievements);
         SharedPreferences settings = context.getSharedPreferences(context.PREFS_NAME, 0);
@@ -83,6 +85,7 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         btnDownload.setOnClickListener(this);
         btnEstadisticas.setOnClickListener(this);
         btnResetEstadisticas.setOnClickListener(this);
+        btnVerLogros.setOnClickListener(this);
 
         return view;
     }
@@ -98,34 +101,18 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
             }
         } else if (view.getId() == btnDownload.getId()) { // download
             Fragment fragment = new DescargaBusquedaFragment();
-
-            context.setTitle(getString(R.string.settings_descargar));
-
-            FragmentManager fragmentManager = context.getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-            fragmentManager.beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                    .replace(R.id.content_frame, fragment)
-                    .addToBackStack("")
-                    .commit();
-        } else if (view.getId() == btnEstadisticas.getId()) {
+            Utils.openFragment(context, fragment, getString(R.string.settings_descargar));
+        } else if (view.getId() == btnEstadisticas.getId()) { // ver estadisticas
             Fragment fragment = new EstadisticasFragment();
-
-            context.setTitle(getString(R.string.settings_estadisticas));
-
-            FragmentManager fragmentManager = context.getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-            fragmentManager.beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                    .replace(R.id.content_frame, fragment)
-                    .addToBackStack("")
-                    .commit();
+            Utils.openFragment(context, fragment, getString(R.string.settings_estadisticas));
+        } else if (view.getId() == btnVerLogros.getId()) { // ver logros
+            Fragment fragment = new LogrosFragment();
+            Utils.openFragment(context, fragment, getString(R.string.settings_show_logros));
         } else if (view.getId() == btnResetEstadisticas.getId()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             // Chain together various setter methods to set the dialog characteristics
             builder.setMessage(R.string.estadisticas_reset_confirmacion)
                     .setTitle(R.string.settings_reset_achievements);
-
             // Add the buttons
             builder.setPositiveButton(R.string.global_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
@@ -144,8 +131,6 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
                 }
             });
             // Set other dialog properties
-
-
             // Create the AlertDialog
             AlertDialog dialog = builder.create();
             dialog.show();

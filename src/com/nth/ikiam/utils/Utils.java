@@ -1,6 +1,8 @@
 package com.nth.ikiam.utils;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,6 +24,16 @@ import java.io.File;
  */
 public class Utils {
 
+    public static void openFragment(MapActivity context, Fragment fragment, String title) {
+        context.setTitle(title);
+        FragmentManager fragmentManager = context.getFragmentManager();
+//                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack("")
+                .commit();
+    }
 
     public static String getStringResourceByName(Context c, String aString) {
         String packageName = c.getPackageName();
@@ -32,7 +44,6 @@ public class Utils {
             return c.getString(resId);
         }
     }
-
 
     public static boolean isNetworkAvailable(Context context) {
         // Get Connectivity Manager class object from Systems Service
