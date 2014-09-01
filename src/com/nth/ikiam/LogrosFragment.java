@@ -1,22 +1,31 @@
 package com.nth.ikiam;
 
-import android.app.Fragment;
+import android.app.ListFragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import com.nth.ikiam.adapters.BusquedaDownloadResultsEspeciesListAdapter;
+import com.nth.ikiam.adapters.LogrosListAdapter;
+import com.nth.ikiam.db.Logro;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by DELL on 01/09/2014.
  */
-public class LogrosFragment extends Fragment {
-    MapActivity context;
+public class LogrosFragment extends ListFragment {
+
+    MapActivity activity;
+    List<Logro> logrosList;
+    LogrosListAdapter adapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = (MapActivity) getActivity();
-        View view = inflater.inflate(R.layout.logros_layout, container, false);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (MapActivity) getActivity();
 
-        return view;
+        logrosList = Logro.findAllByTipoAndNotCompleto(activity, activity.ACHIEV_FOTOS);
+
+        adapter = new LogrosListAdapter(getActivity(), logrosList);
+        setListAdapter(adapter);
     }
 }

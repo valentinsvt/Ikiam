@@ -266,6 +266,31 @@
     <string name="especies_info_internet">Internet</string>
     <string name="especie_info_ikiam">Ikiam</string>
     <string name="map_tipo">Tipo</string>
+
+    <string name="achivement_foto_titulo_1">Tipo</string>
+    <string name="achivement_foto_titulo_5">Tipo</string>
+    <string name="achivement_foto_titulo_10">Tipo</string>
+    <string name="achivement_foto_titulo_50">Tipo</string>
+    <string name="achivement_foto_titulo_100">Tipo</string>
+
+    <string name="achivement_upload_titulo_1">Tipo</string>
+    <string name="achivement_upload_titulo_5">Tipo</string>
+    <string name="achivement_upload_titulo_10">Tipo</string>
+    <string name="achivement_upload_titulo_50">Tipo</string>
+    <string name="achivement_upload_titulo_100">Tipo</string>
+
+    <string name="achivement_share_titulo_1">Tipo</string>
+    <string name="achivement_share_titulo_5">Tipo</string>
+    <string name="achivement_share_titulo_10">Tipo</string>
+    <string name="achivement_share_titulo_50">Tipo</string>
+    <string name="achivement_share_titulo_100">Tipo</string>
+
+    <string name="achivement_distancia_titulo_1000">Tipo</string>
+    <string name="achivement_distancia_titulo_2000">Tipo</string>
+    <string name="achivement_distancia_titulo_3000">Tipo</string>
+    <string name="achivement_distancia_titulo_5000">Tipo</string>
+    <string name="achivement_distancia_titulo_10000">Tipo</string>
+
     <plurals name="achievement_foto">
         <item quantity="one">Felicidades! Has agregado tu primera foto!</item>
         <item quantity="other">Felicidades! Has agregado %1$d fotos!</item>
@@ -282,5 +307,5 @@
         <item quantity="one">Felicidades! Has recorrido tu primer kilómetro!</item>
         <item quantity="other">Felicidades! Has recorrido %1$d kilómetros!</item>
     </plurals>
- <string name="menu_fotos_usuario">Fotos del usuario</string>
+    <string name="menu_fotos_usuario">Fotos del usuario</string>
 </resources>

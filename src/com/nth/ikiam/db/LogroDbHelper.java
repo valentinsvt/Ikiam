@@ -110,6 +110,29 @@ public class LogroDbHelper extends DbHelper {
         return logroes;
     }
 
+    public ArrayList<Logro> getAllLogrosCompletos() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Logro> logroes = new ArrayList<Logro>();
+        String selectQuery = "SELECT  * FROM " + TABLE_LOGRO +
+                " WHERE " + KEY_COMPLETO + " = 1";
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Logro cl = setDatos(c);
+
+                // adding to tags list
+                logroes.add(cl);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return logroes;
+    }
+
     public int countLogrosCompletos() {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  count(*) count FROM " + TABLE_LOGRO +

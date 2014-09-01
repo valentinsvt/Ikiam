@@ -77,6 +77,10 @@ public class Logro {
         LogroDbHelper e = new LogroDbHelper(context);
         return e.getAllLogrosByTipoAndNotCompleto(tipo);
     }
+    public static List<Logro> findAllCompletos(Context context) {
+        LogroDbHelper e = new LogroDbHelper(context);
+        return e.getAllLogrosCompletos();
+    }
 
     public static int countCompletos(Context context) {
         LogroDbHelper e = new LogroDbHelper(context);
