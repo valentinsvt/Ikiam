@@ -267,45 +267,50 @@
     <string name="especie_info_ikiam">Ikiam</string>
     <string name="map_tipo">Tipo</string>
 
-    <string name="achivement_foto_titulo_1">Tipo</string>
-    <string name="achivement_foto_titulo_5">Tipo</string>
-    <string name="achivement_foto_titulo_10">Tipo</string>
-    <string name="achivement_foto_titulo_50">Tipo</string>
-    <string name="achivement_foto_titulo_100">Tipo</string>
+    <string name="achievement_warning_titulo">Logros desactivados</string>
+    <string name="achievement_warning_text">La contabilización de logros está desctivada. ¿Deseas activarla ahora?</string>
 
-    <string name="achivement_upload_titulo_1">Tipo</string>
-    <string name="achivement_upload_titulo_5">Tipo</string>
-    <string name="achivement_upload_titulo_10">Tipo</string>
-    <string name="achivement_upload_titulo_50">Tipo</string>
-    <string name="achivement_upload_titulo_100">Tipo</string>
+    <string name="achievement_1_titulo_1">Una foto!</string>
+    <string name="achievement_1_titulo_5">Cinco fotos!</string>
+    <string name="achievement_1_titulo_10">Diez fotos!</string>
+    <string name="achievement_1_titulo_50">Cincuenta fotos!</string>
+    <string name="achievement_1_titulo_100">Cien fotos!!</string>
 
-    <string name="achivement_share_titulo_1">Tipo</string>
-    <string name="achivement_share_titulo_5">Tipo</string>
-    <string name="achivement_share_titulo_10">Tipo</string>
-    <string name="achivement_share_titulo_50">Tipo</string>
-    <string name="achivement_share_titulo_100">Tipo</string>
+    <string name="achievement_3_titulo_1">Una foto subida!</string>
+    <string name="achievement_3_titulo_5">Cinco fotos subidas!</string>
+    <string name="achievement_3_titulo_10">Diez fotos subidas!</string>
+    <string name="achievement_3_titulo_50">Cincuenta fotos subidas!</string>
+    <string name="achievement_3_titulo_100">Cien fotos subidas!!</string>
 
-    <string name="achivement_distancia_titulo_1000">Tipo</string>
-    <string name="achivement_distancia_titulo_2000">Tipo</string>
-    <string name="achivement_distancia_titulo_3000">Tipo</string>
-    <string name="achivement_distancia_titulo_5000">Tipo</string>
-    <string name="achivement_distancia_titulo_10000">Tipo</string>
+    <string name="achievement_4_titulo_1">Una foto compartida!</string>
+    <string name="achievement_4_titulo_5">Cinco fotos compartidas!</string>
+    <string name="achievement_4_titulo_10">Diez fotos compartidas!</string>
+    <string name="achievement_4_titulo_50">Cincuenta fotos compartidas!</string>
+    <string name="achievement_4_titulo_100">Cien fotos compartidas!!</string>
 
-    <plurals name="achievement_foto">
-        <item quantity="one">Felicidades! Has agregado tu primera foto!</item>
-        <item quantity="other">Felicidades! Has agregado %1$d fotos!</item>
+    <string name="achievement_2_titulo_1000">Un kilómetro recorrido!</string>
+    <string name="achievement_2_titulo_2000">Dos kilómetros recorridos!</string>
+    <string name="achievement_2_titulo_3000">Tres kilómetros recorridos!</string>
+    <string name="achievement_2_titulo_5000">Cinco kilómetros recorridos!</string>
+    <string name="achievement_2_titulo_10000">Diez kilómetros recorridos!!</string>
+
+    <string name="achievement_felicidades">Felicidades!</string>
+
+    <plurals name="achievement_1">
+        <item quantity="one">Has agregado tu primera foto!</item>
+        <item quantity="other">Has agregado %1$s fotos!</item>
     </plurals>
-    <plurals name="achievement_upload">
-        <item quantity="one">Felicidades! Has subido tu primera foto!</item>
-        <item quantity="other">Felicidades! Has subido %1$d fotos!</item>
+    <plurals name="achievement_3">
+        <item quantity="one">Has subido tu primera foto!</item>
+        <item quantity="other">Has subido %1$s fotos!</item>
     </plurals>
-    <plurals name="achievement_share">
-        <item quantity="one">Felicidades! Has compartido tu primera foto!</item>
-        <item quantity="other">Felicidades! Has compartido %1$d fotos!</item>
+    <plurals name="achievement_4">
+        <item quantity="one">Has compartido tu primera foto!</item>
+        <item quantity="other">Has compartido %1$s fotos!</item>
     </plurals>
-    <plurals name="achievement_distancia">
-        <item quantity="one">Felicidades! Has recorrido tu primer kilómetro!</item>
-        <item quantity="other">Felicidades! Has recorrido %1$d kilómetros!</item>
+    <plurals name="achievement_2">
+        <item quantity="one">Has recorrido tu primer kilómetro!</item>
+        <item quantity="other">Has recorrido %1$s metros!</item>
     </plurals>
     <string name="menu_fotos_usuario">Fotos del usuario</string>
 </resources>
