@@ -61,12 +61,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int LOGIN_POS = 6;
     public final int MAP_POS_T = 0;
     public final int CAPTURA_POS_T = 1;
-    public final int ENCYCLOPEDIA_POS_T = -1;
-    public final int GALERIA_POS_T = 2;
-    public final int RUTAS_POS_T = 3;
-    public final int IKIAM_WEB_POS_T = 4;
-    public final int SETTINGS_POS_T = 5;
-    public final int LOGIN_POS_T = 6;
+    public final int ENCYCLOPEDIA_POS_T = 2;
+    public final int GALERIA_POS_T = 3;
+    public final int RUTAS_POS_T = 4;
+    public final int IKIAM_WEB_POS_T = 5;
+    public final int SETTINGS_POS_T = 6;
+    public final int LOGIN_POS_T = 7;
     public final int TOOLS_POS = 17;
     public final int BUSQUEDA_POS = 18;
 
@@ -644,7 +644,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         });
 
     }
-    public void setPingEspecie(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String desc) {
+    public void setPingEspecie(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String desc,final String nombreEspecie) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
@@ -662,7 +662,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
-                EspecieUi especieUi = new EspecieUi(title, fotoDialog, likes, desc);
+                EspecieUi especieUi = new EspecieUi(title, nombreEspecie,fotoDialog, likes, desc);
                 especies.put(marker, especieUi);
             }
         });
@@ -894,9 +894,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             builder.setPositiveButton(R.string.map_activity_dialog_mas, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int id) {
-
+                                    String url = UtilsUploaders.getIp()+"especie/show?nombre="+especies.get(marker).nombreEspecie;
                                     try {
-
+                                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                        startActivity(myIntent);
                                     } catch (ActivityNotFoundException e) {
                                         e.printStackTrace();
                                     }

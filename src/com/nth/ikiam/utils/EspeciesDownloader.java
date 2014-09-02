@@ -78,7 +78,7 @@ public class EspeciesDownloader implements Runnable  {
                     String[] datos = parts[i].split(";");
                     System.out.println("datos "+datos+" "+datos.length);
                     try {
-                        if (datos.length == 7) {
+                        if (datos.length == 8) {
                             System.out.println("url foto "+(IP+"uploaded/android/"+datos[2]));
                             URL urlFoto = new URL(IP +"uploaded/android/"+ datos[2]);
                             HttpURLConnection connection = (HttpURLConnection) urlFoto.openConnection();
@@ -89,7 +89,7 @@ public class EspeciesDownloader implements Runnable  {
                             int likes = Integer.parseInt(datos[6]);
                             double lat = Double.parseDouble(datos[3]);
                             double longi = Double.parseDouble(datos[4]);
-                            context.setPingEspecie(datos[0], likes, lat, longi, myBitmap[0], myBitmap[1], datos[1]);
+                            context.setPingEspecie(datos[0], likes, lat, longi, myBitmap[0], myBitmap[1], datos[1],datos[7]);
                         }
 
 

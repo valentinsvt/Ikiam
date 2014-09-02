@@ -79,6 +79,7 @@
     <string-array name="options_array_turista">
         <item>Mapa</item>
         <item>Nueva captura</item>
+        <item>Enciclopedia</item>
         <item>Galería</item>
         <item>Rutas</item>
         <item>Ikiam Web</item>

@@ -271,7 +271,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
             band=true;
         }
         if (view.getId() == btnIkiam.getId()) {
-            String url = UtilsUploaders.getIp()+especie.nombre;
+            String url = UtilsUploaders.getIp()+"especie/show?nombre="+especie.nombre;
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(myIntent);
             band=true;
