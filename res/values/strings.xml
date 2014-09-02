@@ -311,7 +311,7 @@
     </plurals>
     <plurals name="achievement_2">
         <item quantity="one">Has recorrido tu primer kilómetro!</item>
-        <item quantity="other">Has recorrido %1$s kilómetros!</item>
+        <item quantity="other">Has recorrido %1$s metros!</item>
     </plurals>
     <string name="menu_fotos_usuario">Fotos del usuario</string>
 </resources>
