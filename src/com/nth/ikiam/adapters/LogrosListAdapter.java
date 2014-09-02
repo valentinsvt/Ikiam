@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.facebook.android.Util;
 import com.nth.ikiam.MapActivity;
@@ -50,29 +51,50 @@ public class LogrosListAdapter extends ArrayAdapter<Logro> {
             textFecha = (TextView) convertView.findViewById(R.id.logros_fecha);
             textDescripcion = (TextView) convertView.findViewById(R.id.logros_descripcion);
 
+            int imageId;
             if (logro.completo == 1) {
-                textFecha.setText(logro.fecha);
+//                imageBadge.setVisibility(View.VISIBLE);
                 textFecha.setVisibility(View.VISIBLE);
-                imageBadge.setVisibility(View.VISIBLE);
+                textDescripcion.setVisibility(View.VISIBLE);
+
+                textFecha.setText(logro.fecha);
+                textDescripcion.setText(Utils.getPluralResourceByName(context, "achievement_" + logro.codigo,
+                        logro.cantidad.intValue(), "" + logro.cantidad.intValue()));
+
                 textTitulo.setTextColor(context.getResources().getColor(R.color.achievement_completed));
                 textDescripcion.setTextColor(context.getResources().getColor(R.color.achievement_completed));
+
+                imageId = Utils.getImageResourceByName(context, "ic_achievement_" + logro.codigo + "_" + logro.cantidad.intValue());
+                if (imageId == 0) {
+                    imageId = Utils.getImageResourceByName(context, "ic_achievement_prize_medal_128");
+                }
+                RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) imageBadge.getLayoutParams();
+                p.height = 300;
+                p.width = 300;
+                imageBadge.setLayoutParams(p);
+//                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(100, 100);
+//                imageBadge.setLayoutParams(layoutParams);
             } else {
 //                imageBadge.setVisibility(View.GONE);
-//                textFecha.setVisibility(View.GONE);
-//                textDescripcion.setVisibility(View.GONE);
+                textFecha.setVisibility(View.GONE);
+                textDescripcion.setVisibility(View.GONE);
+
+                textFecha.setText("");
+                textDescripcion.setText("");
+
                 textTitulo.setTextColor(context.getResources().getColor(R.color.achievement_not_completed));
                 textDescripcion.setTextColor(context.getResources().getColor(R.color.achievement_not_completed));
+
+                imageId = Utils.getImageResourceByName(context, "ic_achievement_locked");
+                RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) imageBadge.getLayoutParams();
+                p.height = 120;
+                p.width = 120;
+                imageBadge.setLayoutParams(p);
             }
 
             textTitulo.setText(Utils.getStringResourceByName(context, "achievement_" + logro.codigo + "_titulo_" + logro.cantidad.intValue()));
 
-            textDescripcion.setText(Utils.getPluralResourceByName(context, "achievement_" + logro.codigo,
-                    logro.cantidad.intValue(), "" + logro.cantidad.intValue()));
-
-            int image = Utils.getImageResourceByName(context, "ic_achievement_" + logro.codigo + "_" + logro.cantidad.intValue());
-            if (image > 0) {
-                imageBadge.setImageResource(image);
-            }
+            imageBadge.setImageResource(imageId);
 
         } catch (Exception e) {
             e.printStackTrace();

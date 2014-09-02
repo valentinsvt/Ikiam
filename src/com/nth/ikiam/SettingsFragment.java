@@ -47,7 +47,8 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
                 @Override
                 public void run() {
                     int cantFotos = Foto.countNotUploaded(context);
-                    String toUpload = getString(R.string.settings_btn_upload, cantFotos);
+//                    String toUpload = getString(R.string.settings_btn_upload, cantFotos);
+                    String toUpload = getResources().getQuantityString(R.plurals.settings_btn_upload, cantFotos, cantFotos);
                     btnUpload.setText(toUpload);
                 }
             });
@@ -56,7 +57,8 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
 
     private void updateUploadBtn() {
         int cantFotos = Foto.countNotUploaded(context);
-        String toUpload = getString(R.string.settings_btn_upload, cantFotos);
+//        String toUpload = getString(R.string.settings_btn_upload, cantFotos);
+        String toUpload = getResources().getQuantityString(R.plurals.settings_btn_upload, cantFotos, cantFotos);
         btnUpload.setText(toUpload);
     }
 

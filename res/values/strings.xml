@@ -39,7 +39,7 @@
     <string name="help_rutas">Ayuda rutas</string>
     <string name="help_configuracion">Ayuda configuracion</string>
     <string name="help_login">Ayuda login</string>
-    <string name="help_busqueda">Ayuda busqueda</string>
+    <string name="help_busqueda">Ayuda búsqueda</string>
     <string name="help_tools">Ayuda tools</string>
     <string name="help_ikiam_web">Ayuda ikiam</string>
 
@@ -102,6 +102,11 @@
     <string name="gallery_title">Galería</string>
     <string name="map_title">Mapa</string>
     <string name="tools_title">Herramientas</string>
+    <string name="busqueda_title">Búsqueda</string>
+    <string name="rutas_title">Rutas</string>
+    <string name="login_title">Ingresar</string>
+    <string name="ikiam_web_title">Ikiam web</string>
+    <string name="logro_title">Logros</string>
 
     <string name="gallery_choose_btn_label">Seleccionar imagen</string>
     <string name="camera_btn_label">Tomar foto</string>
@@ -110,8 +115,8 @@
     <string name="map_continente_btn">Continente</string>
     <string name="map_locate_btn">Mi ubicación</string>
     <string name="map_service">Nueva Ruta</string>
-    <string name="map_subirFotoMarker">Clic en el ping para subir una foto en esta posición</string>
-    <string name="map_ubicar_foto_marker">Clic en el ping para ubicar la foto aquí</string>
+    <string name="map_subirFotoMarker">Clic en el pin para subir una foto en esta posición</string>
+    <string name="map_ubicar_foto_marker">Clic en el pin para ubicar la foto aquí</string>
     <string name="map_foto_ubicada">Foto ubicada correctamente</string>
     <string name="map_camara">Cámara</string>
     <string name="map_especies">Especies</string>
@@ -176,7 +181,11 @@
     <string name="dialog_btn_anterior">Anterior</string>
     <string name="dialog_btn_siguiente">Siguiente</string>
 
-    <string name="settings_btn_upload">Subir %1$d fotos</string>
+    <plurals name="settings_btn_upload">
+        <item quantity="one">Subir 1 foto</item>
+        <item quantity="other">Subir %1$d fotos</item>
+    </plurals>
+
     <string name="settings_btn_download">Descargar info</string>
     <string name="settings_chk_achevements">Contabilizar logros</string>
     <string name="settings_reset_achievements">Reiniciar estadísticas</string>
@@ -260,7 +269,7 @@
     <string name="share_caption">Descubre la biodiversidad ecuatoriana</string>
     <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
 
-    <string name="achievement_titulo">Has desbloqueado un logro!</string>
+    <string name="achievement_titulo">Has ganado el título de</string>
     <string name="tools_latitud">Latitud</string>
     <string name="tools_longitud">Longitud</string>
     <string name="map_tools">Brújula</string>

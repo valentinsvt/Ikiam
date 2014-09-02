@@ -6,13 +6,12 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
@@ -25,14 +24,32 @@ import java.io.File;
 public class Utils {
 
     public static void openFragment(MapActivity context, Fragment fragment, String title) {
+        openFragment(context, fragment, title, null);
+    }
+
+    public static void openFragment(MapActivity context, Fragment fragment, String title, Bundle args) {
         context.setTitle(title);
         FragmentManager fragmentManager = context.getFragmentManager();
+        RelativeLayout mainLayout = (RelativeLayout) context.findViewById(R.id.rl2);
+        if (fragment == null) {
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .hide(fragmentManager.findFragmentById(R.id.content_frame))
+                    .addToBackStack("")
+                    .commit();
+            mainLayout.setVisibility(View.VISIBLE);
+        } else {
+            if (args != null) {
+                fragment.setArguments(args);
+            }
 //                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack("")
-                .commit();
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .replace(R.id.content_frame, fragment)
+                    .addToBackStack("")
+                    .commit();
+            mainLayout.setVisibility(LinearLayout.GONE);
+        }
     }
 
     public static String getStringResourceByName(Context c, String aString) {

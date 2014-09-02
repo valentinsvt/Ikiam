@@ -23,6 +23,7 @@ import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.FotoUploader;
 import com.nth.ikiam.utils.RutaUploader;
 import com.nth.ikiam.utils.Utils;
+import com.nth.ikiam.utils.UtilsDistancia;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +38,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by Svt on 8/15/2014.
  */
-public class RutaFragment extends Fragment implements Button.OnClickListener, View.OnTouchListener,FieldListener {
+public class RutaFragment extends Fragment implements Button.OnClickListener, View.OnTouchListener, FieldListener {
     MapActivity activity;
     private Button[] botones;
     private ImageButton[] imgBotones;
@@ -73,10 +74,10 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(activity.ruta.idRemoto==null){
+                if (activity.ruta.idRemoto == null) {
                     ExecutorService queue = Executors.newSingleThreadExecutor();
-                    queue.execute(new RutaUploader(activity,activity.ruta,cords,fotos));
-                }else{
+                    queue.execute(new RutaUploader(activity, activity.ruta, cords, fotos));
+                } else {
                     publishStory();
                 }
 
@@ -89,11 +90,11 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             if (session != null && session.isOpened()) {
                 shareButton.setVisibility(View.VISIBLE);
                 subir.setVisibility(View.GONE);
-            }else{
+            } else {
                 shareButton.setVisibility(View.GONE);
                 subir.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             shareButton.setVisibility(View.GONE);
             subir.setVisibility(View.VISIBLE);
         }
@@ -101,62 +102,61 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         TextView texto = (TextView) view.findViewById(R.id.txt_descripcion);
         texto.setText(activity.ruta.descripcion);
         ((TextView) view.findViewById(R.id.ruta_fecha)).setText(activity.ruta.fecha);
-        fotos = Foto.findAllByRuta(activity, activity.ruta);
-        cords = Coordenada.findAllByRuta(activity,activity.ruta);
         imgs = new ArrayList<ImageView>();
+        fotos = Foto.findAllByRuta(activity, activity.ruta);
+        cords = Coordenada.findAllByRuta(activity, activity.ruta);
         double distancia = 0;
         double alturaMinima = 0;
         double alturaMaxima = 0;
-        if(cords.size()>2){
-            for(int i = 0;i<cords.size()-1;i++){
+        if (cords.size() > 2) {
+            for (int i = 0; i < cords.size() - 1; i++) {
                 Coordenada current = cords.get(i);
-                Coordenada next = cords.get(i+1);
-                if(i==0){
+                Coordenada next = cords.get(i + 1);
+                if (i == 0) {
                     alturaMinima = current.altitud;
                 }
 
-                if(alturaMinima>current.altitud)
-                    alturaMinima=current.altitud;
-                if(alturaMaxima<current.altitud)
-                    alturaMaxima=current.altitud;
-                if(alturaMinima>next.altitud)
-                    alturaMinima=next.altitud;
-                if(alturaMaxima<next.altitud)
-                    alturaMaxima=next.altitud;
-                distancia+=dist(current.getLatitud(),current.getLongitud(),next.getLatitud(),next.getLongitud());
-
+                if (alturaMinima > current.altitud)
+                    alturaMinima = current.altitud;
+                if (alturaMaxima < current.altitud)
+                    alturaMaxima = current.altitud;
+                if (alturaMinima > next.altitud)
+                    alturaMinima = next.altitud;
+                if (alturaMaxima < next.altitud)
+                    alturaMaxima = next.altitud;
+                distancia += UtilsDistancia.dist(current.getLatitud(), current.getLongitud(), next.getLatitud(), next.getLongitud());
             }
         }
-        distancia=distancia*1000; /*para sacar en metros*/
-        distancia= Math.round(distancia * 100.0) / 100.0;
+        distancia = distancia * 1000; /*para sacar en metros*/
+        distancia = Math.round(distancia * 100.0) / 100.0;
         Foto foto;
         int width = 215;
-        if(fotos.size()>0) {
+        if (fotos.size() > 0) {
             foto = fotos.get(0);
             File imgFile = new File(foto.path);
             if (imgFile.exists()) {
                 Bitmap myBitmap = ImageUtils.decodeBitmap(foto.path, width, (int) Math.floor(width * 0.5625));
                 imagen.setImageBitmap(myBitmap);
             }
-            for(int i =1;i<fotos.size();i++){
-                if(i>5)
+            for (int i = 1; i < fotos.size(); i++) {
+                if (i > 5)
                     break;
                 int res = R.id.image_1;
-                switch (i){
+                switch (i) {
                     case 1:
-                        res=R.id.image_1;
+                        res = R.id.image_1;
                         break;
                     case 2:
-                        res=R.id.image_2;
+                        res = R.id.image_2;
                         break;
                     case 3:
-                        res=R.id.image_3;
+                        res = R.id.image_3;
                         break;
                     case 4:
-                        res=R.id.image_4;
+                        res = R.id.image_4;
                         break;
                     case 5:
-                        res=R.id.image_5;
+                        res = R.id.image_5;
                         break;
 
                     default:
@@ -170,15 +170,15 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 im.setImageBitmap(myBitmap);
                 im.setVisibility(View.VISIBLE);
             }
-        }else{
+        } else {
             imagen.setMinimumWidth(width);
-            imagen.setMinimumHeight((int)Math.floor(width*0.5625));
+            imagen.setMinimumHeight((int) Math.floor(width * 0.5625));
             imagen.setImageResource(R.drawable.ic_launcher);
         }
 
-        ((TextView) view.findViewById(R.id.lbl_fotos)).setText(""+fotos.size()+" "+getString(R.string.ruta_lbl_foto));
-        ((TextView) view.findViewById(R.id.lbl_valor_distancia)).setText(""+distancia+"m");
-        ((TextView) view.findViewById(R.id.lbl_valor_altura_1)).setText("Min: "+alturaMinima+"m  -  Max: "+alturaMaxima+"m");
+        ((TextView) view.findViewById(R.id.lbl_fotos)).setText("" + fotos.size() + " " + getString(R.string.ruta_lbl_foto));
+        ((TextView) view.findViewById(R.id.lbl_valor_distancia)).setText("" + distancia + "m");
+        ((TextView) view.findViewById(R.id.lbl_valor_altura_1)).setText("Min: " + alturaMinima + "m  -  Max: " + alturaMaxima + "m");
         botones = new Button[2];
         imgBotones = new ImageButton[1];
         imgBotones[0] = (ImageButton) view.findViewById(R.id.btn_guardar_desc);
@@ -204,24 +204,24 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         if (v.getId() == imgBotones[0].getId()) {
 
             String descripcion = ((EditText) view.findViewById(R.id.txt_descripcion)).getText().toString().trim();
-            if(descripcion.length()>0){
-                activity.ruta.descripcion=descripcion;
+            if (descripcion.length() > 0) {
+                activity.ruta.descripcion = descripcion;
                 activity.ruta.save();
                 Toast.makeText(activity, getString(R.string.ruta_datos_guardados), Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(activity, getString(R.string.ruta_error_datos), Toast.LENGTH_SHORT).show();
             }
         }
         if (v.getId() == botones[0].getId()) {
             /*Ver en el mapa*/
-            activity.showRuta(cords,fotos);
+            activity.showRuta(cords, fotos);
         }
         if (v.getId() == botones[1].getId()) {
             /*Subir*/
             ExecutorService queue = Executors.newSingleThreadExecutor();
-            queue.execute(new RutaUploader(activity,activity.ruta,cords,fotos));
+            queue.execute(new RutaUploader(activity, activity.ruta, cords, fotos));
         }
-        if(imgs.size()>0){
+        if (imgs.size() > 0) {
             if (v.getId() == imgs.get(0).getId()) {
                 LayoutInflater inflater = activity.getLayoutInflater();
                 View myView = inflater.inflate(R.layout.dialog, null);
@@ -242,7 +242,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 activity.dialog.show();
             }
         }
-        if(imgs.size()>1){
+        if (imgs.size() > 1) {
             if (v.getId() == imgs.get(1).getId()) {
                 LayoutInflater inflater = activity.getLayoutInflater();
                 View myView = inflater.inflate(R.layout.dialog, null);
@@ -263,7 +263,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 activity.dialog.show();
             }
         }
-        if(imgs.size()>2){
+        if (imgs.size() > 2) {
             if (v.getId() == imgs.get(2).getId()) {
                 LayoutInflater inflater = activity.getLayoutInflater();
                 View myView = inflater.inflate(R.layout.dialog, null);
@@ -284,7 +284,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 activity.dialog.show();
             }
         }
-        if(imgs.size()>3){
+        if (imgs.size() > 3) {
             if (v.getId() == imgs.get(3).getId()) {
                 LayoutInflater inflater = activity.getLayoutInflater();
                 View myView = inflater.inflate(R.layout.dialog, null);
@@ -305,7 +305,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 activity.dialog.show();
             }
         }
-        if(imgs.size()>4){
+        if (imgs.size() > 4) {
             if (v.getId() == imgs.get(4).getId()) {
                 LayoutInflater inflater = activity.getLayoutInflater();
                 View myView = inflater.inflate(R.layout.dialog, null);
@@ -329,8 +329,9 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
 
 
     }
+
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        System.out.println("Session state change "+state);
+        System.out.println("Session state change " + state);
         if (session != null && session.isOpened()) {
             shareButton.setVisibility(View.VISIBLE);
             if (pendingPublishReauthorization && state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
@@ -342,20 +343,23 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             shareButton.setVisibility(View.INVISIBLE);
         }
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(PENDING_PUBLISH_KEY, pendingPublishReauthorization);
         uiHelper.onSaveInstanceState(outState);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("activity result de ruta "+requestCode);
+        System.out.println("activity result de ruta " + requestCode);
         if (requestCode == REAUTH_ACTIVITY_CODE) {
             uiHelper.onActivityResult(requestCode, resultCode, data);
         }
     }
+
     private void makeMeRequest(final Session session) {
         // Make an API call to get user data and define a
         // new callback to handle the response.
@@ -365,15 +369,15 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                     public void onCompleted(GraphUser user, Response response) {
 
                         // If the response is successful
-                        System.out.println("make request "+session+"  active "+Session.getActiveSession());
+                        System.out.println("make request " + session + "  active " + Session.getActiveSession());
                         if (session == Session.getActiveSession()) {
-                            System.out.println("user? "+user);
+                            System.out.println("user? " + user);
                             if (user != null) {
                                 //System.out.println("username ruta "+user.getUsername()+" name  "+user.getName());
                                 //System.out.println("Make request "+user.getId()+"  "+user.getUsername()+"  "+user.getName());
-                                activity.userId=user.getId();
-                                activity.type="facebook";
-                                activity.name=user.getName();
+                                activity.userId = user.getId();
+                                activity.type = "facebook";
+                                activity.name = user.getName();
                             } else {
                                 System.out.println("no user? no session?");
                             }
@@ -389,27 +393,29 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
     private void publishStory() {
         Session session = Session.getActiveSession();
         String link = "http://www.tedein.com.ec:8080/ikiamServer/ruta/publish/";
-        if (session != null){
+        if (session != null) {
 
             // Check for publish permissions
             List<String> permissions = session.getPermissions();
             if (!isSubsetOf(PERMISSIONS, permissions)) {
-                System.out.println("no permisos "+permissions);
+                System.out.println("no permisos " + permissions);
                 pendingPublishReauthorization = true;
                 Session.NewPermissionsRequest newPermissionsRequest = new Session
                         .NewPermissionsRequest(activity, PERMISSIONS);
                 session.requestNewPublishPermissions(newPermissionsRequest);
                 return;
             }
-            System.out.println("paso?");
+//            System.out.println("paso?");
+            //AQUI ACHIEVEMENT
+            activity.updateAchievement(activity.ACHIEV_SHARE);
             Bundle postParams = new Bundle();
             postParams.putString("name", getString(R.string.share_name));
             postParams.putString("caption", getString(R.string.share_caption));
             postParams.putString("description", getString(R.string.share_description));
-            postParams.putString("link", link+activity.ruta.idRemoto);
+            postParams.putString("link", link + activity.ruta.idRemoto);
             postParams.putString("picture", "http://sphotos-e.ak.fbcdn.net/hphotos-ak-prn2/222461_472847872799797_1288982685_n.png");
 
-            Request.Callback callbackShare= new Request.Callback() {
+            Request.Callback callbackShare = new Request.Callback() {
                 public void onCompleted(Response response) {
                     JSONObject graphResponse = response
                             .getGraphObject()
@@ -418,7 +424,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                     try {
                         postId = graphResponse.getString("id");
                     } catch (JSONException e) {
-                        System.out.println("JSON error!!!! "+ e.getMessage());
+                        System.out.println("JSON error!!!! " + e.getMessage());
                     }
                     FacebookRequestError error = response.getError();
                     if (error != null) {
@@ -459,8 +465,8 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         System.out.println(fieldName + " - got set with value - " + newValue);
         if (fieldName.equals("ruta_remote_id")) {
             System.out.println("tengo ruta id");
-            if(!newValue.equals("-1"))
-                if(activity.old_id==null){
+            if (!newValue.equals("-1"))
+                if (activity.old_id == null) {
                     publishStory();
                 }
 
@@ -483,28 +489,13 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         }
         return true;
     }
-    public double dist(double lat1,double long1,double lat2,double long2){
-
-
-        double R     = 6378.137;                          //Radio de la tierra en km
-        double dLat  = radianes(lat2 - lat1);
-        double dLong = radianes(long2 - long1);
-
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(radianes(lat1)) * Math.cos(radianes(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c;
-
-        return d;                      //Retorna tres decimales
-    }
-    public double radianes(double x){
-        return x*Math.PI/180;
-    }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         Utils.hideSoftKeyboard(this.getActivity());
         return false;
     }
+
     @Override
     public void onResume() {
         super.onResume();

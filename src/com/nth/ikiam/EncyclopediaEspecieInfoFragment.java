@@ -89,13 +89,15 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         String color1 = "", color2 = "";
         Color c1 = especie.getColor1(context);
         if (c1 != null) {
-            int id = getResources().getIdentifier("global_color_" + c1.nombre, "string", context.getPackageName());
-            color1 = id == 0 ? "" : (String) getResources().getText(id);
+//            int id = getResources().getIdentifier("global_color_" + c1.nombre, "string", context.getPackageName());
+//            color1 = id == 0 ? "" : (String) getResources().getText(id);
+            color1 = Utils.getStringResourceByName(context, "global_color_" + c1.nombre);
         }
         Color c2 = especie.getColor2(context);
         if (c2 != null) {
-            int id = getResources().getIdentifier("global_color_" + c2.nombre, "string", context.getPackageName());
-            color2 = id == 0 ? "" : (", " + ((String) getResources().getText(id)));
+//            int id = getResources().getIdentifier("global_color_" + c2.nombre, "string", context.getPackageName());
+//            color2 = id == 0 ? "" : (", " + ((String) getResources().getText(id)));
+            color2 = Utils.getStringResourceByName(context, "global_color_" + c2.nombre);
         }
 
         double altMin = 0, altMax = 0;
@@ -258,25 +260,25 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
     @Override
     public void onClick(View view) {
         Utils.hideSoftKeyboard(this.getActivity());
-        boolean band=false;
+        boolean band = false;
         if (view.getId() == btnMap.getId()) {
             //System.out.println("Mostrar mapa de la especie: " + especie.nombre);
             context.mostrarEspecie(especie);
-            band=true;
+            band = true;
         }
         if (view.getId() == btnWeb.getId()) {
-            String url = "http://en.wikipedia.org/wiki/"+especie.nombre;
+            String url = "http://en.wikipedia.org/wiki/" + especie.nombre;
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(myIntent);
-            band=true;
+            band = true;
         }
         if (view.getId() == btnIkiam.getId()) {
-            String url = UtilsUploaders.getIp()+"especie/show?nombre="+especie.nombre;
+            String url = UtilsUploaders.getIp() + "especie/show?nombre=" + especie.nombre;
             Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(myIntent);
-            band=true;
+            band = true;
         }
-        if(!band){
+        if (!band) {
             int i;
             for (i = 0; i < imageViews.length; i++) {
                 if (view.getId() == imageViews[i].getId()) {

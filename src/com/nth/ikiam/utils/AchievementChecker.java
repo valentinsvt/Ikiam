@@ -1,10 +1,13 @@
 package com.nth.ikiam.utils;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
@@ -19,10 +22,6 @@ public class AchievementChecker implements Runnable {
     MapActivity activity;
     int tipo;
     float cant;
-    public final int ACHIEV_FOTOS = 1;
-    public final int ACHIEV_DISTANCIA = 2;
-    public final int ACHIEV_UPLOADS = 3;
-    public final int ACHIEV_SHARE = 4;
 
     public AchievementChecker(MapActivity activity, int tipo, float cant) {
         this.activity = activity;
@@ -33,8 +32,6 @@ public class AchievementChecker implements Runnable {
     @Override
     public void run() {
 
-        int pluralId = 0;
-
         String felicidades = activity.getString(R.string.achievement_felicidades);
 
         List<Logro> logros = Logro.findAllByTipoAndNotCompleto(activity, this.tipo);
@@ -43,17 +40,30 @@ public class AchievementChecker implements Runnable {
                 String strAchiev = "";
 //                if (pluralId > 0) {
 //                    strAchiev = activity.getResources().getQuantityString(pluralId, (int) cant, cant);
-                    strAchiev = Utils.getPluralResourceByName(activity, "achievement_" + tipo, (int) cant, "" + cant);
+                strAchiev = Utils.getPluralResourceByName(activity, "achievement_" + tipo, logro.cantidad.intValue(), "" + logro.cantidad.intValue());
 //                }
                 logro.setCompleto(1);
                 logro.save();
+                String titulo = Utils.getStringResourceByName(activity, "achievement_" + tipo + "_titulo_" + logro.cantidad.intValue());
+                activity.titulo = titulo;
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this.activity)
                                 .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle(activity.getString(R.string.achievement_titulo))
+                                .setContentTitle(activity.getString(R.string.achievement_titulo) + " " + titulo)
                                 .setContentText(felicidades + " " + strAchiev);
                 // Creates an explicit intent for an Activity in your app
-                Intent resultIntent = new Intent(this.activity, MapActivity.class);
+//                Intent resultIntent = new Intent(this.activity, MapActivity.class);
+
+                Intent resultIntent = activity.getPackageManager().getLaunchIntentForPackage(activity.getPackageName());
+                if (resultIntent != null) {
+                    resultIntent.setAction("" + activity.INTENT_LOGRO);
+                }
+
+                mBuilder.setAutoCancel(true);
+                mBuilder.setLights(Color.BLUE, 500, 500);
+                long[] pattern = {1000, 500};
+                mBuilder.setVibrate(pattern);
+                mBuilder.setSound(Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.birds));
 
                 // The stack builder object will contain an artificial back stack for the
                 // started Activity.

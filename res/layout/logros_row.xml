@@ -11,6 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="@drawable/border"
+        android:padding="7dp"
 
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_achievement_prize_medal_128" />
@@ -23,7 +24,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Titulo logro"
 
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="40dp"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/logros_badge" />
 
@@ -33,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="fecha obtecion logro"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"

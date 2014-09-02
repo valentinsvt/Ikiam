@@ -1,12 +1,9 @@
 package com.nth.ikiam.utils;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Button;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.*;
-import com.nth.ikiam.image.ImageItem;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -153,6 +150,7 @@ public class CapturaUploader implements Runnable {
             if (coordenada != null) {
                 addFormPart(dos, "lat", "" + coordenada.latitud);
                 addFormPart(dos, "long", "" + coordenada.longitud);
+                addFormPart(dos, "alt", "" + coordenada.altitud);
             }
 
             addFormPart(dos, "userId", context.userId); //id (faceboook - fb id, ikiam db.id
@@ -207,7 +205,7 @@ public class CapturaUploader implements Runnable {
                 foto.save();
                 foto.getEntry(context).save();
                 context.setErrorMessage(context.getString(R.string.uploader_upload_success));
-                context.updateAchivement(context.ACHIEV_UPLOADS);
+                context.updateAchievement(context.ACHIEV_UPLOADS);
                 context.checkAchiev(context.ACHIEV_UPLOADS, context.getAchievement(context.ACHIEV_UPLOADS));
             } else {
                 System.out.println("NOT COMPLETED: " + serverResponseCode + "   " + serverResponseMessage);

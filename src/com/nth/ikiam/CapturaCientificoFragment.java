@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -328,7 +327,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                         } else {
 //                            alerta(getString(R.string.uploader_upload_success));
                         }
-                        context.updateAchivement(context.ACHIEV_FOTOS);
+                        context.updateAchievement(context.ACHIEV_FOTOS);
 //                alerta(msg + " exitosamente");
                         resetForm();
                         if (coordenada == null) {

@@ -2,14 +2,10 @@ package com.nth.ikiam;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -17,8 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.nth.ikiam.adapters.*;
-import com.nth.ikiam.capturaAutocomplete.CustomAutoCompleteView;
 import com.nth.ikiam.db.*;
 import com.nth.ikiam.listeners.*;
 import com.nth.ikiam.utils.CapturaUploader;
@@ -27,8 +21,6 @@ import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -225,7 +217,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 } else {
                     alerta(getString(R.string.uploader_upload_success));
                 }
-                context.updateAchivement(context.ACHIEV_FOTOS);
+                context.updateAchievement(context.ACHIEV_FOTOS);
 //                alerta(msg + " exitosamente");
                 resetForm();
                 if (coordenada == null) {
