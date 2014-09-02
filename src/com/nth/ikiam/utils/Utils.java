@@ -45,6 +45,22 @@ public class Utils {
         }
     }
 
+    public static String getPluralResourceByName(Context c, String aString, int quantity, String param1) {
+        String packageName = c.getPackageName();
+        int resId = c.getResources().getIdentifier(aString, "plurals", packageName);
+        if (resId == 0) {
+            return aString;
+        } else {
+            return c.getResources().getQuantityString(resId, quantity, param1);
+        }
+    }
+
+    public static int getImageResourceByName(Context c, String aString) {
+        String packageName = c.getPackageName();
+        int resId = c.getResources().getIdentifier(aString, "drawable", packageName);
+        return resId;
+    }
+
     public static boolean isNetworkAvailable(Context context) {
         // Get Connectivity Manager class object from Systems Service
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

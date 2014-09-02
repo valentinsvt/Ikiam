@@ -68,7 +68,8 @@ public class LogroDbHelper extends DbHelper {
     public ArrayList<Logro> getAllLogros() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Logro> logroes = new ArrayList<Logro>();
-        String selectQuery = "SELECT  * FROM " + TABLE_LOGRO;
+        String selectQuery = "SELECT  * FROM " + TABLE_LOGRO +
+                " ORDER BY " + KEY_COMPLETO + " DESC, " + KEY_CODIGO + " ASC";
 
         logQuery(LOG, selectQuery);
 

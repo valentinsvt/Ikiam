@@ -35,35 +35,23 @@ public class AchievementChecker implements Runnable {
 
         int pluralId = 0;
 
-        switch (tipo) {
-            case ACHIEV_FOTOS:
-                pluralId = R.plurals.achievement_foto;
-                break;
-            case ACHIEV_DISTANCIA:
-                pluralId = R.plurals.achievement_distancia;
-                break;
-            case ACHIEV_UPLOADS:
-                pluralId = R.plurals.achievement_upload;
-                break;
-            case ACHIEV_SHARE:
-                pluralId = R.plurals.achievement_share;
-                break;
-        }
+        String felicidades = activity.getString(R.string.achievement_felicidades);
 
         List<Logro> logros = Logro.findAllByTipoAndNotCompleto(activity, this.tipo);
         for (Logro logro : logros) {
             if (cant >= logro.cantidad) {
                 String strAchiev = "";
-                if (pluralId > 0) {
-                    strAchiev = activity.getResources().getQuantityString(pluralId, (int) cant, cant);
-                }
+//                if (pluralId > 0) {
+//                    strAchiev = activity.getResources().getQuantityString(pluralId, (int) cant, cant);
+                    strAchiev = Utils.getPluralResourceByName(activity, "achievement_" + tipo, (int) cant, "" + cant);
+//                }
                 logro.setCompleto(1);
                 logro.save();
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this.activity)
                                 .setSmallIcon(R.drawable.ic_launcher)
                                 .setContentTitle(activity.getString(R.string.achievement_titulo))
-                                .setContentText(strAchiev);
+                                .setContentText(felicidades + " " + strAchiev);
                 // Creates an explicit intent for an Activity in your app
                 Intent resultIntent = new Intent(this.activity, MapActivity.class);
 
