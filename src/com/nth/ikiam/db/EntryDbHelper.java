@@ -22,8 +22,9 @@ public class EntryDbHelper extends DbHelper {
     public static final String KEY_COMENTARIOS = "comentarios";
     public static final String KEY_ESPECIE_ID = "especie_id";
     public static final String KEY_UPLOADED = "uploaded";
+    public static final String KEY_CAUTIVERIO = "cautiverio";
 
-    public static final String[] KEYS_ENTRY = {KEY_ESPECIE_ID, KEY_COMENTARIOS, KEY_UPLOADED};
+    public static final String[] KEYS_ENTRY = {KEY_ESPECIE_ID, KEY_COMENTARIOS, KEY_UPLOADED, KEY_CAUTIVERIO};
 
     public EntryDbHelper(Context context) {
         super(context);
@@ -335,6 +336,7 @@ public class EntryDbHelper extends DbHelper {
         f.setEspecie_id(c.getLong(c.getColumnIndex(KEY_ESPECIE_ID)));
         f.setComentarios((c.getString(c.getColumnIndex(KEY_COMENTARIOS))));
         f.setUploaded((c.getInt(c.getColumnIndex(KEY_UPLOADED))));
+        f.setCautiverio((c.getInt(c.getColumnIndex(KEY_CAUTIVERIO))));
         return f;
     }
 
@@ -348,6 +350,7 @@ public class EntryDbHelper extends DbHelper {
         }
         values.put(KEY_COMENTARIOS, entry.getComentarios());
         values.put(KEY_UPLOADED, entry.getUploaded());
+        values.put(KEY_CAUTIVERIO, entry.getCautiverio());
         return values;
     }
 

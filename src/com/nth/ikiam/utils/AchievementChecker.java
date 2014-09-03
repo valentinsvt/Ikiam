@@ -63,7 +63,7 @@ public class AchievementChecker implements Runnable {
                 mBuilder.setLights(Color.BLUE, 500, 500);
                 long[] pattern = {1000, 500};
                 mBuilder.setVibrate(pattern);
-                mBuilder.setSound(Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.birds));
+                mBuilder.setSound(Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.chipquest));
 
                 // The stack builder object will contain an artificial back stack for the
                 // started Activity.
