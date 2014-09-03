@@ -1,6 +1,7 @@
 package com.nth.ikiam.utils;
 
 import com.nth.ikiam.MapActivity;
+import com.nth.ikiam.R;
 import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.Entry;
 import com.nth.ikiam.db.Especie;
@@ -29,11 +30,12 @@ public class FotoEspecieDownloader implements Runnable {
     Vector<String> fotosLats;
     Vector<String> fotosLongs;
     Vector<String> fotosAlts;
+    Vector<String> fotosComs;
     Especie especie;
 
     final String IP = UtilsUploaders.getIp();
 
-    public FotoEspecieDownloader(MapActivity context, ExecutorService queue, int retries, Vector<String> fotosPaths, Vector<String> fotosLats, Vector<String> fotosLongs, Vector<String> fotosAlts, Especie especie) {
+    public FotoEspecieDownloader(MapActivity context, ExecutorService queue, int retries, Vector<String> fotosPaths, Vector<String> fotosLats, Vector<String> fotosLongs, Vector<String> fotosAlts, Vector<String> fotosComs, Especie especie) {
         this.context = context;
         this.queue = queue;
         this.retries = retries;
@@ -41,6 +43,7 @@ public class FotoEspecieDownloader implements Runnable {
         this.fotosLats = fotosLats;
         this.fotosLongs = fotosLongs;
         this.fotosAlts = fotosAlts;
+        this.fotosComs = fotosComs;
         this.especie = especie;
     }
 
@@ -77,9 +80,11 @@ public class FotoEspecieDownloader implements Runnable {
                     fos.close();
                     System.out.println("Download Completed in" + ((System.currentTimeMillis() - startTime) / 1000) + " sec to " + fileName);
 
-                    double lat = Double.parseDouble(fotosLats.get(i));
-                    double lon = Double.parseDouble(fotosLongs.get(i));
-                    double alt = Double.parseDouble(fotosAlts.get(i));
+                    double lat = fotosLats.get(i).equals("null") ? 0 : Double.parseDouble(fotosLats.get(i));
+                    double lon = fotosLongs.get(i).equals("null") ? 0 : Double.parseDouble(fotosLongs.get(i));
+                    double alt = fotosAlts.get(i).equals("null") ? 0 : Double.parseDouble(fotosAlts.get(i));
+
+                    String com = fotosComs.get(i).equals("null") ? "" : fotosComs.get(i);
 
                     List<Coordenada> coords = Coordenada.findAllByCoords(context, lat, lon, alt);
                     Coordenada nuevaCoord;
@@ -96,7 +101,7 @@ public class FotoEspecieDownloader implements Runnable {
                     Entry nuevoEntry = new Entry(context);
                     nuevoEntry.setEspecie(especie);
                     nuevoEntry.uploaded = 1;
-                    nuevoEntry.comentarios = "";
+                    nuevoEntry.comentarios = com;
                     nuevoEntry.save();
 
                     Foto nuevaFoto = new Foto(context);
@@ -106,8 +111,11 @@ public class FotoEspecieDownloader implements Runnable {
                     nuevaFoto.path = fileName;
                     nuevaFoto.uploaded = 1;
                     nuevaFoto.save();
+
+                    context.showToast(context.getString(R.string.descarga_busqueda_download_foto_ok, especie.nombreComun));
                 } else {
                     System.out.println("File " + fileName + " exists");
+                    context.showToast(context.getString(R.string.descarga_busqueda_download_foto_ok, especie.nombreComun));
                 }
                 i++;
             }

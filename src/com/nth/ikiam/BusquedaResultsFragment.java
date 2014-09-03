@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.nth.ikiam.adapters.BusquedaResultsEspeciesListAdapter;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Foto;
+import com.nth.ikiam.utils.Utils;
 
 import java.util.List;
 
@@ -45,19 +46,21 @@ public class BusquedaResultsFragment extends ListFragment {
         Fragment fragment = new EncyclopediaEspecieInfoFragment();
         Bundle args = new Bundle();
         args.putLong("especie", selected.id);
-        fragment.setArguments(args);
+//        fragment.setArguments(args);
 
         String nombre = selected.getNombreCientifico() + " (" + selected.nombreComun + ")";
 
-        activity.setTitle(nombre);
+        Utils.openFragment(activity, fragment, nombre, args);
 
-        FragmentManager fragmentManager = activity.getFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack("")
-                .commit();
+//        activity.setTitle(nombre);
+//
+//        FragmentManager fragmentManager = activity.getFragmentManager();
+////        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+//        fragmentManager.beginTransaction()
+//                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+//                .replace(R.id.content_frame, fragment)
+//                .addToBackStack("")
+//                .commit();
 
 //        Entry selectedEntry = entryList.get(position);
 //        fotos = Foto.findAllByEntry(activity, selectedEntry);

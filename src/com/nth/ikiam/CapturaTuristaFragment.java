@@ -206,8 +206,17 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                     String id = context.userId; //id (faceboook - fb id, ikiam db.id
                     if (id != null && !id.equals("-1")) {
                         // aqui hace upload al servidor.....
-                        ExecutorService queue = Executors.newSingleThreadExecutor();
-                        queue.execute(new CapturaUploader(context, queue, fotoSubir, 0));
+                        if (coordenada == null) {
+                            if (!deMapa) {
+                                alerta(getString(R.string.captura_error_gps_upload));
+                            } else {
+                                ExecutorService queue = Executors.newSingleThreadExecutor();
+                                queue.execute(new CapturaUploader(context, queue, fotoSubir, 0));
+                            }
+                        } else {
+                            ExecutorService queue = Executors.newSingleThreadExecutor();
+                            queue.execute(new CapturaUploader(context, queue, fotoSubir, 0));
+                        }
                     } else {
                         //redirect a login
                         System.out.println("Login first!!!");

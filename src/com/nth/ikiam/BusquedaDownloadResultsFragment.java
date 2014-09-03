@@ -54,7 +54,7 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
         final int positionToRemove = position;
 
-        System.out.println("SELECTED:::::: " + selected);
+//        System.out.println("SELECTED:::::: " + selected);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Chain together various setter methods to set the dialog characteristics
         builder.setMessage(R.string.descarga_busqueda_download_confirmacion)
@@ -65,6 +65,7 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 try {
+                    System.out.println("**********************************" + selected);
                     String[] datos = selected.split(";");
                     String nombreComun = URLDecoder.decode(datos[0].trim(), "UTF-8");
                     String nombreFamilia = URLDecoder.decode(datos[1].trim(), "UTF-8");
@@ -77,6 +78,10 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
                     Vector<String> fotosLats = new Vector<String>();
                     Vector<String> fotosLongs = new Vector<String>();
                     Vector<String> fotosAlts = new Vector<String>();
+                    Vector<String> fotosComs = new Vector<String>();
+
+                    int cantFotos = 0;
+
                     if (datos.length >= 7) {
                         color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
                     }
@@ -85,18 +90,27 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
                         fotosLats.add(datos[8]);
                         fotosLongs.add(datos[9]);
                         fotosAlts.add(datos[10]);
+                        fotosComs.add(datos[11]);
+
+                        cantFotos++;
                     }
-                    if (datos.length >= 12) {
-                        fotosPaths.add(datos[11]);
-                        fotosLats.add(datos[12]);
-                        fotosLongs.add(datos[13]);
-                        fotosAlts.add(datos[14]);
+                    if (datos.length >= 13) {
+                        fotosPaths.add(datos[12]);
+                        fotosLats.add(datos[13]);
+                        fotosLongs.add(datos[14]);
+                        fotosAlts.add(datos[15]);
+                        fotosComs.add(datos[16]);
+
+                        cantFotos++;
                     }
-                    if (datos.length >= 16) {
-                        fotosPaths.add(datos[15]);
-                        fotosLats.add(datos[16]);
-                        fotosLongs.add(datos[17]);
-                        fotosAlts.add(datos[18]);
+                    if (datos.length >= 17) {
+                        fotosPaths.add(datos[16]);
+                        fotosLats.add(datos[17]);
+                        fotosLongs.add(datos[18]);
+                        fotosAlts.add(datos[19]);
+                        fotosComs.add(datos[20]);
+
+                        cantFotos++;
                     }
 
                     Familia nuevaFamilia = Familia.getByNombreOrCreate(activity, nombreFamilia);
@@ -114,11 +128,15 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
                     especiesList.remove(positionToRemove);
                     adapter.notifyDataSetChanged();
+                    String texto = getString(R.string.descarga_busqueda_download_ok);
+                    if (cantFotos > 0) {
+                        texto = getResources().getQuantityString(R.plurals.descarga_busqueda_download_ok, cantFotos, cantFotos);
+                    }
+                    Toast.makeText(activity, texto, Toast.LENGTH_LONG).show();
 
                     ExecutorService queue = Executors.newSingleThreadExecutor();
-                    queue.execute(new FotoEspecieDownloader(activity, queue, 0, fotosPaths, fotosLats, fotosLongs, fotosAlts, nuevaEspecie));
+                    queue.execute(new FotoEspecieDownloader(activity, queue, 0, fotosPaths, fotosLats, fotosLongs, fotosAlts, fotosComs, nuevaEspecie));
 
-                    Toast.makeText(activity, getString(R.string.descarga_busqueda_download_ok), Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

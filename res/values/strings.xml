@@ -167,6 +167,8 @@
     <string name="captura_error_seleccion">Por favor, selecciona o toma una foto primero</string>
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
     <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
+    <string name="captura_error_gps_upload">La foto no tiene información geográfica. Por favor súbala después de ubicarla.</string>
+
 
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
     <string name="map_activity_atracciones">Atracciones</string>
@@ -204,7 +206,14 @@
 
     <string name="descarga_busqueda_download_title">Descargar especie</string>
     <string name="descarga_busqueda_download_confirmacion">¿Está seguro de querer descargar esta especie a su dispositivo móvil?</string>
-    <string name="descarga_busqueda_download_ok">Especie descargada</string>
+    <string name="descarga_busqueda_download_foto_ok">Descargada foto de %1$s</string>
+    <string name="descarga_busqueda_download_foto_exists">Foto de %1$s ya existe</string>
+    <string name="descarga_busqueda_download_ok">Especie descargada.</string>
+    <plurals name="descarga_busqueda_download_ok">
+        <item quantity="one">Especie descargada. Se descargará 1 foto.</item>
+        <item quantity="other">Especie descargada. Se descargarán %1$d fotos.</item>
+    </plurals>
+
 
     <string name="estadisticas_reset_confirmacion">¿Está seguro de querer reiniciar a 0 todas las estadísticas guardadas?</string>
     <string name="estadisticas_reset_ok">Estadísticas reiniciadas</string>

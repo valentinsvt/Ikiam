@@ -39,6 +39,7 @@ import com.nth.ikiam.utils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -203,6 +204,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     public void showDownloadedEspecies(final String msg, final ProgressDialog progressDialog) {
         final Activity a = this;
+        final MapActivity mapAct = (MapActivity) a;
         if (a != null) {
             a.runOnUiThread(new Runnable() {
 
@@ -210,14 +212,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 public void run() {
                     progressDialog.hide();
                     Fragment fragment = new BusquedaDownloadResultsFragment();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rl2);
-                    mainLayout.setVisibility(LinearLayout.GONE);
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                            .replace(R.id.content_frame, fragment)
-                            .addToBackStack("")
-                            .commit();
+                    Utils.openFragment(mapAct, fragment, getString(R.string.descarga_busqueda_download_title));
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rl2);
+//                    mainLayout.setVisibility(LinearLayout.GONE);
+//                    fragmentManager.beginTransaction()
+//                            .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+//                            .replace(R.id.content_frame, fragment)
+//                            .addToBackStack("")
+//                            .commit();
                 }
             });
         }
