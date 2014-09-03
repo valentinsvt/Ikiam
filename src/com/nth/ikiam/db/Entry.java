@@ -17,6 +17,9 @@ public class Entry {
     public String comentarios;
 
     public int uploaded = 0;
+
+    public int cautiverio = 0;
+
     Context context;
     EntryDbHelper entryDbHelper;
 
@@ -61,6 +64,10 @@ public class Entry {
         return uploaded;
     }
 
+    public int getCautiverio() {
+        return cautiverio;
+    }
+
     //setters
     public void setId(long id) {
         this.id = id;
@@ -84,6 +91,10 @@ public class Entry {
 
     public void setUploaded(int uploaded) {
         this.uploaded = uploaded;
+    }
+
+    public void setCautiverio(int cautiverio) {
+        this.cautiverio = cautiverio;
     }
 
     public void save() {

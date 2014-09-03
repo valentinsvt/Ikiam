@@ -193,9 +193,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+
                 android:layout_below="@id/captura_flor_toggle"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="15dp" />
+
+            <CheckBox
+                android:id="@+id/captura_cautiverio_label"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/captura_color2_spinner"
+                android:text="@string/captura_cautiverio_label"
+                android:layout_alignParentStart ="true" />
+
 
             <TextView
                 android:id="@id/captura_color1_label"
@@ -204,9 +215,10 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/captura_color1_label"
-                android:layout_below="@id/captura_info_label"
-                android:layout_alignParentStart="true"
-                android:textStyle="bold|italic" />
+                android:textStyle="bold|italic"
+
+                android:layout_below="@id/captura_cautiverio_label"
+                android:layout_alignParentStart="true" />
 
             <TextView
                 android:id="@id/captura_color2_label"
@@ -250,7 +262,7 @@
 
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_below="@id/captura_color2_spinner"
+                android:layout_below="@id/captura_color1_spinner"
                 android:layout_alignParentLeft="true" />
 
             <com.nth.ikiam.capturaAutocomplete.CustomAutoCompleteView
@@ -350,6 +362,7 @@
                 android:layout_below="@+id/captura_autocomplete_nombre_especie"
                 android:password="false"
                 android:hint="@string/captura_comentarios_label" />
+
         </RelativeLayout>
     </ScrollView>
 
