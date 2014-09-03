@@ -40,6 +40,7 @@ public class DbHelper extends SQLiteOpenHelper {
     protected static final String TABLE_RUTA = "ruta";
     protected static final String TABLE_ENTRY = "entry";
     protected static final String TABLE_LOGRO = "logro";
+    protected static final String TABLE_NOTA = "notas";
 
     // Common column names
     protected static final String KEY_ID = "id";
@@ -65,10 +66,10 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_FAMILIA, KEYS_COMMON, FamiliaDbHelper.KEYS_FAMILIA));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_FOTO, KEYS_COMMON, FotoDbHelper.KEYS_FOTO));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_GENERO, KEYS_COMMON, GeneroDbHelper.KEYS_GENERO));
-        //sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_LUGAR, KEYS_COMMON, LugarDbHelper.KEYS_LUGAR));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_RUTA, KEYS_COMMON, RutaDbHelper.KEYS_RUTA));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ENTRY, KEYS_COMMON, EntryDbHelper.KEYS_ENTRY));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_LOGRO, KEYS_COMMON, LogroDbHelper.KEYS_LOGRO));
+        sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_NOTA, KEYS_COMMON, NotaDbHelper.KEYS_NOTA));
     }
 
     @Override

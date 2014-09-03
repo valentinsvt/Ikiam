@@ -1,0 +1,57 @@
+package com.nth.ikiam.adapters;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import com.nth.ikiam.R;
+import com.nth.ikiam.db.Nota;
+import com.nth.ikiam.utils.Utils;
+
+import java.net.URLDecoder;
+import java.util.List;
+
+/**
+ * Created by DELL on 03/08/2014.
+ */
+public class NotasListAdapter extends ArrayAdapter<Nota> {
+    private final Context context;
+    private final List<Nota> notas;
+
+    public NotasListAdapter(Context context, List<Nota> notas) {
+        super(context, R.layout.notas_row, notas);
+        this.context = context;
+        this.notas = notas;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        try {
+            Nota nota = notas.get(position);
+
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.notas_row, null);
+            }
+            TextView itemTitulo = (TextView) convertView.findViewById(R.id.notas_row_titulo);
+            TextView itemContenido = (TextView) convertView.findViewById(R.id.notas_row_contenido);
+            TextView itemFecha = (TextView) convertView.findViewById(R.id.notas_row_fecha);
+
+            String contenido = nota.contenido;
+            if (contenido.length() > 100) {
+                contenido = contenido.substring(0, 97) + "...";
+            }
+
+            itemTitulo.setText(nota.titulo);
+            itemContenido.setText(contenido);
+            itemFecha.setText(nota.fecha);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return convertView;
+    }
+}

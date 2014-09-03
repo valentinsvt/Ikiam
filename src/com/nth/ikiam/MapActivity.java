@@ -58,8 +58,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int GALERIA_POS = -1;
     public final int RUTAS_POS = 3;
     public final int IKIAM_WEB_POS = 4;
-    public final int SETTINGS_POS = 5;
-    public final int LOGIN_POS = 6;
+    public final int NOTEPAD_POS = 5;
+    public final int SETTINGS_POS = 6;
+    public final int LOGIN_POS = 7;
 
     public final int MAP_POS_T = 0;
     public final int CAPTURA_POS_T = 1;
@@ -67,8 +68,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int GALERIA_POS_T = 3;
     public final int RUTAS_POS_T = 4;
     public final int IKIAM_WEB_POS_T = 5;
-    public final int SETTINGS_POS_T = 6;
-    public final int LOGIN_POS_T = 7;
+    public final int NOTEPAD_POS_T = 6;
+    public final int SETTINGS_POS_T = 7;
+    public final int LOGIN_POS_T = 8;
 
     public final int TOOLS_POS = 17;
     public final int BUSQUEDA_POS = 18;
@@ -1229,6 +1231,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         case IKIAM_WEB_POS_T:
                             txt.setText(getString(R.string.help_ikiam_web));
                             break;
+                        case NOTEPAD_POS_T:
+                            txt.setText(getString(R.string.help_notepad));
+                            break;
                         case SETTINGS_POS_T:
                             txt.setText(getString(R.string.help_configuracion));
                             break;
@@ -1261,6 +1266,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             break;
                         case IKIAM_WEB_POS:
                             txt.setText(getString(R.string.help_ikiam_web));
+                            break;
+                        case NOTEPAD_POS:
+                            txt.setText(getString(R.string.help_notepad));
                             break;
                         case SETTINGS_POS:
                             txt.setText(getString(R.string.help_configuracion));
@@ -1365,6 +1373,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     title = getString(R.string.ikiam_web_title);
                     activeFragment = IKIAM_WEB_POS;
                     break;
+                case NOTEPAD_POS_T:
+                    fragment = new NotepadFragment();
+                    title = getString(R.string.notepad_title);
+                    activeFragment = NOTEPAD_POS;
+                    break;
                 case SETTINGS_POS_T:
                     fragment = new SettingsFragment();
                     this.addListener((FieldListener) fragment);
@@ -1430,6 +1443,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     fragment = new DescargaBusquedaFragment();
                     title = getString(R.string.ikiam_web_title);
                     activeFragment = IKIAM_WEB_POS;
+                    break;
+                case NOTEPAD_POS:
+                    fragment = new NotepadFragment();
+                    title = getString(R.string.notepad_title);
+                    activeFragment = NOTEPAD_POS;
                     break;
                 case SETTINGS_POS:
                     fragment = new SettingsFragment();

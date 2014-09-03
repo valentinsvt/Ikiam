@@ -42,6 +42,7 @@
     <string name="help_busqueda">Ayuda búsqueda</string>
     <string name="help_tools">Ayuda tools</string>
     <string name="help_ikiam_web">Ayuda ikiam</string>
+    <string name="help_notepad">Ayuda notas</string>
 
     <string name="global_yes">Sí</string>
     <string name="global_no">No</string>
@@ -73,6 +74,7 @@
         <item>Enciclopedia</item>
         <item>Rutas</item>
         <item>Ikiam Web</item>
+        <item>Notas</item>
         <item>Configuración</item>
         <item>Login</item>
     </string-array>
@@ -83,6 +85,7 @@
         <item>Galería</item>
         <item>Rutas</item>
         <item>Ikiam Web</item>
+        <item>Notas</item>
         <item>Configuración</item>
         <item>Login</item>
     </string-array>
@@ -107,6 +110,7 @@
     <string name="login_title">Ingresar</string>
     <string name="ikiam_web_title">Ikiam web</string>
     <string name="logro_title">Logros</string>
+    <string name="notepad_title">Notas</string>
 
     <string name="gallery_choose_btn_label">Seleccionar imagen</string>
     <string name="camera_btn_label">Tomar foto</string>

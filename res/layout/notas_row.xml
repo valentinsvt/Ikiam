@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/notas_row_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TITULO"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/notas_row_contenido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fragmento de contenido"
+
+        android:layout_below="@id/notas_row_titulo" />
+
+    <TextView
+        android:id="@+id/notas_row_fecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="fecha"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+
+        android:layout_below="@+id/notas_row_contenido" />
+
+
+</RelativeLayout>
