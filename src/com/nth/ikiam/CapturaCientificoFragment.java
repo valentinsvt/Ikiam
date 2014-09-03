@@ -61,6 +61,8 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 
     private EditText textoComentarios;
 
+    private CheckBox chkCautiverio;
+
     public CustomAutoCompleteView autocompleteNombreComun;
     public CustomAutoCompleteView autocompleteFamilia;
     public CustomAutoCompleteView autocompleteGenero;
@@ -113,6 +115,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
         selectedImage = (ImageView) view.findViewById(R.id.captura_chosen_image_view);
         lblInfo = (TextView) view.findViewById(R.id.captura_info_label);
         textoComentarios = (EditText) view.findViewById(R.id.captura_comentarios_txt);
+        chkCautiverio = (CheckBox) view.findViewById(R.id.captura_cautiverio_check);
 
         initSpinners(view);
         initAutocompletes(view);
@@ -246,6 +249,11 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                             entry.setEspecie(especie);
                             entry.setComentarios(comentarios);
                             entry.setUploaded(0);
+                            if (chkCautiverio.isChecked()) {
+                                entry.cautiverio = 1;
+                            } else {
+                                entry.cautiverio = 0;
+                            }
                             entry.save();
                         }
 

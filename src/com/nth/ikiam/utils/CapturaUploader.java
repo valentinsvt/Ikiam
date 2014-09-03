@@ -144,6 +144,8 @@ public class CapturaUploader implements Runnable {
                 addFormPart(dos, "fecha", entry.fecha);
             }
 
+            addFormPart(dos, "cautiverio", "" + entry.cautiverio);
+
             addFormPart(dos, "keywords", foto.keywords);
             addFormPart(dos, "archivo", foto.path);
 

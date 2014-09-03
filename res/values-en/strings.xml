@@ -156,7 +156,7 @@
     <string name="captura_nombre_comun_label">Nombre común</string>
     <string name="captura_color1_label">Color principal</string>
     <string name="captura_color2_label">Color secundario</string>
-    <string name="captura_cautiverio_label">En cautiverio</string>
+    <string name="captura_cautiverio_label">Especimen en cautiverio</string>
 
     <string name="captura_error_nombre_comun">Por favor, ingresa el nombre común de la especie</string>
     <string name="captura_error_nombre_familia">Por favor, ingresa la familia de la especie</string>

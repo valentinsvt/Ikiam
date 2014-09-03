@@ -193,20 +193,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="gone"
 
                 android:layout_below="@id/captura_flor_toggle"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="15dp" />
-
-            <CheckBox
-                android:id="@+id/captura_cautiverio_label"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/captura_color2_spinner"
-                android:text="@string/captura_cautiverio_label"
-                android:layout_alignParentStart ="true" />
-
 
             <TextView
                 android:id="@id/captura_color1_label"
@@ -217,7 +208,7 @@
                 android:text="@string/captura_color1_label"
                 android:textStyle="bold|italic"
 
-                android:layout_below="@id/captura_cautiverio_label"
+                android:layout_below="@id/captura_info_label"
                 android:layout_alignParentStart="true" />
 
             <TextView
@@ -227,6 +218,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/captura_color2_label"
+
                 android:layout_below="@id/captura_info_label"
                 android:layout_toRightOf="@id/captura_color1_label"
                 android:layout_alignStart="@id/captura_color2_spinner"
@@ -350,6 +342,30 @@
 
                 android:layout_below="@id/captura_autocomplete_nombre_genero"
                 android:layout_toRightOf="@id/captura_nombre_especie_label" />
+
+            <TextView
+                android:id="@id/captura_cautiverio_label"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/captura_cautiverio_label"
+                android:textStyle="bold|italic"
+
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/captura_nombre_especie_label"
+                android:layout_alignParentLeft="true" />
+
+            <CheckBox
+                android:id="@+id/captura_cautiverio_check"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_below="@id/captura_autocomplete_nombre_especie"
+                android:text=""
+                android:layout_toRightOf="@id/captura_cautiverio_label"/>
 
             <EditText
                 android:id="@id/captura_comentarios_txt"
