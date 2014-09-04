@@ -317,11 +317,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         /*DRAWER*/
         mTitle = mDrawerTitle = getTitle();
-        if (!esCientifico.equals("-1")) {
-            mOptionsArray = getResources().getStringArray(R.array.options_array_cientifico);
+        if (!esCientifico.equals("S")) {
+            mOptionsArray = getResources().getStringArray(R.array.options_array_turista);
+
 
         } else {
-            mOptionsArray = getResources().getStringArray(R.array.options_array_turista);
+            mOptionsArray = getResources().getStringArray(R.array.options_array_cientifico);
 
         }
 
