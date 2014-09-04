@@ -128,9 +128,9 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
                     especiesList.remove(positionToRemove);
                     adapter.notifyDataSetChanged();
-                    String texto = getString(R.string.descarga_busqueda_download_ok);
+                    String texto = getString(R.string.descarga_busqueda_download_ok, nuevaEspecie.nombreComun);
                     if (cantFotos > 0) {
-                        texto = getResources().getQuantityString(R.plurals.descarga_busqueda_download_ok, cantFotos, cantFotos);
+                        texto = getResources().getQuantityString(R.plurals.descarga_busqueda_download_ok, cantFotos, nuevaEspecie.nombreComun, cantFotos);
                     }
                     Toast.makeText(activity, texto, Toast.LENGTH_LONG).show();
 

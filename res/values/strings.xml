@@ -218,10 +218,10 @@
     <string name="descarga_busqueda_download_confirmacion">¿Está seguro de querer descargar esta especie a su dispositivo móvil?</string>
     <string name="descarga_busqueda_download_foto_ok">Descargada foto de %1$s</string>
     <string name="descarga_busqueda_download_foto_exists">Foto de %1$s ya existe</string>
-    <string name="descarga_busqueda_download_ok">Especie descargada.</string>
+    <string name="descarga_busqueda_download_ok">Especie %1$s descargada. No tiene fotos que descargar.</string>
     <plurals name="descarga_busqueda_download_ok">
-        <item quantity="one">Especie descargada. Se descargará 1 foto.</item>
-        <item quantity="other">Especie descargada. Se descargarán %1$d fotos.</item>
+        <item quantity="one">Especie %1$s descargada. Se descargará 1 foto.</item>
+        <item quantity="other">Especie %1$s descargada. Se descargarán %1$d fotos.</item>
     </plurals>
 
 
