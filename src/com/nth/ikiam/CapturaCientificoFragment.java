@@ -660,4 +660,10 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 //        Utils.hideSoftKeyboard(context);
         return false;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.captura_title);
+    }
 }

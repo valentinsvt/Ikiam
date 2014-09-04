@@ -66,4 +66,10 @@ public class EncyclopediaFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.setTitle(R.string.encyclopedia_title);
+    }
+
 }

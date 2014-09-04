@@ -59,8 +59,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int RUTAS_POS = 3;
     public final int IKIAM_WEB_POS = 4;
     public final int NOTEPAD_POS = 5;
-    public final int SETTINGS_POS = 6;
-    public final int LOGIN_POS = 7;
+    public final int NOTA_POS = 6;
+    public final int SETTINGS_POS = 7;
+    public final int LOGIN_POS = 8;
 
     public final int MAP_POS_T = 0;
     public final int CAPTURA_POS_T = 1;
@@ -69,8 +70,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int RUTAS_POS_T = 4;
     public final int IKIAM_WEB_POS_T = 5;
     public final int NOTEPAD_POS_T = 6;
-    public final int SETTINGS_POS_T = 7;
-    public final int LOGIN_POS_T = 8;
+    public final int NOTA_POS_T = 7;
+    public final int SETTINGS_POS_T = 8;
+    public final int LOGIN_POS_T = 9;
 
     public final int TOOLS_POS = 17;
     public final int BUSQUEDA_POS = 18;
@@ -1232,6 +1234,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             txt.setText(getString(R.string.help_ikiam_web));
                             break;
                         case NOTEPAD_POS_T:
+                        case NOTA_POS_T:
                             txt.setText(getString(R.string.help_notepad));
                             break;
                         case SETTINGS_POS_T:
@@ -1268,6 +1271,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             txt.setText(getString(R.string.help_ikiam_web));
                             break;
                         case NOTEPAD_POS:
+                        case NOTA_POS:
                             txt.setText(getString(R.string.help_notepad));
                             break;
                         case SETTINGS_POS:
@@ -1325,6 +1329,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         String title = "";
         Utils.hideSoftKeyboard(this);
         Fragment fragment = null;
+        Bundle args = null;
         if (esCientifico.equals("-1")) {
             switch (position) {
                 case MAP_POS_T:
@@ -1377,6 +1382,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     fragment = new NotepadFragment();
                     title = getString(R.string.notepad_title);
                     activeFragment = NOTEPAD_POS;
+                    break;
+                case NOTA_POS_T:
+                    fragment = new NotaCreateFrgment();
+                    args = new Bundle();
+                    args.putLong("nota", -1);
+                    title = getString(R.string.nota_create_title);
+                    activeFragment = NOTA_POS;
                     break;
                 case SETTINGS_POS_T:
                     fragment = new SettingsFragment();
@@ -1449,6 +1461,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     title = getString(R.string.notepad_title);
                     activeFragment = NOTEPAD_POS;
                     break;
+                case NOTA_POS:
+                    fragment = new NotaCreateFrgment();
+                    args = new Bundle();
+                    args.putLong("nota", -1);
+                    title = getString(R.string.nota_create_title);
+                    activeFragment = NOTA_POS;
+                    break;
                 case SETTINGS_POS:
                     fragment = new SettingsFragment();
                     this.addListener((FieldListener) fragment);
@@ -1472,7 +1491,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 //            Bundle args = new Bundle();
         //args.putString("pathFolder", pathFolder);
 //            fragment.setArguments(args);
-        Utils.openFragment(this, fragment, title);
+        Utils.openFragment(this, fragment, title, args);
 //            FragmentManager fragmentManager = getFragmentManager();
 //            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
 //            mainLayout.setVisibility(LinearLayout.GONE);
@@ -1652,9 +1671,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
             }
         }
-        LatLngBounds bounds = builder.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-        map.animateCamera(cu);
+        if (entrys.size() > 0) {
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            map.animateCamera(cu);
+        }
         if (activeFragment != MAP_POS)
             showMap();
         setTitle(getString(R.string.menu_fotos_usuario));

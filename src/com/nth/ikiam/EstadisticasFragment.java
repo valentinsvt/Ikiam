@@ -35,4 +35,10 @@ public class EstadisticasFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.setTitle(R.string.estadisticas_title);
+    }
 }

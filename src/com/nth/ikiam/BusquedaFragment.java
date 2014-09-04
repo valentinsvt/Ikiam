@@ -270,4 +270,9 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
         Utils.hideSoftKeyboard(context);
         return false;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.setTitle(R.string.busqueda_title);
+    }
 }

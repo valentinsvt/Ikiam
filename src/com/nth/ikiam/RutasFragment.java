@@ -36,6 +36,7 @@ public class RutasFragment extends ListFragment {
         RutasListAdapter adapter = new RutasListAdapter(getActivity(), list);
         setListAdapter(adapter);
     }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Ruta selected = list.get(position);
@@ -43,5 +44,10 @@ public class RutasFragment extends ListFragment {
         activity.openRutaFragment(selected);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.rutas_title);
+    }
 
 }

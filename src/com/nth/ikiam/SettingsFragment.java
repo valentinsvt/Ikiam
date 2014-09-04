@@ -162,4 +162,10 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         editor.putInt("logros", val);
         editor.commit();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.setTitle(R.string.settings_title);
+    }
 }

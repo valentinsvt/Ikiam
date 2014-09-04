@@ -383,4 +383,10 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         Utils.hideSoftKeyboard(this.getActivity());
         return false;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.setTitle(R.string.especie_info_title);
+    }
 }

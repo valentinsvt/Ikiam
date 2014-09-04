@@ -97,4 +97,10 @@ public class GaleriaFragment extends ListFragment {
         img.setImageBitmap(activity.getFotoDialog(fotos.get(fotoPos), activity.screenWidth, 300));
 //        dialogTitle = R.string.encyclopedia_entries_dialog_title + " (" + (fotoPos + 1) + "/" + fotos.size() + ")";
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.gallery_title);
+    }
 }

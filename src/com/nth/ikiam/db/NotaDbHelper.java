@@ -39,7 +39,7 @@ public class NotaDbHelper extends DbHelper {
 
     public long createNota(Nota nota) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = setValues(nota, true);
+        ContentValues values = setValues(nota);
 
         // insert row
         long res = db.insert(TABLE_NOTA, null, values);
@@ -133,18 +133,12 @@ public class NotaDbHelper extends DbHelper {
         return cl;
     }
 
-    private ContentValues setValues(Nota nota, boolean fecha) {
+    private ContentValues setValues(Nota nota) {
         ContentValues values = new ContentValues();
-        if (fecha) {
-            values.put(KEY_FECHA, getDateTime());
-        }
+        values.put(KEY_FECHA, getDateTime());
         values.put(KEY_TITULO, nota.titulo);
         values.put(KEY_CONTENIDO, nota.contenido);
         return values;
-    }
-
-    private ContentValues setValues(Nota nota) {
-        return setValues(nota, false);
     }
 }
 

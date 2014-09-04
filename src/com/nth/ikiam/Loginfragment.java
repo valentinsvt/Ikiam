@@ -180,7 +180,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
             }
         }
 
-       // System.out.println("variables login " + activity.userId + "  name " + activity.name);
+        // System.out.println("variables login " + activity.userId + "  name " + activity.name);
 
 
         return view;
@@ -339,7 +339,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
                 new Request.GraphUserCallback() {
                     @Override
                     public void onCompleted(GraphUser user, Response response) {
-                        System.out.println("call back en login "+session+"  "+user);
+                        System.out.println("call back en login " + session + "  " + user);
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
@@ -385,6 +385,7 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
+        activity.setTitle(R.string.login_title);
     }
 
     @Override

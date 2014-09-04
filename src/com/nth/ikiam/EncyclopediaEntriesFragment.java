@@ -108,5 +108,11 @@ public class EncyclopediaEntriesFragment extends ListFragment {
 //        dialogTitlegetResources().getQuantityString(R.plurals.especie_info_fotos, cantFotos, cantFotos, showing);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.encyclopedia_title);
+    }
+
 
 }

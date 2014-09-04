@@ -40,9 +40,18 @@ public class NotasListAdapter extends ArrayAdapter<Nota> {
             TextView itemContenido = (TextView) convertView.findViewById(R.id.notas_row_contenido);
             TextView itemFecha = (TextView) convertView.findViewById(R.id.notas_row_fecha);
 
-            String contenido = nota.contenido;
-            if (contenido.length() > 100) {
-                contenido = contenido.substring(0, 97) + "...";
+            String contenido = "";
+
+            if (nota.contenido != null) {
+                String[] parts = nota.contenido.split("\\n");
+                contenido = parts[0];
+                if (contenido.length() >= 99) {
+                    contenido = contenido.substring(0, 99) + "…";
+                } else {
+                    if (parts.length > 1) {
+                        contenido += "…";
+                    }
+                }
             }
 
             itemTitulo.setText(nota.titulo);

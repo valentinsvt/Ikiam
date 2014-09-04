@@ -500,6 +500,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
+        activity.setTitle(R.string.rutas_title);
     }
 
     @Override

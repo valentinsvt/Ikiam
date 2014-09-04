@@ -9,4 +9,9 @@
 
     <color name="achievement_not_completed">#939393</color>
     <color name="achievement_completed">#076324</color>
+
+    <color name="ikiam_oscuro">#076324</color>
+    <color name="ikiam_claro">#9FCF67</color>
+
+
 </resources>

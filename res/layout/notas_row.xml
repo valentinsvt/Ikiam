@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:text="TITULO"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/ikiam_oscuro"
 
         android:textStyle="bold" />
 
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:text="fecha"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/ikiam_claro"
 
         android:layout_below="@+id/notas_row_contenido" />
 

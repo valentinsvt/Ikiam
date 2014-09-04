@@ -93,6 +93,11 @@ public class Nota {
         return e.getAllNotas();
     }
 
+    public static void delete(Context context, Nota nota) {
+        NotaDbHelper e = new NotaDbHelper(context);
+        e.deleteNota(nota);
+    }
+
     public static void empty(Context context) {
         NotaDbHelper e = new NotaDbHelper(context);
         e.deleteAllNotaes();

@@ -68,7 +68,7 @@
         android:id="@+id/captura_turista_scroll_view"
 
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_below="@+id/captura_botones_container"
         android:layout_above="@+id/captura_guardar_container"
 
@@ -80,7 +80,7 @@
             android:id="@+id/relative_layout"
 
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@id/captura_chosen_image_view"
@@ -94,27 +94,17 @@
                 android:minHeight="100dp"
                 android:minWidth="100dp" />
 
-
-            <TextView
-                android:id="@id/captura_info_label"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_below="@id/captura_chosen_image_view"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="15dp" />
-
             <EditText
                 android:id="@id/captura_comentarios_txt"
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:inputType="textMultiLine"
-                android:minLines="8"
+                android:ems="10"
+                android:minLines="13"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/captura_info_label"
-                android:password="false"
+                android:layout_below="@+id/captura_chosen_image_view"
+                android:gravity="top"
                 android:hint="@string/captura_comentarios_label" />
         </RelativeLayout>
     </ScrollView>

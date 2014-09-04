@@ -22,14 +22,14 @@ import android.widget.TextView;
 /**
  * Created by svt on 8/27/2014.
  */
-public class ToolsFragment extends Fragment  implements SensorEventListener {
+public class ToolsFragment extends Fragment implements SensorEventListener {
 
     // Acquire a reference to the system Location Manager
-    LocationManager locationManager ;
+    LocationManager locationManager;
     MapActivity activity;
     View view;
-    TextView latitud ;
-    TextView longitud ;
+    TextView latitud;
+    TextView longitud;
     TextView altura;
 
     SensorManager sensorManager;
@@ -52,33 +52,37 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
             updateInterface(location);
         }
 
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
 
-        public void onProviderEnabled(String provider) {}
+        public void onProviderEnabled(String provider) {
+        }
 
-        public void onProviderDisabled(String provider) {}
+        public void onProviderDisabled(String provider) {
+        }
     };
     private ImageView image;
     private float currentDegree = 0f;
     TextView tvHeading;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tools_layout, container, false);
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 //        String provider, long minTime, float minDistance, LocationListener listener
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000*60*2, 10, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100*30, 5, locationListener);
-        Location location =  locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100 * 30, 5, locationListener);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         activity = (MapActivity) getActivity();
         //myCompass = (Compass)view.findViewById(R.id.mycompass);
-        latitud =(TextView) view.findViewById(R.id.lbl_valor_latitud);
-        longitud =(TextView) view.findViewById(R.id.lbl_valor_longitud);
-        altura =(TextView) view.findViewById(R.id.lbl_valor_altura);
-        latitud.setText(""+location.getLatitude());
-        longitud.setText(""+location.getLongitude());
+        latitud = (TextView) view.findViewById(R.id.lbl_valor_latitud);
+        longitud = (TextView) view.findViewById(R.id.lbl_valor_longitud);
+        altura = (TextView) view.findViewById(R.id.lbl_valor_altura);
+        latitud.setText("" + location.getLatitude());
+        longitud.setText("" + location.getLongitude());
         altura.setText("" + location.getAltitude() + " m");
 
-        sensorManager = (SensorManager)activity.getSystemService(activity.SENSOR_SERVICE);
+        sensorManager = (SensorManager) activity.getSystemService(activity.SENSOR_SERVICE);
         //sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         //sensorMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         image = (ImageView) view.findViewById(R.id.imageViewCompass);
@@ -98,11 +102,11 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
         return view;
     }
 
-    public void updateInterface(Location location){
-       // System.out.println("cambio location "+location.getLatitude()+"  "+location.getLongitude()+"  "+location.getAltitude());
-        latitud.setText(""+location.getLatitude());
-        longitud.setText(""+location.getLongitude());
-        altura.setText(""+location.getAltitude()+" m");
+    public void updateInterface(Location location) {
+        // System.out.println("cambio location "+location.getLatitude()+"  "+location.getLongitude()+"  "+location.getAltitude());
+        latitud.setText("" + location.getLatitude());
+        longitud.setText("" + location.getLongitude());
+        altura.setText("" + location.getAltitude() + " m");
     }
 
     @Override
@@ -146,10 +150,10 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
         // create a rotation animation (reverse turn degree degrees)
         RotateAnimation ra = new RotateAnimation(
                 currentDegree,
-                        -degree,
+                -degree,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF,
-        0.5f);
+                0.5f);
 
         // how long the animation will take place
         ra.setDuration(210);
@@ -166,6 +170,7 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
+
     @Override
     public void onResume() {
         /*sensorManager.registerListener(this,
@@ -175,11 +180,13 @@ public class ToolsFragment extends Fragment  implements SensorEventListener {
                 sensorMagneticField,
                 SensorManager.SENSOR_DELAY_NORMAL);*/
 
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
 
+        activity.setTitle(R.string.tools_title);
         super.onResume();
 
     }
+
 
     @Override
     public void onPause() {

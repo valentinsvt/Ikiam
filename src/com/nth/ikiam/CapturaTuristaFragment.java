@@ -327,4 +327,10 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
         Utils.hideSoftKeyboard(context);
         return false;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.captura_title);
+    }
 }

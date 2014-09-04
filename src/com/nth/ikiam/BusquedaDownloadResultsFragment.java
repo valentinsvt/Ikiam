@@ -215,4 +215,10 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 //        com.setText(comentarios);
 //        dialog.show();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.busqueda_title);
+    }
 }

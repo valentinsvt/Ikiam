@@ -56,4 +56,10 @@ public class LogrosFragment extends ListFragment {
         adapter = new LogrosListAdapter(activity, logrosList);
         setListAdapter(adapter);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        activity.setTitle(R.string.logro_title);
+    }
 }

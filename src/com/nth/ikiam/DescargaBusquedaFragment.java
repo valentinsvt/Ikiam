@@ -89,4 +89,9 @@ public class DescargaBusquedaFragment extends Fragment implements View.OnClickLi
         Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        context.setTitle(R.string.ikiam_web_title);
+    }
 }
