@@ -93,6 +93,7 @@ public class LoginUploader implements Runnable {
                     editor.putString("email", parts[1]);
                     editor.putString("name", parts[2] + " " + parts[3]);
                     editor.putString("type", "ikiam");
+                    System.out.println("es cientifico? "+parts[4]);
                     editor.putString("esCientifico", parts[4]);
                     editor.commit();
                     context.userId = parts[0];
