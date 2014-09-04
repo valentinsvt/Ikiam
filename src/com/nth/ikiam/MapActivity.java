@@ -1213,7 +1213,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                 final AlertDialog d = builder.create();
                 final TextView txt = (TextView) v.findViewById(R.id.help_container);
-                if (esCientifico.equals("-1")) {
+                if (!esCientifico.equals("S")) {
                     switch (activeFragment) {
                         case MAP_POS_T:
                             txt.setText(getString(R.string.help_map));
@@ -1330,7 +1330,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         Utils.hideSoftKeyboard(this);
         Fragment fragment = null;
         Bundle args = null;
-        if (esCientifico.equals("-1")) {
+        if (!esCientifico.equals("S")) {
             switch (position) {
                 case MAP_POS_T:
                     // fragment = new NthMapFragment();
@@ -1349,7 +1349,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     break;
                 case CAPTURA_POS_T:
 //                System.out.println(":::::cientifico:::: " + esCientifico);
-                    if (esCientifico.trim().equals("-1")) {
+                    if (!esCientifico.trim().equals("S")) {
                         fragment = new CapturaTuristaFragment();
                     } else {
                         fragment = new CapturaCientificoFragment();
@@ -1427,7 +1427,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     break;
                 case CAPTURA_POS:
 //                System.out.println(":::::cientifico:::: " + esCientifico);
-                    if (esCientifico.trim().equals("-1")) {
+                    if (!esCientifico.trim().equals("S")) {
                         fragment = new CapturaTuristaFragment();
                     } else {
                         fragment = new CapturaCientificoFragment();

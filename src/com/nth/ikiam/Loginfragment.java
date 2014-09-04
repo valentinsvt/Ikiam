@@ -1,7 +1,9 @@
 package com.nth.ikiam;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,13 +56,16 @@ public class Loginfragment extends Fragment implements Button.OnClickListener, F
         if (fieldName.equals("type")) {
             if (newValue.equals("ikiam")) {
                 SharedPreferences settings = context.getSharedPreferences(activity.PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("user", activity.userId);
-                editor.putString("email", activity.email);
-                editor.putString("name", activity.name);
-                editor.putString("type", "ikiam");
-                editor.commit();
+                System.out.println("es cientifico act "+settings.getString("esCientifico","-1"));
+
                 showIkiamView();
+                Intent mStartActivity = new Intent(context, MapActivity.class);
+                int mPendingIntentId = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                System.exit(0);
+
             }
         }
         if (fieldName.equals("errorMessage")) {

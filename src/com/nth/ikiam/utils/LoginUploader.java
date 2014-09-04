@@ -85,7 +85,7 @@ public class LoginUploader implements Runnable {
                     context.setErrorMessage(response.toString());
                 } else {
                     String[] parts = response.toString().split(";");
-                    System.out.println("parts " + parts);
+                    //System.out.println("parts " + parts);
                     //""+usu.id+";"+usu.email+";"+usu.nombre+";"+usu.apellido+";"+usu.esCientifico
                     SharedPreferences settings = context.getSharedPreferences(context.PREFS_NAME, 0);
                     SharedPreferences.Editor editor = settings.edit();
