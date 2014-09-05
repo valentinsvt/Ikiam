@@ -1,11 +1,11 @@
 package com.nth.ikiam.utils;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -46,6 +46,10 @@ public class AchievementChecker implements Runnable {
                 logro.save();
                 String titulo = Utils.getStringResourceByName(activity, "achievement_" + tipo + "_titulo_" + logro.cantidad.intValue());
                 activity.titulo = titulo;
+                SharedPreferences settings = activity.getSharedPreferences(activity.PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("titulo", titulo);
+                editor.commit();
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this.activity)
                                 .setSmallIcon(R.drawable.ic_launcher)
@@ -63,7 +67,7 @@ public class AchievementChecker implements Runnable {
                 mBuilder.setLights(Color.BLUE, 500, 500);
                 long[] pattern = {1000, 500};
                 mBuilder.setVibrate(pattern);
-                mBuilder.setSound(Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.chipquest));
+                mBuilder.setSound(Uri.parse("android.resource://" + activity.getPackageName() + "/" + R.raw.glassbell));
 
                 // The stack builder object will contain an artificial back stack for the
                 // started Activity.

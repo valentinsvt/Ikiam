@@ -298,28 +298,28 @@
     <string name="map_tipo">Tipo</string>
 
     <string name="achievement_warning_titulo">Logros desactivados</string>
-    <string name="achievement_warning_text">La contabilización de logros está desctivada. ¿Deseas activarla ahora?</string>
+    <string name="achievement_warning_text">La contabilización de logros está desactivada. ¿Deseas activarla ahora?</string>
 
-    <string name="achievement_1_titulo_1">Una foto!</string>
-    <string name="achievement_1_titulo_5">Cinco fotos!</string>
-    <string name="achievement_1_titulo_10">Diez fotos!</string>
+    <string name="achievement_1_titulo_1">el Aprendiz</string>
+    <string name="achievement_1_titulo_5">el Ecologista</string>
+    <string name="achievement_1_titulo_10">el Fotógrafo</string>
     <string name="achievement_1_titulo_50">Cincuenta fotos!</string>
     <string name="achievement_1_titulo_100">Cien fotos!!</string>
 
-    <string name="achievement_3_titulo_1">Una foto subida!</string>
-    <string name="achievement_3_titulo_5">Cinco fotos subidas!</string>
+    <string name="achievement_3_titulo_1">el Aprendiz</string>
+    <string name="achievement_3_titulo_5">el Recolector</string>
     <string name="achievement_3_titulo_10">Diez fotos subidas!</string>
     <string name="achievement_3_titulo_50">Cincuenta fotos subidas!</string>
     <string name="achievement_3_titulo_100">Cien fotos subidas!!</string>
 
-    <string name="achievement_4_titulo_1">Una foto compartida!</string>
-    <string name="achievement_4_titulo_5">Cinco fotos compartidas!</string>
+    <string name="achievement_4_titulo_1">el Aprendiz</string>
+    <string name="achievement_4_titulo_5">el Embajador</string>
     <string name="achievement_4_titulo_10">Diez fotos compartidas!</string>
     <string name="achievement_4_titulo_50">Cincuenta fotos compartidas!</string>
     <string name="achievement_4_titulo_100">Cien fotos compartidas!!</string>
 
-    <string name="achievement_2_titulo_1000">Un kilómetro recorrido!</string>
-    <string name="achievement_2_titulo_2000">Dos kilómetros recorridos!</string>
+    <string name="achievement_2_titulo_1000">el Caminante</string>
+    <string name="achievement_2_titulo_2000">el Explorador</string>
     <string name="achievement_2_titulo_3000">Tres kilómetros recorridos!</string>
     <string name="achievement_2_titulo_5000">Cinco kilómetros recorridos!</string>
     <string name="achievement_2_titulo_10000">Diez kilómetros recorridos!!</string>
@@ -351,5 +351,10 @@
     <string name="nota_create_dlg_delete_contenido">¿Está seguro de querer eliminar esta nota?</string>
     <string name="nota_create_delete">Nota eliminada</string>
     <string name="nota_create_saved">Nota guardada</string>
+    <string name="foto_por">Foto de: </string>
+    <string name="map_social">Social</string>
+    <string name="map_comentar">Comentar</string>
+    <string name="map_reportar">Reportar</string>
+
 
 </resources>

@@ -99,8 +99,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     LocationClient locationClient;
     Marker lastPosition;
     HashMap<Marker, Foto> data;
+    HashMap<Marker, Foto> dataUsuario;
     HashMap<Marker, AtraccionUi> atracciones;
     HashMap<Marker, EspecieUi> especies;
+    HashMap<Marker, SocialUi> social;
     HashMap<Marker, Bitmap> fotosUsuario;
     Marker selected;
     int tipoMapa = 0;
@@ -267,6 +269,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         type = settings.getString("type", "-1");
         email = settings.getString("email", "-1");
         esCientifico = settings.getString("esCientifico", "-1");
+        titulo = settings.getString("titulo", "-1");
         //System.out.println("variables name "+userId+"  name "+name);
         setContentView(R.layout.activity_map);
         uiHelper = new UiLifecycleHelper(this, callback);
@@ -291,11 +294,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         locationClient.connect();
         setUpMapIfNeeded();
         data = new HashMap<Marker, Foto>();
+        dataUsuario = new HashMap<Marker, Foto>();
         atracciones = new HashMap<Marker, AtraccionUi>();
         especies = new HashMap<Marker, EspecieUi>();
+        social = new HashMap<Marker, SocialUi>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
 
-        botones = new Button[8];
+        botones = new Button[9];
         botones[0] = (Button) this.findViewById(R.id.btnGalapagos);
         botones[1] = (Button) this.findViewById(R.id.btnService);
         botones[2] = (Button) this.findViewById(R.id.btnAtraccion);
@@ -304,6 +309,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         botones[5] = (Button) this.findViewById(R.id.btnLimpiar);
         botones[6] = (Button) this.findViewById(R.id.btnTools);
         botones[7] = (Button) this.findViewById(R.id.btnTipo);
+        botones[8] = (Button) this.findViewById(R.id.btnSocial);
         if (type.equals("Ikiam")) {
             if (esCientifico.equals("S"))
                 botones[2].setVisibility(View.GONE);
@@ -521,6 +527,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
             especies.clear();
+            social.clear();
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
             location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -536,6 +543,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
             especies.clear();
+            social.clear();
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
             location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
@@ -586,6 +594,22 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     tipoMapa = 0;
                     break;
             }
+        }
+        if (v.getId() == botones[8].getId()) {
+            map.clear();
+            Location mCurrentLocation;
+            mCurrentLocation = locationClient.getLastLocation();
+            atracciones.clear();
+            especies.clear();
+            social.clear();
+            selected = null;
+            //System.out.println("Altura "+ mCurrentLocation.getAltitude());
+            location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
+            map.animateCamera(update);
+            ExecutorService queue = Executors.newSingleThreadExecutor();
+            /*aqui cambiar por el buen downloader*/
+            queue.execute(new SocialDownloader(this, queue, 0));
         }
     }
 
@@ -704,6 +728,30 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         });
 
     }
+    public void setPingSocial(final String id, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String comentario, final String usuario) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final LatLng pos = new LatLng(latitud, longitud);
+                Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Canvas canvas1 = new Canvas(bmp);
+                Paint color = new Paint();
+                color.setTextSize(35);
+                color.setColor(Color.BLACK);//modify canvas
+                canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
+                        R.drawable.pin3), 0, 0, color);
+                canvas1.drawBitmap(foto, 3, 2, color);
+                Marker marker = map.addMarker(new MarkerOptions().position(pos)
+                        .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                        .anchor(0.5f, 1).title(""));
+                SocialUi socialUi = new SocialUi(id,comentario,usuario,fotoDialog,likes);
+                social.put(marker, socialUi);
+            }
+        });
+
+    }
 
     /*CLASES PARA COMUNICARSE CON SvtService*/
     private void CheckIfServiceIsRunning() {
@@ -813,6 +861,65 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     }
                 }
 
+                if (dataUsuario.get(marker) != null) {
+                    System.out.println("click data usuario");
+                    marker.showInfoWindow();
+                    LayoutInflater inflater = activity.getLayoutInflater();
+                    myView = inflater.inflate(R.layout.dialog_usuario, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(R.string.map_activity_nuevaFoto);
+                    builder.setView(myView);
+                    if(dataUsuario.get(marker).uploaded!=1){
+                        builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+//                            imagePathUpload = data.get(marker).path;
+                                imageToUpload = dataUsuario.get(marker);
+//                            dialog.dismiss();
+//                            System.out.println("***************** ANTES: " + imageToUpload.path);
+//                            System.out.println("*************** MAPA*************** " + imageToUpload.getCoordenada(context).latitud);
+                                selectItem(CAPTURA_POS, false);
+                            }
+                        });
+                    }
+
+                    builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+
+
+                    });
+
+                    builder.setNeutralButton(R.string.dialog_btn_borrar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dataUsuario.get(marker).delete();
+                            dataUsuario.remove(marker);
+                            marker.remove();
+                            dialog.dismiss();
+                        }
+
+
+                    });
+                    dialog = builder.create();
+                    ImageView img = (ImageView) myView.findViewById(R.id.image_usuairo);
+                    if(titulo!=null){
+                        if(!titulo.equals("") && !titulo.equals("-1")) {
+                            ((TextView) myView.findViewById(R.id.usuario_lbl)).setText(getString(R.string.foto_por) + " " + name + ", " + titulo);
+                        }else{
+                            ((TextView) myView.findViewById(R.id.usuario_lbl)).setText(getString(R.string.foto_por) + " " + name);
+                        }
+                    }else{
+                        ((TextView) myView.findViewById(R.id.usuario_lbl)).setText(getString(R.string.foto_por) + " " + name);
+                    }
+
+
+                    img.setImageBitmap(getFotoDialog(dataUsuario.get(marker), screenWidth, 300));
+                    dialog.show();
+
+                    return true;
+                }
+
                 if (data.get(marker) != null) {
                     System.out.println("click data");
                     marker.showInfoWindow();
@@ -821,17 +928,20 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(R.string.map_activity_nuevaFoto);
                     builder.setView(myView);
-                    builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
+                    if(data.get(marker).uploaded!=1){
+                        builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
 //                            imagePathUpload = data.get(marker).path;
-                            imageToUpload = data.get(marker);
+                                imageToUpload = data.get(marker);
 //                            dialog.dismiss();
 //                            System.out.println("***************** ANTES: " + imageToUpload.path);
 //                            System.out.println("*************** MAPA*************** " + imageToUpload.getCoordenada(context).latitud);
-                            selectItem(CAPTURA_POS, false);
-                        }
-                    });
+                                selectItem(CAPTURA_POS, false);
+                            }
+                        });
+                    }
+
                     builder.setNegativeButton(R.string.dialog_btn_cerrar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.dismiss();
@@ -960,6 +1070,60 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             img.setImageBitmap(current.foto);
                             TextView txt = (TextView) myView.findViewById(R.id.especie_info_dialog_comentarios);
                             txt.setText(current.desc);
+                            dialog.show();
+                        } else {
+                            selected = marker;
+                        }
+                    }
+                    return true;
+                }
+                if (social.get(marker) != null) {
+                    marker.showInfoWindow();
+
+                    if (selected == null) {
+                        selected = marker;
+                    } else {
+                        if (selected.getId().equals(marker.getId())) {
+                            selected = null;
+                            final SocialUi current = social.get(marker);
+                            LayoutInflater inflater = activity.getLayoutInflater();
+                            myView = inflater.inflate(R.layout.dialog_usuario, null);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                            builder.setTitle("");
+                            builder.setView(myView);
+                            builder.setPositiveButton(R.string.map_comentar, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    String url = UtilsUploaders.getIp() + "especie/show?nombre=" + especies.get(marker).nombreEspecie;
+                                    try {
+                                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                        startActivity(myIntent);
+                                    } catch (ActivityNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+
+
+                            });
+                            builder.setNeutralButton(R.string.map_reportar, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                           /*aqui implementar like*/
+
+                                    dialog.dismiss();
+                                }
+
+
+                            });
+                            dialog = builder.create();
+                            ImageView img = (ImageView) myView.findViewById(R.id.image_usuairo);
+                            img.setImageBitmap(current.foto);
+                            TextView txt = (TextView) myView.findViewById(R.id.usuario_lbl);
+                            txt.setText(current.usuario);
                             dialog.show();
                         } else {
                             selected = marker;
@@ -1572,6 +1736,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public void showRuta(List<Coordenada> cords, List<Foto> fotos) {
         map.clear();
         data.clear();
+        dataUsuario.clear();
         location = new LatLng(cords.get(0).getLatitud(), cords.get(0).getLongitud());
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 19);
         map.animateCamera(update);
@@ -1645,7 +1810,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     private void verFotosUsuario() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         List<Entry> entrys = new ArrayList<Entry>();
-        entrys = Entry.list(this);
+
+        if(!esCientifico.equals("S")) {
+            entrys = Entry.findAllByEspecieIsNull(this);
+        }else{
+            entrys = Entry.list(this);
+        }
         int padding = (100);
         for (Entry entry : entrys) {
             List<Foto> fotos = Foto.findAllByEntry(activity, entry);
@@ -1667,7 +1837,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                             .anchor(0.5f, 1).title(getString(R.string.map_activity_captura) + " " + fotos.get(j).fecha));
                     builder.include(location);
-                    data.put(marker, fotos.get(j));
+                    dataUsuario.put(marker, fotos.get(j));
                 }
 
             }
