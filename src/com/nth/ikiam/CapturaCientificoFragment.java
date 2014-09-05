@@ -337,6 +337,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                                 }
                             } else {
                                 //redirect a login
+                                alerta(getString(R.string.uploader_login_error));
                                 System.out.println("Login first!!!");
                                 context.selectItem(context.LOGIN_POS);
                             }

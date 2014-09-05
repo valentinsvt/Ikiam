@@ -233,8 +233,11 @@
     <string name="estadisticas_fotos_compartidas_lbl">Fotos compartidas</string>
     <string name="estadisticas_distancia_recorrida_lbl">Distancia recorrida</string>
 
+    <string name="uploader_login_error">Por favor ingrese con su usuario o regístrese para poder subir fotos al servidor</string>
     <string name="uploader_upload_error">Ha ocurrido un error, por favor intente más tarde</string>
     <string name="uploader_upload_success">Foto guardada exitosamente</string>
+    <string name="uploader_upload_pending">Enviando foto al servidor</string>
+    <string name="uploader_upload_ok">Foto enviada exitosamente al servidor</string>
     <string name="uploader_upload_map">Foto guardada, mantenga presionado un punto en el mapa donde desee ubicarla.</string>
 
     <string name="app_id">298464543671961</string>

@@ -110,6 +110,7 @@ public class FotoEspecieDownloader implements Runnable {
                     nuevaFoto.setEspecie(especie);
                     nuevaFoto.path = fileName;
                     nuevaFoto.uploaded = 1;
+                    nuevaFoto.mio = 0;
                     nuevaFoto.save();
 
                     context.showToast(context.getString(R.string.descarga_busqueda_download_foto_ok, especie.nombreComun));

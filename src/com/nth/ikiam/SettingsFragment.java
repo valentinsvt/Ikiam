@@ -98,6 +98,7 @@ public class SettingsFragment extends Fragment implements Button.OnClickListener
         if (view.getId() == btnUpload.getId()) { // upload
             List<Foto> porSubir = Foto.findAllNotUploaded(context);
             for (Foto foto : porSubir) {
+                Toast.makeText(context, getString(R.string.uploader_upload_pending), Toast.LENGTH_LONG).show();
                 ExecutorService queue = Executors.newSingleThreadExecutor();
                 queue.execute(new CapturaUploader(context, queue, foto, 0));
             }

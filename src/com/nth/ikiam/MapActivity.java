@@ -376,12 +376,17 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         Intent intent = getIntent();
         try {
             String action = intent.getAction();
+//            System.out.println("8888888888888888888888 " + action);
             if (action != null) {
-                int actionId = Integer.parseInt(action);
-                switch (actionId) {
-                    case INTENT_LOGRO:
-                        Fragment fragment = new LogrosFragment();
-                        Utils.openFragment(this, fragment, getString(R.string.logro_title));
+                try {
+                    int actionId = Integer.parseInt(action);
+                    switch (actionId) {
+                        case INTENT_LOGRO:
+                            Fragment fragment = new LogrosFragment();
+                            Utils.openFragment(this, fragment, getString(R.string.logro_title));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 //                selectItem(Integer.parseInt(action), false);
 //                if (action.equalsIgnoreCase(getResources().getString(R.string.notification_action_friend))) {

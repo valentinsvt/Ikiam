@@ -25,6 +25,8 @@ public class Foto {
 
     public int uploaded;
 
+    public int mio = 1;
+
     Context context;
 
     FotoDbHelper fotoDbHelper;
@@ -129,6 +131,10 @@ public class Foto {
         return this.ruta_id;
     }
 
+    public int getMio() {
+        return mio;
+    }
+
     //setter
     public void setEspecie(Especie especie) {
         this.especie_id = especie.id;
@@ -181,6 +187,10 @@ public class Foto {
 
     public void setRuta_id(long id) {
         this.ruta_id = id;
+    }
+
+    public void setMio(int mio) {
+        this.mio = mio;
     }
 
     public void save() {
@@ -249,6 +259,11 @@ public class Foto {
     public static List<Foto> findAllNotUploaded(Context context) {
         FotoDbHelper e = new FotoDbHelper(context);
         return e.getAllFotosByUploaded(0);
+    }
+
+    public static List<Foto> findAllFotosMias(Context context) {
+        FotoDbHelper e = new FotoDbHelper(context);
+        return e.getAllFotosByMio(1);
     }
 
     public static void empty(Context context) {

@@ -26,8 +26,10 @@ public class FotoDbHelper extends DbHelper {
     public static final String KEY_PATH = "path";
     public static final String KEY_UPLOADED = "uploaded";
     public static final String KEY_RUTA_ID = "ruta_id";
+    public static final String KEY_MIO = "mio";
 
-    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_ENTRY_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_PATH, KEY_UPLOADED, KEY_RUTA_ID};
+    public static final String[] KEYS_FOTO = {KEY_ESPECIE_ID, KEY_ENTRY_ID, KEY_COORDENADA, KEY_KEYWORDS, KEY_PATH,
+            KEY_UPLOADED, KEY_RUTA_ID, KEY_MIO};
 
     public FotoDbHelper(Context context) {
         super(context);
@@ -295,6 +297,30 @@ public class FotoDbHelper extends DbHelper {
         return fotos;
     }
 
+    public List<Foto> getAllFotosByMio(int mio) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Foto> fotos = new ArrayList<Foto>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_FOTO +
+                " WHERE " + KEY_MIO + " = " + mio;
+
+        logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Foto f = setDatos(c);
+
+                // adding to entry list
+                fotos.add(f);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return fotos;
+    }
+
     public int updateFoto(Foto foto) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = setValues(foto);
@@ -331,6 +357,7 @@ public class FotoDbHelper extends DbHelper {
         f.setPath((c.getString(c.getColumnIndex(KEY_PATH))));
         f.setUploaded((c.getInt(c.getColumnIndex(KEY_UPLOADED))));
         f.setRuta_id(c.getLong(c.getColumnIndex(KEY_RUTA_ID)));
+        f.setMio((int) c.getLong(c.getColumnIndex(KEY_MIO)));
         return f;
     }
 
@@ -351,6 +378,7 @@ public class FotoDbHelper extends DbHelper {
         values.put(KEY_KEYWORDS, foto.getKeywords());
         values.put(KEY_PATH, foto.getPath());
         values.put(KEY_UPLOADED, foto.getUploaded());
+        values.put(KEY_MIO, foto.getMio());
         if (foto.ruta_id != null) {
             values.put(KEY_RUTA_ID, foto.getRutaId());
         }

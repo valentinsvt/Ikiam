@@ -220,7 +220,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                     } else {
                         //redirect a login
                         System.out.println("Login first!!!");
-                        context.selectItem(context.LOGIN_POS);
+                        context.selectItem(context.LOGIN_POS_T);
                     }
 //                    msg += " y subida ";
                 } else {
