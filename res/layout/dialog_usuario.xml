@@ -23,6 +23,25 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/usuario_lbl"
                 />
+
     </RelativeLayout>
+    <ScrollView
+            android:id="@+id/textAreaScroller"
+            android:layout_width="fill_parent"
+            android:scrollbars="vertical"
+            android:layout_below="@+id/body"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="50dp">
+
+        <TextView
+                android:id="@+id/comentario_usuario"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:lines="7"
+                android:text="text" />
+    </ScrollView>
 
 </RelativeLayout>

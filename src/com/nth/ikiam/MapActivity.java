@@ -1084,55 +1084,57 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
                 if (social.get(marker) != null) {
                     marker.showInfoWindow();
-
-                    if (selected == null) {
-                        selected = marker;
-                    } else {
-                        if (selected.getId().equals(marker.getId())) {
-                            selected = null;
-                            final SocialUi current = social.get(marker);
-                            LayoutInflater inflater = activity.getLayoutInflater();
-                            myView = inflater.inflate(R.layout.dialog_usuario, null);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                            builder.setTitle("");
-                            builder.setView(myView);
-                            builder.setPositiveButton(R.string.map_comentar, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    String url = UtilsUploaders.getIp() + "especie/show?nombre=" + especies.get(marker).nombreEspecie;
-                                    try {
-                                        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                                        startActivity(myIntent);
-                                    } catch (ActivityNotFoundException e) {
-                                        e.printStackTrace();
-                                    }
+                    if (marker.getId().equals(marker.getId())) {
+                        //selected = null;
+                        final SocialUi current = social.get(marker);
+                        LayoutInflater inflater = activity.getLayoutInflater();
+                        myView = inflater.inflate(R.layout.dialog_usuario, null);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("");
+                        builder.setView(myView);
+                        builder.setPositiveButton(R.string.map_comentar, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                String url = UtilsUploaders.getIp() + "entry/comment/" + social.get(marker).id;
+                                try {
+                                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                    startActivity(myIntent);
+                                } catch (ActivityNotFoundException e) {
+                                    e.printStackTrace();
                                 }
-                            });
-                            builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                }
+                            }
+                        });
+                        builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
 
 
-                            });
-                            builder.setNeutralButton(R.string.map_reportar, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                        });
+                        builder.setNeutralButton(R.string.map_reportar, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                            /*aqui implementar like*/
 
-                                    dialog.dismiss();
+                                String url = UtilsUploaders.getIp() + "entry/report/" + social.get(marker).id;
+                                try {
+                                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                    startActivity(myIntent);
+                                } catch (ActivityNotFoundException e) {
+                                    e.printStackTrace();
                                 }
+                            }
 
 
-                            });
-                            dialog = builder.create();
-                            ImageView img = (ImageView) myView.findViewById(R.id.image_usuairo);
-                            img.setImageBitmap(current.foto);
-                            TextView txt = (TextView) myView.findViewById(R.id.usuario_lbl);
-                            txt.setText(current.usuario);
-                            dialog.show();
-                        } else {
-                            selected = marker;
-                        }
+                        });
+                        dialog = builder.create();
+                        ImageView img = (ImageView) myView.findViewById(R.id.image_usuairo);
+                        img.setImageBitmap(current.foto);
+                        TextView txt = (TextView) myView.findViewById(R.id.usuario_lbl);
+                        txt.setText(getString(R.string.foto_por)+" "+current.usuario);
+                        //System.out.println("comentario "+current.comentario);
+                        ((TextView) myView.findViewById(R.id.comentario_usuario)).setText(current.comentario);
+                        dialog.show();
+
                     }
                     return true;
                 }

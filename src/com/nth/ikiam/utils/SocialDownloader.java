@@ -79,7 +79,7 @@ public class SocialDownloader implements Runnable {
                     System.out.println("datos "+datos+" "+datos.length);
                     try {
                         if (datos.length == 8) {
-                            System.out.println("url foto "+(IP+"uploaded/android/"+datos[1]));
+                            //System.out.println("datos 0 "+datos[0]);
                             URL urlFoto = new URL(IP +"uploaded/android/"+ datos[1]);
                             HttpURLConnection connection = (HttpURLConnection) urlFoto.openConnection();
                             connection.setDoInput(true);
