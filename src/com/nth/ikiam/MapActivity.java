@@ -17,7 +17,6 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.text.Html;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.*;
@@ -34,16 +33,15 @@ import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.*;
 import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.*;
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.moodstocks.android.Scanner;
+import com.moodstocks.android.MoodstocksError;
 
-public class MapActivity extends Activity implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class MapActivity extends Activity implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, Scanner.SyncListener {
     /*DRAWER*/
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -73,6 +71,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int NOTA_POS_T = 7;
     public final int SETTINGS_POS_T = 8;
     public final int LOGIN_POS_T = 9;
+    public final int SCANER_POS = 10;
 
     public final int TOOLS_POS = 17;
     public final int BUSQUEDA_POS = 18;
@@ -240,6 +239,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         }
     }
+
+    /*moodstock*/
+    private static final String API_KEY    = "mfpiet0szwumqvp5bati";
+    private static final String API_SECRET = "soulgMN1H2Epn0zB";
+
+    private boolean compatible = false;
+    private Scanner scanner;
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -410,6 +417,20 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         } catch (Exception e) {
             Log.e("ERROR", "Problem consuming action from intent", e);
         }
+        /*moodstock*/
+        compatible = Scanner.isCompatible();
+        System.out.println("compatible "+compatible);
+        if (compatible) {
+            try {
+                scanner = Scanner.get();
+                String path = Scanner.pathFromFilesDir(this, "scanner.db");
+                scanner.open(path, API_KEY, API_SECRET);
+                scanner.setSyncListener(this);
+                scanner.sync();
+            } catch (MoodstocksError e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
@@ -464,6 +485,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        if (compatible) {
+            try {
+                scanner.close();
+                scanner.destroy();
+                scanner = null;
+            } catch (MoodstocksError e) {
+                e.printStackTrace();
+            }
+        }
         try {
             doUnbindService();
             this.stopService(new Intent(this, SvtService.class));
@@ -1161,6 +1191,31 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         fotoSinCoords = null;
     }
 
+    @Override
+    public void onSyncStart() {
+        System.out.println("Moodstocks SDK Sync will start.");
+    }
+
+    @Override
+    public void onSyncComplete() {
+        try {
+            System.out.println("Moodstocks SDK Sync succeeded (" + scanner.count() + " images)");
+        } catch (MoodstocksError e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onSyncFailed(MoodstocksError e) {
+        System.out.println("Moodstocks SDK Sync error #" + e.getErrorCode() + ": " + e.getMessage());
+    }
+
+    @Override
+    public void onSyncProgress(int total, int current) {
+        int percent = (int) ((float) current / (float) total * 100);
+        System.out.println("Moodstocks SDK Sync progressing: " + percent + "%");
+    }
+
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1458,6 +1513,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         case TOOLS_POS:
                             txt.setText(getString(R.string.help_tools));
                             break;
+                        case SCANER_POS:
+                            txt.setText(getString(R.string.help_tools));
+                            break;
 
                     }
                 }
@@ -1573,6 +1631,12 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     this.addListener((FieldListener) fragment);
                     title = getString(R.string.login_title);
                     activeFragment = LOGIN_POS;
+                    break;
+                case SCANER_POS:
+                    if (compatible) {
+                        startActivity(new Intent(this, ScanActivity.class));
+                        return;
+                    }
                     break;
                 default:
                     fragment = null;
