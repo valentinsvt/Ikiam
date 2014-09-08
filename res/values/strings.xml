@@ -360,6 +360,7 @@
     <string name="map_comentar">Comentar</string>
     <string name="map_reportar">Reportar</string>
     <string name="scaner_encontrada">Especie encontrada:</string>
+    <string name="tools_presion">Presión</string>
 
 
 </resources>

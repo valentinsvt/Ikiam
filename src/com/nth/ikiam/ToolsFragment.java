@@ -31,6 +31,7 @@ public class ToolsFragment extends Fragment implements SensorEventListener {
     TextView latitud;
     TextView longitud;
     TextView altura;
+    TextView presion;
 
     SensorManager sensorManager;
     private Sensor sensorAccelerometer;
@@ -78,9 +79,10 @@ public class ToolsFragment extends Fragment implements SensorEventListener {
         latitud = (TextView) view.findViewById(R.id.lbl_valor_latitud);
         longitud = (TextView) view.findViewById(R.id.lbl_valor_longitud);
         altura = (TextView) view.findViewById(R.id.lbl_valor_altura);
+        presion = (TextView) view.findViewById(R.id.lbl_valor_presion);
         latitud.setText("" + location.getLatitude());
         longitud.setText("" + location.getLongitude());
-        altura.setText("" + location.getAltitude() + " m");
+        altura.setText("" + String.format("%.2f", location.getAltitude()) + " m");
 
         sensorManager = (SensorManager) activity.getSystemService(activity.SENSOR_SERVICE);
         //sensorAccelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -97,6 +99,7 @@ public class ToolsFragment extends Fragment implements SensorEventListener {
         matrixR = new float[9];
         matrixI = new float[9];
         matrixValues = new float[3];
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
 
 
         return view;
@@ -106,7 +109,7 @@ public class ToolsFragment extends Fragment implements SensorEventListener {
         // System.out.println("cambio location "+location.getLatitude()+"  "+location.getLongitude()+"  "+location.getAltitude());
         latitud.setText("" + location.getLatitude());
         longitud.setText("" + location.getLongitude());
-        altura.setText("" + location.getAltitude() + " m");
+        altura.setText("" + String.format("%.2f", location.getAltitude()) + " m");
     }
 
     @Override
@@ -144,24 +147,33 @@ public class ToolsFragment extends Fragment implements SensorEventListener {
             myCompass.update(matrixValues[0]);
         }*/
         // get the angle around the z-axis rotated
+        switch(event.sensor.getType()) {
+            case Sensor.TYPE_ORIENTATION:
+                float degree = Math.round(event.values[0]);
+                tvHeading.setText("Orientación: " + Float.toString(degree) + " grados");
+                // create a rotation animation (reverse turn degree degrees)
+                RotateAnimation ra = new RotateAnimation(
+                        currentDegree,
+                        -degree,
+                        Animation.RELATIVE_TO_SELF, 0.5f,
+                        Animation.RELATIVE_TO_SELF,
+                        0.5f);
 
-        float degree = Math.round(event.values[0]);
-        tvHeading.setText("Orientación: " + Float.toString(degree) + " grados");
-        // create a rotation animation (reverse turn degree degrees)
-        RotateAnimation ra = new RotateAnimation(
-                currentDegree,
-                -degree,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f);
+                // how long the animation will take place
+                ra.setDuration(210);
+                // set the animation after the end of the reservation status
+                ra.setFillAfter(true);
+                // Start the animation
+                image.startAnimation(ra);
+                currentDegree = -degree;
+                break;
+            case Sensor.TYPE_PRESSURE:
+                float presionV = Math.round(event.values[0]);
+                presion.setText(""+presionV+" hPa");
+                //System.out.println("presion "+presionV);
+                break;
 
-        // how long the animation will take place
-        ra.setDuration(210);
-        // set the animation after the end of the reservation status
-        ra.setFillAfter(true);
-        // Start the animation
-        image.startAnimation(ra);
-        currentDegree = -degree;
+        }
 
 
     }
@@ -181,6 +193,7 @@ public class ToolsFragment extends Fragment implements SensorEventListener {
                 SensorManager.SENSOR_DELAY_NORMAL);*/
 
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_GAME);
 
         activity.setTitle(R.string.tools_title);
         super.onResume();

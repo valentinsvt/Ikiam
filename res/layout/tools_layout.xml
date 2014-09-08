@@ -71,14 +71,36 @@
             android:layout_below="@+id/lbl_longitud"
             />
     <TextView
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/tools_presion"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/lbl_presion"
+            android:paddingTop="10dp"
+            android:textStyle="bold|italic"
+            android:layout_below="@+id/lbl_altura"/>
+    <TextView
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/lbl_valor_presion"
+            android:paddingTop="10dp"
+            android:layout_toRightOf="@+id/lbl_altura"
+            android:layout_below="@+id/lbl_altura"
+            />
+    <TextView
     android:id="@+id/tvHeading"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
-    android:layout_marginBottom="40dp"
+    android:layout_marginBottom="20dp"
     android:layout_marginTop="20dp"
     android:text="Heading: 0.0"
-    android:layout_below="@+id/lbl_altura"
+    android:layout_below="@+id/lbl_presion"
             />
     <ImageView
     android:id="@+id/imageViewCompass"
