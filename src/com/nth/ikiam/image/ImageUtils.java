@@ -206,8 +206,8 @@ public class ImageUtils {
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //The new size we want to scale to
-            final int REQUIRED_W = 64;
-            final int REQUIRED_H = 32;
+            final int REQUIRED_W = 160;
+            final int REQUIRED_H = 90;
 
             //Find the correct scale value. It should be the power of 2.
             int scale = 1;
@@ -269,6 +269,16 @@ public class ImageUtils {
         try {
             //Decode image size
             Bitmap b = BitmapFactory.decodeStream(stream);
+            return Bitmap.createScaledBitmap(b, w, h, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static Bitmap decodeBitmapPath(String  path, int w, int h) {
+        try {
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             return Bitmap.createScaledBitmap(b, w, h, false);
         } catch (Exception e) {
             e.printStackTrace();

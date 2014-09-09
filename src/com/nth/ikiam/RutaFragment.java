@@ -130,7 +130,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
         distancia = distancia * 1000; /*para sacar en metros*/
         distancia = Math.round(distancia * 100.0) / 100.0;
         Foto foto;
-        int width = 215;
+        int width = 400;
         if (fotos.size() > 0) {
             foto = fotos.get(0);
             File imgFile = new File(foto.path);
@@ -166,7 +166,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
                 ImageView im = (ImageView) view.findViewById(res);
                 im.setOnClickListener(this);
                 imgs.add(im);
-                Bitmap myBitmap = ImageUtils.decodeBitmap(fotos.get(i).path, 100, (int) Math.floor(100 * 0.5625));
+                Bitmap myBitmap = ImageUtils.decodeBitmap(fotos.get(i).path, 200, (int) Math.floor(200 * 0.5625));
                 im.setImageBitmap(myBitmap);
                 im.setVisibility(View.VISIBLE);
             }
@@ -178,7 +178,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
 
         ((TextView) view.findViewById(R.id.lbl_fotos)).setText("" + fotos.size() + " " + getString(R.string.ruta_lbl_foto));
         ((TextView) view.findViewById(R.id.lbl_valor_distancia)).setText("" + distancia + "m");
-        ((TextView) view.findViewById(R.id.lbl_valor_altura_1)).setText("Min: " + alturaMinima + "m  -  Max: " + alturaMaxima + "m");
+        ((TextView) view.findViewById(R.id.lbl_valor_altura_1)).setText("Min: " + String.format("%.2f", alturaMinima) + " m  -  Max: " + String.format("%.2f", alturaMaxima) + " m");
         botones = new Button[2];
         imgBotones = new ImageButton[1];
         imgBotones[0] = (ImageButton) view.findViewById(R.id.btn_guardar_desc);

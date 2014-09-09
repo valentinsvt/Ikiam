@@ -82,7 +82,7 @@ public class AtraccionDownloader implements Runnable {
                             connection.setDoInput(true);
                             connection.connect();
                             InputStream input = connection.getInputStream();
-                            Bitmap[] myBitmap = ImageUtils.dobleBitmap(input, 80, 45, context.screenWidth, 300);
+                            Bitmap[] myBitmap = ImageUtils.dobleBitmap(input, 160, 90, 300, 200);
                             int likes = Integer.parseInt(datos[1]);
                             double lat = Double.parseDouble(datos[2]);
                             double longi = Double.parseDouble(datos[3]);

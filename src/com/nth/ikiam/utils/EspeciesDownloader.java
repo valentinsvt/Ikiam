@@ -85,7 +85,7 @@ public class EspeciesDownloader implements Runnable  {
                             connection.setDoInput(true);
                             connection.connect();
                             InputStream input = connection.getInputStream();
-                            Bitmap[] myBitmap = ImageUtils.dobleBitmap(input, 80, 45, context.screenWidth, 300);
+                            Bitmap[] myBitmap = ImageUtils.dobleBitmap(input, 160, 90, 700, 400);
                             int likes = Integer.parseInt(datos[6]);
                             double lat = Double.parseDouble(datos[3]);
                             double longi = Double.parseDouble(datos[4]);

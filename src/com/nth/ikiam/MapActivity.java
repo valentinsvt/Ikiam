@@ -721,14 +721,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             public void run() {
                 final LatLng pos = new LatLng(latitud, longitud);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
                 color.setColor(Color.BLACK);//modify canvas
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
-                canvas1.drawBitmap(foto, 3, 2, color);
+                canvas1.drawBitmap(foto, 5, 4, color);
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
@@ -746,17 +746,17 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             public void run() {
                 final LatLng pos = new LatLng(latitud, longitud);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
-                color.setTextSize(35);
+                color.setTextSize(10);
                 color.setColor(Color.BLACK);//modify canvas
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
-                canvas1.drawBitmap(foto, 3, 2, color);
+                canvas1.drawBitmap(foto, 5, 4, color);
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                        .anchor(0.5f, 1).title(title));
+                        .title(title));
                 EspecieUi especieUi = new EspecieUi(title, nombreEspecie, fotoDialog, likes, desc);
                 especies.put(marker, especieUi);
             }
@@ -770,14 +770,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             public void run() {
                 final LatLng pos = new LatLng(latitud, longitud);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
                 color.setColor(Color.BLACK);//modify canvas
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
-                canvas1.drawBitmap(foto, 3, 2, color);
+                canvas1.drawBitmap(foto, 5, 4, color);
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(""));
@@ -1125,7 +1125,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         builder.setPositiveButton(R.string.map_comentar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                String url = UtilsUploaders.getIp() + "entry/comment/" + social.get(marker).id;
+                                String url = UtilsUploaders.getIp() + "entry/comment/" + social.get(marker).id+"?usuario="+userId;
                                 try {
                                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                                     startActivity(myIntent);
@@ -1145,7 +1145,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             public void onClick(DialogInterface dialog, int id) {
                            /*aqui implementar like*/
 
-                                String url = UtilsUploaders.getIp() + "entry/report/" + social.get(marker).id;
+                                String url = UtilsUploaders.getIp() + "entry/comment/"  + social.get(marker).id+"?usuario="+userId;
                                 try {
                                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                                     startActivity(myIntent);
@@ -1254,14 +1254,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             foto.uploaded = 0;
                             foto.save();
                             fotos.add(foto);
-                            Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                            Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
                             Canvas canvas1 = new Canvas(bmp);
                             Paint color = new Paint();
                             color.setTextSize(35);
                             color.setColor(Color.BLACK);//modify canvas
                             canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                                     R.drawable.pin3), 0, 0, color);
-                            canvas1.drawBitmap(imagenes.get(lastIndex), 3, 2, color);
+                            canvas1.drawBitmap(imagenes.get(lastIndex), 5, 4, color);
 
                             Marker marker = map.addMarker(new MarkerOptions().position(latlong)
                                     .icon(BitmapDescriptorFactory.fromBitmap(bmp))
@@ -1334,7 +1334,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         if (imageItem != null) {
             // System.out.println("path "+imageItem.imagePath);
             //System.out.println("images " + imagenes);
-            Bitmap b = ImageUtils.decodeFile(imageItem.imagePath);
+            Bitmap b = ImageUtils.decodeBitmapPath(imageItem.imagePath,160,90);
             //System.out.println("width " + b.getWidth() + "  " + b.getHeight());
             imagenes.add(b);
             lastIndex++;
@@ -1814,15 +1814,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         polyLine = map.addPolyline(rectOptions);
         for (int i = 0; i < fotos.size(); i++) {
             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-            Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+            Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
             Canvas canvas1 = new Canvas(bmp);
             Paint color = new Paint();
             color.setTextSize(35);
             color.setColor(Color.BLACK);//modify canvas
             canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                     R.drawable.pin3), 0, 0, color);
-            Bitmap b = ImageUtils.decodeFile(fotos.get(i).path);
-            canvas1.drawBitmap(b, 3, 2, color);
+            Bitmap b = ImageUtils.decodeBitmapPath(fotos.get(i).path,160,90);;
+            canvas1.drawBitmap(b, 5, 4, color);
             Coordenada co = fotos.get(i).getCoordenada(activity);
             location = new LatLng(co.getLatitud(), co.getLongitud());
             Marker marker = map.addMarker(new MarkerOptions().position(location)
@@ -1892,15 +1892,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             List<Foto> fotos = Foto.findAllByEntry(activity, entry);
             for (int j = 0; j < fotos.size(); j++) {
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
                 color.setColor(Color.BLACK);//modify canvas
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
-                Bitmap b = ImageUtils.decodeFile(fotos.get(j).path);
-                canvas1.drawBitmap(b, 3, 2, color);
+                Bitmap b = ImageUtils.decodeBitmapPath(fotos.get(j).path,160,90);
+                canvas1.drawBitmap(b, 5, 4, color);
                 Coordenada co = fotos.get(j).getCoordenada(activity);
                 if (co != null) {
                     location = new LatLng(co.getLatitud(), co.getLongitud());
@@ -1942,7 +1942,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             List<Foto> fotos = Foto.findAllByEntry(activity, current);
             for (int j = 0; j < fotos.size(); j++) {
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp = Bitmap.createBitmap(86, 59, conf);
+                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
@@ -1950,7 +1950,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
                 Bitmap b = ImageUtils.decodeFile(fotos.get(j).path);
-                canvas1.drawBitmap(b, 3, 2, color);
+                canvas1.drawBitmap(b, 5, 4, color);
                 Coordenada co = fotos.get(j).getCoordenada(activity);
                 location = new LatLng(co.getLatitud(), co.getLongitud());
                 puntos.add(location);
