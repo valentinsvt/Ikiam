@@ -103,12 +103,39 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
                         cantFotos++;
                     }
-                    if (datos.length >= 17) {
-                        fotosPaths.add(datos[16]);
-                        fotosLats.add(datos[17]);
-                        fotosLongs.add(datos[18]);
-                        fotosAlts.add(datos[19]);
-                        fotosComs.add(datos[20]);
+                    if (datos.length >= 18) {
+                        fotosPaths.add(datos[17]);
+                        fotosLats.add(datos[18]);
+                        fotosLongs.add(datos[19]);
+                        fotosAlts.add(datos[20]);
+                        fotosComs.add(datos[21]);
+
+                        cantFotos++;
+                    }/******************************************************/
+                    if (datos.length >= 23) {
+                        fotosPaths.add(datos[22]);
+                        fotosLats.add(datos[23]);
+                        fotosLongs.add(datos[24]);
+                        fotosAlts.add(datos[25]);
+                        fotosComs.add(datos[26]);
+
+                        cantFotos++;
+                    }
+                    if (datos.length >= 28) {
+                        fotosPaths.add(datos[27]);
+                        fotosLats.add(datos[28]);
+                        fotosLongs.add(datos[29]);
+                        fotosAlts.add(datos[30]);
+                        fotosComs.add(datos[31]);
+
+                        cantFotos++;
+                    }
+                    if (datos.length >= 33) {
+                        fotosPaths.add(datos[32]);
+                        fotosLats.add(datos[33]);
+                        fotosLongs.add(datos[34]);
+                        fotosAlts.add(datos[35]);
+                        fotosComs.add(datos[36]);
 
                         cantFotos++;
                     }
@@ -126,8 +153,39 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
                     nuevaEspecie.setColor2(nuevoColor2);
                     nuevaEspecie.save();
 
+                    /*
+                01    00    Eucalipto;
+                02   01    Myrtaceae;
+                03    02    Eucalyptus;
+                04    03    Urograndis;
+                05    04    289;
+                06    05    cafe;
+                07    06    blanco;
+                08    07    uploaded/android/eucalipto.jpg;
+                09    08    -0.13258683769131246;
+                10    09    -78.49934756755829;
+                11    10    2857.93;
+                12    11    Eucalipto;
+                13    12    uploaded/android/Eucalyptus_Urograndis2.jpg;
+                14    13    -0.13228643108416097;
+                15    14    -78.49887549877167;
+                16    15    2849.29;
+                17    16    Hoja seca del Eucalipto;
+                18    17    uploaded/android/Eucalyptus_Urograndis.jpg;
+                19    18    -0.13217914300929773;
+                20    19    -78.49973917007446;
+                21    20    2857.6;
+                22    21    Hoja fresca del eucalipto;
+                23    22    uploaded/android/20140907_132040.jpg;
+                24    23    -0.13299453236662262;
+                25    24    -78.4997820854187;
+                26    25    2858.42;
+                27    26    Fruto seco del eucalipto
+                     */
+
                     especiesList.remove(positionToRemove);
                     adapter.notifyDataSetChanged();
+                    System.out.println("CANT FOTOS:" + cantFotos + "   " + nuevaEspecie.nombreComun);
                     String texto = getString(R.string.descarga_busqueda_download_ok, nuevaEspecie.nombreComun);
                     if (cantFotos > 0) {
                         texto = getResources().getQuantityString(R.plurals.descarga_busqueda_download_ok, cantFotos, nuevaEspecie.nombreComun, cantFotos);
