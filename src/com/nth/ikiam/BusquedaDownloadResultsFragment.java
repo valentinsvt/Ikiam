@@ -103,12 +103,39 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
 
                         cantFotos++;
                     }
-                    if (datos.length >= 17) {
-                        fotosPaths.add(datos[16]);
-                        fotosLats.add(datos[17]);
-                        fotosLongs.add(datos[18]);
-                        fotosAlts.add(datos[19]);
-                        fotosComs.add(datos[20]);
+                    if (datos.length >= 18) {
+                        fotosPaths.add(datos[17]);
+                        fotosLats.add(datos[18]);
+                        fotosLongs.add(datos[19]);
+                        fotosAlts.add(datos[20]);
+                        fotosComs.add(datos[21]);
+
+                        cantFotos++;
+                    }/******************************************************/
+                    if (datos.length >= 23) {
+                        fotosPaths.add(datos[22]);
+                        fotosLats.add(datos[23]);
+                        fotosLongs.add(datos[24]);
+                        fotosAlts.add(datos[25]);
+                        fotosComs.add(datos[26]);
+
+                        cantFotos++;
+                    }
+                    if (datos.length >= 28) {
+                        fotosPaths.add(datos[27]);
+                        fotosLats.add(datos[28]);
+                        fotosLongs.add(datos[29]);
+                        fotosAlts.add(datos[30]);
+                        fotosComs.add(datos[31]);
+
+                        cantFotos++;
+                    }
+                    if (datos.length >= 33) {
+                        fotosPaths.add(datos[32]);
+                        fotosLats.add(datos[33]);
+                        fotosLongs.add(datos[34]);
+                        fotosAlts.add(datos[35]);
+                        fotosComs.add(datos[36]);
 
                         cantFotos++;
                     }

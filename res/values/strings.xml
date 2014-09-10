@@ -222,7 +222,7 @@
     <string name="descarga_busqueda_download_ok">Especie %1$s descargada. No tiene fotos que descargar.</string>
     <plurals name="descarga_busqueda_download_ok">
         <item quantity="one">Especie %1$s descargada. Se descargará 1 foto.</item>
-        <item quantity="other">Especie %1$s descargada. Se descargarán %1$d fotos.</item>
+        <item quantity="other">Especie %1$s descargada. Se descargarán %2$d fotos.</item>
     </plurals>
 
 
