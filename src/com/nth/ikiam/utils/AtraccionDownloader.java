@@ -76,7 +76,7 @@ public class AtraccionDownloader implements Runnable {
 
                     try {
                         if (datos.length == 7) {
-                            System.out.println("url foto "+(IP+"atraccion/android/"+datos[4]));
+//                            System.out.println("url foto "+(IP+"atraccion/android/"+datos[4]));
                             URL urlFoto = new URL(IP +"atraccion/android/"+ datos[4]);
                             HttpURLConnection connection = (HttpURLConnection) urlFoto.openConnection();
                             connection.setDoInput(true);

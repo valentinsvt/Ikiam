@@ -336,7 +336,7 @@ public class RutaFragment extends Fragment implements Button.OnClickListener, Vi
             shareButton.setVisibility(View.VISIBLE);
             if (pendingPublishReauthorization && state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
                 pendingPublishReauthorization = false;
-                System.out.println("run del publish");
+                //System.out.println("run del publish");
                 publishStory();
             }
         } else if (state.isClosed()) {

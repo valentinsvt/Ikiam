@@ -33,13 +33,14 @@ import com.nth.ikiam.db.*;
 import com.nth.ikiam.image.*;
 import com.nth.ikiam.listeners.FieldListener;
 import com.nth.ikiam.utils.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.moodstocks.android.Scanner;
 import com.moodstocks.android.MoodstocksError;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MapActivity extends Activity implements Button.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, Scanner.SyncListener {
     /*DRAWER*/
@@ -151,6 +152,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             onSessionStateChange(session, state, exception);
         }
     };
+    private boolean pendingPublishReauthorization = false;
+    private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
+    private static final String PENDING_PUBLISH_KEY = "pendingPublishReauthorization";
     List<FieldListener> listeners = new ArrayList<FieldListener>();
 
     public List<Entry> entriesBusqueda;
@@ -158,6 +162,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public Marker markerSubir;
     public LatLng posicionSubir;
     public String strEspeciesList;
+    public AtraccionUi atraccion;
 
     public Foto fotoSinCoords;
 
@@ -234,10 +239,90 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
         if (session != null && session.isOpened()) {
             makeMeRequest(session);
+            if (pendingPublishReauthorization && state.equals(SessionState.OPENED_TOKEN_UPDATED)) {
+                pendingPublishReauthorization = false;
+                //System.out.println("run del publish");
+                publishStory();
+            }
         } else {
 
 
         }
+    }
+    private boolean isSubsetOf(Collection<String> subset, Collection<String> superset) {
+        for (String string : subset) {
+            if (!superset.contains(string)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private void publishStory() {
+        Session session = Session.getActiveSession();
+        String link = "http://www.tedein.com.ec:8080/ikiamServer/ruta/publish/";
+        if (session != null) {
+
+            // Check for publish permissions
+            List<String> permissions = session.getPermissions();
+            if (!isSubsetOf(PERMISSIONS, permissions)) {
+                System.out.println("no permisos " + permissions);
+                pendingPublishReauthorization = true;
+                Session.NewPermissionsRequest newPermissionsRequest = new Session
+                        .NewPermissionsRequest(activity, PERMISSIONS);
+                session.requestNewPublishPermissions(newPermissionsRequest);
+                return;
+            }
+            System.out.println("paso?");
+            //AQUI ACHIEVEMENT
+            updateAchievement(this.ACHIEV_SHARE);
+            Bundle postParams = new Bundle();
+            postParams.putString("name", getString(R.string.share_name));
+            postParams.putString("caption", getString(R.string.share_caption));
+            postParams.putString("description", getString(R.string.share_description));
+            postParams.putString("link", this.atraccion.url);
+            postParams.putString("picture", "http://sphotos-e.ak.fbcdn.net/hphotos-ak-prn2/222461_472847872799797_1288982685_n.png");
+
+            Request.Callback callbackShare = new Request.Callback() {
+                public void onCompleted(Response response) {
+                    JSONObject graphResponse = response
+                            .getGraphObject()
+                            .getInnerJSONObject();
+                    String postId = null;
+                    try {
+                        postId = graphResponse.getString("id");
+                    } catch (JSONException e) {
+                        System.out.println("JSON error!!!! " + e.getMessage());
+                    }
+                    FacebookRequestError error = response.getError();
+                    if (error != null) {
+                        Toast.makeText(getApplicationContext(),
+                                error.getErrorMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Atraccion compartida exitosamente",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+
+            Request request = new Request(session, "me/feed", postParams,
+                    HttpMethod.POST, callbackShare);
+
+            final RequestAsyncTask task = new RequestAsyncTask(request);
+            final Activity a = activity;
+            if (a != null) {
+                a.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        task.execute();
+                    }
+                });
+            }
+
+        }
+
     }
 
     /*moodstock*/
@@ -1011,6 +1096,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         if (selected.getId().equals(marker.getId())) {
                             selected = null;
                             final AtraccionUi current = atracciones.get(marker);
+                            atraccion=current;
                             LayoutInflater inflater = activity.getLayoutInflater();
                             myView = inflater.inflate(R.layout.especie_map_dialog, null);
                             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -1030,27 +1116,37 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             });
                             builder.setNegativeButton(R.string.map_activity_dialog_cerrar, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+
                                     dialog.dismiss();
                                 }
 
 
                             });
-                            String label = getString(R.string.map_activity_dialog_like);
-                            builder.setNeutralButton(label + " (" + current.likes + ")", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                           /*aqui implementar like*/
-                                    current.likes++;
-                                    dialog.dismiss();
-                                }
+
+                            if(type.equals("facebook")){
+                                String label = getString(R.string.ruta_subir);
+                                builder.setNeutralButton(label, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        publishStory();
+                                        dialog.dismiss();
+                                    }
 
 
-                            });
+                                });
+
+                            }
+
                             dialog = builder.create();
                             ImageView img = (ImageView) myView.findViewById(R.id.especie_info_dialog_image);
                             img.setImageBitmap(current.foto);
                             TextView txt = (TextView) myView.findViewById(R.id.especie_info_dialog_comentarios);
                             txt.setText(current.descripcion);
                             dialog.show();
+                            if(type.equals("facebook")) {
+                                Button bq = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+                                bq.setBackgroundColor(Color.BLUE);
+                                bq.setTextColor(Color.WHITE);
+                            }
                         } else {
                             selected = marker;
                         }
