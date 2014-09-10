@@ -24,7 +24,7 @@ import java.util.Vector;
 /**
  * Created by DELL on 15/08/2014.
  */
-public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.OnClickListener, View.OnTouchListener {
+public class EspecieInfoFragment extends Fragment implements Button.OnClickListener, View.OnTouchListener {
     MapActivity context;
 
     TextView txtEspecieInfoNombreComun;
@@ -97,7 +97,7 @@ public class EncyclopediaEspecieInfoFragment extends Fragment implements Button.
         if (c2 != null) {
 //            int id = getResources().getIdentifier("global_color_" + c2.nombre, "string", context.getPackageName());
 //            color2 = id == 0 ? "" : (", " + ((String) getResources().getText(id)));
-            color2 = Utils.getStringResourceByName(context, "global_color_" + c2.nombre);
+            color2 = ", " + Utils.getStringResourceByName(context, "global_color_" + c2.nombre);
         }
 
         double altMin = 0, altMax = 0;

@@ -39,7 +39,7 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         activity = (MapActivity) getActivity();
 
-        System.out.println(activity.strEspeciesList);
+//        System.out.println(activity.strEspeciesList);
         try {
             JSONArray arr = new JSONArray(activity.strEspeciesList);
             especiesList = new ArrayList<String>();
@@ -78,7 +78,7 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 try {
-                    System.out.println("**********************************" + selected);
+//                    System.out.println("**********************************" + selected);
                     JSONObject obj = new JSONObject(selected);
 
                     int cantFotos = 0;

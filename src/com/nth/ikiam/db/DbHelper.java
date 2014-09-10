@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+import com.nth.ikiam.MapActivity;
+import com.nth.ikiam.utils.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,7 +72,36 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_ENTRY, KEYS_COMMON, EntryDbHelper.KEYS_ENTRY));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_LOGRO, KEYS_COMMON, LogroDbHelper.KEYS_LOGRO));
         sqLiteDatabase.execSQL(DbCreator.createTableSql(TABLE_NOTA, KEYS_COMMON, NotaDbHelper.KEYS_NOTA));
+
+//        checkColores();
     }
+
+//    private void checkColores() {
+////        if (Color.count(context) == 0) {
+//            Color c0 = new Color(context, "none");
+//            c0.save();
+//            Color c1 = new Color(context, "azul");
+//            c1.save();
+//            Color c2 = new Color(context, "cafe");
+//            c2.save();
+//            Color c3 = new Color(context, "verde");
+//            c3.save();
+//            Color c4 = new Color(context, "naranja");
+//            c4.save();
+//            Color c5 = new Color(context, "rosa");
+//            c5.save();
+//            Color c6 = new Color(context, "violeta");
+//            c6.save();
+//            Color c7 = new Color(context, "rojo");
+//            c7.save();
+//            Color c8 = new Color(context, "blanco");
+//            c8.save();
+//            Color c9 = new Color(context, "amarillo");
+//            c9.save();
+//            Color c10 = new Color(context, "negro");
+//            c10.save();
+////        }
+//    }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i2) {

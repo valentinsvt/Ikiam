@@ -1,11 +1,8 @@
 package com.nth.ikiam.adapters;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ListFragment;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.nth.ikiam.*;
 import com.nth.ikiam.db.Especie;
 import com.nth.ikiam.db.Familia;
 import com.nth.ikiam.db.Genero;
-import com.nth.ikiam.utils.Utils;
 
 import java.util.List;
 
@@ -71,7 +66,7 @@ public class EncyclopediaFirstLevelAdapter extends BaseExpandableListAdapter {
                 Especie selected = especies.get(childPosition);
 
 //                ListFragment fragment = new EncyclopediaEntriesFragment();
-                Fragment fragment = new EncyclopediaEspecieInfoFragment();
+                Fragment fragment = new EspecieInfoFragment();
                 Bundle args = new Bundle();
                 args.putLong("especie", selected.id);
                 fragment.setArguments(args);

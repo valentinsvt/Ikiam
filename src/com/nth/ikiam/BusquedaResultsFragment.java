@@ -1,7 +1,6 @@
 package com.nth.ikiam;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.View;
@@ -43,7 +42,7 @@ public class BusquedaResultsFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Especie selected = especiesList.get(position);
-        Fragment fragment = new EncyclopediaEspecieInfoFragment();
+        Fragment fragment = new EspecieInfoFragment();
         Bundle args = new Bundle();
         args.putLong("especie", selected.id);
 //        fragment.setArguments(args);
