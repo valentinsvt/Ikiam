@@ -40,8 +40,11 @@ public class BusquedaResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
         String nombreCientifico = genero.nombre + " " + especie.nombre.toLowerCase();
 
         List<Foto> fotos = Foto.findAllByEspecie(context, especie);
-        Foto foto = fotos.get(0);
-        File imgFile = new File(foto.path);
+        Foto foto = null;
+        if (fotos.size() > 0) {
+            foto = fotos.get(0);
+        }
+//        File imgFile = new File(foto.path);
 
 
         int cantFotos = Foto.countByEspecie(context, especie);
@@ -61,7 +64,9 @@ public class BusquedaResultsEspeciesListAdapter extends ArrayAdapter<Especie> {
         itemNombreCientifico.setText(labelNombreCientifico);
         itemNombreComun.setText(labelNombreComun);
         itemCantFotos.setText(labelCantFotos);
-        itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 100, 100, true));
+        if (foto != null) {
+            itemFoto.setImageBitmap(ImageUtils.decodeFile(foto.path, 100, 100, true));
+        }
         return convertView;
         /* **********************************************/
 

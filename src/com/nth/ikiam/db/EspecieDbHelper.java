@@ -149,7 +149,9 @@ public class EspecieDbHelper extends DbHelper {
             where += ")";
         }
 
-        sql = select + from + joins + where + groupBy;
+        sql = select + from + joins + where /*+ groupBy*/;
+
+        System.out.println(sql);
 
         logQuery(LOG, sql);
 
