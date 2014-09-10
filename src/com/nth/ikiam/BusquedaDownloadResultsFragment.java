@@ -39,7 +39,7 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         activity = (MapActivity) getActivity();
 
-        System.out.println(activity.strEspeciesList);
+//        System.out.println(activity.strEspeciesList);
         try {
             JSONArray arr = new JSONArray(activity.strEspeciesList);
             especiesList = new ArrayList<String>();

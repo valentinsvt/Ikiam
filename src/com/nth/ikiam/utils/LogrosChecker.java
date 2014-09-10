@@ -9,6 +9,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
+import com.nth.ikiam.db.Color;
 import com.nth.ikiam.db.Logro;
 
 import java.util.List;
@@ -59,6 +60,30 @@ public class LogrosChecker implements Runnable {
                 logro.save();
                 System.out.println("distancia : " + cantidad);
             }
+        }
+        if (Color.count(activity) == 0) {
+            Color c0 = new Color(activity, "none");
+            c0.save();
+            Color c1 = new Color(activity, "azul");
+            c1.save();
+            Color c2 = new Color(activity, "cafe");
+            c2.save();
+            Color c3 = new Color(activity, "verde");
+            c3.save();
+            Color c4 = new Color(activity, "naranja");
+            c4.save();
+            Color c5 = new Color(activity, "rosa");
+            c5.save();
+            Color c6 = new Color(activity, "violeta");
+            c6.save();
+            Color c7 = new Color(activity, "rojo");
+            c7.save();
+            Color c8 = new Color(activity, "blanco");
+            c8.save();
+            Color c9 = new Color(activity, "amarillo");
+            c9.save();
+            Color c10 = new Color(activity, "negro");
+            c10.save();
         }
     }
 }

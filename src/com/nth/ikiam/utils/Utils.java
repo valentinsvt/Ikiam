@@ -114,7 +114,7 @@ public class Utils {
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    public static void checkColores(MapActivity context) {
+    public static void checkColores(Context context) {
 //        Color.empty(context);
 //        Familia.empty(context);
 //        Genero.empty(context);
