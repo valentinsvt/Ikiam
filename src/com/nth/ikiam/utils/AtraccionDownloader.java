@@ -75,18 +75,18 @@ public class AtraccionDownloader implements Runnable {
                     String[] datos = parts[i].split("&");
 
                     try {
-                        if (datos.length == 6) {
-                            //System.out.println("url foto "+(IP+datos[4]));
-                            URL urlFoto = new URL(IP + datos[4]);
+                        if (datos.length == 7) {
+                            System.out.println("url foto "+(IP+"atraccion/android/"+datos[4]));
+                            URL urlFoto = new URL(IP +"atraccion/android/"+ datos[4]);
                             HttpURLConnection connection = (HttpURLConnection) urlFoto.openConnection();
                             connection.setDoInput(true);
                             connection.connect();
                             InputStream input = connection.getInputStream();
-                            Bitmap[] myBitmap = ImageUtils.dobleBitmap(input, 160, 90, 300, 200);
+                            Bitmap[] myBitmap = ImageUtils.dobleBitmap(input, 160, 90, 800, 500);
                             int likes = Integer.parseInt(datos[1]);
                             double lat = Double.parseDouble(datos[2]);
                             double longi = Double.parseDouble(datos[3]);
-                            context.setPing(datos[0], likes, lat, longi, myBitmap[0], myBitmap[1], datos[5]);
+                            context.setPing(datos[0], likes, lat, longi, myBitmap[0], myBitmap[1], datos[5],datos[6]);
                         }
 
 

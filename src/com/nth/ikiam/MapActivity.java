@@ -558,14 +558,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         if (v.getId() == botones[2].getId()) {
             map.clear();
-            Location mCurrentLocation;
-            mCurrentLocation = locationClient.getLastLocation();
+            //Location mCurrentLocation;
+           // mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
             especies.clear();
             social.clear();
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
-            location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            location = new LatLng(-1.6477220517969353, -78.46435546875);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
             map.animateCamera(update);
             ExecutorService queue = Executors.newSingleThreadExecutor();
@@ -713,7 +713,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.animateCamera(cu);
     }
 
-    public void setPing(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String url) {
+    public void setPing(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String url,final String descripcion) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
@@ -731,7 +731,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
-                AtraccionUi atraccion = new AtraccionUi(title, fotoDialog, likes, url);
+                AtraccionUi atraccion = new AtraccionUi(title, fotoDialog, likes, url,descripcion);
                 atracciones.put(marker, atraccion);
             }
         });
@@ -1004,7 +1004,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
                 if (atracciones.get(marker) != null) {
                     marker.showInfoWindow();
-                    System.out.println("click  atracc " + marker + "  " + selected + "  " + (selected != marker));
+//                    System.out.println("click  atracc " + marker + "  " + selected + "  " + (selected != marker));
                     if (selected == null) {
                         selected = marker;
                     } else {
@@ -1012,7 +1012,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             selected = null;
                             final AtraccionUi current = atracciones.get(marker);
                             LayoutInflater inflater = activity.getLayoutInflater();
-                            myView = inflater.inflate(R.layout.dialog, null);
+                            myView = inflater.inflate(R.layout.especie_map_dialog, null);
                             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                             builder.setTitle(current.nombre);
                             builder.setView(myView);
@@ -1046,9 +1046,10 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                             });
                             dialog = builder.create();
-                            ImageView img = (ImageView) myView.findViewById(R.id.image);
-
+                            ImageView img = (ImageView) myView.findViewById(R.id.especie_info_dialog_image);
                             img.setImageBitmap(current.foto);
+                            TextView txt = (TextView) myView.findViewById(R.id.especie_info_dialog_comentarios);
+                            txt.setText(current.descripcion);
                             dialog.show();
                         } else {
                             selected = marker;
@@ -1058,7 +1059,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
                 if (especies.get(marker) != null) {
                     marker.showInfoWindow();
-                    System.out.println("especie " + marker + "  " + selected + "  " + (selected != marker));
+                    //System.out.println("especie " + marker + "  " + selected + "  " + (selected != marker));
                     if (selected == null) {
                         selected = marker;
                     } else {
