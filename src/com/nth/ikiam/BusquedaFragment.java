@@ -214,8 +214,9 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
 //            List<Especie> especies = Especie.busqueda(context, searchKeywords, searchColor, searchNC);
             context.especiesBusqueda = Especie.busqueda(context, searchKeywords, searchColor, searchNC);
             ListFragment fragment = new BusquedaResultsFragment();
-            FragmentManager fragmentManager = context.getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+            Utils.openFragment(context, fragment, getString(R.string.busqueda_title));
+//            FragmentManager fragmentManager = context.getFragmentManager();
+//            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 //            List<Foto> fotos = Foto.busqueda(context, data);
 //            context.fotosBusqueda = Foto.busqueda(context, data);
@@ -270,6 +271,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
         Utils.hideSoftKeyboard(context);
         return false;
     }
+
     @Override
     public void onResume() {
         super.onResume();

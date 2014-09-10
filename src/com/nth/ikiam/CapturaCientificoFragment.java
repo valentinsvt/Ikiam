@@ -179,7 +179,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 String nombreComun = autocompleteNombreComun.getText().toString().trim();
                 String nombreFamilia = autocompleteFamilia.getText().toString().trim();
                 String nombreGenero = autocompleteGenero.getText().toString().trim();
-                String nombreEspecie = autocompleteEspecie.getText().toString().trim();
+                String nombreEspecie = autocompleteEspecie.getText().toString().trim().toLowerCase();
 
                 boolean ok = true;
                 if (nombreComun.equals("")) {
