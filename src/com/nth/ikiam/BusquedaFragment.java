@@ -53,7 +53,7 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
         context = (MapActivity) getActivity();
         View view = inflater.inflate(R.layout.busqueda_layout, container, false);
         view.setOnTouchListener(this);
-        Utils.checkColores(context);
+//        Utils.checkColores(context);
 
         lblInfoKeywords = (TextView) view.findViewById(R.id.busqueda_info_keywords_lbl);
         lblInfoColor = (TextView) view.findViewById(R.id.busqueda_info_color_lbl);

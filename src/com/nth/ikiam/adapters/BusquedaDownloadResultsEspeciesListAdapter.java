@@ -28,6 +28,7 @@ import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
 import com.nth.ikiam.db.Color;
 import com.nth.ikiam.utils.Utils;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -60,20 +61,14 @@ public class BusquedaDownloadResultsEspeciesListAdapter extends ArrayAdapter<Str
 
         try {
             String especie = especies.get(position);
-            String[] datos = especie.split(";");
 
-            nombreComun = URLDecoder.decode(datos[0].trim(), "UTF-8");
-            nombreFamilia = URLDecoder.decode(datos[1].trim(), "UTF-8");
-            nombreGenero = URLDecoder.decode(datos[2].trim(), "UTF-8");
-            nombreEspecie = URLDecoder.decode(datos[3].trim(), "UTF-8");
-            idEspecie = datos[4];
-            color1 = URLDecoder.decode(datos[5].trim(), "UTF-8");
-            color2 = "";
-            if (datos.length >= 7) {
-                if (!datos[6].equals("-")) {
-                    color2 = URLDecoder.decode(datos[6].trim(), "UTF-8");
-                }
-            }
+            JSONObject obj = new JSONObject(especie);
+            nombreComun = URLDecoder.decode(obj.getString("nombreComun"), "UTF-8");
+            nombreFamilia = URLDecoder.decode(obj.getString("familia"), "UTF-8");
+            nombreGenero = URLDecoder.decode(obj.getString("genero"), "UTF-8");
+            nombreEspecie = URLDecoder.decode(obj.getString("especie"), "UTF-8");
+            color1 = URLDecoder.decode(obj.getString("color1"), "UTF-8");
+            color2 = URLDecoder.decode(obj.getString("color2"), "UTF-8");
 
             nombreCientifico = nombreGenero + " " + nombreEspecie.toLowerCase();
 

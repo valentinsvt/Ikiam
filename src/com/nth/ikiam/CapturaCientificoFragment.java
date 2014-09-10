@@ -108,7 +108,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 //        view.setOnTouchListener(this);
         scrollview.setOnTouchListener(this);
 
-        Utils.checkColores(context);
+//        Utils.checkColores(context);
         activity = (MapActivity) getActivity();
         screenHeight = activity.screenHeight;
         screenWidth = activity.screenWidth;

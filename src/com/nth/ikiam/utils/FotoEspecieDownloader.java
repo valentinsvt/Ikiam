@@ -31,11 +31,14 @@ public class FotoEspecieDownloader implements Runnable {
     Vector<String> fotosLongs;
     Vector<String> fotosAlts;
     Vector<String> fotosComs;
+    Vector<String> fotosKeys;
     Especie especie;
 
     final String IP = UtilsUploaders.getIp();
 
-    public FotoEspecieDownloader(MapActivity context, ExecutorService queue, int retries, Vector<String> fotosPaths, Vector<String> fotosLats, Vector<String> fotosLongs, Vector<String> fotosAlts, Vector<String> fotosComs, Especie especie) {
+    public FotoEspecieDownloader(MapActivity context, ExecutorService queue, int retries, Vector<String> fotosPaths,
+                                 Vector<String> fotosLats, Vector<String> fotosLongs, Vector<String> fotosAlts, Vector<String> fotosComs,
+                                 Vector<String> fotosKeys, Especie especie) {
         this.context = context;
         this.queue = queue;
         this.retries = retries;
@@ -44,6 +47,7 @@ public class FotoEspecieDownloader implements Runnable {
         this.fotosLongs = fotosLongs;
         this.fotosAlts = fotosAlts;
         this.fotosComs = fotosComs;
+        this.fotosKeys = fotosKeys;
         this.especie = especie;
     }
 
@@ -85,6 +89,7 @@ public class FotoEspecieDownloader implements Runnable {
                     double alt = fotosAlts.get(i).equals("null") ? 0 : Double.parseDouble(fotosAlts.get(i));
 
                     String com = fotosComs.get(i).equals("null") ? "" : fotosComs.get(i);
+                    String keywords = fotosKeys.get(i);
 
                     List<Coordenada> coords = Coordenada.findAllByCoords(context, lat, lon, alt);
                     Coordenada nuevaCoord;
@@ -108,6 +113,7 @@ public class FotoEspecieDownloader implements Runnable {
                     nuevaFoto.setCoordenada(nuevaCoord);
                     nuevaFoto.setEntry(nuevoEntry);
                     nuevaFoto.setEspecie(especie);
+                    nuevaFoto.setKeywords(keywords);
                     nuevaFoto.path = fileName;
                     nuevaFoto.uploaded = 1;
                     nuevaFoto.mio = 0;

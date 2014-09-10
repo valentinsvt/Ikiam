@@ -259,7 +259,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        Utils.checkColores(this);
         DbHelper helper = new DbHelper(this);
         helper.getWritableDatabase();
 
