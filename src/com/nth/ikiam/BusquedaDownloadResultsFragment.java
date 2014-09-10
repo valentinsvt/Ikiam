@@ -78,7 +78,7 @@ public class BusquedaDownloadResultsFragment extends ListFragment {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 try {
-                    System.out.println("**********************************" + selected);
+//                    System.out.println("**********************************" + selected);
                     JSONObject obj = new JSONObject(selected);
 
                     int cantFotos = 0;
