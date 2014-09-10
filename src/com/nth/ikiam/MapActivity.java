@@ -515,7 +515,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 continente = true;
             } else {
                 location = new LatLng(-0.4614207935306084, -90.615234375);
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
                 map.animateCamera(update);
                 botones[0].setText(R.string.map_continente_btn);
                 continente = false;
@@ -566,7 +566,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
             location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
             map.animateCamera(update);
             ExecutorService queue = Executors.newSingleThreadExecutor();
             queue.execute(new AtraccionDownloader(this, queue, 0));
@@ -574,15 +574,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         if (v.getId() == botones[3].getId()) {
             map.clear();
-            Location mCurrentLocation;
-            mCurrentLocation = locationClient.getLastLocation();
+
             atracciones.clear();
             especies.clear();
             social.clear();
             selected = null;
             //System.out.println("Altura "+ mCurrentLocation.getAltitude());
-            location = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 9);
+            location = new LatLng(-1.6477220517969353, -78.46435546875);
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
             map.animateCamera(update);
             ExecutorService queue = Executors.newSingleThreadExecutor();
             queue.execute(new EspeciesDownloader(this, queue, 0));
