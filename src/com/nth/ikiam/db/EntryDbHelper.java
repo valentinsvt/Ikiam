@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.Normalizer;
+import java.util.*;
 
 /**
  * Created by DELL on 31/07/2014.
@@ -213,6 +211,76 @@ public class EntryDbHelper extends DbHelper {
                 " WHERE " + KEY_UPLOADED + " = " + uploaded;
 
         logQuery(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Entry e = setDatos(c);
+
+                // adding to entry list
+                entries.add(e);
+            } while (c.moveToNext());
+        }
+        db.close();
+        return entries;
+    }
+
+    public List<Entry> getBusquedaNuevo(Vector<String> keywords, String color, String nc) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Entry> entries = new ArrayList<Entry>();
+
+        String select = "SELECT  n.* ";
+        String from = " FROM " + TABLE_ENTRY + " n";
+        String joins = " INNER JOIN " + TABLE_ESPECIE + " e ON n." + KEY_ESPECIE_ID + " = e." + KEY_ID;
+        String where = "";
+
+        if (!color.equals("")) {
+            joins += " LEFT JOIN " + TABLE_COLOR + " c1 ON e." + EspecieDbHelper.KEY_COLOR1_ID + " = c1." + KEY_ID;
+            joins += " LEFT JOIN " + TABLE_COLOR + " c2 ON e." + EspecieDbHelper.KEY_COLOR2_ID + " = c2." + KEY_ID;
+
+            if (where.equals("")) {
+                where += " WHERE ";
+            } else {
+                where += " AND ";
+            }
+            where += " (c1." + ColorDbHelper.KEY_NOMBRE + " = '" + color + "'";
+            where += " OR c2." + ColorDbHelper.KEY_NOMBRE + " = '" + color + "')";
+        }
+        if (!nc.equals("")) {
+            if (where.equals("")) {
+                where += " WHERE ";
+            } else {
+                where += " AND ";
+            }
+            where += "LOWER(e." + EspecieDbHelper.KEY_NOMBRE_COMUN_NORM + ") LIKE '%" + Normalizer.normalize(nc, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").toLowerCase() + "%' ";
+        }
+        if (keywords.size() > 0) {
+            joins += " LEFT JOIN " + TABLE_FOTO + " f ON f." + FotoDbHelper.KEY_ENTRY_ID + " = n." + KEY_ID;
+            if (where.equals("")) {
+                where += " WHERE ";
+            } else {
+                where += " AND ";
+            }
+            where += "(";
+            boolean first = true;
+            for (String keyword : keywords) {
+                if (first) {
+                    first = false;
+                } else {
+                    where += " OR ";
+                }
+                where += "f." + FotoDbHelper.KEY_KEYWORDS + " LIKE '%" + keyword + "%'";
+            }
+
+            where += ")";
+        }
+
+        String selectQuery = select + from + joins + where;
+        logQuery(LOG, selectQuery);
+
+        System.out.println(selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 

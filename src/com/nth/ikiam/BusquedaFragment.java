@@ -212,8 +212,9 @@ public class BusquedaFragment extends Fragment implements Button.OnClickListener
 //            System.out.println("NC: " + searchNC);
 
 //            List<Especie> especies = Especie.busqueda(context, searchKeywords, searchColor, searchNC);
-            context.especiesBusqueda = Especie.busqueda(context, searchKeywords, searchColor, searchNC);
-            ListFragment fragment = new BusquedaResultsFragment();
+//            context.especiesBusqueda = Especie.busqueda(context, searchKeywords, searchColor, searchNC);-
+            context.entriesBusquedaNuevo = Entry.busquedaNuevo(context, searchKeywords, searchColor, searchNC);
+            ListFragment fragment = new BusquedaEntryResultsFragment();
             Utils.openFragment(context, fragment, getString(R.string.busqueda_title));
 //            FragmentManager fragmentManager = context.getFragmentManager();
 //            fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();

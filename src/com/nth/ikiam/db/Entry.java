@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by DELL on 31/07/2014.
@@ -162,5 +163,10 @@ public class Entry {
     public static List<Entry> busqueda(Context context, HashMap<String, String> data) {
         EntryDbHelper e = new EntryDbHelper(context);
         return e.getBusqueda(data);
+    }
+
+    public static List<Entry> busquedaNuevo(Context context, Vector<String> searchKeywords, String searchColor, String searchNC) {
+        EntryDbHelper e = new EntryDbHelper(context);
+        return e.getBusquedaNuevo(searchKeywords, searchColor, searchNC);
     }
 }
