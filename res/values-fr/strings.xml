@@ -1,0 +1,181 @@
+<!--
+  Copyright 2013 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Ikiam</string>
+    <string name="menu_title">Ikiam</string>
+
+    <string name="help_help">Aide</string>
+    <string name="help_map">
+        "La carte montre la position géographique de l'utilisateur et des photos prises dans l'application.\n
+        Buttons:\n
+        Galapagos: centre la carte sur les îles Galapagos\n
+        Nouvelle randonnée: l'application commencera à enregistrer la position de l'utilisateru y l'activité de l'appareil photo pour monter sur la carte.\n
+        Caméra: ouvre l'application de l'apppareil photo\n
+        Attractions: décharche du serveur de l'Ikiam les principales attractions touristiques de l'Equateur\n
+        Espèces: décharche du serveur de l'Ikiam les principales espèces de l'Equateur\n
+        Boussole: montre les coordonnées de l'utilisateur et une boussole\n
+        Type: change le type de carte\n
+        Nettoyer: nettoie les marques et les photos de la carte"
+    </string>
+    <string name="help_captura">Ayuda captura</string>
+    <string name="help_enciclopedia">Ayuda enciclopedia</string>
+    <string name="help_galeria">Ayuda galeria</string>
+    <string name="help_rutas">Ayuda rutas</string>
+    <string name="help_configuracion">Ayuda configuracion</string>
+    <string name="help_login">Ayuda login</string>
+    <string name="help_busqueda">Ayuda búsqueda</string>
+    <string name="help_tools">Ayuda tools</string>
+    <string name="help_ikiam_web">Ayuda ikiam</string>
+    <string name="help_notepad">Ayuda notas</string>
+
+    <string name="global_yes">Oui</string>
+    <string name="global_no">Non</string>
+    <string name="global_ok">OK</string>
+    <string name="global_save">Enregistrer</string>
+    <string name="global_upload">Enregistrer et télécharger</string>
+    <string name="global_cancel">Annuler</string>
+    <string name="global_placeHolder">placeHolder</string>
+    <string name="global_min">min.</string>
+    <string name="global_max">max.</string>
+
+    <string name="global_color_none">-Aucune-</string>
+    <string name="global_color_azul">Bleue</string>
+    <string name="global_color_cafe">Marron</string>
+    <string name="global_color_verde">Vert</string>
+    <string name="global_color_naranja">Orange</string>
+    <string name="global_color_rosa">Rose</string>
+    <string name="global_color_violeta">Violet</string>
+    <string name="global_color_rojo">Rouge</string>
+    <string name="global_color_blanco">Blanc</string>
+    <string name="global_color_amarillo">Jaune</string>
+    <string name="global_color_negro">Noir</string>
+
+    <string name="global_error_no_connection">"Il y a eu une erreur de connection à l'Internet."</string>
+
+    <string-array name="options_array_cientifico">
+        <item>Carte</item>
+        <item>Nouvelle entrée</item>
+        <item>Encyclopédie</item>
+        <item>Randonnées</item>
+        <item>Ikiam Web</item>
+        <item>Notes</item>
+        <item>Nouvelle note</item>
+        <item>Configuration</item>
+        <item>Connexion</item>
+    </string-array>
+    <string-array name="options_array_turista">
+        <item>Carte</item>
+        <item>Nouvelle entrée</item>
+        <item>Encyclopédie</item>
+        <item>Gallerie</item>
+        <item>Randonnées</item>
+        <item>Ikiam Web</item>
+        <item>Notes</item>
+        <item>Nouvelle note</item>
+        <item>Configuration</item>
+        <item>Connexion</item>
+        <item>Scaner</item>
+    </string-array>
+
+    <string name="drawer_open">Ouvrir le menu</string>
+    <string name="drawer_close">Fermer le menu</string>
+    <string name="search_btn_label">Recherche</string>
+
+    <string name="web_app_not_available">"Il n'y a aucune application pour naviguer sur Internet"</string>
+    <string name="gallery_app_not_available">"Il n'y a aucune application de gallerie"</string>
+    <string name="camera_app_not_available">"Il n'y a aucun application d'appareil photo"</string>
+
+    <string name="encyclopedia_title">Encyclopédie</string>
+    <string name="settings_title">Configuration</string>
+    <string name="camera_title">Appareil photo</string>
+    <string name="captura_title">Nouvelle entrée</string>
+    <string name="gallery_title">Gallerie</string>
+    <string name="map_title">Carte</string>
+    <string name="tools_title">Outils</string>
+    <string name="busqueda_title">Recherche</string>
+    <string name="rutas_title">Randonnées</string>
+    <string name="login_title">Connexion</string>
+    <string name="ikiam_web_title">Ikiam web</string>
+    <string name="logro_title">Accomplissements</string>
+    <string name="notepad_title">Notes</string>
+    <string name="nota_create_title">Nouvelle note</string>
+    <string name="nota_edit_title">Modifier note</string>
+    <string name="especie_info_title">Info. espèce</string>
+    <string name="estadisticas_title">Statistiques</string>
+
+    <string name="gallery_choose_btn_label">Choisir image</string>
+    <string name="camera_btn_label">Prendre photo</string>
+
+    <string name="map_galapagos_btn">Galapagos</string>
+    <string name="map_continente_btn">Continent</string>
+    <string name="map_locate_btn">Ma position</string>
+    <string name="map_service">Nouvelle randonnée</string>
+    <string name="map_subirFotoMarker">Cliquer la marque pour enregistrer une photo dans cette position</string>
+    <string name="map_ubicar_foto_marker">Cliquer la marque pour localiser la photo</string>
+    <string name="map_foto_ubicada">Photo localisée</string>
+    <string name="map_camara">Caméra</string>
+    <string name="map_especies">Espèces</string>
+    <string name="map_limpiar">Nettoyer</string>
+
+    <string name="captura_es_animal">Animal</string>
+    <string name="captura_es_planta">Plante</string>
+    <string name="captura_tiene_fruta">Fruit</string>
+    <string name="captura_tiene_arbol">Arbre</string>
+    <string name="captura_tiene_corteza">Ecorce</string>
+    <string name="captura_tiene_hoja">Feuilles</string>
+    <string name="captura_tiene_flor">Fleurs</string>
+
+    <string name="buscar_buscar">"Rechercher photos d'espèces"</string>
+    <string name="buscar_donde">"où l'on ppuisse voir"</string>
+    <string name="buscar_es_animal">des animaux</string>
+    <string name="buscar_es_planta">dea plantes</string>
+    <string name="buscar_es_animal_y_planta">de plantes et animaux</string>
+    <string name="buscar_tiene_fruta">le fruit</string>
+    <string name="buscar_tiene_arbol">"l'arbre"</string>
+    <string name="buscar_tiene_corteza">"l'écorce"</string>
+    <string name="buscar_tiene_hoja">les feuilles</string>
+    <string name="buscar_tiene_flor">les fleurs</string>
+    <string name="buscar_nombre_comun">de nom commun</string>
+    <string name="buscar_color">de couleur</string>
+
+    <string name="captura_keyWord_animal">Animal</string>
+    <string name="captura_keyWord_fruta">Fruit</string>
+    <string name="captura_keyWord_arbol">Arbre</string>
+    <string name="captura_keyWord_corteza">Ecorce</string>
+    <string name="captura_keyWord_hoja">Feuilles</string>
+    <string name="captura_keyWord_flor">Fleurs</string>
+
+    <string name="captura_comentarios_label">Commentaires</string>
+    <string name="captura_nombre_familia_label">Famille</string>
+    <string name="captura_nombre_genero_label">Genre</string>
+    <string name="captura_nombre_especie_label">Espèce</string>
+    <string name="captura_nombre_comun_label">Nom commun</string>
+    <string name="captura_color1_label">Couleur principale</string>
+    <string name="captura_color2_label">Couleur secondaire</string>
+    <string name="captura_cautiverio_label">Spécimen en captivité</string>
+
+    <string name="captura_error_nombre_comun">Introduisez le nom commun</string>
+    <string name="captura_error_nombre_familia">Introduisez la famille</string>
+    <string name="captura_error_nombre_genero">Introduisez le genre</string>
+    <string name="captura_error_nombre_especie">"Introduisez l'espèce"</string>
+    <string name="captura_error_keywords">Choisissez un type de photo</string>
+    <string name="captura_error_seleccion">"Choisissez ou prenez une photo d'abord"</string>
+    <string name="captura_error_tag_gps">"La photo n'a pas d'information géographique. localisez-là sur la carte"</string>
+    <string name="captura_success_tag_gps">"La photo a l'information géographique et apparaîtra sur la carte"</string>
+    <string name="captura_error_gps_upload">"La photo n'a pas d'information géographique. Localisez-là sur la carte pour la télecharger"</string>
+</resources>

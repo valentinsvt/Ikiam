@@ -53,7 +53,7 @@ public class AchievementChecker implements Runnable {
                 NotificationCompat.Builder mBuilder =
                         new NotificationCompat.Builder(this.activity)
                                 .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle(activity.getString(R.string.achievement_titulo) + " " + titulo)
+                                .setContentTitle(activity.getString(R.string.achievement_titulo) + ": " + titulo)
                                 .setContentText(felicidades + " " + strAchiev);
                 // Creates an explicit intent for an Activity in your app
 //                Intent resultIntent = new Intent(this.activity, MapActivity.class);

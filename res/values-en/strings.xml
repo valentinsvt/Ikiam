@@ -33,4 +33,331 @@
         Clean: removes all map markers"
     </string>
 
+    <string name="help_captura">Ayuda captura</string>
+    <string name="help_enciclopedia">Ayuda enciclopedia</string>
+    <string name="help_galeria">Ayuda galeria</string>
+    <string name="help_rutas">Ayuda rutas</string>
+    <string name="help_configuracion">Ayuda configuracion</string>
+    <string name="help_login">Ayuda login</string>
+    <string name="help_busqueda">Ayuda búsqueda</string>
+    <string name="help_tools">Ayuda tools</string>
+    <string name="help_ikiam_web">Ayuda ikiam</string>
+    <string name="help_notepad">Ayuda notas</string>
+
+    <string name="global_yes">Yes</string>
+    <string name="global_no">No</string>
+    <string name="global_ok">OK</string>
+    <string name="global_save">Save</string>
+    <string name="global_upload">Save and upload</string>
+    <string name="global_cancel">Cancel</string>
+    <string name="global_placeHolder">placeHolder</string>
+    <string name="global_min">min.</string>
+    <string name="global_max">max.</string>
+
+    <string name="global_color_none">-None-</string>
+    <string name="global_color_azul">Blue</string>
+    <string name="global_color_cafe">Brown</string>
+    <string name="global_color_verde">Green</string>
+    <string name="global_color_naranja">Orange</string>
+    <string name="global_color_rosa">Pink</string>
+    <string name="global_color_violeta">Purple</string>
+    <string name="global_color_rojo">Red</string>
+    <string name="global_color_blanco">White</string>
+    <string name="global_color_amarillo">Yellow</string>
+    <string name="global_color_negro">Black</string>
+
+    <string name="global_error_no_connection">There was an error connecting to the Internet</string>
+
+    <string-array name="options_array_cientifico">
+        <item>Map</item>
+        <item>New entry</item>
+        <item>Encyclopedia</item>
+        <item>Routes</item>
+        <item>Ikiam Web</item>
+        <item>Notes</item>
+        <item>New note</item>
+        <item>Settings</item>
+        <item>Login</item>
+    </string-array>
+    <string-array name="options_array_turista">
+        <item>Map</item>
+        <item>New entry</item>
+        <item>Encyclopedia</item>
+        <item>Gallery</item>
+        <item>Routes</item>
+        <item>Ikiam Web</item>
+        <item>Notes</item>
+        <item>New note</item>
+        <item>Settings</item>
+        <item>Login</item>
+        <item>Scanner</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="search_btn_label">Search</string>
+
+    <string name="web_app_not_available">No browser app found</string>
+    <string name="gallery_app_not_available">No gallery app found</string>
+    <string name="camera_app_not_available">No camera app found</string>
+
+    <string name="encyclopedia_title">Encyclopedia</string>
+    <string name="settings_title">Settings</string>
+    <string name="camera_title">Camera</string>
+    <string name="captura_title">New entry</string>
+    <string name="gallery_title">Gallery</string>
+    <string name="map_title">Map</string>
+    <string name="tools_title">Tools</string>
+    <string name="busqueda_title">Search</string>
+    <string name="rutas_title">Routes</string>
+    <string name="login_title">Login</string>
+    <string name="ikiam_web_title">Ikiam web</string>
+    <string name="logro_title">Achievements</string>
+    <string name="notepad_title">Notes</string>
+    <string name="nota_create_title">New note</string>
+    <string name="nota_edit_title">Update nota</string>
+    <string name="especie_info_title">Species info</string>
+    <string name="estadisticas_title">Statistics</string>
+
+    <string name="gallery_choose_btn_label">Choose a picture</string>
+    <string name="camera_btn_label">Take a picture</string>
+
+    <string name="map_galapagos_btn">Galápagos</string>
+    <string name="map_continente_btn">Continent</string>
+    <string name="map_locate_btn">My location</string>
+    <string name="map_service">New route</string>
+    <string name="map_subirFotoMarker">Click the marker to upload a picture here</string>
+    <string name="map_ubicar_foto_marker">Click the marker to position the picture</string>
+    <string name="map_foto_ubicada">Picture positioned</string>
+    <string name="map_camara">Camera</string>
+    <string name="map_especies">Species</string>
+    <string name="map_limpiar">Clean</string>
+
+    <string name="captura_es_animal">Animal</string>
+    <string name="captura_es_planta">Plant</string>
+    <string name="captura_tiene_fruta">Fruit visible</string>
+    <string name="captura_tiene_arbol">Tree visible</string>
+    <string name="captura_tiene_corteza">Bark visible</string>
+    <string name="captura_tiene_hoja">Leaves visible</string>
+    <string name="captura_tiene_flor">Flowers visible</string>
+
+    <string name="buscar_buscar">Find pictures of species</string>
+    <string name="buscar_donde">where you can see</string>
+    <string name="buscar_es_animal">animals</string>
+    <string name="buscar_es_planta">plants</string>
+    <string name="buscar_es_animal_y_planta">plants and animals</string>
+    <string name="buscar_tiene_fruta">fruit</string>
+    <string name="buscar_tiene_arbol">tree</string>
+    <string name="buscar_tiene_corteza">bark</string>
+    <string name="buscar_tiene_hoja">leaves</string>
+    <string name="buscar_tiene_flor">flowers</string>
+    <string name="buscar_nombre_comun">common name</string>
+    <string name="buscar_color">color</string>
+
+    <string name="captura_keyWord_animal">Animal</string>
+    <string name="captura_keyWord_fruta">Fruit</string>
+    <string name="captura_keyWord_arbol">Tree</string>
+    <string name="captura_keyWord_corteza">Bark</string>
+    <string name="captura_keyWord_hoja">Leaves</string>
+    <string name="captura_keyWord_flor">Flowers</string>
+
+    <string name="captura_comentarios_label">Comments</string>
+    <string name="captura_nombre_familia_label">Family</string>
+    <string name="captura_nombre_genero_label">Genus</string>
+    <string name="captura_nombre_especie_label">Species</string>
+    <string name="captura_nombre_comun_label">Common name</string>
+    <string name="captura_color1_label">Main color</string>
+    <string name="captura_color2_label">Secondary color</string>
+    <string name="captura_cautiverio_label">Specimen in captvity</string>
+
+    <string name="captura_error_nombre_comun">Please enter de common name of the species</string>
+    <string name="captura_error_nombre_familia">Please enter the family of th species</string>
+    <string name="captura_error_nombre_genero">Please enter the genus of the species</string>
+    <string name="captura_error_nombre_especie">Please enter the name of the species</string>
+    <string name="captura_error_keywords">Please choose at least a keyword</string>
+    <string name="captura_error_seleccion">Please take or choose a picture</string>
+    <string name="captura_error_tag_gps">There is no Geo tag in this picture. Please place it on thee map.</string>
+    <string name="captura_success_tag_gps">This picture has Geo tag. It will show up on the map.</string>
+    <string name="captura_error_gps_upload">You cannot upload the picture until you have placed it on the map.</string>
+
+    <string name="map_activity_nuevaFoto">New picture</string>
+    <string name="map_activity_atracciones">Attractions</string>
+    <string name="map_activity_dialog_cerrar">Close</string>
+    <string name="map_activity_dialog_like">Like</string>
+    <string name="map_activity_dialog_mas">More</string>
+    <string name="map_activity_dialog">New entry</string>
+    <string name="map_activity_captura">Entry</string>
+
+    <string name="dialog_btn_cerrar">Close</string>
+    <string name="dialog_btn_borrar">Delete</string>
+    <string name="dialog_btn_descargar">Upload</string>
+    <string name="dialog_btn_anterior">Previous</string>
+    <string name="dialog_btn_siguiente">Next</string>
+
+    <plurals name="settings_btn_upload">
+        <item quantity="one">Upload a picture</item>
+        <item quantity="other">Upload %1$d pictures</item>
+    </plurals>
+
+    <string name="settings_btn_download">Download info</string>
+    <string name="settings_chk_achevements">Track achievements</string>
+    <string name="settings_reset_achievements">Reset statistics</string>
+    <string name="settings_show_estadisticas">Show statistics</string>
+    <string name="settings_estadisticas">Statistics</string>
+    <string name="settings_descargar">Download species</string>
+    <string name="settings_logros">Achievements</string>
+    <string name="settings_show_logros">Show achievements</string>
+
+    <string name="descarga_busqueda_info">"Enter one or more criteria to search on the server.
+        Choose the species you want to download from the list.
+        If you already have  species in your device, its info will be updated."</string>
+    <string name="descarga_busqueda_buscando">Searching…</string>
+    <string name="descarga_busqueda_buscando_info">Please wait while the search is being conducted</string>
+
+    <string name="descarga_busqueda_download_title">Download species</string>
+    <string name="descarga_busqueda_download_confirmacion">Are you sure you want to download the information of this species to your mobile device?</string>
+    <string name="descarga_busqueda_download_foto_ok">"%1$s's picture downloaded"</string>
+    <string name="descarga_busqueda_download_foto_exists">"%1$s's picture already exists"</string>
+    <string name="descarga_busqueda_download_ok">Species %1$s downloaded. It has no pictures to download.</string>
+    <plurals name="descarga_busqueda_download_ok">
+        <item quantity="one">Species %1$s downloaded. One picture will be downloaded.</item>
+        <item quantity="other">Species %1$s downloaded. %2$d pictures will be downloaded.</item>
+    </plurals>
+
+    <string name="estadisticas_reset_confirmacion">Are you sure you want to reset all statistics?</string>
+    <string name="estadisticas_reset_ok">Statistics reset</string>
+
+    <string name="estadisticas_fotos_tomadas_lbl">Taken pictures</string>
+    <string name="estadisticas_fotos_subidas_lbl">Uploaded pictires</string>
+    <string name="estadisticas_fotos_compartidas_lbl">Shared pictures</string>
+    <string name="estadisticas_distancia_recorrida_lbl">Total distance</string>
+
+    <string name="uploader_login_error">Pleasse login or register to upload pictures</string>
+    <string name="uploader_upload_error">Please try again later</string>
+    <string name="uploader_upload_success">Picture saved</string>
+    <string name="uploader_upload_pending">Uploading picture</string>
+    <string name="uploader_upload_ok">Picture uploaded</string>
+    <string name="uploader_upload_map">Picture saved. Long press the map to place it.</string>
+
+    <string name="app_id">298464543671961</string>
+    <string name="login_email">E-mail</string>
+    <string name="login_password">Password</string>
+    <string name="login_repetir_pass">Confirm password</string>
+    <string name="login_nombre">First name</string>
+    <string name="login_apellido">Last name</string>
+    <string name="login_crear_cuenta">Register</string>
+    <string name="login_separados">Or</string>
+    <string name="login_guardar">Save</string>
+    <string name="login_ingresar">Login</string>
+    <string name="login_lbl_ingresar">Ikiam account</string>
+    <string name="login_logout">Logout</string>
+
+    <string name="busqueda_nombre_cientifico">Scientific name</string>
+    <string name="busqueda_color">Color</string>
+    <string name="busqueda_nombre_comun">Common name</string>
+
+    <string name="ruta_lbl_distancia">Travelled distance:</string>
+    <string name="ruta_lbl_altura">Altitude:</string>
+    <string name="ruta_lbl_fotos">Pictures:</string>
+    <string name="ruta_lbl_foto">pictures</string>
+    <string name="ruta_ver_mapa">Show on map</string>
+    <string name="ruta_subir">Share</string>
+    <string name="ruta_datos_guardados">Info updated</string>
+    <string name="ruta_compartir">Share on Facebook</string>
+    <string name="ruta_error_datos">Enter a description</string>
+
+    <string name="uploader_no_login">Please register an Ikiam account or login with your Faceook account from the Login option of the menu</string>
+
+    <string name="encyclopedia_especie_info_ver_mapa">Show habitat</string>
+    <string name="especie_info_altura">Altitude</string>
+    <string name="especie_info_altura_min">Min. altitude</string>
+    <string name="especie_info_altura_max">Max. altitude</string>
+    <string name="especie_info_altura_avg">Avg. altitude</string>
+    <string name="especie_info_color_lbl">Color</string>
+    <!--<string name="especie_info_foto">%1$d foto, mostrando %2$d</string>-->
+    <!--<string name="especie_info_fotos">%1$d fotos, mostrando %2$d</string>-->
+    <plurals name="especie_info_fotos">
+        <item quantity="one">Showing 1 of 1 picture</item>
+        <item quantity="other">Showing %2$d of %1$d pictures</item>
+    </plurals>
+    <!--<string name="encyclopedia_entries_dialog_title">Foto(s)</string>-->
+    <plurals name="encyclopedia_entries_dialog_title">
+        <item quantity="one">Picture</item>
+        <item quantity="other">Pictures</item>
+    </plurals>
+
+    <!--Strings para compartir la ruta de facebook-->
+    <string name="share_name">Ikiam</string>
+    <string name="share_caption">Discover ecuadorian biodiversity</string>
+    <string name="share_description">"The new Ikiam app allows you to discover and share the beauty of Ecuador's flora and fauna"</string>
+
+    <string name="achievement_titulo">You have obtained a new title</string>
+    <string name="tools_latitud">Latitude</string>
+    <string name="tools_longitud">Longitude</string>
+    <string name="map_tools">Compass</string>
+    <string name="especies_info_internet">Internet</string>
+    <string name="especie_info_ikiam">Ikiam</string>
+    <string name="map_tipo">Type</string>
+
+    <string name="achievement_warning_titulo">Achievements disabled</string>
+    <string name="achievement_warning_text">Achievement tracking is disabled. Do you want to enable it now?</string>
+
+    <string name="achievement_1_titulo_1">the Aprentice</string>
+    <string name="achievement_1_titulo_5">the Ecologist</string>
+    <string name="achievement_1_titulo_10">the Photographer</string>
+    <string name="achievement_1_titulo_50">Fifty pictures!</string>
+    <string name="achievement_1_titulo_100">One hundred pictures!!</string>
+
+    <string name="achievement_3_titulo_1">the Apprentice</string>
+    <string name="achievement_3_titulo_5">the Collector</string>
+    <string name="achievement_3_titulo_10">Ten uploaded pictures</string>
+    <string name="achievement_3_titulo_50">Fifty uploaded pictures!</string>
+    <string name="achievement_3_titulo_100">One hundred uploaded pictures!!!</string>
+
+    <string name="achievement_4_titulo_1">the Apprentice</string>
+    <string name="achievement_4_titulo_5">the Embassador</string>
+    <string name="achievement_4_titulo_10">Ten shared pictures</string>
+    <string name="achievement_4_titulo_50">Fifty shared pictures!</string>
+    <string name="achievement_4_titulo_100">One hundred shared pictures!!!</string>
+
+    <string name="achievement_2_titulo_1000">the Walker</string>
+    <string name="achievement_2_titulo_2000">the Explorer</string>
+    <string name="achievement_2_titulo_3000">Three kilometers</string>
+    <string name="achievement_2_titulo_5000">Five kilometers</string>
+    <string name="achievement_2_titulo_10000">Ten kilometers!!</string>
+
+    <string name="achievement_felicidades">Congratulations!</string>
+
+    <plurals name="achievement_1">
+        <item quantity="one">You have taken your first picture!</item>
+        <item quantity="other">You have taken %1$s pictures!</item>
+    </plurals>
+    <plurals name="achievement_3">
+        <item quantity="one">You have uploaded your first picture!</item>
+        <item quantity="other">You have uploded %1$s pictures!</item>
+    </plurals>
+    <plurals name="achievement_4">
+        <item quantity="one">You have shared your first picture!</item>
+        <item quantity="other">You have shared %1$s pictures!</item>
+    </plurals>
+    <plurals name="achievement_2">
+        <item quantity="one">You have walked your first 1000 meters!</item>
+        <item quantity="other">You have walked %1$s meters!</item>
+    </plurals>
+
+    <string name="menu_fotos_usuario">"User's pictures"</string>
+
+    <string name="nota_create_title_label">Title</string>
+    <string name="nota_create_contenido_label">Content</string>
+
+    <string name="nota_create_dlg_delete_title">Delete note</string>
+    <string name="nota_create_dlg_delete_contenido">Do you really want to delete this note?</string>
+    <string name="nota_create_delete">Note deleted</string>
+    <string name="nota_create_saved">Note saved</string>
+    <string name="foto_por">Picture by: </string>
+    <string name="map_social">Social</string>
+    <string name="map_comentar">Comment</string>
+    <string name="map_reportar">Report</string>
+    <string name="scaner_encontrada">Found species:</string>
+    <string name="tools_presion">Pressure</string>
 </resources>

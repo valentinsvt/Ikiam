@@ -24,14 +24,13 @@
         La pantalla mapa muestra la ubicación geográfica del usuario y de las fotos tomadas dentro de la aplicación.\n
        Botones:\n
        Galapagos: reubica el mapa de tal forma que enfoque a las Islas Galapagos.\n
-       Nueva Ruta: la aplicación empezará a monitorear la posición geográfica del usuario y la actividad de la cámara de fotos, para mostrarlas en el mapa.\n
+       Nueva Ruta: la aplicación empezará a monitorear la posición geográfica del usuario y la actividad de la cámara de fotos para mostrarlas en el mapa.\n
        Cámara: abre la aplicación de la cámara de fotos.\n
-       Atracciones: descarga del servidor Ikiam, las principales atracciónes turisticas del Ecuador.\n
-       Especies: descarga del servidor Ikiam, las principales especies del Ecuador.\n
-       Brujula: abre una ventana con información de la posición actual del usuario, y una brujula.\n
+       Atracciones: descarga del servidor Ikiam las principales atracciones turísticas del Ecuador.\n
+       Especies: descarga del servidor Ikiam las principales especies del Ecuador.\n
+       Brújula: abre una ventana con información de la posición actual del usuario y una brújula.\n
        Tipo: cambia el tipo de terreno que se muestra en el mapa.\n
        Limipiar: borrar todos los marcadores y fotos del mapa.
-
     </string>
     <string name="help_captura">Ayuda captura</string>
     <string name="help_enciclopedia">Ayuda enciclopedia</string>
@@ -141,7 +140,7 @@
     <string name="captura_tiene_hoja">Se ven las hojas</string>
     <string name="captura_tiene_flor">Se ven las flores</string>
 
-    <string name="buscar_buscar">Buscar fotos</string>
+    <string name="buscar_buscar">Buscar fotos de especies</string>
     <string name="buscar_donde">donde se vea</string>
     <string name="buscar_es_animal">de animales</string>
     <string name="buscar_es_planta">de plantas</string>
@@ -179,7 +178,6 @@
     <string name="captura_error_tag_gps">La foto no tiene información geográfica. Ubíquela en el mapa en el siguiente paso.</string>
     <string name="captura_success_tag_gps">La foto tiene información geográfica. Será ubicada en el mapa.</string>
     <string name="captura_error_gps_upload">La foto no tiene información geográfica. Por favor súbala después de ubicarla.</string>
-
 
     <string name="map_activity_nuevaFoto">Nueva Foto</string>
     <string name="map_activity_atracciones">Atracciones</string>
@@ -279,8 +277,8 @@
     <!--<string name="especie_info_foto">%1$d foto, mostrando %2$d</string>-->
     <!--<string name="especie_info_fotos">%1$d fotos, mostrando %2$d</string>-->
     <plurals name="especie_info_fotos">
-        <item quantity="one">1 foto, mostrando 1</item>
-        <item quantity="other">%1$d fotos, mostrando %2$d</item>
+        <item quantity="one">Mostrando 1 de 1 foto</item>
+        <item quantity="other">Mostrando %2$d fotos de %1$d</item>
     </plurals>
     <!--<string name="encyclopedia_entries_dialog_title">Foto(s)</string>-->
     <plurals name="encyclopedia_entries_dialog_title">
@@ -293,7 +291,7 @@
     <string name="share_caption">Descubre la biodiversidad ecuatoriana</string>
     <string name="share_description">La nueva aplicación Ikiam permite compartir la belleza de la fauna y flora del Ecuador.</string>
 
-    <string name="achievement_titulo">Has ganado el título de</string>
+    <string name="achievement_titulo">Has ganado un título</string>
     <string name="tools_latitud">Latitud</string>
     <string name="tools_longitud">Longitud</string>
     <string name="map_tools">Brújula</string>
@@ -343,7 +341,7 @@
         <item quantity="other">Has compartido %1$s fotos!</item>
     </plurals>
     <plurals name="achievement_2">
-        <item quantity="one">Has recorrido tu primer kilómetro!</item>
+        <item quantity="one">Has recorrido tus primeros 1000 metros!</item>
         <item quantity="other">Has recorrido %1$s metros!</item>
     </plurals>
     <string name="menu_fotos_usuario">Fotos del usuario</string>
