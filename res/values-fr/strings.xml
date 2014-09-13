@@ -165,8 +165,8 @@
     <string name="captura_nombre_genero_label">Genre</string>
     <string name="captura_nombre_especie_label">Espèce</string>
     <string name="captura_nombre_comun_label">Nom commun</string>
-    <string name="captura_color1_label">Couleur principale</string>
-    <string name="captura_color2_label">Couleur secondaire</string>
+    <string name="captura_color1_label">Couleur 1</string>
+    <string name="captura_color2_label">Couleur 2</string>
     <string name="captura_cautiverio_label">Spécimen en captivité</string>
 
     <string name="captura_error_nombre_comun">Introduisez le nom commun</string>
