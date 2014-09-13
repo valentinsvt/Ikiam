@@ -26,8 +26,8 @@
         Galapagos: centre la carte sur les îles Galapagos\n
         Nouvelle randonnée: l'application commencera à enregistrer la position de l'utilisateru y l'activité de l'appareil photo pour monter sur la carte.\n
         Caméra: ouvre l'application de l'apppareil photo\n
-        Attractions: décharche du serveur de l'Ikiam les principales attractions touristiques de l'Equateur\n
-        Espèces: décharche du serveur de l'Ikiam les principales espèces de l'Equateur\n
+        Attractions: télécharge du serveur de l'Ikiam les principales attractions touristiques de l'Equateur\n
+        Espèces: télécharge du serveur de l'Ikiam les principales espèces de l'Equateur\n
         Boussole: montre les coordonnées de l'utilisateur et une boussole\n
         Type: change le type de carte\n
         Nettoyer: nettoie les marques et les photos de la carte"
