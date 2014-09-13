@@ -223,7 +223,6 @@
         <item quantity="other">Especie %1$s descargada. Se descargarán %2$d fotos.</item>
     </plurals>
 
-
     <string name="estadisticas_reset_confirmacion">¿Está seguro de querer reiniciar a 0 todas las estadísticas guardadas?</string>
     <string name="estadisticas_reset_ok">Estadísticas reiniciadas</string>
 
@@ -359,6 +358,4 @@
     <string name="map_reportar">Reportar</string>
     <string name="scaner_encontrada">Especie encontrada:</string>
     <string name="tools_presion">Presión</string>
-
-
 </resources>

@@ -178,4 +178,183 @@
     <string name="captura_error_tag_gps">"La photo n'a pas d'information géographique. localisez-là sur la carte"</string>
     <string name="captura_success_tag_gps">"La photo a l'information géographique et apparaîtra sur la carte"</string>
     <string name="captura_error_gps_upload">"La photo n'a pas d'information géographique. Localisez-là sur la carte pour la télecharger"</string>
+
+    <string name="map_activity_nuevaFoto">Nouvelle photo</string>
+    <string name="map_activity_atracciones">Attractions</string>
+    <string name="map_activity_dialog_cerrar">Fermer</string>
+    <string name="map_activity_dialog_like">"J'aime"</string>
+    <string name="map_activity_dialog_mas">Lire plus</string>
+    <string name="map_activity_dialog">Nouvelle entrée</string>
+    <string name="map_activity_captura">Capturer</string>
+
+    <string name="dialog_btn_cerrar">Fermer</string>
+    <string name="dialog_btn_borrar">Eliminer</string>
+    <string name="dialog_btn_descargar">Télécharger</string>
+    <string name="dialog_btn_anterior">Antérieur</string>
+    <string name="dialog_btn_siguiente">Suivant</string>
+
+    <plurals name="settings_btn_upload">
+        <item quantity="one">Télécharger 1 photo</item>
+        <item quantity="other">Télécharger %1$d photos</item>
+    </plurals>
+
+    <string name="settings_btn_download">Télécharger info</string>
+    <string name="settings_chk_achevements">Comptabilizer accomplissemnts</string>
+    <string name="settings_reset_achievements">Remettre statistiques à 0</string>
+    <string name="settings_show_estadisticas">Voir statistiques</string>
+    <string name="settings_estadisticas">Statistiques</string>
+    <string name="settings_descargar">Télécharger espèces</string>
+    <string name="settings_logros">Accomplissements</string>
+    <string name="settings_show_logros">Mes accomplissements</string>
+
+    <string name="descarga_busqueda_info">"Complétez une ou plusieurs infos pour réaliser une recherche sur le serveur.
+        Choisissez l'espèce de la liste que vous désirez télécharger sur votre portable.
+        Si l'espèce existe déjà, ses infos seront mises à jour."</string>
+    <string name="descarga_busqueda_buscando">Cherchant…</string>
+    <string name="descarga_busqueda_buscando_info">"Attendez pendant que la recherche se complète"</string>
+
+    <string name="descarga_busqueda_download_title">Télécharger espèce</string>
+    <string name="descarga_busqueda_download_confirmacion">Êtes-vous sûr de vouloir télécharger cette espèce sur votre portable?</string>
+    <string name="descarga_busqueda_download_foto_ok">Photo de %1$s téléchargée</string>
+    <string name="descarga_busqueda_download_foto_exists">Photo de %1$s existe déjà</string>
+    <string name="descarga_busqueda_download_ok">Espèce %1$s téléchargée. Aucune photo à télécharger.</string>
+    <plurals name="descarga_busqueda_download_ok">
+        <item quantity="one">Espèce %1$s téléchargée. Une photo sera téléchargée.</item>
+        <item quantity="other">Espèce %1$s téléchargée. %2$d photos seront téléchargées.</item>
+    </plurals>
+
+    <string name="estadisticas_reset_confirmacion">Êtes-vous de vouloir remettre à 0 toutes les statistiques?</string>
+    <string name="estadisticas_reset_ok">Statistiques remises à 0</string>
+
+    <string name="estadisticas_fotos_tomadas_lbl">Photos prises</string>
+    <string name="estadisticas_fotos_subidas_lbl">Photos téléchargées</string>
+    <string name="estadisticas_fotos_compartidas_lbl">Photos partagées</string>
+    <string name="estadisticas_distancia_recorrida_lbl">Distance parcourue</string>
+
+    <string name="uploader_login_error">"S'il vous plaît, ouvrez votre session ou registrez-vous pour pouvoir télécharger des photos"</string>
+    <string name="uploader_upload_error">Essayez plus tard</string>
+    <string name="uploader_upload_success">Photo enregistrée</string>
+    <string name="uploader_upload_pending">Photo en procès de téléchargement</string>
+    <string name="uploader_upload_ok">Photo télécahrgée au serveur</string>
+    <string name="uploader_upload_map">Photo enregistrée, appuyez sur la carte pour la positionner</string>
+
+    <string name="app_id">298464543671961</string>
+    <string name="login_email">E-mail</string>
+    <string name="login_password">Mot de passe</string>
+    <string name="login_repetir_pass">Confirmer mot de passe</string>
+    <string name="login_nombre">Prénom</string>
+    <string name="login_apellido">Nom</string>
+    <string name="login_crear_cuenta">Créer un compte</string>
+    <string name="login_separados">Ou</string>
+    <string name="login_guardar">Enregistrer</string>
+    <string name="login_ingresar">Entrer</string>
+    <string name="login_lbl_ingresar">Compte Ikiam</string>
+    <string name="login_logout">Sortir</string>
+
+    <string name="busqueda_nombre_cientifico">Nom scientifique</string>
+    <string name="busqueda_color">Couleur</string>
+    <string name="busqueda_nombre_comun">Nom commun</string>
+
+    <string name="ruta_lbl_distancia">Distance parcourue:</string>
+    <string name="ruta_lbl_altura">Hauteur:</string>
+    <string name="ruta_lbl_fotos">Photos:</string>
+    <string name="ruta_lbl_foto">photos</string>
+    <string name="ruta_ver_mapa">Voir sur la carte</string>
+    <string name="ruta_subir">Partager</string>
+    <string name="ruta_datos_guardados">Infos mises à jour</string>
+    <string name="ruta_compartir">Partager sur Facebook</string>
+    <string name="ruta_error_datos">Écrivez une description</string>
+
+    <string name="uploader_no_login">"S'il vous plaît, créez un compte Ikiam ou connectez-vous avec votre compte Facebook"</string>
+
+    <string name="encyclopedia_especie_info_ver_mapa">Voir habitat</string>
+    <string name="especie_info_altura">Hauteur</string>
+    <string name="especie_info_altura_min">Hauteur minimun</string>
+    <string name="especie_info_altura_max">Hauteur maximun</string>
+    <string name="especie_info_altura_avg">Hauteur moyenne</string>
+    <string name="especie_info_color_lbl">Couleur</string>
+    <!--<string name="especie_info_foto">%1$d foto, mostrando %2$d</string>-->
+    <!--<string name="especie_info_fotos">%1$d fotos, mostrando %2$d</string>-->
+    <plurals name="especie_info_fotos">
+        <item quantity="one">1 de 1 photo</item>
+        <item quantity="other">%2$d photos de %1$d</item>
+    </plurals>
+    <!--<string name="encyclopedia_entries_dialog_title">Foto(s)</string>-->
+    <plurals name="encyclopedia_entries_dialog_title">
+        <item quantity="one">Photo</item>
+        <item quantity="other">Photos</item>
+    </plurals>
+
+    <string name="share_name">Ikiam</string>
+    <string name="share_caption">Découvrez la biodiversité équatorienne</string>
+    <string name="share_description">"La nouvelle application Ikiam permet de partager la beauté de la faune et la flore de l'Équateur"</string>
+
+    <string name="achievement_titulo">Tu as gagné un nouveau diplôme</string>
+    <string name="tools_latitud">Latitude</string>
+    <string name="tools_longitud">Longitude</string>
+    <string name="map_tools">Boussole</string>
+    <string name="especies_info_internet">Internet</string>
+    <string name="especie_info_ikiam">Ikiam</string>
+    <string name="map_tipo">Type</string>
+
+    <string name="achievement_warning_titulo">Accomplissements déactivés</string>
+    <string name="achievement_warning_text">"L'enregistrement des accomplissements n'est pas activé. Voulez-vous l'activer maintenant?"</string>
+
+    <string name="achievement_1_titulo_1">"l'Appprentis"</string>
+    <string name="achievement_1_titulo_5">"l'Écologiste"</string>
+    <string name="achievement_1_titulo_10">le Photographe</string>
+    <string name="achievement_1_titulo_50">Cinquante photos!</string>
+    <string name="achievement_1_titulo_100">Cent photos!!</string>
+
+    <string name="achievement_3_titulo_1">"l'Appprentis"</string>
+    <string name="achievement_3_titulo_5">le Collectionneur</string>
+    <string name="achievement_3_titulo_10">Diz photos téléchargées</string>
+    <string name="achievement_3_titulo_50">Cinquante photos téléchargées!</string>
+    <string name="achievement_3_titulo_100">Cent photos téléchargées!!</string>
+
+    <string name="achievement_4_titulo_1">"l'Appprentis"</string>
+    <string name="achievement_4_titulo_5">"l'Embassadeur"</string>
+    <string name="achievement_4_titulo_10">Dix photos partagées</string>
+    <string name="achievement_4_titulo_50">Cinquante photos partagées!</string>
+    <string name="achievement_4_titulo_100">Cent photos partagées!!</string>
+
+    <string name="achievement_2_titulo_1000">le Marcheur</string>
+    <string name="achievement_2_titulo_2000">"l'Explorateur"</string>
+    <string name="achievement_2_titulo_3000">Trois kilomètres parcourus!</string>
+    <string name="achievement_2_titulo_5000">Cinq kilomètres parcourus!</string>
+    <string name="achievement_2_titulo_10000">Dix kilomètres parcourus!!</string>
+
+    <string name="achievement_felicidades">Félicitations!</string>
+
+    <plurals name="achievement_1">
+        <item quantity="one">Tu as pris ta première photo!</item>
+        <item quantity="other">Tu as pris %1$s photos!</item>
+    </plurals>
+    <plurals name="achievement_3">
+        <item quantity="one">Tu as téléchargé ta première photo!</item>
+        <item quantity="other">Tu as téléchargé %1$s photos!</item>
+    </plurals>
+    <plurals name="achievement_4">
+        <item quantity="one">Tu as partagé ta première photo!</item>
+        <item quantity="other">Tu as partagé %1$s photos!</item>
+    </plurals>
+    <plurals name="achievement_2">
+        <item quantity="one">Tu as parcouru tes premiers 1000 mètres!</item>
+        <item quantity="other">Tu as parcouru %1$s mètres!</item>
+    </plurals>
+    <string name="menu_fotos_usuario">"Photos de l'utilisateur"</string>
+
+    <string name="nota_create_title_label">Diplôme</string>
+    <string name="nota_create_contenido_label">Contenu</string>
+
+    <string name="nota_create_dlg_delete_title">Éliminer note</string>
+    <string name="nota_create_dlg_delete_contenido">Êtes-vous sûr de vouloir éliminer cette note?</string>
+    <string name="nota_create_delete">Note éliminée</string>
+    <string name="nota_create_saved">Note enregistrée</string>
+    <string name="foto_por">Photo de: </string>
+    <string name="map_social">Social</string>
+    <string name="map_comentar">Commenter</string>
+    <string name="map_reportar">Écrire un rapport</string>
+    <string name="scaner_encontrada">Espèce trouvée:</string>
+    <string name="tools_presion">Pression</string>
 </resources>
