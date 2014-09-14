@@ -65,7 +65,7 @@
                 android:layout_toRightOf="@+id/selection_profile_pic_ikiam"/>
         <Button
                 android:layout_width="110dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/login_logout"
                 android:id="@+id/button_logout_ikiam"
                 android:background="@drawable/button_black"

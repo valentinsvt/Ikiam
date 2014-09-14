@@ -37,6 +37,7 @@ import com.nth.ikiam.utils.*;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import com.moodstocks.android.Scanner;
 import com.moodstocks.android.MoodstocksError;
 import org.json.JSONException;
@@ -250,6 +251,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         }
     }
+
     private boolean isSubsetOf(Collection<String> subset, Collection<String> superset) {
         for (String string : subset) {
             if (!superset.contains(string)) {
@@ -258,6 +260,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
         return true;
     }
+
     private void publishStory() {
         Session session = Session.getActiveSession();
         String link = "http://www.tedein.com.ec:8080/ikiamServer/ruta/publish/";
@@ -327,19 +330,17 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     }
 
     /*moodstock*/
-    private static final String API_KEY    = "mfpiet0szwumqvp5bati";
+    private static final String API_KEY = "mfpiet0szwumqvp5bati";
     private static final String API_SECRET = "soulgMN1H2Epn0zB";
 
     private boolean compatible = false;
     private Scanner scanner;
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -367,7 +368,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         Session session;
-        if (type.equals("-1") || type.equals("facebook")) {
+        if (type.equals("-1") || type.equalsIgnoreCase("facebook")) {
             session = Session.getActiveSession();
             System.out.println("get active " + session);
             makeMeRequest(session);
@@ -402,9 +403,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         botones[6] = (Button) this.findViewById(R.id.btnTools);
         botones[7] = (Button) this.findViewById(R.id.btnTipo);
         botones[8] = (Button) this.findViewById(R.id.btnSocial);
-        if (type.equals("Ikiam")) {
-            if (esCientifico.equals("S"))
+//        System.out.println("TYPE::::: " + type + "    " + type.equalsIgnoreCase("Ikiam"));
+//        System.out.println("ES CIENTIFICO::::: >" + esCientifico.trim() + "<     >" + esCientifico.equalsIgnoreCase("S") + "<");
+        if (type.equalsIgnoreCase("Ikiam")) {
+            if (esCientifico.trim().equalsIgnoreCase("S")) {
+//                System.out.println("TYPE::::: " + type);
+//                System.out.println("ES CIENTIFICO::::: " + esCientifico);
                 botones[2].setVisibility(View.GONE);
+                botones[8].setVisibility(View.GONE);
+            }
         }
         for (int i = 0; i < botones.length; i++) {
             botones[i].setOnClickListener(this);
@@ -415,10 +422,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
         /*DRAWER*/
         mTitle = mDrawerTitle = getTitle();
-        if (!esCientifico.equals("S")) {
+        if (!esCientifico.trim().equals("S")) {
             mOptionsArray = getResources().getStringArray(R.array.options_array_turista);
-
-
         } else {
             mOptionsArray = getResources().getStringArray(R.array.options_array_cientifico);
 
@@ -504,7 +509,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
         /*moodstock*/
         compatible = Scanner.isCompatible();
-        System.out.println("compatible "+compatible);
+        System.out.println("compatible " + compatible);
         if (compatible) {
             try {
                 scanner = Scanner.get();
@@ -644,7 +649,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         if (v.getId() == botones[2].getId()) {
             map.clear();
             //Location mCurrentLocation;
-           // mCurrentLocation = locationClient.getLastLocation();
+            // mCurrentLocation = locationClient.getLastLocation();
             atracciones.clear();
             especies.clear();
             social.clear();
@@ -798,14 +803,14 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         map.animateCamera(cu);
     }
 
-    public void setPing(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String url,final String descripcion) {
+    public void setPing(final String title, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String url, final String descripcion) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
                 final LatLng pos = new LatLng(latitud, longitud);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);
+                Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
@@ -816,7 +821,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(title));
-                AtraccionUi atraccion = new AtraccionUi(title, fotoDialog, likes, url,descripcion);
+                AtraccionUi atraccion = new AtraccionUi(title, fotoDialog, likes, url, descripcion);
                 atracciones.put(marker, atraccion);
             }
         });
@@ -830,7 +835,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             public void run() {
                 final LatLng pos = new LatLng(latitud, longitud);
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);
+                Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(10);
@@ -847,6 +852,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         });
 
     }
+
     public void setPingSocial(final String id, final int likes, final double latitud, final double longitud, final Bitmap foto, final Bitmap fotoDialog, final String comentario, final String usuario) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -865,7 +871,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 Marker marker = map.addMarker(new MarkerOptions().position(pos)
                         .icon(BitmapDescriptorFactory.fromBitmap(bmp))
                         .anchor(0.5f, 1).title(""));
-                SocialUi socialUi = new SocialUi(id,comentario,usuario,fotoDialog,likes);
+                SocialUi socialUi = new SocialUi(id, comentario, usuario, fotoDialog, likes);
                 social.put(marker, socialUi);
             }
         });
@@ -988,7 +994,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(R.string.map_activity_nuevaFoto);
                     builder.setView(myView);
-                    if(dataUsuario.get(marker).uploaded!=1){
+                    if (dataUsuario.get(marker).uploaded != 1) {
                         builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
@@ -1022,13 +1028,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     });
                     dialog = builder.create();
                     ImageView img = (ImageView) myView.findViewById(R.id.image_usuairo);
-                    if(titulo!=null){
-                        if(!titulo.equals("") && !titulo.equals("-1")) {
+                    if (titulo != null) {
+                        if (!titulo.equals("") && !titulo.equals("-1")) {
                             ((TextView) myView.findViewById(R.id.usuario_lbl)).setText(getString(R.string.foto_por) + " " + name + ", " + titulo);
-                        }else{
+                        } else {
                             ((TextView) myView.findViewById(R.id.usuario_lbl)).setText(getString(R.string.foto_por) + " " + name);
                         }
-                    }else{
+                    } else {
                         ((TextView) myView.findViewById(R.id.usuario_lbl)).setText(getString(R.string.foto_por) + " " + name);
                     }
 
@@ -1047,7 +1053,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setTitle(R.string.map_activity_nuevaFoto);
                     builder.setView(myView);
-                    if(data.get(marker).uploaded!=1){
+                    if (data.get(marker).uploaded != 1) {
                         builder.setPositiveButton(R.string.dialog_btn_descargar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
@@ -1096,7 +1102,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         if (selected.getId().equals(marker.getId())) {
                             selected = null;
                             final AtraccionUi current = atracciones.get(marker);
-                            atraccion=current;
+                            atraccion = current;
                             LayoutInflater inflater = activity.getLayoutInflater();
                             myView = inflater.inflate(R.layout.especie_map_dialog, null);
                             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -1123,7 +1129,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                             });
 
-                            if(type.equals("facebook")){
+                            if (type.equalsIgnoreCase("facebook")) {
                                 String label = getString(R.string.ruta_subir);
                                 builder.setNeutralButton(label, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
@@ -1142,7 +1148,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             TextView txt = (TextView) myView.findViewById(R.id.especie_info_dialog_comentarios);
                             txt.setText(current.descripcion);
                             dialog.show();
-                            if(type.equals("facebook")) {
+                            if (type.equalsIgnoreCase("facebook")) {
                                 Button bq = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
                                 bq.setBackgroundColor(Color.BLUE);
                                 bq.setTextColor(Color.WHITE);
@@ -1221,7 +1227,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         builder.setPositiveButton(R.string.map_comentar, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                String url = UtilsUploaders.getIp() + "entry/comment/" + social.get(marker).id+"?usuario="+userId;
+                                String url = UtilsUploaders.getIp() + "entry/comment/" + social.get(marker).id + "?usuario=" + userId;
                                 try {
                                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                                     startActivity(myIntent);
@@ -1241,7 +1247,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             public void onClick(DialogInterface dialog, int id) {
                            /*aqui implementar like*/
 
-                                String url = UtilsUploaders.getIp() + "entry/comment/"  + social.get(marker).id+"?usuario="+userId;
+                                String url = UtilsUploaders.getIp() + "entry/comment/" + social.get(marker).id + "?usuario=" + userId;
                                 try {
                                     Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                                     startActivity(myIntent);
@@ -1256,7 +1262,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         ImageView img = (ImageView) myView.findViewById(R.id.image_usuairo);
                         img.setImageBitmap(current.foto);
                         TextView txt = (TextView) myView.findViewById(R.id.usuario_lbl);
-                        txt.setText(getString(R.string.foto_por)+" "+current.usuario);
+                        txt.setText(getString(R.string.foto_por) + " " + current.usuario);
                         //System.out.println("comentario "+current.comentario);
                         ((TextView) myView.findViewById(R.id.comentario_usuario)).setText(current.comentario);
                         dialog.show();
@@ -1350,7 +1356,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             foto.uploaded = 0;
                             foto.save();
                             fotos.add(foto);
-                            Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
+                            Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
+                            ;
                             Canvas canvas1 = new Canvas(bmp);
                             Paint color = new Paint();
                             color.setTextSize(35);
@@ -1430,7 +1437,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         if (imageItem != null) {
             // System.out.println("path "+imageItem.imagePath);
             //System.out.println("images " + imagenes);
-            Bitmap b = ImageUtils.decodeBitmapPath(imageItem.imagePath,160,90);
+            Bitmap b = ImageUtils.decodeBitmapPath(imageItem.imagePath, 160, 90);
             //System.out.println("width " + b.getWidth() + "  " + b.getHeight());
             imagenes.add(b);
             lastIndex++;
@@ -1536,7 +1543,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
                 final AlertDialog d = builder.create();
                 final TextView txt = (TextView) v.findViewById(R.id.help_container);
-                if (!esCientifico.equals("S")) {
+                if (!esCientifico.trim().equals("S")) {
                     switch (activeFragment) {
                         case MAP_POS_T:
                             txt.setText(getString(R.string.help_map));
@@ -1656,7 +1663,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         Utils.hideSoftKeyboard(this);
         Fragment fragment = null;
         Bundle args = null;
-        if (!esCientifico.equals("S")) {
+        if (!esCientifico.trim().equals("S")) {
             switch (position) {
                 case MAP_POS_T:
                     // fragment = new NthMapFragment();
@@ -1910,14 +1917,16 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         polyLine = map.addPolyline(rectOptions);
         for (int i = 0; i < fotos.size(); i++) {
             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-            Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
+            Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
+            ;
             Canvas canvas1 = new Canvas(bmp);
             Paint color = new Paint();
             color.setTextSize(35);
             color.setColor(Color.BLACK);//modify canvas
             canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                     R.drawable.pin3), 0, 0, color);
-            Bitmap b = ImageUtils.decodeBitmapPath(fotos.get(i).path,160,90);;
+            Bitmap b = ImageUtils.decodeBitmapPath(fotos.get(i).path, 160, 90);
+            ;
             canvas1.drawBitmap(b, 5, 4, color);
             Coordenada co = fotos.get(i).getCoordenada(activity);
             location = new LatLng(co.getLatitud(), co.getLongitud());
@@ -1978,9 +1987,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         List<Entry> entrys = new ArrayList<Entry>();
 
-        if(!esCientifico.equals("S")) {
+        if (!esCientifico.trim().equals("S")) {
             entrys = Entry.findAllByEspecieIsNull(this);
-        }else{
+        } else {
             entrys = Entry.list(this);
         }
         int padding = (100);
@@ -1988,14 +1997,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             List<Foto> fotos = Foto.findAllByEntry(activity, entry);
             for (int j = 0; j < fotos.size(); j++) {
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
+                Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
+                ;
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
                 color.setColor(Color.BLACK);//modify canvas
                 canvas1.drawBitmap(BitmapFactory.decodeResource(getResources(),
                         R.drawable.pin3), 0, 0, color);
-                Bitmap b = ImageUtils.decodeBitmapPath(fotos.get(j).path,160,90);
+                Bitmap b = ImageUtils.decodeBitmapPath(fotos.get(j).path, 160, 90);
                 canvas1.drawBitmap(b, 5, 4, color);
                 Coordenada co = fotos.get(j).getCoordenada(activity);
                 if (co != null) {
@@ -2038,7 +2048,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
             List<Foto> fotos = Foto.findAllByEntry(activity, current);
             for (int j = 0; j < fotos.size(); j++) {
                 Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-                Bitmap bmp =  Bitmap.createBitmap(170, 126, conf);;
+                Bitmap bmp = Bitmap.createBitmap(170, 126, conf);
+                ;
                 Canvas canvas1 = new Canvas(bmp);
                 Paint color = new Paint();
                 color.setTextSize(35);
