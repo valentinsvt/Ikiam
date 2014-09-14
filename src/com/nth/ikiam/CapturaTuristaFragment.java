@@ -21,6 +21,7 @@ import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -175,25 +176,47 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 }
                 fotoSubir.save();
 
+//                System.out.println("<<<<>>>> COORD" + coordenada);
                 String nuevoNombre = "photo_" + fotoSubir.id + ".jpg";
 
 //                File file = new File(pathFolder, fotoPath);
 //                fotoPath = file.getName();
                 File file = new File(pathFolder, nuevoNombre);
+                File origFile = new File(fotoPath);
 ////                if (file.exists()) {
 ////                    file.delete();
 ////                }
-                try {
-                    if (!file.exists()) {
-                        FileOutputStream out = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                        out.flush();
-                        out.close();
+//                try {
+//                    if (!file.exists()) {
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+//                        out.flush();
+//                        out.close();
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                System.out.println("AQUI:::: " + fotoPath);
+                if (origFile.exists()) {
+                    System.out.println("origFils exists");
+//                    FileInputStream inStream = null;
+//                    FileOutputStream outStream = null;
+                    try {
+                        FileInputStream inStream = new FileInputStream(origFile);
+                        FileOutputStream outStream = new FileOutputStream(file);
+                        FileChannel inChannel = inStream.getChannel();
+                        FileChannel outChannel = outStream.getChannel();
+                        inChannel.transferTo(0, inChannel.size(), outChannel);
+                        inStream.close();
+                        outStream.close();
+                        System.out.println("TRY");
+                    } catch (Exception e) {
+                        System.out.println("CATCH");
+                        e.printStackTrace();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
                 //System.out.println("Path folder: " + pathFolder);
                 //System.out.println("Photo path: " + fotoPath);
 //                foto.setPath(pathFolder + "/" + fotoPath);
@@ -281,7 +304,7 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                 MapActivity activity = (MapActivity) getActivity();
                 Bitmap thumb = ImageUtils.getThumbnailFromCameraData(data, activity);
                 selectedImage.setImageBitmap(thumb);
-                bitmap = ImageUtils.getBitmapFromCameraData(data, activity);
+//                bitmap = ImageUtils.getBitmapFromCameraData(data, activity);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = context.getContentResolver().query(data.getData(), filePathColumn, null, null, null);
@@ -294,7 +317,21 @@ public class CapturaTuristaFragment extends Fragment implements Button.OnClickLi
                     GeoDegree gd = new GeoDegree(exif);
                     fotoLat = gd.getLatitude();
                     fotoLong = gd.getLongitude();
-                    fotoAlt = Double.parseDouble(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
+                    String[] altParts = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE).split("/");
+                    if (altParts.length == 2) {
+                        double alt0 = Double.parseDouble(altParts[0]);
+                        double alt1 = Double.parseDouble(altParts[1]);
+                        fotoAlt = alt0 / alt1;
+                    } else {
+                        fotoAlt = 0d;
+                    }
+//                    fotoAlt = Double.parseDouble(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
+
+//                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+//                    System.out.println(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE));
+//                    System.out.println(fotoLat + "     " + fotoLong + "     " + fotoAlt);
+//                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
                     if (fotoLat != null && fotoLong != null) {
                         alerta(getString(R.string.captura_success_tag_gps));
                     } else {

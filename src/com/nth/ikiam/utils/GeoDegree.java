@@ -15,6 +15,8 @@ public class GeoDegree {
         String attrLONGITUDE = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
         String attrLONGITUDE_REF = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
 
+//        System.out.println("COORDS GEO DEGREE  " + attrLATITUDE + "    " + attrLONGITUDE + " *******************************");
+
         if ((attrLATITUDE != null)
                 && (attrLATITUDE_REF != null)
                 && (attrLONGITUDE != null)

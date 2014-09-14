@@ -176,7 +176,7 @@
     <string name="captura_error_nombre_especie">Please enter the name of the species</string>
     <string name="captura_error_keywords">Please choose at least a keyword</string>
     <string name="captura_error_seleccion">Please take or choose a picture</string>
-    <string name="captura_error_tag_gps">There is no Geo tag in this picture. Please place it on thee map.</string>
+    <string name="captura_error_tag_gps">There is no Geo tag in this picture. Please place it on the map.</string>
     <string name="captura_success_tag_gps">This picture has Geo tag. It will show up on the map.</string>
     <string name="captura_error_gps_upload">You cannot upload the picture until you have placed it on the map.</string>
 
@@ -302,7 +302,7 @@
     <string name="achievement_warning_titulo">Achievements disabled</string>
     <string name="achievement_warning_text">Achievement tracking is disabled. Do you want to enable it now?</string>
 
-    <string name="achievement_1_titulo_1">the Aprentice</string>
+    <string name="achievement_1_titulo_1">the Apprentice</string>
     <string name="achievement_1_titulo_5">the Ecologist</string>
     <string name="achievement_1_titulo_10">the Photographer</string>
     <string name="achievement_1_titulo_50">Fifty pictures!</string>

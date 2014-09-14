@@ -24,8 +24,10 @@ import com.nth.ikiam.image.ImageUtils;
 import com.nth.ikiam.utils.Utils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -298,19 +300,38 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
 //                File file = new File(pathFolder, fotoPath);
 //                fotoPath = file.getName();
                         File file = new File(pathFolder, nuevoNombre);
+                        File origFile = new File(fotoPath);
 ////                if (file.exists()) {
 ////                    file.delete();
 ////                }
-                        try {
-                            if (!file.exists()) {
-                                FileOutputStream out = new FileOutputStream(file);
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
-                                out.flush();
-                                out.close();
+//                        try {
+//                            if (!file.exists()) {
+//                                FileOutputStream out = new FileOutputStream(file);
+//                                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+//                                out.flush();
+//                                out.close();
+//                            }
+//
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+                        if (origFile.exists()) {
+                            System.out.println("origFils exists");
+//                    FileInputStream inStream = null;
+//                    FileOutputStream outStream = null;
+                            try {
+                                FileInputStream inStream = new FileInputStream(origFile);
+                                FileOutputStream outStream = new FileOutputStream(file);
+                                FileChannel inChannel = inStream.getChannel();
+                                FileChannel outChannel = outStream.getChannel();
+                                inChannel.transferTo(0, inChannel.size(), outChannel);
+                                inStream.close();
+                                outStream.close();
+                                System.out.println("TRY");
+                            } catch (Exception e) {
+                                System.out.println("CATCH");
+                                e.printStackTrace();
                             }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                         //System.out.println("Path folder: " + pathFolder);
                         //System.out.println("Photo path: " + fotoPath);
@@ -610,7 +631,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 MapActivity activity = (MapActivity) getActivity();
                 Bitmap thumb = ImageUtils.getThumbnailFromCameraData(data, activity);
                 selectedImage.setImageBitmap(thumb);
-                bitmap = ImageUtils.getBitmapFromCameraData(data, activity);
+//                bitmap = ImageUtils.getBitmapFromCameraData(data, activity);
 
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
                 Cursor cursor = context.getContentResolver().query(data.getData(), filePathColumn, null, null, null);
