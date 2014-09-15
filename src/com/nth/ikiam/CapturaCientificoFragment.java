@@ -562,6 +562,7 @@ public class CapturaCientificoFragment extends Fragment implements Button.OnClic
                 autocompleteFamilia.setText(txt);
             }
         });
+
         // add the listener so it will tries to suggest while the user types
         autocompleteFamilia.addTextChangedListener(new CapturaNombreFamiliaAutocompleteTextChangedListener(context, this));
         // ObjectItemData has no value at first

@@ -2,6 +2,7 @@ package com.nth.ikiam.listeners;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import com.nth.ikiam.CapturaCientificoFragment;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;
@@ -46,7 +47,7 @@ public class CapturaNombreEspecieAutocompleteTextChangedListener implements Text
         try {
 
             // if you want to see in the logcat what the user types
-//            Log.e(TAG, "User input: " + userInput);
+//            System.out.println("User input: " + userInput);
 
             // update the adapater
             fragment.nombreEspecieArrayAdapter.notifyDataSetChanged();
@@ -57,6 +58,11 @@ public class CapturaNombreEspecieAutocompleteTextChangedListener implements Text
             // update the nombreComunArrayAdapter
             fragment.nombreEspecieArrayAdapter = new CapturaNombreEspecieArrayAdapter(context, R.layout.captura_autocomplete_list_item, myObjs);
             fragment.autocompleteEspecie.setAdapter(fragment.nombreEspecieArrayAdapter);
+
+            if (myObjs.size() == 1) {
+                fragment.autocompleteNombreComun.setText(myObjs.get(0).nombreComun);
+            }
+
         } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (Exception e) {

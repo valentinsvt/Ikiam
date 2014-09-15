@@ -2,6 +2,8 @@ package com.nth.ikiam.listeners;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import com.nth.ikiam.CapturaCientificoFragment;
 import com.nth.ikiam.MapActivity;
 import com.nth.ikiam.R;

@@ -264,6 +264,7 @@
                 android:layout_height="wrap_content"
                 android:autoText="true"
                 android:hint="@string/captura_nombre_comun_label"
+                android:completionThreshold="1"
 
                 android:layout_toRightOf="@id/captura_nombre_comun_label"
                 android:layout_below="@id/captura_color1_spinner" />
@@ -289,6 +290,7 @@
                 android:layout_height="wrap_content"
                 android:autoText="true"
                 android:hint="@string/captura_nombre_familia_label"
+                android:completionThreshold="1"
 
                 android:layout_below="@id/captura_autocomplete_nombre_comun"
                 android:layout_toRightOf="@id/captura_nombre_familia_label" />
@@ -314,6 +316,7 @@
                 android:layout_height="wrap_content"
                 android:autoText="true"
                 android:hint="@string/captura_nombre_genero_label"
+                android:completionThreshold="1"
 
                 android:layout_below="@id/captura_autocomplete_nombre_familia"
                 android:layout_toRightOf="@id/captura_nombre_genero_label" />
@@ -339,6 +342,8 @@
                 android:layout_height="wrap_content"
                 android:autoText="true"
                 android:hint="@string/captura_nombre_especie_label"
+                android:inputType="text"
+                android:completionThreshold="1"
 
                 android:layout_below="@id/captura_autocomplete_nombre_genero"
                 android:layout_toRightOf="@id/captura_nombre_especie_label" />
@@ -365,7 +370,7 @@
 
                 android:layout_below="@id/captura_autocomplete_nombre_especie"
                 android:text=""
-                android:layout_toRightOf="@id/captura_cautiverio_label"/>
+                android:layout_toRightOf="@id/captura_cautiverio_label" />
 
             <EditText
                 android:id="@id/captura_comentarios_txt"
