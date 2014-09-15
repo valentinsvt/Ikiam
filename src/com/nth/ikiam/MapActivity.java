@@ -410,6 +410,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 //                System.out.println("TYPE::::: " + type);
 //                System.out.println("ES CIENTIFICO::::: " + esCientifico);
                 botones[2].setVisibility(View.GONE);
+                botones[3].setVisibility(View.GONE);
                 botones[8].setVisibility(View.GONE);
             }
         }
@@ -687,15 +688,16 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
         if (v.getId() == botones[6].getId()) {
             Fragment fragment = new ToolsFragment();
-            FragmentManager fragmentManager = getFragmentManager();
-            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
-            mainLayout.setVisibility(LinearLayout.GONE);
-            fragmentManager.beginTransaction()
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                    .replace(R.id.content_frame, fragment)
-                    .addToBackStack("")
-                    .commit();
-            setTitle(getString(R.string.map_tools));
+            Utils.openFragment(this, fragment, getString(R.string.map_tools));
+//            FragmentManager fragmentManager = getFragmentManager();
+//            RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.rl2);
+//            mainLayout.setVisibility(LinearLayout.GONE);
+//            fragmentManager.beginTransaction()
+//                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+//                    .replace(R.id.content_frame, fragment)
+//                    .addToBackStack("")
+//                    .commit();
+//            setTitle(getString(R.string.map_tools));
             activeFragment = TOOLS_POS;
         }
         if (v.getId() == botones[7].getId()) {
