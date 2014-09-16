@@ -97,8 +97,8 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
 
                 //Send data as a String
                 Bundle b = new Bundle();
-                b.putDouble("latitud", location.getLatitude()+counter*0.00210);
-                b.putDouble("logitud", location.getLongitude()+counter*0.00103);
+                b.putDouble("latitud", location.getLatitude()/*+counter*0.00210*/);
+                b.putDouble("logitud", location.getLongitude()/*+counter*0.00103*/);
                 Message msg = Message.obtain(null, MSG_SET_COORDS);
                 msg.setData(b);
                 mClients.get(i).send(msg);
@@ -119,7 +119,7 @@ public class SvtService extends Service implements  GooglePlayServicesClient.Con
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();
 
-        timer.scheduleAtFixedRate(new TimerTask(){ public void run() {onTimerTick();}}, 2500, 30000L);
+        timer.scheduleAtFixedRate(new TimerTask(){ public void run() {onTimerTick();}}, 2500, 20000L);
         isRunning = true;
     }
     private void showNotification() {
