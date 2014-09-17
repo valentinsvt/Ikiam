@@ -40,10 +40,22 @@ The saved picture can be viewed in the Gallery, or in a map with the other user'
     <string name="help_captura">
         "This screen allows the registered scientific user to create a new species for the encyclopedia or to add pictures to an existing one.
 It allows the user to take a new picture or to choose one from the gallery.
-The user then has to fill in the form with the species information"
+The user then has to fill in the form with the species information, choosing between plant and animal, and filling the names of familiy, genus and species.
+The names fields show suggestions once the user starts typyng. If the user enters a common name of a known species, the fields for family, genus and species will be automatically filled.
+If the user enter known family, genus and species, the common name will be automatically filled.
+The picture can be saved locally or set to the Ikiam server, where it will be added to the encyclopedia.
+Once the picture has been saved, it can be viewed on the encyclopedia."
     </string>
-    <string name="help_enciclopedia">Ayuda enciclopedia</string>
-    <string name="help_galeria">Ayuda galeria</string>
+    <string name="help_enciclopedia">
+        "This screen shows all the species that were saved to the mobile device.
+The user can download more species from the Ikiam Web section.
+The encyclopedia is organized with a series of collapsible panels. The first level show the families, when opened, it will show the genus of that species, then the species themselves.
+Clicking a species will show a screen with its information and up to 6 pictures downloaded from the server."
+    </string>
+    <string name="help_galeria">
+        "This screen show all the pictures taken by the user. Each picture has its comment.
+If the user is logged in, he or she can share the picture on Facebook or on the Ikiam server."
+    </string>
     <string name="help_rutas">Ayuda rutas</string>
     <string name="help_configuracion">Ayuda configuracion</string>
     <string name="help_login">Ayuda login</string>

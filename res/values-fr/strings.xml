@@ -32,6 +32,11 @@
         Type: change le type de carte\n
         Nettoyer: nettoie les marques et les photos de la carte"
     </string>
+    <string name="help_captura_turista">
+        "Cet écran permet de prendre une photo ou en choisir une de la gallerie, écrire des commentaires et l'enregistrer.
+Si l'utilisateur est registré il peut télécharger la photo sur le serveur Ikiam et la partager avec les autres utilisateurs.
+Les photos enregistrés peuvent être vues dan la Gallerie ou sur une carte avec le reste des photos de l'utilisateur (button d'utilisateur sur la barre supérieure)"
+    </string>
     <string name="help_captura">Ayuda captura</string>
     <string name="help_enciclopedia">Ayuda enciclopedia</string>
     <string name="help_galeria">Ayuda galeria</string>

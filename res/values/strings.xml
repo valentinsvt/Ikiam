@@ -33,7 +33,7 @@
        Limipiar: borrar todos los marcadores y fotos del mapa.
     </string>
     <string name="help_captura_turista">
-        La pantalla de captura permite tomar una foto o seleccionar una de la galería, agreagar comentarios y guaardarla.\n
+        La pantalla de captura permite tomar una foto o seleccionar una de la galería, agregar comentarios y guardarla.\n
         Si el usuario está registrado puede subir la foto al servidor de Ikiam y así compartirla con otros usuarios.\n
         La foto guardada se puede ver en el área de Galería o en un mapa con las fotos del usuario (botón de usuario en a barra superior)
     </string>
@@ -51,7 +51,7 @@
     </string>
     <string name="help_enciclopedia">
         La pantalla de enciclopedia muestra las especies que se encuentran el dispositivo móvil. Puede descargar especies adicionales
-        desde el área Ikiam Web. La enciclopedia está organnizada con una serie de paneles que se contraen por niveles.
+        desde el área Ikiam Web. La enciclopedia está organizada con una serie de paneles que se contraen por niveles.
         En el primer nivel se muestran las familias, para cada una sus géneros, y para cada uno sus especies. Al hacer clic en
         la especie se muestra una pantalla con la información y hasta 6 fotos descargadas del servidor.
     </string>
