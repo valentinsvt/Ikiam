@@ -43,6 +43,7 @@
     <string name="help_tools">Ayuda tools</string>
     <string name="help_ikiam_web">Ayuda ikiam</string>
     <string name="help_notepad">Ayuda notas</string>
+    <string name="help_scanner">help scanner</string>
 
     <string name="global_yes">Yes</string>
     <string name="global_no">No</string>
@@ -78,6 +79,7 @@
         <item>New note</item>
         <item>Settings</item>
         <item>Login</item>
+        <item>Scaner</item>
     </string-array>
     <string-array name="options_array_turista">
         <item>Map</item>

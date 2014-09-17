@@ -62,6 +62,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int NOTA_POS = 6;
     public final int SETTINGS_POS = 7;
     public final int LOGIN_POS = 8;
+    public final int SCANER_POS = 9;
 
     public final int MAP_POS_T = 0;
     public final int CAPTURA_POS_T = 1;
@@ -73,7 +74,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public final int NOTA_POS_T = 7;
     public final int SETTINGS_POS_T = 8;
     public final int LOGIN_POS_T = 9;
-    public final int SCANER_POS = 10;
+    public final int SCANER_POS_T = 10;
 
     public final int TOOLS_POS = 17;
     public final int BUSQUEDA_POS = 18;
@@ -1581,6 +1582,9 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                         case TOOLS_POS:
                             txt.setText(getString(R.string.help_tools));
                             break;
+                        case SCANER_POS_T:
+                            txt.setText(getString(R.string.help_scanner));
+                            break;
                     }
                 } else {
                     switch (activeFragment) {
@@ -1619,9 +1623,8 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             txt.setText(getString(R.string.help_tools));
                             break;
                         case SCANER_POS:
-                            txt.setText(getString(R.string.help_tools));
+                            txt.setText(getString(R.string.help_scanner));
                             break;
-
                     }
                 }
 
@@ -1660,7 +1663,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
 
     public void selectItem(int position, boolean drawer) {
         // update the main content by replacing fragments
-        //System.out.println("pos? "+position);
+        System.out.println("pos? " + position + "   cientifico? " + esCientifico.trim());
         String title = "";
         Utils.hideSoftKeyboard(this);
         Fragment fragment = null;
@@ -1737,12 +1740,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     title = getString(R.string.login_title);
                     activeFragment = LOGIN_POS;
                     break;
-                case SCANER_POS:
+                case SCANER_POS_T:
                     if (compatible) {
                         startActivity(new Intent(this, ScanActivity.class));
                         return;
+                    } else {
+                        return;
                     }
-                    break;
                 default:
                     fragment = null;
                     break;
@@ -1821,6 +1825,13 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     title = getString(R.string.login_title);
                     activeFragment = LOGIN_POS;
                     break;
+                case SCANER_POS:
+                    if (compatible) {
+                        startActivity(new Intent(this, ScanActivity.class));
+                        return;
+                    } else {
+                        return;
+                    }
                 default:
                     fragment = null;
                     break;
