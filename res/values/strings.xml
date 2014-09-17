@@ -21,7 +21,7 @@
 
     <string name="help_help">Ayuda</string>
     <string name="help_map">
-        La pantalla mapa muestra la ubicación geográfica del usuario y de las fotos tomadas dentro de la aplicación.\n
+       La pantalla mapa muestra la ubicación geográfica del usuario y de las fotos tomadas dentro de la aplicación.\n
        Botones:\n
        Galapagos: reubica el mapa de tal forma que enfoque a las Islas Galapagos.\n
        Nueva Ruta: la aplicación empezará a monitorear la posición geográfica del usuario y la actividad de la cámara de fotos para mostrarlas en el mapa.\n
@@ -32,9 +32,33 @@
        Tipo: cambia el tipo de terreno que se muestra en el mapa.\n
        Limipiar: borrar todos los marcadores y fotos del mapa.
     </string>
-    <string name="help_captura">Ayuda captura</string>
-    <string name="help_enciclopedia">Ayuda enciclopedia</string>
-    <string name="help_galeria">Ayuda galeria</string>
+    <string name="help_captura_turista">
+        La pantalla de captura permite tomar una foto o seleccionar una de la galería, agreagar comentarios y guaardarla.\n
+        Si el usuario está registrado puede subir la foto al servidor de Ikiam y así compartirla con otros usuarios.\n
+        La foto guardada se puede ver en el área de Galería o en un mapa con las fotos del usuario (botón de usuario en a barra superior)
+    </string>
+    <string name="help_captura">
+        La pantalla de captura permite al usuario registrado como cientifico ingresar una nueva especie o agregar fotos a una existente.\n
+        Puede usar la cámara para hacer una nueva captura o seleccionar una foto de la galería.\n
+        Una vez seleccionada la foto debe completar la información de la especie utilizando el formulario. En primer lugar
+        el tipo de especie (planta o animal, y en el caso de planta, seleccionar las partes de la planta visibles en la foto).
+        A continuación los nombres de la familia, género y especie. En estos campos, al comenzar a escribir se mostrará una lista
+        con posibles coincidencias ya insertadas en la enciclopedia. Si se completa el nombre común de una especie ya existente se
+        completará automáticamente la familia, el género y la especie. Si se completan los últimos 3 datos de una especie existente
+        se completará el nombre común.\n
+        La foto puede ser guardada localmente o enviada también al servidor Ikiam, donde pasará a alimentar la enciclopedia.\n
+        Una vez guardada puede ser visualizada en el área de enciclopedia.
+    </string>
+    <string name="help_enciclopedia">
+        La pantalla de enciclopedia muestra las especies que se encuentran el dispositivo móvil. Puede descargar especies adicionales
+        desde el área Ikiam Web. La enciclopedia está organnizada con una serie de paneles que se contraen por niveles.
+        En el primer nivel se muestran las familias, para cada una sus géneros, y para cada uno sus especies. Al hacer clic en
+        la especie se muestra una pantalla con la información y hasta 6 fotos descargadas del servidor.
+    </string>
+    <string name="help_galeria">
+        La galería muestra las fotos tomadas por el usuario. Para cada foto se muestra el comentario ingresado. Si el usuario
+        está registrado, puede compartir la foto en Facebook y en el servidor de Ikiam.
+    </string>
     <string name="help_rutas">Ayuda rutas</string>
     <string name="help_configuracion">Ayuda configuracion</string>
     <string name="help_login">Ayuda login</string>

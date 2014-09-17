@@ -1552,7 +1552,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                             txt.setText(getString(R.string.help_map));
                             break;
                         case CAPTURA_POS_T:
-                            txt.setText(getString(R.string.help_captura));
+                            txt.setText(getString(R.string.help_captura_turista));
                             break;
                         case ENCYCLOPEDIA_POS_T:
                             txt.setText(getString(R.string.help_enciclopedia));

@@ -22,18 +22,26 @@
     <string name="help_help">Help</string>
     <string name="help_map">
         "This screen shows the user and the picture's location.\n
-        Buttons:\n
-        Galapagos: centers the map to the Galapagos Islands\n
-        New route: the app will monitor your location and the camera's activity in order to show new pictures on the map\n
-        Camera: opens the camera\n
-        Attractions: downloads from Ikiam's server some of the most important attractions of Ecuador\n
-        Species: downloads from Ikiam's server some of the most important species of Ecuador\n
-        Compass: shows information about your geographic location and a compass\n
-        Type: changes map type (terrain, satellite, roads…)\n
-        Clean: removes all map markers"
+Buttons:\n
+Galapagos: centers the map to the Galapagos Islands\n
+New route: the app will monitor your location and the camera's activity in order to show new pictures on the map\n
+Camera: opens the camera\n
+Attractions: downloads from Ikiam's server some of the most important attractions of Ecuador\n
+Species: downloads from Ikiam's server some of the most important species of Ecuador\n
+Compass: shows information about your geographic location and a compass\n
+Type: changes map type (terrain, satellite, roads…)\n
+Clean: removes all map markers"
     </string>
-
-    <string name="help_captura">Ayuda captura</string>
+    <string name="help_captura_turista">
+        "This screen allows the user to take a picture, or choose one from the gallery, add comments to it and save it.
+If the user is registered, he or she can upload the pictur to Ikiam's web server and share it with the other users.
+The saved picture can be viewed in the Gallery, or in a map with the other user's pictures, from the user button on the top bar."
+    </string>
+    <string name="help_captura">
+        "This screen allows the registered scientific user to create a new species for the encyclopedia or to add pictures to an existing one.
+It allows the user to take a new picture or to choose one from the gallery.
+The user then has to fill in the form with the species information"
+    </string>
     <string name="help_enciclopedia">Ayuda enciclopedia</string>
     <string name="help_galeria">Ayuda galeria</string>
     <string name="help_rutas">Ayuda rutas</string>
@@ -210,9 +218,7 @@
     <string name="settings_logros">Achievements</string>
     <string name="settings_show_logros">Show achievements</string>
 
-    <string name="descarga_busqueda_info">"Enter one or more criteria to search on the server.
-        Choose the species you want to download from the list.
-        If you already have  species in your device, its info will be updated."</string>
+    <string name="descarga_busqueda_info">"Enter one or more criteria to search on the server. Choose the species you want to download from the list. If you already have  species in your device, its info will be updated."</string>
     <string name="descarga_busqueda_buscando">Searching…</string>
     <string name="descarga_busqueda_buscando_info">Please wait while the search is being conducted</string>
 

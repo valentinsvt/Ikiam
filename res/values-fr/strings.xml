@@ -209,9 +209,7 @@
     <string name="settings_logros">Accomplissements</string>
     <string name="settings_show_logros">Mes accomplissements</string>
 
-    <string name="descarga_busqueda_info">"Complétez une ou plusieurs infos pour réaliser une recherche sur le serveur.
-        Choisissez l'espèce de la liste que vous désirez télécharger sur votre portable.
-        Si l'espèce existe déjà, ses infos seront mises à jour."</string>
+    <string name="descarga_busqueda_info">"Complétez une ou plusieurs infos pour réaliser une recherche sur le serveur. Choisissez l'espèce de la liste que vous désirez télécharger sur votre portable. Si l'espèce existe déjà, ses infos seront mises à jour."</string>
     <string name="descarga_busqueda_buscando">Cherchant…</string>
     <string name="descarga_busqueda_buscando_info">"Attendez pendant que la recherche se complète"</string>
 
