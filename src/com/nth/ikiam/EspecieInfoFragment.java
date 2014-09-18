@@ -163,23 +163,24 @@ public class EspecieInfoFragment extends Fragment implements Button.OnClickListe
                 for (Entry e : entries) {
                     List<Foto> fotos1 = Foto.findAllByEntry(context, e);
                     if (fotos1 != null) {
-                        Foto f = fotos1.get(0);
-                        imgFile = new File(f.path);
-                        if (imgFile.exists()) {
-                            if (i < imageViews.length) {
-                                ImageView curIV = imageViews[i];
-                                if (currentWidth == 0) {
-                                    idPrev = 0;
-                                }
-                                Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100, true);
-                                int w = myBitmap.getWidth();
-                                int h = myBitmap.getHeight();
+                        if(fotos1.size()>0){
+                            Foto f = fotos1.get(0);
+                            imgFile = new File(f.path);
+                            if (imgFile.exists()) {
+                                if (i < imageViews.length) {
+                                    ImageView curIV = imageViews[i];
+                                    if (currentWidth == 0) {
+                                        idPrev = 0;
+                                    }
+                                    Bitmap myBitmap = ImageUtils.decodeFile(imgFile.getAbsolutePath(), 100, 100, true);
+                                    int w = myBitmap.getWidth();
+                                    int h = myBitmap.getHeight();
 //                                if (h > w) {
 //                                    System.out.println("foto es VERT");
 //                                }
-                                curIV.setImageBitmap(myBitmap);
-                                curIV.setVisibility(View.VISIBLE);
-                                curIV.setOnClickListener(this);
+                                    curIV.setImageBitmap(myBitmap);
+                                    curIV.setVisibility(View.VISIBLE);
+                                    curIV.setOnClickListener(this);
                                /* currentWidth += (w + 30);
                                 RelativeLayout.LayoutParams p = (RelativeLayout.LayoutParams) curIV.getLayoutParams();
                                 if (idPrev > 0) {
@@ -199,19 +200,21 @@ public class EspecieInfoFragment extends Fragment implements Button.OnClickListe
                                     idHighest = curIV.getId();
                                 }
                                  */
-                            }
+                                }
 
-                            coord = f.getCoordenada(context);
-                            if (coord != null && coord.altitud > 0) {
-                                if (coord.altitud < altMin) {
-                                    altMin = coord.altitud;
+                                coord = f.getCoordenada(context);
+                                if (coord != null && coord.altitud > 0) {
+                                    if (coord.altitud < altMin) {
+                                        altMin = coord.altitud;
+                                    }
+                                    if (coord.altitud > altMax) {
+                                        altMax = coord.altitud;
+                                    }
                                 }
-                                if (coord.altitud > altMax) {
-                                    altMax = coord.altitud;
-                                }
+                                i++;
                             }
-                            i++;
                         }
+
                     }
                 }
             }
