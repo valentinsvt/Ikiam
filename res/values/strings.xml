@@ -384,4 +384,7 @@
     <string name="map_reportar">Reportar</string>
     <string name="scaner_encontrada">Especie encontrada:</string>
     <string name="tools_presion">Presión</string>
+
+    <string name="nota_confirm_mapa_titulo">Agregar nota al mapa</string>
+    <string name="nota_confirm_mapa_contenido">Desea asignar coordenadas a esta nota para que aparezca en el mapa?</string>
 </resources>

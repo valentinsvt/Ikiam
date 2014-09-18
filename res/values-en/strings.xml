@@ -380,4 +380,7 @@ If the user is logged in, he or she can share the picture on Facebook or on the 
     <string name="map_reportar">Report</string>
     <string name="scaner_encontrada">Found species:</string>
     <string name="tools_presion">Pressure</string>
+
+    <string name="nota_confirm_mapa_titulo">Add note to map</string>
+    <string name="nota_confirm_mapa_contenido">Would you like to add coordinates to this note so it will appear on the map?</string>
 </resources>

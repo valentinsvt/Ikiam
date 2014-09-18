@@ -379,4 +379,7 @@ Si l'utilisateur est registré il pourra partager ses photos sur Facebook et sur
     <string name="map_reportar">Écrire un rapport</string>
     <string name="scaner_encontrada">Espèce trouvée:</string>
     <string name="tools_presion">Pression</string>
+
+    <string name="nota_confirm_mapa_titulo">Ajouter note à la carte</string>
+    <string name="nota_confirm_mapa_contenido">"Voulez-vous ajouter des coordonnées a cette note pour qu'elle aparaisse sur la carte?"</string>
 </resources>

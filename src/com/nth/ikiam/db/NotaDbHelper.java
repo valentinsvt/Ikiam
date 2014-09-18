@@ -17,8 +17,9 @@ public class NotaDbHelper extends DbHelper {
 
     public static final String KEY_TITULO = "titulo";
     public static final String KEY_CONTENIDO = "contenido";
+    public static final String KEY_COORDENADA = "coordenada_id";
 
-    public static final String[] KEYS_NOTA = {KEY_TITULO, KEY_CONTENIDO};
+    public static final String[] KEYS_NOTA = {KEY_TITULO, KEY_CONTENIDO, KEY_COORDENADA};
 
     public NotaDbHelper(Context context) {
         super(context);
@@ -130,6 +131,7 @@ public class NotaDbHelper extends DbHelper {
         cl.setFecha(c.getString(c.getColumnIndex(KEY_FECHA)));
         cl.setTitulo(c.getString(c.getColumnIndex(KEY_TITULO)));
         cl.setContenido(c.getString(c.getColumnIndex(KEY_CONTENIDO)));
+        cl.setCoordenada_id(c.getLong(c.getColumnIndex(KEY_COORDENADA)));
         return cl;
     }
 
@@ -138,6 +140,9 @@ public class NotaDbHelper extends DbHelper {
         values.put(KEY_FECHA, getDateTime());
         values.put(KEY_TITULO, nota.titulo);
         values.put(KEY_CONTENIDO, nota.contenido);
+        if (nota.coordenada_id != null) {
+            values.put(KEY_COORDENADA, nota.coordenada_id);
+        }
         return values;
     }
 }

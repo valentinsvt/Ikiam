@@ -1,6 +1,8 @@
 package com.nth.ikiam;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.nth.ikiam.db.Nota;
+import com.nth.ikiam.db.*;
+import com.nth.ikiam.utils.FotoEspecieDownloader;
 import com.nth.ikiam.utils.Utils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.URLDecoder;
+import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by DELL on 03/09/2014.
@@ -54,10 +64,30 @@ public class NotaCreateFrgment extends Fragment implements Button.OnClickListene
             nota.contenido = txtContenido.getText().toString().trim();
             nota.save();
 
-            Fragment fragment = new NotepadFragment();
-            Utils.openFragment(context, fragment, getString(R.string.notepad_title));
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // Chain together various setter methods to set the dialog characteristics
+            builder.setMessage(R.string.nota_confirm_mapa_contenido)
+                    .setTitle(R.string.nota_confirm_mapa_titulo);
+// Add the buttons
+            builder.setPositiveButton(R.string.global_ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User clicked OK button
+                    context.selectItem(context.MAP_POS);
+                }
+            });
+            builder.setNegativeButton(R.string.global_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancelled the dialog
+                    Fragment fragment = new NotepadFragment();
+                    Utils.openFragment(context, fragment, getString(R.string.notepad_title));
 
-            Toast.makeText(getActivity(), getString(R.string.nota_create_saved), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getString(R.string.nota_create_saved), Toast.LENGTH_LONG).show();
+                }
+            });
+            // Set other dialog properties
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     }
 }

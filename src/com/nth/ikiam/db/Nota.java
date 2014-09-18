@@ -13,6 +13,8 @@ public class Nota {
     public String titulo;
     public String contenido;
 
+    public Long coordenada_id;
+
     NotaDbHelper notaDbHelper;
 
     public Nota(Context context) {
@@ -49,6 +51,17 @@ public class Nota {
         return contenido;
     }
 
+    public Coordenada getCoordenada(Context context) {
+        if (coordenada_id != null) {
+            return Coordenada.get(context, coordenada_id);
+        } else {
+            return null;
+        }
+    }
+
+    public Long getCoordenada_id() {
+        return coordenada_id;
+    }
     //setters
     public void setId(long id) {
         this.id = id;
@@ -64,6 +77,15 @@ public class Nota {
 
     public void setContenido(String contenido) {
         this.contenido = contenido;
+    }
+
+    public void setCoordenada(Coordenada coordenada) {
+        System.out.println("set coord: " + coordenada.id);
+        this.coordenada_id = coordenada.id;
+    }
+
+    public void setCoordenada_id(Long coordenada_id) {
+        this.coordenada_id = coordenada_id;
     }
 
     public String toString() {
