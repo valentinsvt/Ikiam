@@ -37,9 +37,26 @@
 Si l'utilisateur est registré il peut télécharger la photo sur le serveur Ikiam et la partager avec les autres utilisateurs.
 Les photos enregistrés peuvent être vues dan la Gallerie ou sur une carte avec le reste des photos de l'utilisateur (button d'utilisateur sur la barre supérieure)"
     </string>
-    <string name="help_captura">Ayuda captura</string>
-    <string name="help_enciclopedia">Ayuda enciclopedia</string>
-    <string name="help_galeria">Ayuda galeria</string>
+    <string name="help_captura">
+        "Cet écran permet à l'utilisateur scientifique registré de créer une nouvelle espèce pour l'encyclopédie ou d'augmenter de nouvelles photos à des espèces existentes.
+L'utilisateur peut prendre une photo ou en choisir un de la gallerie.
+Une fois choisie la photo il faut compléter l'information scientifique de l'espèce, comme les noms de la famille et du genre.
+Quand l'utilisateur commence à taper un des noms, l'application essaie de trouver des coïncidences pour les montrer.
+Une fois complété le nom commun d'une espèce connue, la famille, le genre et l'éspèce seront complétés automatiquement.
+Similairement, une fois complétés famille, genre et espèce le nom commun sera complété automatiquement.
+Quand la photo est enregistrée on peut la voir dans l'encyclopédie."
+    </string>
+    <string name="help_enciclopedia">
+        "L'encyclopédie montre les espèces enregistrées sur le portable.
+L'utilisateur peut en télécharger plus du serveur Ikiam.
+L'encyclopédie est organisée avec une série de panneaux pliants.
+Le premier niveau montre les familles, puis le deuxième les genres et finalement les espèces.
+Pour chaque espèce on peut voir l'information scientifique et un maximum de 6 photos téléchargées du serveur."
+    </string>
+    <string name="help_galeria">
+        "La gallerie montre les photos prises par l'utilisateur. Pour chaque photo on peut aussi voir les commentaires.
+Si l'utilisateur est registré il pourra partager ses photos sur Facebook et sur le serveur Ikiam."
+    </string>
     <string name="help_rutas">Ayuda rutas</string>
     <string name="help_configuracion">Ayuda configuracion</string>
     <string name="help_login">Ayuda login</string>
