@@ -48,4 +48,17 @@
 
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/nota_create_btn_map"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/map_title"
+        android:background="@drawable/button_blue"
+        style="@style/ButtonText"
+        android:drawableLeft="@drawable/ic_action_map"
+        android:visibility="gone"
+
+        android:layout_toLeftOf="@id/nota_create_btn_save"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

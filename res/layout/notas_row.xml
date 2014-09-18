@@ -32,5 +32,18 @@
 
         android:layout_below="@+id/notas_row_contenido" />
 
+    <TextView
+        android:id="@+id/notas_row_coords"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="coords"
+        android:textColor="@color/ikiam_claro"
+        android:visibility="gone"
+
+        android:layout_alignTop="@id/notas_row_fecha"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

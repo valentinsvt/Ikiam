@@ -154,6 +154,7 @@
     <string name="map_subirFotoMarker">Clic en el pin para subir una foto en esta posición</string>
     <string name="map_ubicar_foto_marker">Clic en el pin para ubicar la foto aquí</string>
     <string name="map_foto_ubicada">Foto ubicada correctamente</string>
+    <string name="map_nota_ubicada">Nota ubicada correctamente</string>
     <string name="map_camara">Cámara</string>
     <string name="map_especies">Especies</string>
     <string name="map_limpiar">Limpiar</string>
@@ -263,6 +264,7 @@
     <string name="uploader_upload_pending">Enviando foto al servidor</string>
     <string name="uploader_upload_ok">Foto enviada exitosamente al servidor</string>
     <string name="uploader_upload_map">Foto guardada, mantenga presionado un punto en el mapa donde desee ubicarla.</string>
+    <string name="nota_locate_map">Nota guardada, mantenga presionado un punto en el mapa donde desee ubicarla.</string>
 
     <string name="app_id">298464543671961</string>
     <string name="login_email">Email</string>
@@ -387,4 +389,7 @@
 
     <string name="nota_confirm_mapa_titulo">Agregar nota al mapa</string>
     <string name="nota_confirm_mapa_contenido">Desea asignar coordenadas a esta nota para que aparezca en el mapa?</string>
+
+    <string name="map_ubicar_nota_marker">Clic en el pin para ubicar la nota aquí</string>
+    <string name="nota_en_mapa">Nota en el mapa</string>
 </resources>

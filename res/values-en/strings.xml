@@ -151,6 +151,7 @@ If the user is logged in, he or she can share the picture on Facebook or on the 
     <string name="map_subirFotoMarker">Click the marker to upload a picture here</string>
     <string name="map_ubicar_foto_marker">Click the marker to position the picture</string>
     <string name="map_foto_ubicada">Picture positioned</string>
+    <string name="map_nota_ubicada">Note positioned</string>
     <string name="map_camara">Camera</string>
     <string name="map_especies">Species</string>
     <string name="map_limpiar">Clean</string>
@@ -258,6 +259,7 @@ If the user is logged in, he or she can share the picture on Facebook or on the 
     <string name="uploader_upload_pending">Uploading picture</string>
     <string name="uploader_upload_ok">Picture uploaded</string>
     <string name="uploader_upload_map">Picture saved. Long press the map to place it.</string>
+    <string name="nota_locate_map">Note saved. Long press the map to place it.</string>
 
     <string name="app_id">298464543671961</string>
     <string name="login_email">E-mail</string>
@@ -383,4 +385,7 @@ If the user is logged in, he or she can share the picture on Facebook or on the 
 
     <string name="nota_confirm_mapa_titulo">Add note to map</string>
     <string name="nota_confirm_mapa_contenido">Would you like to add coordinates to this note so it will appear on the map?</string>
+
+    <string name="map_ubicar_nota_marker">Click the marker to position the note</string>
+    <string name="nota_en_mapa">Note on the map</string>
 </resources>

@@ -27,6 +27,7 @@ import java.util.concurrent.Executors;
 public class NotaCreateFrgment extends Fragment implements Button.OnClickListener {
     MapActivity context;
     Button btnSave;
+    Button btnMap;
     TextView txtTitulo;
     TextView txtContenido;
     Nota nota;
@@ -52,6 +53,13 @@ public class NotaCreateFrgment extends Fragment implements Button.OnClickListene
 
         btnSave = (Button) view.findViewById(R.id.nota_create_btn_save);
         btnSave.setOnClickListener(this);
+        btnMap = (Button) view.findViewById(R.id.nota_create_btn_map);
+        if (notaId > -1 && nota.getCoordenada(context) != null) {
+            btnMap.setVisibility(View.VISIBLE);
+            btnMap.setOnClickListener(this);
+        } else {
+            btnMap.setVisibility(View.GONE);
+        }
 
         return view;
         //http://dioma.deviantart.com/art/Textures-Paper-58028330?q=boost:popular+in:resources/textures+paper&qo=11
@@ -72,7 +80,10 @@ public class NotaCreateFrgment extends Fragment implements Button.OnClickListene
             builder.setPositiveButton(R.string.global_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
+                    context.notaSinCoords = nota;
                     context.selectItem(context.MAP_POS);
+
+                    Toast.makeText(getActivity(), getString(R.string.nota_locate_map), Toast.LENGTH_LONG).show();
                 }
             });
             builder.setNegativeButton(R.string.global_cancel, new DialogInterface.OnClickListener() {
@@ -88,6 +99,9 @@ public class NotaCreateFrgment extends Fragment implements Button.OnClickListene
             // Create the AlertDialog
             AlertDialog dialog = builder.create();
             dialog.show();
+        } else if (view.getId() == btnMap.getId()) {
+            context.ubicarNotas();
+            context.selectItem(context.MAP_POS);
         }
     }
 }

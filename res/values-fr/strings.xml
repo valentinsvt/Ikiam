@@ -152,6 +152,7 @@ Si l'utilisateur est registré il pourra partager ses photos sur Facebook et sur
     <string name="map_subirFotoMarker">Cliquer la marque pour enregistrer une photo dans cette position</string>
     <string name="map_ubicar_foto_marker">Cliquer la marque pour localiser la photo</string>
     <string name="map_foto_ubicada">Photo localisée</string>
+    <string name="map_nota_ubicada">Note localisée</string>
     <string name="map_camara">Caméra</string>
     <string name="map_especies">Espèces</string>
     <string name="map_limpiar">Nettoyer</string>
@@ -259,6 +260,7 @@ Si l'utilisateur est registré il pourra partager ses photos sur Facebook et sur
     <string name="uploader_upload_pending">Photo en procès de téléchargement</string>
     <string name="uploader_upload_ok">Photo télécahrgée au serveur</string>
     <string name="uploader_upload_map">Photo enregistrée, appuyez sur la carte pour la positionner</string>
+    <string name="nota_locate_map">Note enregistrée, appuyez sur la carte pour la positionner</string>
 
     <string name="app_id">298464543671961</string>
     <string name="login_email">E-mail</string>
@@ -382,4 +384,7 @@ Si l'utilisateur est registré il pourra partager ses photos sur Facebook et sur
 
     <string name="nota_confirm_mapa_titulo">Ajouter note à la carte</string>
     <string name="nota_confirm_mapa_contenido">"Voulez-vous ajouter des coordonnées a cette note pour qu'elle aparaisse sur la carte?"</string>
+
+    <string name="map_ubicar_nota_marker">Cliquer la marque pour localiser la note</string>
+    <string name="nota_en_mapa">Note sur la carte</string>
 </resources>

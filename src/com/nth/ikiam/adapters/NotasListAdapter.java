@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.nth.ikiam.R;
+import com.nth.ikiam.db.Coordenada;
 import com.nth.ikiam.db.Nota;
 import com.nth.ikiam.utils.Utils;
 
@@ -39,6 +40,7 @@ public class NotasListAdapter extends ArrayAdapter<Nota> {
             TextView itemTitulo = (TextView) convertView.findViewById(R.id.notas_row_titulo);
             TextView itemContenido = (TextView) convertView.findViewById(R.id.notas_row_contenido);
             TextView itemFecha = (TextView) convertView.findViewById(R.id.notas_row_fecha);
+            TextView itemCoords = (TextView) convertView.findViewById(R.id.notas_row_coords);
 
             String contenido = "";
 
@@ -57,6 +59,11 @@ public class NotasListAdapter extends ArrayAdapter<Nota> {
             itemTitulo.setText(nota.titulo);
             itemContenido.setText(contenido);
             itemFecha.setText(nota.fecha);
+            Coordenada coords = nota.getCoordenada(context);
+            if (coords != null) {
+                itemCoords.setText(context.getString(R.string.nota_en_mapa));
+                itemCoords.setVisibility(View.VISIBLE);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

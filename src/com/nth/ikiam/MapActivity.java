@@ -105,6 +105,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     HashMap<Marker, AtraccionUi> atracciones;
     HashMap<Marker, EspecieUi> especies;
     HashMap<Marker, SocialUi> social;
+    HashMap<Marker, Nota> markersNotas;
     HashMap<Marker, Bitmap> fotosUsuario;
     Marker selected;
     int tipoMapa = 0;
@@ -168,6 +169,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     public AtraccionUi atraccion;
 
     public Foto fotoSinCoords;
+    public Nota notaSinCoords;
 
 
     public void setRuta_remote_id(String id) {
@@ -353,6 +355,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         ExecutorService queue = Executors.newSingleThreadExecutor();
         queue.execute(new LogrosChecker(this));
 
+        notaSinCoords = null;
         fotoSinCoords = null;
         imageToUpload = null;
 
@@ -392,6 +395,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         atracciones = new HashMap<Marker, AtraccionUi>();
         especies = new HashMap<Marker, EspecieUi>();
         social = new HashMap<Marker, SocialUi>();
+        markersNotas = new HashMap<Marker, Nota>();
         fotosUsuario = new HashMap<Marker, Bitmap>();
 
         botones = new Button[9];
@@ -740,6 +744,30 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         }
     }
 
+    public void ubicarNotas() {
+        map.clear();
+
+        atracciones.clear();
+        especies.clear();
+        social.clear();
+        markersNotas.clear();
+        selected = null;
+        //System.out.println("Altura "+ mCurrentLocation.getAltitude());
+        location = new LatLng(-1.6477220517969353, -78.46435546875);
+
+        List<Nota> notas = Nota.list(this);
+        for (Nota nota : notas) {
+            Coordenada coord = nota.getCoordenada(this);
+            if (coord != null) {
+                final LatLng pos = new LatLng(coord.latitud, coord.longitud);
+                Marker marker = map.addMarker(new MarkerOptions().position(pos)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_nota))
+                        .anchor(0.5f, 1).title(nota.titulo));
+                markersNotas.put(marker, nota);
+            }
+        }
+    }
+
     /*Google services*/
     private boolean servicesConnected() {
         // Check that Google Play services is available
@@ -947,7 +975,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
     private void setUpMap() {
         //locationClient.getLastLocation();
         location = new LatLng(-1.6477220517969353, -78.46435546875);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
+        final CameraUpdate update = CameraUpdateFactory.newLatLngZoom(location, 7);
         map.setMyLocationEnabled(true);
         map.animateCamera(update);
         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
@@ -960,7 +988,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 // Setting the title for the marker.
                 // This will be displayed on taping the marker
                 if (fotoSinCoords == null) {
-                    markerOptions.title(getString(R.string.map_subirFotoMarker));
+                    if (notaSinCoords != null) {
+                        markerOptions.title(getString(R.string.map_ubicar_nota_marker));
+                    } else {
+                        markerOptions.title(getString(R.string.map_subirFotoMarker));
+                    }
                 } else {
                     markerOptions.title(getString(R.string.map_ubicar_foto_marker));
                 }
@@ -982,7 +1014,11 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     if (marker.getId().equals(markerSubir.getId())) {
                         posicionSubir = marker.getPosition();
                         if (fotoSinCoords == null) {
-                            selectItem(CAPTURA_POS);
+                            if (notaSinCoords == null) {
+                                selectItem(CAPTURA_POS);
+                            } else {
+                                updateNotaSinCoords(posicionSubir);
+                            }
                         } else {
                             updateFotoSinCoords(posicionSubir);
                         }
@@ -990,7 +1026,7 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                 }
 
                 if (dataUsuario.get(marker) != null) {
-                    System.out.println("click data usuario");
+//                    System.out.println("click data usuario");
                     marker.showInfoWindow();
                     LayoutInflater inflater = activity.getLayoutInflater();
                     myView = inflater.inflate(R.layout.dialog_usuario, null);
@@ -1273,6 +1309,15 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
                     }
                     return true;
                 }
+                if (markersNotas.get(marker) != null) {
+                    //click en la nota
+//                    return false;
+                    Nota nota = markersNotas.get(marker);
+                    Bundle args = new Bundle();
+                    args.putLong("nota", nota.id);
+                    Fragment fragment = new NotaCreateFrgment();
+                    Utils.openFragment((MapActivity) activity, fragment, getString(R.string.nota_edit_title), args);
+                }
                 return true;
             }
         });
@@ -1294,6 +1339,29 @@ public class MapActivity extends Activity implements Button.OnClickListener, Goo
         markerSubir.remove();
         markerSubir = null;
         fotoSinCoords = null;
+    }
+
+    private void updateNotaSinCoords(LatLng pos) {
+        Coordenada coord = new Coordenada(this);
+        markerSubir.hideInfoWindow();
+        coord.latitud = pos.latitude;
+        coord.longitud = pos.longitude;
+        coord.altitud = 0;
+        coord.save();
+        notaSinCoords.setCoordenada(coord);
+        notaSinCoords.save();
+        Toast.makeText(this, getString(R.string.map_nota_ubicada), Toast.LENGTH_LONG).show();
+        if (markerSubir.isInfoWindowShown())
+            markerSubir.hideInfoWindow();
+        markerSubir.remove();
+        markerSubir = null;
+        notaSinCoords = null;
+
+        int notepad = NOTEPAD_POS_T;
+        if (esCientifico.trim().equalsIgnoreCase("S")) {
+            notepad = NOTEPAD_POS;
+        }
+        selectItem(notepad);
     }
 
     @Override
